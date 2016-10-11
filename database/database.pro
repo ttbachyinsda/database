@@ -14,12 +14,20 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    databasehandler/database.cpp \
+    databasehandler/table.cpp \
+    typehandler/type.cpp \
+    typehandler/databaseint.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
     pagefilesystem/FileManager.h \
-    pagefilesystem/pagedef.h
+    pagefilesystem/pagedef.h \
+    databasehandler/database.h \
+    databasehandler/table.h \
+    typehandler/type.h \
+    typehandler/databaseint.h
 
 FORMS    += mainwindow.ui
 
