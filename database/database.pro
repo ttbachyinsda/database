@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT += qml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,7 +16,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    pagefilesystem/BufPageManager.h \
+    pagefilesystem/FileManager.h \
+    pagefilesystem/pagedef.h
 
 FORMS    += mainwindow.ui
 
