@@ -1,10 +1,16 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QQmlExtensionPlugin>
+#include <iostream>
+#include "tester/testtype.h"
+using namespace std;
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-    return a.exec();
+    //QApplication a(argc, argv);
+    //MainWindow w;
+    //w.show();
+    //return a.exec();
+    testtype t;
+    t.begintest(true);
+    return 0;
 }

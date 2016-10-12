@@ -4,6 +4,9 @@
  * BufPageManager
  * 实现了一个缓存的管理器
  */
+#include "FileManager.h"
+#include "MyHashMap.h"
+#include "FindReplace.h"
 struct BufPageManager {
 public:
 	int last;

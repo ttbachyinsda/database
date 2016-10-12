@@ -1,10 +1,10 @@
-#include "databaseint.h"
-/*We should know that the max size of type(Int) is 255, if you set the size larger than 255
+#include "databasechar.h"
+/*We should know that the max size of type(Char) is 255, if you set the size larger than 255
  * the size will force to be 255, whatever your input is.
  * */
-DatabaseInt::DatabaseInt(int size)
+DatabaseChar::DatabaseChar(int size)
 {
-    if (size>MAX_INT_SIZE) size=MAX_INT_SIZE;
+    if (size>MAX_CHAR_SIZE) size=MAX_CHAR_SIZE;
     this->size=size;
     data=new char[size];
     memset(data,0,size);
@@ -12,9 +12,9 @@ DatabaseInt::DatabaseInt(int size)
 /* Remember that if you input a string more than 255 characters or illegal, data will be
  * empty.
  * */
-DatabaseInt::DatabaseInt(string input)
+DatabaseChar::DatabaseChar(string input)
 {
-    this->size=MAX_INT_SIZE;
+    this->size=MAX_CHAR_SIZE;
     bool can=checkRight(input);
     if (can)
     {
@@ -24,61 +24,55 @@ DatabaseInt::DatabaseInt(string input)
     } else
     {
         int size=input.length();
-        if (size>MAX_INT_SIZE) size=MAX_INT_SIZE;
+        if (size>MAX_CHAR_SIZE) size=MAX_CHAR_SIZE;
         this->size=size;
         data=new char[size];
         memset(data,0,size);
     }
 }
-DatabaseInt::DatabaseInt(char *input, int size)
+DatabaseChar::DatabaseChar(char *input, int size)
 {
-    this->size=MAX_INT_SIZE;
-    bool can=checkRight(input,size);
-    if (can)
+    if (size<=MAX_CHAR_SIZE)
     {
         this->size=size;
         data=new char[size];
         strncpy(data,input,size);
     } else
     {
-        if (size>MAX_INT_SIZE) size=MAX_INT_SIZE;
-        this->size=size;
-        this->data=new char[size];
+        this->size=MAX_CHAR_SIZE;
+        this->data=new char[MAX_CHAR_SIZE];
         memset(data,0,size);
     }
 }
 
-//Return length of type(Int)
-int DatabaseInt::getSize()
+//Return length of type(Char)
+int DatabaseChar::getSize()
 {
     return this->size;
 }
 
-/* Don't try to use it in a public method. Try to use checkRight or
+/* Don't try to use them in a public method. Try to use checkRight or
  * checkRightAndChange instead.
  * */
-void DatabaseInt::change(string input)
+void DatabaseChar::change(string input)
 {
     int size=input.length();
     strncpy(data,input.c_str(),size);
 }
-void DatabaseInt::change(char *input, int size)
+void DatabaseChar::change(char *input, int size)
 {
     strncpy(data,input,size);
 }
 
 /* Really commend to use these two methods
  * */
-bool DatabaseInt::checkRight(string input)
+bool DatabaseChar::checkRight(string input)
 {
     int lengthofinput=input.length();
     if (lengthofinput>this->size) return false;
-    for (int i=0;i<lengthofinput;i++)
-        if (input[i]<'0' || input[i]>'9')
-            return false;
     return true;
 }
-bool DatabaseInt::checkRightAndChange(string input)
+bool DatabaseChar::checkRightAndChange(string input)
 {
     bool can=checkRight(input);
     if (can)
@@ -91,18 +85,14 @@ bool DatabaseInt::checkRightAndChange(string input)
 /* Be careful to use these two methods. If you want to use that, don't delete char*input,
  * because databasechar will not copy the content.
  * */
-bool DatabaseInt::checkRight(char* input,int size)
+bool DatabaseChar::checkRight(char* input,int size)
 {
     if (size>this->size) return false;
-    for (int i=0;i<size;i++)
-        if (input[i]<'0' || input[i]>'9')
-            return false;
     return true;
 }
-bool DatabaseInt::checkRightAndChange(char* input,int size)
+bool DatabaseChar::checkRightAndChange(char* input,int size)
 {
-    bool can=checkRight(input,size);
-    if (can)
+    if (size<=this->size)
     {
         change(input,size);
         return true;
@@ -111,28 +101,23 @@ bool DatabaseInt::checkRightAndChange(char* input,int size)
 }
 /* Return the type and the maxlength of Type(char)
  * */
-string DatabaseInt::getType()
+string DatabaseChar::getType()
 {
     char str[25];
     sprintf(str, "%d" , size);
     string temp(str);
-    return "Type: Int("+temp+")";
+    return "Type: Char("+temp+")";
 }
-string DatabaseInt::output()
+string DatabaseChar::output()
 {
-    char* tmp=new char[size];
-    strncpy(tmp,data,size);
-    for (int i=0;i<size;i++)
-        if (tmp[i]==0)
-            tmp[i]='0';
-    string t=tmp;
-    string s=t;
-    return s;
+    string s=data;
+    string t=s;
+    return t;
 }
 
 /* Don't delete that
  * */
-DatabaseInt::~DatabaseInt()
+DatabaseChar::~DatabaseChar()
 {
 
 }

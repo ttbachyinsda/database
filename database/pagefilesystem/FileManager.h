@@ -7,6 +7,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include "MyBitMap.h"
+#include "pagedef.h"
 using namespace std;
 class FileManager {
 private:

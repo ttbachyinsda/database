@@ -1,29 +1,29 @@
-#ifndef DATABASEINT_H
-#define DATABASEINT_H
+#ifndef DATABASECHAR_H
+#define DATABASECHAR_H
 #include "type.h"
 #include <cstring>
 #include <bitset>
 #include <cstdlib>
 #include <cstdio>
 using namespace std;
-#define MAX_INT_SIZE 255
-class DatabaseInt : public type
+#define MAX_CHAR_SIZE 255
+class DatabaseChar : public type
 {
 public:
-    DatabaseInt(int size);
-    DatabaseInt(string input);
-    DatabaseInt(char* input, int size);
+    DatabaseChar(int size);
+    DatabaseChar(string input);
+    DatabaseChar(char* input,int size);
     bool checkRight(string input);
     bool checkRightAndChange(string input);
     bool checkRight(char* input,int size);
     bool checkRightAndChange(char* input,int size);
     int getSize();
     string getType();
-    ~DatabaseInt();
     string output();
+    ~DatabaseChar();
 private:
     void change(string input);
     void change(char* input,int size);
 };
 
-#endif // DATABASEINT_H
+#endif // DATABASECHAR_H
