@@ -7,7 +7,7 @@
 #include "FileManager.h"
 #include "MyHashMap.h"
 #include "FindReplace.h"
-struct BufPageManager {
+class BufPageManager {
 public:
 	int last;
 	FileManager* fileManager;
@@ -142,7 +142,7 @@ public:
 		}
 	}
 	/*
-	 * @函数名getKey
+     * @函数名getKeyint h
 	 * @参数index:缓存页面数组中的下标，用来指定一个缓存页面
 	 * @参数fileID:函数返回时，用于存储指定缓存页面所属的文件号
 	 * @参数pageID:函数返回时，用于存储指定缓存页面对应的文件页号

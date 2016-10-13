@@ -20,7 +20,7 @@ DatabaseChar::DatabaseChar(string input)
     {
         this->size=input.length();
         data=new char[this->size];
-        strncpy(data,input.c_str(),this->size);
+        memcpy(data,input.c_str(),this->size);
     } else
     {
         int size=input.length();
@@ -36,7 +36,7 @@ DatabaseChar::DatabaseChar(char *input, int size)
     {
         this->size=size;
         data=new char[size];
-        strncpy(data,input,size);
+        memcpy(data,input,size);
     } else
     {
         this->size=MAX_CHAR_SIZE;
@@ -57,11 +57,13 @@ int DatabaseChar::getSize()
 void DatabaseChar::change(string input)
 {
     int size=input.length();
-    strncpy(data,input.c_str(),size);
+    memset(data,0,this->size);
+    memcpy(data,input.c_str(),size);
 }
 void DatabaseChar::change(char *input, int size)
 {
-    strncpy(data,input,size);
+    memset(data,0,this->size);
+    memcpy(data,input,size);
 }
 
 /* Really commend to use these two methods

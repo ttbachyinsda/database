@@ -20,7 +20,7 @@ DatabaseInt::DatabaseInt(string input)
     {
         this->size=input.length();
         data=new char[this->size];
-        strncpy(data,input.c_str(),this->size);
+        memcpy(data,input.c_str(),this->size);
     } else
     {
         int size=input.length();
@@ -38,7 +38,7 @@ DatabaseInt::DatabaseInt(char *input, int size)
     {
         this->size=size;
         data=new char[size];
-        strncpy(data,input,size);
+        memcpy(data,input,size);
     } else
     {
         if (size>MAX_INT_SIZE) size=MAX_INT_SIZE;
@@ -60,11 +60,13 @@ int DatabaseInt::getSize()
 void DatabaseInt::change(string input)
 {
     int size=input.length();
-    strncpy(data,input.c_str(),size);
+    memset(data,0,this->size);
+    memcpy(data,input.c_str(),size);
 }
 void DatabaseInt::change(char *input, int size)
 {
-    strncpy(data,input,size);
+    memset(data,0,this->size);
+    memcpy(data,input,size);
 }
 
 /* Really commend to use these two methods
@@ -95,8 +97,9 @@ bool DatabaseInt::checkRight(char* input,int size)
 {
     if (size>this->size) return false;
     for (int i=0;i<size;i++)
-        if (input[i]<'0' || input[i]>'9')
-            return false;
+        if (*(input+i)<'0' || *(input+i)>'9')
+            if (*(input+i)!=0)
+                return false;
     return true;
 }
 bool DatabaseInt::checkRightAndChange(char* input,int size)
@@ -121,10 +124,10 @@ string DatabaseInt::getType()
 string DatabaseInt::output()
 {
     char* tmp=new char[size];
-    strncpy(tmp,data,size);
+    memcpy(tmp,data,size);
     for (int i=0;i<size;i++)
-        if (tmp[i]==0)
-            tmp[i]='0';
+        if (*(tmp+i)==0 || *(tmp+i)==32)
+            *(tmp+i)='0';
     string t=tmp;
     string s=t;
     return s;

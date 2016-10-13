@@ -2,19 +2,28 @@
 #define FIXEDSIZETABLE_H
 
 #include "databasehandler/table.h"
+#include "managementhandler/uic.h"
 
 class FixedSizeTable : public Table
 {
 public:
     FixedSizeTable();
+    ~FixedSizeTable();
     bool Initialize();
+    void createTable(vector<string> clname, vector<string> cltype, vector<int> clsize);
+    bool Insert();
+    bool DeleteAt(int pagenum,int rownum);
+    bool FindAt(int pagenum,int rownum);
 private:
-    void PackageFromHeadFile(carrier &temp);
-    void PackageHeadFile(carrier &temp);
+    void PackageFromHeadFile(BufType temp);
+    void PackageHeadFile(BufType temp);
+    bool InsertAt(int pagenum);
+    char* Packager();
+    void UnPackager(BufType b,int position);
     int PageNum;
+    int RowSize;
     int MaxRowNum;
     int MaxRecordSize;
-    int headindex;
     vector<int> PageIndex;
     vector<int> RowNumInPage;
 };

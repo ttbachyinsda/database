@@ -20,9 +20,10 @@ SOURCES += main.cpp\
     typehandler/type.cpp \
     typehandler/databaseint.cpp \
     typehandler/databasechar.cpp \
-    managementsystem/carrier.cpp \
     tester/testtype.cpp \
-    databasehandler/fixedsizetable.cpp
+    databasehandler/fixedsizetable.cpp \
+    managementhandler/uic.cpp \
+    tester/testtable.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -33,14 +34,15 @@ HEADERS  += mainwindow.h \
     typehandler/type.h \
     typehandler/databaseint.h \
     typehandler/databasechar.h \
-    managementsystem/carrier.h \
     tester/testtype.h \
     databasehandler/fixedsizetable.h \
     pagefilesystem/MyLinkList.h \
     pagefilesystem/MyHashMap.h \
     pagefilesystem/MyBitMap.h \
     pagefilesystem/FindReplace.h \
-    pagefilesystem/FileTable.h
+    pagefilesystem/FileTable.h \
+    managementhandler/uic.h \
+    tester/testtable.h
 
 FORMS    += mainwindow.ui
 

@@ -2,7 +2,6 @@
 #define TYPE_H
 #include <iostream>
 #include <bitset>
-#include "managementsystem/carrier.h"
 using namespace std;
 class type
 {
