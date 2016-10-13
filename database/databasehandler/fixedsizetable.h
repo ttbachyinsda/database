@@ -12,6 +12,7 @@ public:
     bool Initialize();
     void createTable(vector<string> clname, vector<string> cltype, vector<int> clsize);
     bool Insert();
+    bool Modify(int pagenum,int rownum);
     bool DeleteAt(int pagenum,int rownum);
     bool FindAt(int pagenum,int rownum);
 private:
@@ -19,6 +20,7 @@ private:
     void PackageHeadFile(BufType temp);
     bool InsertAt(int pagenum);
     char* Packager();
+    bool modifypd(int pagenum, int rownum, BufType &ct, int &newindex, int &pagenewnum);
     void UnPackager(BufType b,int position);
     int PageNum;
     int RowSize;

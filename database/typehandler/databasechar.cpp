@@ -20,7 +20,7 @@ DatabaseChar::DatabaseChar(string input)
     {
         this->size=input.length();
         data=new char[this->size];
-        memcpy(data,input.c_str(),this->size);
+        memcpy(data,input.data(),this->size);
     } else
     {
         int size=input.length();
@@ -58,7 +58,7 @@ void DatabaseChar::change(string input)
 {
     int size=input.length();
     memset(data,0,this->size);
-    memcpy(data,input.c_str(),size);
+    memcpy(data,input.data(),size);
 }
 void DatabaseChar::change(char *input, int size)
 {
@@ -112,9 +112,8 @@ string DatabaseChar::getType()
 }
 string DatabaseChar::output()
 {
-    string s=data;
-    string t=s;
-    return t;
+    string s(data,size);
+    return s;
 }
 
 /* Don't delete that

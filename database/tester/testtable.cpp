@@ -8,7 +8,7 @@ void testtable::begintest()
 {
     cout<<"test table begin..."<<endl;
     Table* onetable = new FixedSizeTable();
-    onetable->setfilename("/home/ttbachyinsda/onetable.db");
+    onetable->setfilename("onetable.db");
     onetable->setname("testtable");
     vector<string> clname; vector<string> cltype; vector<int> clsize;
     clname.push_back("userid"); clname.push_back("password"); clname.push_back("age");

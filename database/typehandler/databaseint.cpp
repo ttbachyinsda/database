@@ -20,7 +20,7 @@ DatabaseInt::DatabaseInt(string input)
     {
         this->size=input.length();
         data=new char[this->size];
-        memcpy(data,input.c_str(),this->size);
+        memcpy(data,input.data(),this->size);
     } else
     {
         int size=input.length();
@@ -61,7 +61,7 @@ void DatabaseInt::change(string input)
 {
     int size=input.length();
     memset(data,0,this->size);
-    memcpy(data,input.c_str(),size);
+    memcpy(data,input.data(),size);
 }
 void DatabaseInt::change(char *input, int size)
 {
@@ -128,8 +128,7 @@ string DatabaseInt::output()
     for (int i=0;i<size;i++)
         if (*(tmp+i)==0 || *(tmp+i)==32)
             *(tmp+i)='0';
-    string t=tmp;
-    string s=t;
+    string s(tmp,size);
     return s;
 }
 
