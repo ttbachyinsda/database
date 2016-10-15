@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     //w.show();
     //return a.exec();
     testtype t;
-    t.begintest(false);
+    t.begintest(true);
     testtable u;
     u.begintest();
     return 0;
