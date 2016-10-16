@@ -2,7 +2,7 @@
 #define TABLE_H
 #include <string>
 #include <vector>
-#include "typehandler/type.h"
+#include "typehandler/databasetype.h"
 #include "typehandler/databasechar.h"
 #include "typehandler/databaseint.h"
 #include "pagefilesystem/BufPageManager.h"
@@ -15,7 +15,7 @@ public:
     Table(string name,string filename);
     string getname();
     string getfilename();
-    type* getcolumn(int i);
+    DataBaseType* getcolumn(int i);
     string getcolumnname(int i);
     bool setname(string name);
     void setfilename(string filename);
@@ -23,6 +23,8 @@ public:
     vector<string> checkOutput();
     virtual bool Insert()=0;
     virtual bool Initialize()=0;
+    bool havecreatetable=false;
+    bool haveinitialize=false;
     virtual bool DeleteAt(int pagenum,int rownum)=0;
     virtual bool FindAt(int pagenum,int rownum)=0;
     virtual void createTable(vector<string> clname,vector<string> cltype,vector<int> clsize)=0;
@@ -34,9 +36,9 @@ protected:
     string filename;
     int fileid;
     int columncount;
-    vector<type*> column;
-    vector<int> order;
-    vector<string> columnname;
+    DataBaseType** column;           //per size if 8
+    int * order;
+    string * columnname;
     BufPageManager* BPM;
     FileManager* FM;
 };

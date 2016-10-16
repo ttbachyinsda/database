@@ -1,13 +1,13 @@
 #ifndef DATABASECHAR_H
 #define DATABASECHAR_H
-#include "type.h"
+#include "databasetype.h"
 #include <cstring>
 #include <bitset>
 #include <cstdlib>
 #include <cstdio>
 using namespace std;
 #define MAX_CHAR_SIZE 255
-class DatabaseChar : public type
+class DatabaseChar : public DataBaseType
 {
 public:
     DatabaseChar(int size);

@@ -6,7 +6,7 @@ testtype::testtype()
 }
 void testtype::begintestchar()
 {
-    type *a = new DatabaseChar(20);
+    DataBaseType *a = new DatabaseChar(20);
     a->printdata("a");
     char *x= new char[20];
     memcpy(x,"acefg               ",20);
@@ -22,7 +22,7 @@ void testtype::begintestchar()
     cout<<a->output()<<'E'<<a->output().length()<<endl;
     cout<<a->getType()<<endl;
     delete a;
-    type *b = new DatabaseInt(5);
+    DataBaseType *b = new DatabaseInt(5);
     char *z= new char[5];
     memcpy(z,"12345",5);
     b->printdata("b");
@@ -36,7 +36,7 @@ void testtype::begintestchar()
 }
 void testtype::beginteststring()
 {
-    type *a = new DatabaseChar(20);
+    DataBaseType *a = new DatabaseChar(20);
     a->printdata("a");
     a->checkRightAndChange("acefg");
     a->printdata("a");
@@ -44,7 +44,7 @@ void testtype::beginteststring()
     a->printdata("a");
     cout<<a->getType()<<endl;
     delete a;
-    type *b = new DatabaseInt(5);
+    DataBaseType *b = new DatabaseInt(5);
     b->printdata("b");
     cout<<b->checkRight("1aa")<<endl;
     b->checkRightAndChange("12345");
@@ -65,11 +65,11 @@ void testtype::begintest(bool timetest)
     {
     for (int i=0;i<100000000;i++)
     {
-        type *a = new DatabaseChar(20);
+        DataBaseType *a = new DatabaseChar(20);
         a->checkRightAndChange("acefg");
         a->checkRightAndChange("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         delete a;
-        type *b = new DatabaseInt(5);
+        DataBaseType *b = new DatabaseInt(5);
         b->checkRightAndChange("12345");
         delete b;
     }
@@ -80,7 +80,7 @@ void testtype::begintest(bool timetest)
     time2.start();
     for (int i=0;i<100000000;i++)
     {
-        type *a = new DatabaseChar(20);
+        DataBaseType *a = new DatabaseChar(20);
         char *x= new char[20];
         memcpy(x,"acefg               ",20);
         bool c=a->checkRightAndChange(x,20);
@@ -90,7 +90,7 @@ void testtype::begintest(bool timetest)
         c=a->checkRightAndChange(y,53);
         delete y;
         delete a;
-        type *b = new DatabaseInt(5);
+        DataBaseType *b = new DatabaseInt(5);
         char *z= new char[5];
         memcpy(z,"12345",5);
         c=b->checkRightAndChange(z,5);

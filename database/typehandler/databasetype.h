@@ -1,12 +1,12 @@
-#ifndef TYPE_H
-#define TYPE_H
+#ifndef DATABASETYPE_H
+#define DATABASETYPE_H
 #include <iostream>
 #include <bitset>
 using namespace std;
-class type
+class DataBaseType
 {
 public:
-    type();
+    DataBaseType();
     char* getdata();
     void printdata(string testinfo);
     virtual bool checkRight(string input)=0;
@@ -15,11 +15,11 @@ public:
     virtual bool checkRightAndChange(char* input,int size)=0;
     virtual int getSize()=0;
     virtual string getType()=0;
-    virtual ~type();
+    virtual ~DataBaseType();
     virtual string output()=0;
 protected:
     int size;
     char* data;
 };
 
-#endif // TYPE_H
+#endif // DATABASETYPE_H

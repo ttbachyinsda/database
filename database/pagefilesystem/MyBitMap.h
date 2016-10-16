@@ -15,17 +15,16 @@ using namespace std;
 #define MAX_INNER_NUM 67
 //#define MOD 61
 #define BIAS 5
-static unsigned char h[61];
 
 
 class MyBitMap {
 protected:
-//	static const int LEAF_BIT = 32;
-//	static const int MAX_LEVEL = 5;
-//	static const int MAX_INNER_NUM = 10;
-//	static const int MOD = 61;
-//	static unsigned char h[MOD];
-	static uint getMask(int k) {
+//	const int LEAF_BIT = 32;
+//	const int MAX_LEVEL = 5;
+//	const int MAX_INNER_NUM = 10;
+//	const int MOD = 61;
+//	unsigned char h[MOD];
+    uint getMask(int k) {
 		uint s = 0;
 		for (int i = 0; i < k; ++ i) {
 			s += (1 << i);
@@ -40,6 +39,7 @@ protected:
 	uint inner[MAX_INNER_NUM];
 	uint innerMask;
 	uint rootMask;
+    unsigned char h[61];
 	//virtual
 	uint getLeafData(int index) {
 		return data[index];
@@ -150,8 +150,8 @@ protected:
 		return _findLeftOne(level - 1, offset - prevLevelCap, nPos, (prevLevelCap << BIAS));
 	}
 public:
-//	static const int BIAS;/* = 5;*/
-//	static void initConst();
+//	const int BIAS;/* = 5;*/
+//	void initConst();
 	/* {
 		for (int i = 0; i < 32; ++ i) {
 			unsigned int k = (1 << i);
@@ -159,23 +159,23 @@ public:
 		}
 	}
 	*/
-	static int _hash(uint i) {
+    int _hash(uint i) {
 		return i % 61;
 	}
-	static void initConst() {
+    void initConst() {
 		for (int i = 0; i < 32; ++ i) {
 			unsigned int k = (1 << i);
 			h[_hash(k)] = i;
 		}
 	}
-	static int getIndex(uint k)
+    int getIndex(uint k)
 	{
 		return h[_hash(k)];
 	}
-	static uint lowbit(uint k) {
+    uint lowbit(uint k) {
 		return (k & (-k));
 	}
-	static void getPos(int index, int& pos, int& bit) {
+    void getPos(int index, int& pos, int& bit) {
 		pos = (index >> BIAS);
 		bit = index - (pos << BIAS);
 	}
@@ -208,6 +208,7 @@ public:
 		return (i << BIAS) + index;
 	}
 	MyBitMap(int cap, uint k) {
+        initConst();
 		size = (cap >> BIAS);
 		data = new uint[size];
 		uint fill = 0;
@@ -220,6 +221,7 @@ public:
 		init();
 	}
 	MyBitMap(int cap, uint* da) {
+        initConst();
 		data = da;
 		size = (cap >> BIAS);
 		init();

@@ -17,13 +17,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     databasehandler/database.cpp \
     databasehandler/table.cpp \
-    typehandler/type.cpp \
     typehandler/databaseint.cpp \
     typehandler/databasechar.cpp \
     tester/testtype.cpp \
     databasehandler/fixedsizetable.cpp \
     managementhandler/uic.cpp \
-    tester/testtable.cpp
+    tester/testtable.cpp \
+    tester/testdatabase.cpp \
+    typehandler/databasetype.cpp \
+    layer/databasemanager.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -31,7 +33,6 @@ HEADERS  += mainwindow.h \
     pagefilesystem/pagedef.h \
     databasehandler/database.h \
     databasehandler/table.h \
-    typehandler/type.h \
     typehandler/databaseint.h \
     typehandler/databasechar.h \
     tester/testtype.h \
@@ -42,7 +43,10 @@ HEADERS  += mainwindow.h \
     pagefilesystem/FindReplace.h \
     pagefilesystem/FileTable.h \
     managementhandler/uic.h \
-    tester/testtable.h
+    tester/testtable.h \
+    tester/testdatabase.h \
+    typehandler/databasetype.h \
+    layer/databasemanager.h
 
 FORMS    += mainwindow.ui
 

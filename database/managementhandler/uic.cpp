@@ -25,7 +25,7 @@ bool UIC::equal(const char *s1, char *s2, int len)
             return false;
     return true;
 }
-void UIC::convert(type* t1,char* s1)
+void UIC::convert(DataBaseType* t1,char* s1)
 {
     string temp=t1->getType();
     if (temp[6]=='C')
@@ -37,18 +37,28 @@ void UIC::convert(type* t1,char* s1)
         *(s1)='I'; *(s1+1)='N'; *(s1+2)='T'; *(s1+3)='E';
     }
 }
-type* UIC::reconvert(char* s1,int size)
+DataBaseType* UIC::reconvert(char* s1,int size)
 {
     if (*(s1)=='C')
     {
-        type* temp = new DatabaseChar(size);
+        DataBaseType* temp = new DatabaseChar(size);
         return temp;
     }
     if (*(s1)=='I')
     {
-        type* temp = new DatabaseInt(size);
+        DataBaseType* temp = new DatabaseInt(size);
         return temp;
     }
     return NULL;
 }
+int UIC::chartoint(char *s1)
+{
+    int k=0;
+    memcpy(&k,s1,4);
+    return k;
+}
+void UIC::inttochar(int i1, char *s1)
+{
 
+    memcpy(s1,&i1,4);
+}

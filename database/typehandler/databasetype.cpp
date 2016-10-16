@@ -1,15 +1,15 @@
-#include "type.h"
+#include "databasetype.h"
 
-type::type()
+DataBaseType::DataBaseType()
 {
     size=0;
     data=NULL;
 }
-char* type::getdata()
+char* DataBaseType::getdata()
 {
     return data;
 }
-void type::printdata(string testinfo)
+void DataBaseType::printdata(string testinfo)
 {
     cout<<"Now begin "<<testinfo<<endl;
     for (int i=0;i<size;i++)
@@ -19,11 +19,11 @@ void type::printdata(string testinfo)
     }
     cout<<"Now end "<<testinfo<<endl;
 }
-type::~type()
+DataBaseType::~DataBaseType()
 {
     if (data!=NULL)
     {
-        delete data;
+        free(data);
         data=NULL;
     }
 }

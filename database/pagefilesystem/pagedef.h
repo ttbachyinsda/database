@@ -13,7 +13,7 @@
 /*
  * 一个页面中的整数个数
  */
-#define PAGE_INT_NUM 2048
+#define PAGE_INT_NUM 8192
 /*
  * 页面字节数以2为底的指数
  */
@@ -43,7 +43,7 @@
  */
 #define MAX_TB_NUM 31
 #define RELEASE 1
-typedef unsigned int* BufType;
+typedef char* BufType;
 typedef unsigned int uint;
 typedef unsigned short ushort;
 typedef unsigned char uchar;

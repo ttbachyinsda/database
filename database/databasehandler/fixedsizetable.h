@@ -3,6 +3,7 @@
 
 #include "databasehandler/table.h"
 #include "managementhandler/uic.h"
+#include <sstream>
 
 class FixedSizeTable : public Table
 {
@@ -15,6 +16,9 @@ public:
     bool Modify(int pagenum,int rownum);
     bool DeleteAt(int pagenum,int rownum);
     bool FindAt(int pagenum,int rownum);
+    int getPageNum();
+    int getRowSize();
+    int getMaxRowNum();
 private:
     void PackageFromHeadFile(BufType temp);
     void PackageHeadFile(BufType temp);
@@ -26,8 +30,7 @@ private:
     int RowSize;
     int MaxRowNum;
     int MaxRecordSize;
-    vector<int> PageIndex;
-    vector<int> RowNumInPage;
+    int* RowNumInPage;
 };
 
 #endif // FIXEDSIZETABLE_H

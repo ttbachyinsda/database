@@ -6,7 +6,7 @@ DatabaseInt::DatabaseInt(int size)
 {
     if (size>MAX_INT_SIZE) size=MAX_INT_SIZE;
     this->size=size;
-    data=new char[size];
+    data=(char*) malloc(size);
     memset(data,0,size);
 }
 /* Remember that if you input a string more than 255 characters or illegal, data will be
@@ -19,14 +19,14 @@ DatabaseInt::DatabaseInt(string input)
     if (can)
     {
         this->size=input.length();
-        data=new char[this->size];
+        data=(char*) malloc(this->size);
         memcpy(data,input.data(),this->size);
     } else
     {
         int size=input.length();
         if (size>MAX_INT_SIZE) size=MAX_INT_SIZE;
         this->size=size;
-        data=new char[size];
+        data=(char*) malloc(size);
         memset(data,0,size);
     }
 }
@@ -37,13 +37,13 @@ DatabaseInt::DatabaseInt(char *input, int size)
     if (can)
     {
         this->size=size;
-        data=new char[size];
+        data=(char*) malloc(size);
         memcpy(data,input,size);
     } else
     {
         if (size>MAX_INT_SIZE) size=MAX_INT_SIZE;
         this->size=size;
-        this->data=new char[size];
+        this->data=(char*) malloc(size);
         memset(data,0,size);
     }
 }

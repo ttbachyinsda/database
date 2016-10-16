@@ -2,11 +2,25 @@
 
 Table::Table()
 {
+    this->havecreatetable=false;
+    this->haveinitialize=false;
+    this->columncount=0;
+    this->column=NULL;
+    this->columnname=NULL;
+    this->order=NULL;
+    this->fileid=0;
     this->FM=NULL;
     this->BPM=NULL;
 }
 Table::Table(string name, string filename)
 {
+    this->havecreatetable=false;
+    this->haveinitialize=false;
+    this->columncount=0;
+    this->column=NULL;
+    this->columnname=NULL;
+    this->order=NULL;
+    this->fileid=0;
     this->name=name;
     this->filename=filename;
     if (BPM!=NULL)
@@ -19,9 +33,7 @@ Table::Table(string name, string filename)
 
 Table::~Table()
 {
-    for (unsigned int i=0;i<column.size();i++)
-        if (column[i]!=NULL)
-            delete column[i];
+    clearcolumn();
     if (BPM!=NULL)
     {
         BPM->close();
@@ -32,7 +44,7 @@ Table::~Table()
 vector<string> Table::gettype()
 {
     vector<string> temp;
-    for (unsigned int i=0;i<column.size();i++)
+    for (int i=0;i<columncount;i++)
         temp.push_back(column[i]->getType());
     return temp;
 }
@@ -59,14 +71,18 @@ void Table::setfilename(string filename)
 }
 void Table::clearcolumn()
 {
-    for (unsigned int i=0;i<column.size();i++)
+    for (int i=0;i<columncount;i++)
         if (column[i]!=NULL)
             delete column[i];
     columncount=0;
-    column.clear();
-    order.clear();
+    if (column!=NULL) delete[] column;
+    if (columnname!=NULL) delete[] columnname;
+    column=NULL;
+    columnname=NULL;
+    if (order!=NULL) delete[] order;
+    order=NULL;
 }
-type* Table::getcolumn(int i)
+DataBaseType* Table::getcolumn(int i)
 {
     return column[i];
 }

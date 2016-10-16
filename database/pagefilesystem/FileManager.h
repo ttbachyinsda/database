@@ -17,7 +17,7 @@ private:
 	MyBitMap* fm;
 	MyBitMap* tm;
 	int _createFile(const char* name) {
-		FILE* f = fopen(name, "a+");
+        FILE* f = fopen(name, "ab+");
 		if (f == NULL) {
 			cout << "fail" << endl;
 			return -1;
@@ -58,8 +58,17 @@ public:
 		if (error != offset) {
 			return -1;
 		}
-		BufType b = buf + off;
-		error = write(f, (void*) b, PAGE_SIZE);
+        BufType b = buf + off;
+        /*
+        cout<<"Now begin "<<"testment"<<endl;
+        for (int i=0;i<PAGE_INT_NUM;i++)
+        {
+            int k=b[i];
+            cout<<"No."<<i<<" is: "<<k<<endl;
+        }
+        cout<<"Now end "<<"testment"<<endl;
+        */
+        error = write(f, (void*) b, PAGE_SIZE);
 		return 0;
 	}
 	/*

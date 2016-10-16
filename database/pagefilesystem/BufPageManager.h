@@ -20,7 +20,7 @@ public:
 	 */
 	BufType* addr;
 	BufType allocMem() {
-		return new unsigned int[(PAGE_SIZE >> 2)];
+        return new char[PAGE_SIZE];
 	}
 	BufType fetchPage(int typeID, int pageID, int& index) {
 		BufType b;

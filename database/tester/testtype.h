@@ -2,7 +2,7 @@
 #define TESTTYPE_H
 #include "typehandler/databasechar.h"
 #include "typehandler/databaseint.h"
-#include "typehandler/type.h"
+#include "typehandler/databasetype.h"
 #include <QTime>
 
 class testtype

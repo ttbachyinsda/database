@@ -4,6 +4,15 @@ testtable::testtable()
 {
 
 }
+string testtable::RandomString()
+{
+    int aa = rand();
+    stringstream ss;
+    ss<<aa;
+    string s1 = ss.str();
+    return s1;
+}
+
 void testtable::begintest()
 {
     cout<<"test table begin..."<<endl;
@@ -17,13 +26,22 @@ void testtable::begintest()
     onetable->createTable(clname,cltype,clsize);
     onetable->Initialize();
     vector<string> aaa;
-    aaa.push_back("1234567"); aaa.push_back("12345678"); aaa.push_back("58");
+    QTime time;
+    time.start();
+    for (int i=0;i<200000;i++)
+    {
+    aaa.push_back("1234567"+RandomString()); aaa.push_back("12345678"); aaa.push_back("58");
     onetable->checkInsert(aaa);
     onetable->Insert();
     aaa.clear();
-    aaa.push_back("234567"); aaa.push_back("2345678"); aaa.push_back("08");
+    aaa.push_back("234567"+RandomString()); aaa.push_back("2345678"); aaa.push_back("08");
     onetable->checkInsert(aaa);
     onetable->Insert();
+    aaa.clear();
+    }
+    int time_Diff = time.elapsed();
+    float f = time_Diff/1000.0;
+    cout<<"Time table: "<<f<<endl;
     bool yes=onetable->FindAt(1,0);
     aaa.clear();
     if (yes)
@@ -45,5 +63,33 @@ void testtable::begintest()
         }
     }
     delete onetable;
+
+    //Open Again:
+    cout<<"Open again"<<endl;
+    onetable = new FixedSizeTable();
+        onetable->setfilename("onetable.db");
+        onetable->Initialize();
+        yes=onetable->FindAt(1,0);
+        aaa.clear();
+        if (yes)
+        {
+            aaa=onetable->checkOutput();
+            for (unsigned int i=0;i<aaa.size();i++)
+            {
+                cout<<"yes: "<<clname[i]<<" &&&"<<aaa[i]<<"&&& "<<endl;
+            }
+        }
+        yes=onetable->FindAt(1,1);
+        aaa.clear();
+        if (yes)
+        {
+            aaa=onetable->checkOutput();
+            for (unsigned int i=0;i<aaa.size();i++)
+            {
+                cout<<"yes: "<<clname[i]<<" &&&"<<aaa[i]<<"&&& "<<endl;
+            }
+        }
+        delete onetable;
+    cout<<onetable->getname()<<endl;
     cout<<"test table end"<<endl;
 }

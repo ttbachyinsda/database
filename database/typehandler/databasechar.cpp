@@ -6,7 +6,7 @@ DatabaseChar::DatabaseChar(int size)
 {
     if (size>MAX_CHAR_SIZE) size=MAX_CHAR_SIZE;
     this->size=size;
-    data=new char[size];
+    data=(char*) malloc(size);
     memset(data,0,size);
 }
 /* Remember that if you input a string more than 255 characters or illegal, data will be
@@ -19,14 +19,14 @@ DatabaseChar::DatabaseChar(string input)
     if (can)
     {
         this->size=input.length();
-        data=new char[this->size];
+        data=(char*) malloc(this->size);
         memcpy(data,input.data(),this->size);
     } else
     {
         int size=input.length();
         if (size>MAX_CHAR_SIZE) size=MAX_CHAR_SIZE;
         this->size=size;
-        data=new char[size];
+        data=(char*) malloc(size);
         memset(data,0,size);
     }
 }
@@ -35,7 +35,7 @@ DatabaseChar::DatabaseChar(char *input, int size)
     if (size<=MAX_CHAR_SIZE)
     {
         this->size=size;
-        data=new char[size];
+        data=(char*) malloc(size);
         memcpy(data,input,size);
     } else
     {

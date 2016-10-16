@@ -1,13 +1,13 @@
 #ifndef DATABASEINT_H
 #define DATABASEINT_H
-#include "type.h"
+#include "databasetype.h"
 #include <cstring>
 #include <bitset>
 #include <cstdlib>
 #include <cstdio>
 using namespace std;
 #define MAX_INT_SIZE 255
-class DatabaseInt : public type
+class DatabaseInt : public DataBaseType
 {
 public:
     DatabaseInt(int size);
