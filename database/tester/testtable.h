@@ -9,6 +9,7 @@ class testtable
 public:
     testtable();
     string RandomString();
+    string InttoString(int num);
     void begintest();
 };
 

@@ -172,6 +172,7 @@ void FixedSizeTable::PackageHeadFile(BufType b)
 
 void FixedSizeTable::createTable(vector<string> clname, vector<string> cltype,vector<int> clsize)
 {
+    remove(this->filename.c_str());
     int totalheadsize=4*4+4*3+MAX_NAME_SIZE;
     this->clearcolumn();
     this->RowSize=0;

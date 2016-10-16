@@ -12,11 +12,18 @@ string testtable::RandomString()
     string s1 = ss.str();
     return s1;
 }
+string testtable::InttoString(int num)
+{
+    int aa = num;
+    stringstream ss;
+    ss<<aa;
+    string s1 = ss.str();
+    return s1;
+}
 
 void testtable::begintest()
 {
     string filename="onetable.db";
-    remove(filename.c_str());
     cout<<"test table begin..."<<endl;
     Table* onetable = new FixedSizeTable();
     onetable->setfilename(filename);
@@ -32,11 +39,7 @@ void testtable::begintest()
     time.start();
     for (int i=0;i<200000;i++)
     {
-    aaa.push_back("1234567"+RandomString()); aaa.push_back("12345678"); aaa.push_back("58");
-    onetable->checkInsert(aaa);
-    onetable->Insert();
-    aaa.clear();
-    aaa.push_back("234567"+RandomString()); aaa.push_back("2345678"); aaa.push_back("08");
+    aaa.push_back(InttoString(i)); aaa.push_back("12345678"); aaa.push_back("58");
     onetable->checkInsert(aaa);
     onetable->Insert();
     aaa.clear();
