@@ -1,3 +1,20 @@
+/***************
+ Copyright (c) 2013, Matthew Levenstein
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+ Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*****************/
+
+/*
+ * To conver to an append-only design, only the 'fwrite' in the '_insert' function
+ * must be changed. All other writes (save for delete), are appended to the end.
+ * Also, the root address must instead be written to and searched for at the end.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +51,7 @@ void to_big(unsigned char *, uint64_t);
 uint64_t from_big(unsigned char *);
 void node_split(db *, int, unsigned char);
 void _insert(db *, unsigned char *, int, uint64_t, uint64_t, int);
-void put(db *, unsigned char *, unsigned char *);
+void db_put(db *, unsigned char *, unsigned char *);
 uint64_t search(db *, unsigned char *, int *);
 unsigned char* get(db *, unsigned char *);
 void db_init(db *, const char *);
@@ -84,8 +101,8 @@ void
 node_split(db* db, int index, unsigned char isleaf)
 {
   unsigned char* node = db->path[index];
-  unsigned char* lnode = malloc(_WIDTH+1);
-  unsigned char* rnode = malloc(_WIDTH+1);
+  unsigned char* lnode = (unsigned char *)malloc(_WIDTH+1);
+  unsigned char* rnode = (unsigned char *)malloc(_WIDTH+1);
   memset(lnode,0,_WIDTH+1);
   memset(rnode,0,_WIDTH+1);
   int split = (_HASH+SIZEOF_LONG)*(_ORDER>>1)+1;
@@ -98,7 +115,7 @@ node_split(db* db, int index, unsigned char isleaf)
   uint64_t addr = ftello(db->fp);
   fwrite(rnode,1,_WIDTH,db->fp);
   to_big(lnode+split,addr);
-  unsigned char* key = malloc(_HASH+1);
+  unsigned char* key = (unsigned char *)malloc(_HASH+1);
   memset(key,0,_HASH+1);
   memcpy(key,node+split+SIZEOF_LONG,_HASH);
   memcpy(db->path[index],lnode,_WIDTH);
@@ -106,11 +123,11 @@ node_split(db* db, int index, unsigned char isleaf)
     _insert(db,key,index-1,db->node_addrs[index],addr,0);
   }
   else{
-    unsigned char* root = malloc(_WIDTH+1);
+    unsigned char* root = (unsigned char *)malloc(_WIDTH+1);
     memset(root,0,_WIDTH+1);
   	root[0] = 0;
     to_big(root+1,db->node_addrs[0]);
-    strncpy(root+1+SIZEOF_LONG,key,_HASH);
+    memcpy(root+1+SIZEOF_LONG,key,_HASH);
     to_big(root+1+SIZEOF_LONG+_HASH,addr);
     fseeko(db->fp,0,SEEK_END);
     addr = ftello(db->fp);
@@ -123,11 +140,11 @@ node_split(db* db, int index, unsigned char isleaf)
 void
 _insert(db* db, unsigned char* key, int index, uint64_t addr, uint64_t rptr, int isleaf)
 {
-  if( _HASH > strlen(key) ){
+  if( _HASH > strlen((char*)key) ){
     unsigned char* okey = key;
-    key = malloc(_HASH+1);
+    key = (unsigned char *)malloc(_HASH+1);
     memset(key,0x61,_HASH+1);
-    strncpy(key,okey,strlen(okey));
+    memcpy(key,okey,strlen((char*)okey));
   }
   unsigned char* node = db->path[index];
   int i = SIZEOF_LONG+1;
@@ -136,22 +153,22 @@ _insert(db* db, unsigned char* key, int index, uint64_t addr, uint64_t rptr, int
       i -= SIZEOF_LONG;
       to_big(node+i,addr);
       i += SIZEOF_LONG;
-      strncpy(node+i,key,_HASH);
+      memcpy(node+i,key,_HASH);
       if( !isleaf ){
       	i += _HASH;
       	to_big(node+i,rptr);
       }
       break;
     }
-    if( !strncmp(node+i,key,_HASH) ){
+    if( !strncmp((char*)node+i,(char*)key,_HASH) ){
       if( isleaf ){
         i -= SIZEOF_LONG;
         to_big(node+i,addr);
       }
       break;
     }
-    if( strncmp(node+i,key,_HASH) > 0 ){
-      unsigned char* nnode = malloc(_WIDTH+1);
+    if( strncmp((char*)node+i,(char*)key,_HASH) > 0 ){
+      unsigned char* nnode = (unsigned char *)malloc(_WIDTH+1);
       memset(nnode,0,_WIDTH+1);
       i -= SIZEOF_LONG;
       int j;
@@ -160,7 +177,7 @@ _insert(db* db, unsigned char* key, int index, uint64_t addr, uint64_t rptr, int
 	    }
 	  	to_big(nnode+i,addr);
       i += SIZEOF_LONG;
-      strncpy(nnode+i,key,_HASH);
+      memcpy(nnode+i,key,_HASH);
       i += _HASH;
       if( !isleaf ){
       	to_big(nnode+i,rptr);
@@ -186,11 +203,11 @@ _insert(db* db, unsigned char* key, int index, uint64_t addr, uint64_t rptr, int
 uint64_t
 search(db* db, unsigned char* key, int* r_index)
 {
-  if( _HASH > strlen(key) ){
+  if( _HASH > strlen((char*)key) ){
     unsigned char* okey = key;
-    key = malloc(_HASH+1);
+    key = (unsigned char *)malloc(_HASH+1);
     memset(key,0x61,_HASH+1);
-    strncpy(key,okey,strlen(okey));
+    memcpy(key,okey,strlen((char*)okey));
   }
   uint64_t r_addr;
   int i = SIZEOF_LONG+1;
@@ -204,7 +221,7 @@ search(db* db, unsigned char* key, int* r_index)
 search:
   isleaf = db->path[index][0];
   for( ; i<_WIDTH; i+=(_HASH+SIZEOF_LONG) ){
-    if( !strncmp(db->path[index]+i,key,_HASH) ){
+    if( !strncmp((char*)db->path[index]+i,(char*)key,_HASH) ){
       if( isleaf ){
         *r_index = index;
         i -= SIZEOF_LONG;
@@ -230,7 +247,7 @@ search:
       i = SIZEOF_LONG+1;
       goto search;
     }
-    if( strncmp(db->path[index]+i,key,_HASH) > 0 ||
+    if( strncmp((char*)db->path[index]+i,(char*)key,_HASH) > 0 ||
     		db->path[index][i] == 0 ){
       if( isleaf ){
         *r_index = index;
@@ -253,7 +270,7 @@ search:
 }
 
 void
-put(db* db, unsigned char* key, unsigned char* value)
+db_put(db* db, unsigned char* key, unsigned char* value)
 {
 	int index;
   uint64_t ret;
@@ -265,18 +282,18 @@ put(db* db, unsigned char* key, unsigned char* value)
   else{
 #endif
     if( (ret = search(db,key,&index)) > 0 ){
-      uint64_t k_len = strlen(key);
-      uint64_t v_len = strlen(value);
+      uint64_t k_len = strlen((char*)key);
+      uint64_t v_len = strlen((char*)value);
       if( k_len+v_len > _MAX ){ return; }
       uint64_t n_len = k_len+v_len+SIZEOF_LONG+SIZEOF_LONG+1;
-      unsigned char* nnode = malloc(n_len+1);
+      unsigned char* nnode = (unsigned char *)malloc(n_len+1);
       unsigned char* ptr = nnode;
       memset(nnode,0,n_len+1);
       nnode[0] = 1;
       to_big(ptr+1,k_len);
-      strncpy(ptr+SIZEOF_LONG+1,key,k_len);
+      memcpy(ptr+SIZEOF_LONG+1,key,k_len);
       to_big(ptr+SIZEOF_LONG+k_len+1,v_len);
-      strncpy(ptr+SIZEOF_LONG+k_len+SIZEOF_LONG+1,value,v_len);
+      memcpy(ptr+SIZEOF_LONG+k_len+SIZEOF_LONG+1,value,v_len);
       fseeko(db->fp,0,SEEK_END);
       uint64_t addr = ftello(db->fp);
       fwrite(nnode,1,n_len,db->fp);
@@ -296,16 +313,16 @@ unsigned char*
 get(db* db, unsigned char* key)
 {
   int index;
-  if( _HASH > strlen(key) ){
+  if( _HASH > strlen((char*)key) ){
     unsigned char* okey = key;
-    key = malloc(_HASH+1);
+    key = (unsigned char *)malloc(_HASH+1);
     memset(key,0x61,_HASH+1);
-    strncpy(key,okey,strlen(okey));
+    memcpy(key,okey,strlen((char*)okey));
   }
   if( !search(db,key,&index) ){
     int i = SIZEOF_LONG+1;
     for( ; i<_WIDTH; i+=(SIZEOF_LONG+_HASH) ){
-      if( !strncmp(db->path[index]+i,key,_HASH) ){
+      if( !strncmp((char*)db->path[index]+i,(char*)key,_HASH) ){
         i -= SIZEOF_LONG;
         uint64_t addr = from_big(db->path[index]+i);
         fseeko(db->fp,addr,SEEK_SET);
@@ -318,12 +335,12 @@ get(db* db, unsigned char* key)
         }
         fread(k_len,1,SIZEOF_LONG,db->fp);
         uint64_t k_lenb = from_big(k_len);
-        unsigned char* k = malloc(k_lenb);
+        unsigned char* k = (unsigned char *)malloc(k_lenb);
         memset(k,0,k_lenb);
         fread(k,1,k_lenb,db->fp);
         fread(v_len,1,SIZEOF_LONG,db->fp);
         uint64_t v_lenb = from_big(v_len);
-        unsigned char* v = malloc(v_lenb);
+        unsigned char* v = (unsigned char *)malloc(v_lenb);
         memset(v,0,v_lenb);
         fread(v,1,v_lenb,db->fp);
         return v;
@@ -335,19 +352,19 @@ get(db* db, unsigned char* key)
 }
 
 void
-delete(db* db, unsigned char* key)
+db_delete(db* db, unsigned char* key)
 {
   int index;
-  if( _HASH > strlen(key) ){
+  if( _HASH > strlen((char*)key) ){
     unsigned char* okey = key;
-    key = malloc(_HASH+1);
+    key = (unsigned char *)malloc(_HASH+1);
     memset(key,0x61,_HASH+1);
-    strncpy(key,okey,strlen(okey));
+    memcpy(key,okey,strlen((char*)okey));
   }
   if( !search(db,key,&index) ){
     int i = SIZEOF_LONG+1;
     for( ; i<_WIDTH; i+=(SIZEOF_LONG+_HASH) ){
-      if( !strncmp(db->path[index]+i,key,_HASH) ){
+      if( !strncmp((char*)db->path[index]+i,(char*)key,_HASH) ){
         i -= SIZEOF_LONG;
         unsigned char del = 0;
         uint64_t addr = from_big(db->path[index]+i);
@@ -359,20 +376,30 @@ delete(db* db, unsigned char* key)
 }
 
 void
-db_init(db* db, const char* name)
+db_load(db* db, const char* name)
 {
   uint64_t addr;
-  unsigned char* zero = malloc(_WIDTH);
+  unsigned char* zero = (unsigned char *)malloc(_WIDTH);
   memset(zero,0,_WIDTH);
   zero[0] = 1;
   db->fp = fopen(name,"rb+");
   if( !db->fp ){
-    db->fp = fopen(name,"wb+");
-    addr = SIZEOF_LONG;
-    fseeko(db->fp,0,SEEK_SET);
-    fwrite(&addr,SIZEOF_LONG,1,db->fp);
-    fwrite(zero,1,_WIDTH,db->fp);
+    db_init(db, name)
   }
+}
+
+void
+db_init(db* db, const char* name) {
+  uint64_t addr;
+  unsigned char* zero = (unsigned char *)malloc(_WIDTH);
+  memset(zero,0,_WIDTH);
+  zero[0] = 1;
+
+  db->fp = fopen(name,"wb");
+  addr = SIZEOF_LONG;
+  fseeko(db->fp,0,SEEK_SET);
+  fwrite(&addr,SIZEOF_LONG,1,db->fp);
+  fwrite(zero,1,_WIDTH,db->fp);
 }
 
 void
@@ -383,27 +410,31 @@ db_close(db* db)
 
 /*** function for testing ***/
 
-char *random_str() {
-  int i;
-  char *alphabet = "abcdefghijklmnopqrstuvwxyz";
-  char *string = malloc(33);
-  for (i=0; i<32; i++) {
-    string[i] = alphabet[rand()%26];
-  }
-  string[i] = 0;
-  return string;
-}
+// char *random_str() {
+//   int i;
+//   char *alphabet = "abcdefghijklmnopqrstuvwxyz";
+//   char *string = (unsigned char *)malloc(33);
+//   for (i=0; i<32; i++) {
+//     string[i] = alphabet[rand()%26];
+//   }
+//   string[i] = 0;
+//   return string;
+// }
 
 /***************************/
 
 int
 main(void)
 {
-  db new;
-  db_init(&new, "test");
-  put(&new,"hello","world");
-  char* value = get(&new,"hello");
+  db test_db;
+  db_init(&test_db, "test");
+  char a[] = "hello";
+  char b[] = "world";
+  char c[] = "lalal";
+  // put(&test_db,(unsigned char*)a,(unsigned char*)b);
+  db_put(&test_db,(unsigned char*)a,(unsigned char*)c);
+  char* value = (char*)get(&test_db,(unsigned char*)a);
   puts(value);
-  db_close(&new);
+  db_close(&test_db);
   return 0;
 }
