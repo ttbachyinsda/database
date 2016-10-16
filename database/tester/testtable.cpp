@@ -15,9 +15,11 @@ string testtable::RandomString()
 
 void testtable::begintest()
 {
+    string filename="onetable.db";
+    remove(filename.c_str());
     cout<<"test table begin..."<<endl;
     Table* onetable = new FixedSizeTable();
-    onetable->setfilename("onetable.db");
+    onetable->setfilename(filename);
     onetable->setname("testtable");
     vector<string> clname; vector<string> cltype; vector<int> clsize;
     clname.push_back("userid"); clname.push_back("password"); clname.push_back("age");
