@@ -2,8 +2,7 @@
 #define DATABASEMANAGER_H
 #include "databasehandler/database.h"
 
-class DatabaseManager
-{
+class DatabaseManager {
 public:
     DatabaseManager();
     DatabaseManager(string filename);
@@ -12,11 +11,12 @@ public:
     string getname();
     string getfilename();
     bool Initialize();
-    Database * getDatabase(int num);
-    void addDatabase(Database *now);
+    Database* getDatabase(int num);
+    void addDatabase(Database* now);
     void removeDatabase(int num);
     bool writeToFile();
     ~DatabaseManager();
+
 private:
     string name;
     string filename;

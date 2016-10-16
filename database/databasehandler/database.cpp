@@ -2,47 +2,41 @@
 
 Database::Database()
 {
-    this->filename="";
-    this->tablenum=0;
-    this->f=NULL;
+    this->filename = "";
+    this->tablenum = 0;
+    this->f = NULL;
     this->tablelist.clear();
 }
 Database::Database(string filename)
 {
-    this->filename=filename;
-    this->tablenum=0;
+    this->filename = filename;
+    this->tablenum = 0;
     this->tablelist.clear();
-    this->f=NULL;
+    this->f = NULL;
     writeToFile();
 }
 Database::~Database()
 {
-    if (this->filename!="")
+    if (this->filename != "")
         writeToFile();
-    for (int i=0;i<this->tablenum;i++)
+    for (int i = 0; i < this->tablenum; i++)
         delete this->tablelist[i];
     this->tablelist.clear();
-    this->tablenum=0;
-    this->f=NULL;
+    this->tablenum = 0;
+    this->f = NULL;
 }
 
-void Database::setfilename(string filename)
-{
-    this->filename=filename;
-}
-void Database::setname(string name)
-{
-    this->name=name;
-}
+void Database::setfilename(string filename) { this->filename = filename; }
+void Database::setname(string name) { this->name = name; }
 bool Database::writeToFile()
 {
-    this->f=fopen(this->filename.c_str(),"w");
-    if (this->f==NULL) return false;
-    fprintf(this->f,"%s\n",name.c_str());
-    fprintf(this->f,"%d\n",tablenum);
-    for (int i=0;i<tablenum;i++)
-    {
-        fprintf(this->f,"%s\n",tablelist[i]->getfilename().c_str());
+    this->f = fopen(this->filename.c_str(), "w");
+    if (this->f == NULL)
+        return false;
+    fprintf(this->f, "%s\n", name.c_str());
+    fprintf(this->f, "%d\n", tablenum);
+    for (int i = 0; i < tablenum; i++) {
+        fprintf(this->f, "%s\n", tablelist[i]->getfilename().c_str());
     }
     fclose(this->f);
     return true;
@@ -50,62 +44,57 @@ bool Database::writeToFile()
 
 bool Database::Initialize()
 {
-    for (int i=0;i<this->tablenum;i++)
-        if (tablelist[i]!=NULL)
+    for (int i = 0; i < this->tablenum; i++)
+        if (tablelist[i] != NULL)
             delete tablelist[i];
-    tablenum=0;
+    tablenum = 0;
     tablelist.clear();
-    if (this->f!=NULL) fclose(f);
-    this->f=NULL;
-    this->f=fopen(this->filename.c_str(),"r");
-    if (this->f==NULL) return false;
-    char *s = new char[256];  //Max name size is 256
-    char *tp = new char[256];
-    fscanf(this->f,"%s",s);
-    name=s;
-    fscanf(this->f,"%d",&tablenum);
-    for (int i=0;i<tablenum;i++)
-    {
-        memset(s,0,256);
-        fscanf(this->f,"%s",s);
-        fscanf(this->f,"%s",tp);
-        if (tp[0]=='F')
-        {
-            Table *t = new FixedSizeTable();
-            string temp=s;
+    if (this->f != NULL)
+        fclose(f);
+    this->f = NULL;
+    this->f = fopen(this->filename.c_str(), "r");
+    if (this->f == NULL)
+        return false;
+    char* s = new char[256]; // Max name size is 256
+    char* tp = new char[256];
+    fscanf(this->f, "%s", s);
+    name = s;
+    fscanf(this->f, "%d", &tablenum);
+    for (int i = 0; i < tablenum; i++) {
+        memset(s, 0, 256);
+        fscanf(this->f, "%s", s);
+        fscanf(this->f, "%s", tp);
+        if (tp[0] == 'F') {
+            Table* t = new FixedSizeTable();
+            string temp = s;
             t->setfilename(temp);
             tablelist.push_back(t);
         }
     }
     fclose(this->f);
-    this->f=NULL;
+    this->f = NULL;
     return true;
 }
 Table* Database::getTable(int num)
 {
-    if (num<tablenum)
+    if (num < tablenum)
         return tablelist[num];
     else
         return NULL;
 }
-void Database::addTable(Table *now)
+void Database::addTable(Table* now)
 {
     tablenum++;
     tablelist.push_back(now);
 }
 void Database::removeTable(int num)
 {
-    Table* temp=tablelist.at(num);
-    if (temp!=NULL) delete temp;
-    vector<Table*>::iterator k=tablelist.begin()+num;
+    Table* temp = tablelist.at(num);
+    if (temp != NULL)
+        delete temp;
+    vector<Table*>::iterator k = tablelist.begin() + num;
     tablelist.erase(k);
-    tablenum --;
+    tablenum--;
 }
-string Database::getname()
-{
-    return this->name;
-}
-string Database::getfilename()
-{
-    return this->filename;
-}
+string Database::getname() { return this->name; }
+string Database::getfilename() { return this->filename; }

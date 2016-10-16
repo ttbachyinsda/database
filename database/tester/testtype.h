@@ -5,8 +5,7 @@
 #include "typehandler/databasetype.h"
 #include <QTime>
 
-class testtype
-{
+class testtype {
 public:
     testtype();
     void begintest(bool timetest);

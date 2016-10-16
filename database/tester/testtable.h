@@ -4,8 +4,7 @@
 #include "databasehandler/database.h"
 #include "databasehandler/fixedsizetable.h"
 #include <QTime>
-class testtable
-{
+class testtable {
 public:
     testtable();
     string RandomString();

@@ -1,10 +1,9 @@
 #ifndef DATABASE_H
 #define DATABASE_H
-#include "table.h"
 #include "fixedsizetable.h"
+#include "table.h"
 
-class Database
-{
+class Database {
 public:
     Database();
     Database(string filename);
@@ -13,11 +12,12 @@ public:
     string getname();
     string getfilename();
     bool Initialize();
-    Table * getTable(int num);
-    void addTable(Table *now);
+    Table* getTable(int num);
+    void addTable(Table* now);
     void removeTable(int num);
     bool writeToFile();
     ~Database();
+
 private:
     string name;
     string filename;
