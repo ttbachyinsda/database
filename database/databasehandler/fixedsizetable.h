@@ -16,6 +16,7 @@ public:
     bool Modify(int pagenum,int rownum);
     bool DeleteAt(int pagenum,int rownum);
     bool FindAt(int pagenum,int rownum);
+    int getPageRowNum(int pagenum);
     int getPageNum();
     int getRowSize();
     int getMaxRowNum();

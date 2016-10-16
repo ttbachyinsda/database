@@ -25,6 +25,9 @@ public:
     virtual bool Initialize()=0;
     bool havecreatetable=false;
     bool haveinitialize=false;
+    virtual int getPageNum()=0;
+    virtual int getPageRowNum(int pagenum)=0;
+    virtual bool Modify(int pagenum,int rownum)=0;
     virtual bool DeleteAt(int pagenum,int rownum)=0;
     virtual bool FindAt(int pagenum,int rownum)=0;
     virtual void createTable(vector<string> clname,vector<string> cltype,vector<int> clsize)=0;

@@ -23,7 +23,7 @@ string testtable::InttoString(int num)
 
 void testtable::begintest()
 {
-    string filename="onetable.db";
+    string filename="onetable.tb";
     cout<<"test table begin..."<<endl;
     Table* onetable = new FixedSizeTable();
     onetable->setfilename(filename);
@@ -44,6 +44,8 @@ void testtable::begintest()
     onetable->Insert();
     aaa.clear();
     }
+    cout<<onetable->getPageNum()<<endl;
+    cout<<onetable->getPageRowNum(1030)<<endl;
     int time_Diff = time.elapsed();
     float f = time_Diff/1000.0;
     cout<<"Time table: "<<f<<endl;
@@ -57,7 +59,19 @@ void testtable::begintest()
             cout<<"yes: "<<clname[i]<<" &&&"<<aaa[i]<<"&&& "<<endl;
         }
     }
-    yes=onetable->FindAt(1,1);
+    yes=onetable->FindAt(1031,179);
+    aaa.clear();
+    if (yes)
+    {
+        aaa=onetable->checkOutput();
+        for (unsigned int i=0;i<aaa.size();i++)
+        {
+            cout<<"yes: "<<clname[i]<<" &&&"<<aaa[i]<<"&&& "<<endl;
+        }
+    }
+    yes=onetable->DeleteAt(1031,0);
+    cout<<"try to delete"<<endl;
+    yes=onetable->FindAt(1031,0);
     aaa.clear();
     if (yes)
     {
@@ -72,7 +86,7 @@ void testtable::begintest()
     //Open Again:
     cout<<"Open again"<<endl;
     onetable = new FixedSizeTable();
-        onetable->setfilename("onetable.db");
+        onetable->setfilename(filename);
         onetable->Initialize();
         yes=onetable->FindAt(1,0);
         aaa.clear();

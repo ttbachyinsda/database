@@ -96,11 +96,10 @@ void Database::addTable(Table *now)
 void Database::removeTable(int num)
 {
     Table* temp=tablelist.at(num);
-    string tfilename=temp->getfilename();
     if (temp!=NULL) delete temp;
-    remove(tfilename.c_str());
     vector<Table*>::iterator k=tablelist.begin()+num;
     tablelist.erase(k);
+    tablenum --;
 }
 string Database::getname()
 {

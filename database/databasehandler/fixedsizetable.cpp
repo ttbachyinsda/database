@@ -333,7 +333,8 @@ bool FixedSizeTable::DeleteAt(int pagenum, int rownum)
     char* temp = (char*) malloc(this->RowSize);
     memcpy(temp,b+position1,this->RowSize);
     memcpy(b+position2,temp,this->RowSize);
-    b[1]--;
+    pagerownum--;
+    UIC::inttochar(pagerownum,b+4);
     if (pagenum<this->MaxRecordSize)
     {
         this->RowNumInPage[pagenum]--;
@@ -381,4 +382,14 @@ bool FixedSizeTable::Modify(int pagenum,int rownum)
     int position2=8+this->RowSize*rownum;
     memcpy(b+position2,temp,this->RowSize);
     return true;
+}
+int FixedSizeTable::getPageRowNum(int pagenum)
+{
+    cout<<"maxrecordsize="<<this->MaxRecordSize<<endl;
+    if (pagenum>this->PageNum) return 0;
+    if (pagenum<this->MaxRecordSize) return RowNumInPage[pagenum];
+    int index=0;
+    BufType b = BPM->getPage(fileid, pagenum, index);
+    int nowrownum=UIC::chartoint(b+4);
+    return nowrownum;
 }

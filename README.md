@@ -1,3 +1,10 @@
 # database
 一个有情怀的数据库
-Now it has no commands
+Now it has one commands（底层）
+
+这是一个qt工程。直接运行即可执行底层的几个test。
+test1：测试类型是否正确
+test2：测试数据表能否正确工作
+test3：测试数据库能否正确工作
+test4可以参考test3的测试方法测试数据库管理系统能否正确工作
+目前可以插入删除数据库、数据表、记录，也可以修改记录的值。具体方法请见tester文件夹的测试代码和代码注释。
