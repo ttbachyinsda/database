@@ -96,8 +96,10 @@ void DatabaseManager::addDatabase(Database* now)
 void DatabaseManager::removeDatabase(int num)
 {
     Database* temp = databaselist.at(num);
+    string tempfilename=temp->getfilename();
     if (temp != NULL)
         delete temp;
+    remove(tempfilename.c_str());
     vector<Database*>::iterator k = databaselist.begin() + num;
     databaselist.erase(k);
     databasenum--;

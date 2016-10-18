@@ -25,7 +25,14 @@ SOURCES += main.cpp\
     tester/testtable.cpp \
     tester/testdatabase.cpp \
     typehandler/databasetype.cpp \
-    layer/databasemanager.cpp
+    layer/databasemanager.cpp \
+    recordhandler/fixedsizerecord.cpp \
+    recordhandler/record.cpp \
+    managementhandler/iterator.cpp \
+    managementhandler/fixedsizediterator.cpp \
+    tester/testiterator.cpp \
+    recordhandler/recordfactory.cpp \
+    managementhandler/iteratorfactory.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -46,7 +53,14 @@ HEADERS  += mainwindow.h \
     tester/testtable.h \
     tester/testdatabase.h \
     typehandler/databasetype.h \
-    layer/databasemanager.h
+    layer/databasemanager.h \
+    recordhandler/fixedsizerecord.h \
+    recordhandler/record.h \
+    managementhandler/iterator.h \
+    managementhandler/fixedsizediterator.h \
+    tester/testiterator.h \
+    recordhandler/recordfactory.h \
+    managementhandler/iteratorfactory.h
 
 FORMS    += mainwindow.ui
 

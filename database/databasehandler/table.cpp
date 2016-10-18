@@ -38,6 +38,9 @@ Table::~Table()
     if (BPM != NULL) {
         BPM->close();
     }
+    if (FM != NULL){
+        FM->closeFile(fileid);
+    }
     if (BPM != NULL)
         delete BPM;
     if (FM != NULL)
@@ -98,4 +101,20 @@ vector<string> Table::checkOutput()
     for (int i = 0; i < columncount; i++)
         temp.push_back(column[i]->output());
     return temp;
+}
+BufPageManager* Table::getBPM()
+{
+    return this->BPM;
+}
+int Table::getfileid()
+{
+    return this->fileid;
+}
+DataBaseType** Table::getcolumns()
+{
+    return this->column;
+}
+int Table::getcolumncount()
+{
+    return this->columncount;
 }

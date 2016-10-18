@@ -57,13 +57,21 @@ bool Database::Initialize()
         return false;
     char* s = new char[256]; // Max name size is 256
     char* tp = new char[256];
-    fscanf(this->f, "%s", s);
+    int can = fscanf(this->f, "%s", s);
+    if (can == -1)
+        return false;
     name = s;
-    fscanf(this->f, "%d", &tablenum);
+    can = fscanf(this->f, "%d", &tablenum);
+    if (can == -1)
+        return false;
     for (int i = 0; i < tablenum; i++) {
         memset(s, 0, 256);
-        fscanf(this->f, "%s", s);
-        fscanf(this->f, "%s", tp);
+        can = fscanf(this->f, "%s", s);
+        if (can == -1)
+            return false;
+        can = fscanf(this->f, "%s", tp);
+        if (can == -1)
+            return false;
         if (tp[0] == 'F') {
             Table* t = new FixedSizeTable();
             string temp = s;
@@ -90,8 +98,10 @@ void Database::addTable(Table* now)
 void Database::removeTable(int num)
 {
     Table* temp = tablelist.at(num);
+    string tempfilename=temp->getfilename();
     if (temp != NULL)
         delete temp;
+    remove(tempfilename.c_str());
     vector<Table*>::iterator k = tablelist.begin() + num;
     tablelist.erase(k);
     tablenum--;
