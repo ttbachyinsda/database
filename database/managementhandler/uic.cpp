@@ -125,12 +125,11 @@ string UIC::readstringandjump(BufType b, FileIterator& iterator, int size_t, int
 DataBaseType** UIC::copytype(DataBaseType** input, int inputlen)
 {
     DataBaseType** temp = new DataBaseType*[inputlen];
-    for (int i=0;i<inputlen;i++)
-    {
-        char *s = (char*) malloc(4);
-        int nowsize=input[i]->getSize();
-        convert(input[i],s);
-        temp[i]=reconvert(s,nowsize);
+    for (int i = 0; i < inputlen; i++) {
+        char* s = (char*)malloc(4);
+        int nowsize = input[i]->getSize();
+        convert(input[i], s);
+        temp[i] = reconvert(s, nowsize);
     }
     return temp;
 }

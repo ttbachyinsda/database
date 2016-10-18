@@ -98,7 +98,7 @@ void Database::addTable(Table* now)
 void Database::removeTable(int num)
 {
     Table* temp = tablelist.at(num);
-    string tempfilename=temp->getfilename();
+    string tempfilename = temp->getfilename();
     if (temp != NULL)
         delete temp;
     remove(tempfilename.c_str());

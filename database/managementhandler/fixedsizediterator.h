@@ -3,13 +3,12 @@
 
 #include "iterator.h"
 #include "recordhandler/fixedsizerecord.h"
-class FixedSizedIterator : public Iterator
-{
+class FixedSizedIterator : public Iterator {
 public:
     FixedSizedIterator(Table* table);
     bool nextrow();
-    bool access(int pagenum,int rownum);
-    bool getdata(char* output,int& outputsize);
+    bool access(int pagenum, int rownum);
+    bool getdata(char* output, int& outputsize);
     Record* getdata();
     bool deletedata();
     bool insertdata(Record* rec);
@@ -17,6 +16,7 @@ public:
     void getbegin();
     bool modify(Record* rec);
     int getcurrentsize();
+
 private:
     int getRowSize();
     int fileid;

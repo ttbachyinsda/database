@@ -2,11 +2,11 @@
 
 Record::Record()
 {
-    this->data=NULL;
-    this->columncount=0;
-    this->columns=NULL;
-    this->columnsize=NULL;
-    this->size=0;
+    this->data = NULL;
+    this->columncount = 0;
+    this->columns = NULL;
+    this->columnsize = NULL;
+    this->size = 0;
 }
 char* Record::getData()
 {
@@ -18,15 +18,16 @@ int Record::getSize()
 }
 Record::~Record()
 {
-    if (this->data!=NULL) delete[] this->data;
-    if (this->columnsize!=NULL) delete[] this->columnsize;
-    if (this->columns!=NULL)
-    {
-        for (int i=0;i<columncount;i++)
-            if (columns[i]!=NULL)
+    if (this->data != NULL)
+        delete[] this->data;
+    if (this->columnsize != NULL)
+        delete[] this->columnsize;
+    if (this->columns != NULL) {
+        for (int i = 0; i < columncount; i++)
+            if (columns[i] != NULL)
                 delete columns[i];
         delete[] columns;
     }
-    columncount=0;
-    size=0;
+    columncount = 0;
+    size = 0;
 }

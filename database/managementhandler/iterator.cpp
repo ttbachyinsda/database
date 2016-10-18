@@ -2,12 +2,10 @@
 
 Iterator::Iterator()
 {
-
 }
 
 Iterator::~Iterator()
 {
-
 }
 Iterator& Iterator::operator++()
 {

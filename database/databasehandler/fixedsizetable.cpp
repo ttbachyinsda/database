@@ -158,7 +158,7 @@ char* FixedSizeTable::Packager()
     }
     return temp;
 }
-bool FixedSizeTable::InsertAt(int pagenum,char* insertdata,int &rownum)
+bool FixedSizeTable::InsertAt(int pagenum, char* insertdata, int& rownum)
 {
     if (pagenum == 0)
         return false;
@@ -188,7 +188,7 @@ bool FixedSizeTable::InsertAt(int pagenum,char* insertdata,int &rownum)
     if (pagerownum == this->MaxRowNum)
         return false;
     position += 8 + this->RowSize * pagerownum;
-    rownum=pagerownum;
+    rownum = pagerownum;
     memcpy(b + position, insertdata, this->RowSize);
     pagerownum++;
     UIC::inttochar(pagerownum, b + 4);
@@ -205,7 +205,7 @@ bool FixedSizeTable::Insert()
     bool can = false;
     for (int i = 1; i < this->MaxRecordSize; i++)
         if (this->RowNumInPage[i] < this->MaxRowNum) {
-            can = InsertAt(i,insertdata,rownum);
+            can = InsertAt(i, insertdata, rownum);
             if (!can) {
                 cout << "ERROR:: ?????" << endl;
             }
@@ -216,12 +216,12 @@ bool FixedSizeTable::Insert()
             }
         }
     for (int i = this->MaxRecordSize; i <= this->PageNum; i++) {
-        can = InsertAt(i,insertdata,rownum);
+        can = InsertAt(i, insertdata, rownum);
         if (can)
             return true;
     }
     this->PageNum++;
-    can = InsertAt(this->PageNum,insertdata,rownum);
+    can = InsertAt(this->PageNum, insertdata, rownum);
     return can;
 }
 bool FixedSizeTable::modifypd(int pagenum, int rownum, BufType& ct,
@@ -338,28 +338,29 @@ int FixedSizeTable::getPageRowNum(int pagenum)
     int nowrownum = UIC::chartoint(b + 4);
     return nowrownum;
 }
-bool FixedSizeTable::FastModify(int pagenum,int pageposition,Record *rec)
+bool FixedSizeTable::FastModify(int pagenum, int pageposition, Record* rec)
 {
     int index;
-    BufType b=BPM->getPage(fileid,pagenum,index);
-    memcpy(b+pageposition,rec->getData(),this->RowSize);
+    BufType b = BPM->getPage(fileid, pagenum, index);
+    memcpy(b + pageposition, rec->getData(), this->RowSize);
     return true;
 }
-bool FixedSizeTable::FastInsert(int &pagenum,int &pageposition, Record* rec)
+bool FixedSizeTable::FastInsert(int& pagenum, int& pageposition, Record* rec)
 {
     int rownum;
-    bool can=InsertAt(pagenum,rec->getData(),rownum);
-    if (!can) return false;
-    pageposition = rownum*this->RowSize+8;
+    bool can = InsertAt(pagenum, rec->getData(), rownum);
+    if (!can)
+        return false;
+    pageposition = rownum * this->RowSize + 8;
     return true;
 }
-bool FixedSizeTable::FastAllInsert(int &pagenum,int &pageposition,Record* rec)
+bool FixedSizeTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
 {
     bool can = false;
     for (int i = 1; i < this->MaxRecordSize; i++)
         if (this->RowNumInPage[i] < this->MaxRowNum) {
-            pagenum=i;
-            can = FastInsert(pagenum,pageposition,rec);
+            pagenum = i;
+            can = FastInsert(pagenum, pageposition, rec);
             if (!can) {
                 cout << "ERROR:: ?????" << endl;
             }
@@ -370,33 +371,33 @@ bool FixedSizeTable::FastAllInsert(int &pagenum,int &pageposition,Record* rec)
             }
         }
     for (int i = this->MaxRecordSize; i <= this->PageNum; i++) {
-        pagenum=i;
-        can = FastInsert(pagenum,pageposition,rec);
+        pagenum = i;
+        can = FastInsert(pagenum, pageposition, rec);
         if (can)
             return true;
     }
     this->PageNum++;
-    pagenum=this->PageNum;
-    can = FastInsert(pagenum,pageposition,rec);
+    pagenum = this->PageNum;
+    can = FastInsert(pagenum, pageposition, rec);
     return can;
 }
 
-Record* FixedSizeTable::FastOutput(int pagenum,int pageposition)
+Record* FixedSizeTable::FastOutput(int pagenum, int pageposition)
 {
     int index;
-    BufType b=BPM->getPage(fileid,pagenum,index);
+    BufType b = BPM->getPage(fileid, pagenum, index);
     Record* temp = new FixedSizeRecord();
-    DataBaseType ** t = UIC::copytype(this->column,columncount);
-    temp->Initialize(t,columncount);
-    temp->Input(b+pageposition);
+    DataBaseType** t = UIC::copytype(this->column, columncount);
+    temp->Initialize(t, columncount);
+    temp->Input(b + pageposition);
     return temp;
 }
-void FixedSizeTable::FastOutput(int pagenum,int pageposition,char* output,int& outputsize)
+void FixedSizeTable::FastOutput(int pagenum, int pageposition, char* output, int& outputsize)
 {
     int index;
-    BufType b=BPM->getPage(fileid,pagenum,index);
-    outputsize=this->RowSize;
-    memcpy(output,b+pageposition,outputsize);
+    BufType b = BPM->getPage(fileid, pagenum, index);
+    outputsize = this->RowSize;
+    memcpy(output, b + pageposition, outputsize);
 }
 string FixedSizeTable::gettabletype()
 {

@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "tester/testdatabase.h"
+#include "tester/testiterator.h"
 #include "tester/testtable.h"
 #include "tester/testtype.h"
-#include "tester/testiterator.h"
 #include <QApplication>
 #include <QQmlExtensionPlugin>
 #include <iostream>

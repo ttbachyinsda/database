@@ -3,11 +3,10 @@
 
 #include "databasehandler/database.h"
 #include "databasehandler/fixedsizetable.h"
-#include <QTime>
-#include "recordhandler/recordfactory.h"
 #include "managementhandler/iteratorfactory.h"
-class testiterator
-{
+#include "recordhandler/recordfactory.h"
+#include <QTime>
+class testiterator {
 public:
     testiterator();
     string RandomString();

@@ -2,16 +2,15 @@
 #define FIXEDSIZERECORD_H
 
 #include "record.h"
-class FixedSizeRecord : public Record
-{
+class FixedSizeRecord : public Record {
 public:
     FixedSizeRecord();
-    void Initialize(DataBaseType **inidata, int datasize);
-    void Input(char *input);
-    bool getAt(int num, char *returndata, int &returndatasize);
+    void Initialize(DataBaseType** inidata, int datasize);
+    void Input(char* input);
+    bool getAt(int num, char* returndata, int& returndatasize);
     string getAt(int num);
     bool set(string* input);
-    bool set(char **input);
+    bool set(char** input);
 };
 
 #endif // FIXEDSIZERECORD_H

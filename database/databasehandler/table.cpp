@@ -38,7 +38,7 @@ Table::~Table()
     if (BPM != NULL) {
         BPM->close();
     }
-    if (FM != NULL){
+    if (FM != NULL) {
         FM->closeFile(fileid);
     }
     if (BPM != NULL)

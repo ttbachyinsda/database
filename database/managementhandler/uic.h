@@ -27,7 +27,7 @@ public:
     static void writeint(BufType b, FileIterator& iterator, int source);
     static string readstring(BufType b, FileIterator& iterator, int size_t);
     static string readstringandjump(BufType b, FileIterator& iterator, int size_t, int jumpsize);
-    static DataBaseType** copytype(DataBaseType** input,int inputlen);
+    static DataBaseType** copytype(DataBaseType** input, int inputlen);
 };
 
 #endif // UIC_H
