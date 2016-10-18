@@ -13,6 +13,7 @@ public:
     virtual bool access(int pagenum,int rownum)=0;
     Iterator& operator++();
     virtual bool getdata(char* output,int& outputsize)=0;
+    virtual int getcurrentsize()=0;
     virtual Record* getdata()=0;
     virtual bool available()=0;
     virtual bool modify(Record* rec)=0;

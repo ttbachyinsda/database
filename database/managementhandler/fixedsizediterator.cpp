@@ -95,3 +95,7 @@ void FixedSizedIterator::getbegin()
         nowpagenum++;
     }
 }
+int FixedSizedIterator::getcurrentsize()
+{
+    return nowrowsize;
+}

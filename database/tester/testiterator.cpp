@@ -68,7 +68,7 @@ void testiterator::begintest()
 
     Iterator* iterator=IteratorFactory::getiterator(onetable);
     Record* record=RecordFactory::getrecord(onetable);
-    char* temp=new char[200];
+    char* temp=new char[iterator->getcurrentsize()];
     if (iterator->available())
     {
         int tempsize;

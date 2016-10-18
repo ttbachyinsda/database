@@ -16,9 +16,9 @@ public:
     bool available();
     void getbegin();
     bool modify(Record* rec);
+    int getcurrentsize();
 private:
     int getRowSize();
-
     int fileid;
     BufPageManager* BPM;
 };
