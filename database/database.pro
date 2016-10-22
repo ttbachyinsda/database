@@ -33,6 +33,12 @@ SOURCES += main.cpp\
     tester/testiterator.cpp \
     recordhandler/recordfactory.cpp \
     managementhandler/iteratorfactory.cpp
+    tester/testsql.cpp \
+    sqlengine/sqlparser.cpp \
+    sqlengine/sqllexer.cpp \
+    sqlengine/sqldriver.cpp \
+    sqlengine/sqlaction.cpp \
+    sqlengine/sqlstruct.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -61,6 +67,15 @@ HEADERS  += mainwindow.h \
     tester/testiterator.h \
     recordhandler/recordfactory.h \
     managementhandler/iteratorfactory.h
+    tester/testsql.h \
+    sqlengine/stack.hh \
+    sqlengine/sqlparser.hpp \
+    sqlengine/sqllexer.h \
+    sqlengine/sqldriver.h \
+    sqlengine/position.hh \
+    sqlengine/location.hh \
+    sqlengine/sqlaction.h \
+    sqlengine/sqlstruct.h
 
 FORMS    += mainwindow.ui
 

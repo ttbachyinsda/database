@@ -1,0 +1,7 @@
+# Qt Build Files
+build-database-Desktop*/
+*.pro.user
+
+# CLion Files
+.idea/
+CMakeLists.txt
