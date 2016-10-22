@@ -32,7 +32,7 @@ SOURCES += main.cpp\
     managementhandler/fixedsizediterator.cpp \
     tester/testiterator.cpp \
     recordhandler/recordfactory.cpp \
-    managementhandler/iteratorfactory.cpp
+    managementhandler/iteratorfactory.cpp \
     tester/testsql.cpp \
     sqlengine/sqlparser.cpp \
     sqlengine/sqllexer.cpp \
@@ -66,7 +66,7 @@ HEADERS  += mainwindow.h \
     managementhandler/fixedsizediterator.h \
     tester/testiterator.h \
     recordhandler/recordfactory.h \
-    managementhandler/iteratorfactory.h
+    managementhandler/iteratorfactory.h \
     tester/testsql.h \
     sqlengine/stack.hh \
     sqlengine/sqlparser.hpp \

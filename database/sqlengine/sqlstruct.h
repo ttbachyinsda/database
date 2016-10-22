@@ -25,5 +25,20 @@ struct SQLType
     void dump() const;
 };
 
+struct SQLValue
+{
+    enum {
+        ENUMERATE, STRING, NUL
+    } type;
+
+    std::string content;
+
+    SQLValue() {
+        type = SQLValue::STRING;
+    }
+
+    void dump() const;
+};
+
 
 #endif // SQLSTRUCT_H

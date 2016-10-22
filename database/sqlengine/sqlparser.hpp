@@ -305,21 +305,26 @@ namespace yy {
     {
       // Stmt
       // SysStmt
+      // QueryStmt
       char dummy1[sizeof(SQLAction*)];
 
       // Field
       // Type
       char dummy2[sizeof(SQLType*)];
 
-      // VALUE_INT
-      char dummy3[sizeof(int)];
+      // Value
+      char dummy3[sizeof(SQLValue*)];
 
       // IDENTIFIER
       // VALUE_STRING
+      // VALUE_INT
       char dummy4[sizeof(std::string)];
 
       // FieldList
       char dummy5[sizeof(std::vector<SQLType*>*)];
+
+      // ValueList
+      char dummy6[sizeof(std::vector<SQLValue*>*)];
 };
 
     /// Symbol semantic values.
@@ -358,9 +363,18 @@ namespace yy {
         NUL = 271,
         PRIMARY = 272,
         KEY = 273,
-        IDENTIFIER = 274,
-        VALUE_STRING = 275,
-        VALUE_INT = 276
+        INSERT = 274,
+        INTO = 275,
+        VALUES = 276,
+        DELETE = 277,
+        FROM = 278,
+        UPDATE = 279,
+        SET = 280,
+        WHERE = 281,
+        SELECT = 282,
+        IDENTIFIER = 283,
+        VALUE_STRING = 284,
+        VALUE_INT = 285
       };
     };
 
@@ -402,11 +416,13 @@ namespace yy {
 
   basic_symbol (typename Base::kind_type t, const SQLType* v, const location_type& l);
 
-  basic_symbol (typename Base::kind_type t, const int v, const location_type& l);
+  basic_symbol (typename Base::kind_type t, const SQLValue* v, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const std::vector<SQLType*>* v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const std::vector<SQLValue*>* v, const location_type& l);
 
 
       /// Constructor for symbols with semantic value.
@@ -541,6 +557,42 @@ namespace yy {
 
     static inline
     symbol_type
+    make_INSERT (const location_type& l);
+
+    static inline
+    symbol_type
+    make_INTO (const location_type& l);
+
+    static inline
+    symbol_type
+    make_VALUES (const location_type& l);
+
+    static inline
+    symbol_type
+    make_DELETE (const location_type& l);
+
+    static inline
+    symbol_type
+    make_FROM (const location_type& l);
+
+    static inline
+    symbol_type
+    make_UPDATE (const location_type& l);
+
+    static inline
+    symbol_type
+    make_SET (const location_type& l);
+
+    static inline
+    symbol_type
+    make_WHERE (const location_type& l);
+
+    static inline
+    symbol_type
+    make_SELECT (const location_type& l);
+
+    static inline
+    symbol_type
     make_IDENTIFIER (const std::string& v, const location_type& l);
 
     static inline
@@ -549,7 +601,7 @@ namespace yy {
 
     static inline
     symbol_type
-    make_VALUE_INT (const int& v, const location_type& l);
+    make_VALUE_INT (const std::string& v, const location_type& l);
 
 
     /// Build a parser object.
@@ -753,12 +805,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 48,     ///< Last index in yytable_.
-      yynnts_ = 7,  ///< Number of nonterminal symbols.
+      yylast_ = 69,     ///< Last index in yytable_.
+      yynnts_ = 10,  ///< Number of nonterminal symbols.
       yyfinal_ = 2, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 26  ///< Number of tokens.
+      yyntokens_ = 38  ///< Number of tokens.
     };
 
 
@@ -770,7 +822,7 @@ namespace yy {
 
 
 } // yy
-#line 774 "sqlparser.hpp" // lalr1.cc:377
+#line 826 "sqlparser.hpp" // lalr1.cc:377
 
 
 

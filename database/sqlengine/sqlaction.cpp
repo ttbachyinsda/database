@@ -61,3 +61,20 @@ bool SQLShowTablesAction::execute()
 {
     return true;
 }
+
+SQLInsertAction::~SQLInsertAction()
+{
+    for (SQLValue* value : *valueList) {
+        delete value;
+    }
+    delete valueList;
+}
+
+bool SQLInsertAction::execute()
+{
+    std::cout << "Inserted Into " << this->identifier << std::endl;
+    for (SQLValue* value : *valueList) {
+        value->dump();
+    }
+    return true;
+}

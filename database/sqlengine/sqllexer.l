@@ -66,7 +66,7 @@ using token = yy::SQLParser::token;
 (?i:"from")             { return token::FROM;       }
 
 [0-9]+                  {
-                            yylval->build<int>(std::atoi(yytext));
+                            yylval->build<std::string>(yytext);
                             return token::VALUE_INT;
                         }
 

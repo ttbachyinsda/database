@@ -135,4 +135,18 @@ public:
     bool execute();
 };
 
+/**
+ * @brief The SQLInsertAction class
+ */
+class SQLInsertAction : public SQLAction
+{
+    std::string identifier;
+    std::vector<SQLValue*>* valueList;
+public:
+    SQLInsertAction(const std::string& identifier, std::vector<SQLValue*>* vList)
+        : identifier(identifier), valueList(vList) {}
+    ~SQLInsertAction();
+    bool execute();
+};
+
 #endif //DATABASE_SQLACTION_H

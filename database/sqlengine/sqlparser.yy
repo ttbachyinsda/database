@@ -50,14 +50,15 @@
 %token INSERT INTO VALUES DELETE FROM
 %token UPDATE SET WHERE SELECT
 
-%token <std::string> IDENTIFIER VALUE_STRING
-%token <int>         VALUE_INT
+%token <std::string> IDENTIFIER VALUE_STRING VALUE_INT
 %token ';' '(' ')' ',' '=' '>' '<'
 /*%token SELECT UPDATE DELETE FROM*/
 
-%type <SQLAction*> Stmt SysStmt
+%type <SQLAction*> Stmt SysStmt QueryStmt
 %type <std::vector<SQLType*>*> FieldList
 %type <SQLType*> Type Field
+%type <SQLValue*> Value
+%type <std::vector<SQLValue*>*> ValueList
 
 %locations
 
@@ -76,7 +77,10 @@ Stmt            : SysStmt ';' // default as $$ = $1;
                 {
                     $$ = $1;
                 }
-                /*| QueryStmt ';'*/
+                | QueryStmt ';'
+                {
+                    $$ = $1;
+                }
                 ;
 
 SysStmt         : CREATE DATABASE IDENTIFIER
@@ -148,19 +152,56 @@ Type            : INT '(' VALUE_INT ')'
                 {
                     $$ = new SQLType();
                     $$->type = SQLType::INT;
-                    $$->length = $3;
+                    $$->length = atoi($3.c_str());
                 }
                 | CHAR '(' VALUE_INT ')'
                 {
                     $$ = new SQLType();
                     $$->type = SQLType::CHAR;
-                    $$->length = $3;
+                    $$->length = atoi($3.c_str());
                 }
                 | VARCHAR '(' VALUE_INT ')'
                 {
                     $$ = new SQLType();
                     $$->type = SQLType::VARCHAR;
-                    $$->length = $3;
+                    $$->length = atoi($3.c_str());
+                }
+                ;
+
+QueryStmt       : INSERT INTO IDENTIFIER VALUES '(' ValueList ')'
+                {
+                    $$ = new SQLInsertAction($3, $6);
+                }
+                ;
+
+ValueList       : Value
+                {
+                    $$ = new std::vector<SQLValue*>();
+                    $$->push_back($1);
+                }
+                | ValueList ',' Value
+                {
+                    $$ = $1;
+                    $$->push_back($3);
+                }
+                ;
+
+Value           : VALUE_INT
+                {
+                    $$ = new SQLValue();
+                    $$->type = SQLValue::ENUMERATE;
+                    $$->content = $1;
+                }
+                | VALUE_STRING
+                {
+                    $$ = new SQLValue();
+                    $$->type = SQLValue::STRING;
+                    $$->content = $1;
+                }
+                | NUL
+                {
+                    $$ = new SQLValue();
+                    $$->type = SQLValue::NUL;
                 }
                 ;
 
