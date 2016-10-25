@@ -32,16 +32,18 @@ void testiterator::begintest()
     clname.push_back("userid");
     clname.push_back("password");
     clname.push_back("age");
-    string t1="INTE"; string t2="CHAR"; string t3="INTE";
-    string condition="FRTO00000000791160";
-    char *testcondition = new char[condition.length()];
-    memcpy(testcondition,condition.data(),condition.length());
-    DataBaseType* type1=UIC::reconvert(t1.data(),6,true);
-    int index=0;
-    type1->readcondition(testcondition,index);
+    string t1 = "INTE";
+    string t2 = "CHAR";
+    string t3 = "INTE";
+    string condition = "FRTO00000000791160";
+    char* testcondition = new char[condition.length()];
+    memcpy(testcondition, condition.data(), condition.length());
+    DataBaseType* type1 = UIC::reconvert(t1.data(), 6, true);
+    int index = 0;
+    type1->readcondition(testcondition, index);
     delete[] testcondition;
-    DataBaseType* type2=UIC::reconvert(t2.data(),20,true);
-    DataBaseType* type3=UIC::reconvert(t3.data(),2,true);
+    DataBaseType* type2 = UIC::reconvert(t2.data(), 20, true);
+    DataBaseType* type3 = UIC::reconvert(t3.data(), 2, true);
     cltype.push_back(type1);
     cltype.push_back(type2);
     cltype.push_back(type3);
@@ -56,7 +58,9 @@ void testiterator::begintest()
         aaa[0] = InttoString(i);
         aaa[1] = "12345678";
         aaa[2] = "58";
-        bool can=t->set(aaa);
+        bool can = t->set(aaa);
+        can=t->setAt(1,"",true);
+        t->update();
         if (can)
             onetable->FastAllInsert(pagenum, pageposition, t);
         //if (i%1000==0) cout<<pagenum<<' '<<pageposition<<endl;
@@ -83,7 +87,6 @@ void testiterator::begintest()
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
-
     }
 
     ++(*iterator);
@@ -115,7 +118,6 @@ void testiterator::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-
 
     delete iterator;
     delete record;

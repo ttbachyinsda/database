@@ -1,6 +1,7 @@
 使用说明：
 不要问我为什么没有换行，其实有，下载下来就有了
 如何创建数据表：
+
     string filename = "onetable.tb";
     Table* onetable = new FixedSizeTable();                            //此处创建了一个新的表
     onetable->setfilename(filename);					//设置文件名
@@ -27,12 +28,14 @@
     onetable->Initialize();						//初始化表，必须调用这个函数才能使用
 
 如何打开数据表：
+
     onetable = new FixedSizeTable();
     onetable->setfilename(filename);
     onetable->Initialize();
     这样数据表可以从文件中自动读取信息
 
 如何将数据表与数据库绑定：
+
     onedb.setfilename(filename);
     onedb.setname(dbname);
     onedb.Initialize();					//关闭数据库后remove文件名就可以删除数据库
@@ -50,6 +53,7 @@
     绑定之后，调用数据库的析构函数时会调用每一个表的析构函数，就不用自己去调用了。
 
 如何查询指定位置的数据：
+
     iterator = IteratorFactory::getiterator(onetable);	//新建一个iterator，指向表的第一个数据，如果没有第一个available为false
     record = RecordFactory::getrecord(onetable);	//新建一个record
     temp = new char[iterator->getcurrentsize()];
@@ -63,6 +67,7 @@
     }
 
 如何插入数据：
+
     Record* t = RecordFactory::getrecord(onetable);
     for (int i = 0; i < 200000; i++) {
         aaa[0] = InttoString(i);
@@ -77,6 +82,7 @@
     delete[] aaa;
 
 如何删除数据：
+
     iterator->access(300, 0);				//定位
     cout << "try to delete" << endl;
     iterator->deletedata();				//删除
@@ -90,5 +96,6 @@
     }
 
 另外
+
     ++(*iterator); 可以使迭代器+1，即访问下一个元素
     

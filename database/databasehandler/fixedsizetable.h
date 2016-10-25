@@ -11,7 +11,7 @@ public:
     FixedSizeTable();
     ~FixedSizeTable();
     bool Initialize();
-    void createTable(vector<string> clname, vector<DataBaseType *> cltype);
+    void createTable(vector<string> clname, vector<DataBaseType*> cltype);
     bool Modify(int pagenum, int rownum);
     bool DeleteAt(int pagenum, int rownum);
     bool FastModify(int pagenum, int pageposition, Record* rec);

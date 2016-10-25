@@ -40,7 +40,7 @@ public:
     virtual int getMaxRowNum() = 0;
     virtual bool Modify(int pagenum, int rownum) = 0;
     virtual bool DeleteAt(int pagenum, int rownum) = 0;
-    virtual void createTable(vector<string> clname, vector<DataBaseType *> cltype) = 0;
+    virtual void createTable(vector<string> clname, vector<DataBaseType*> cltype) = 0;
     vector<string> gettype();
     virtual ~Table();
 

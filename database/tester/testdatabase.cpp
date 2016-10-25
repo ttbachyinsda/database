@@ -10,10 +10,12 @@ void testdatabase::trytoInitializeTable(Table* temp)
     clname.push_back("userid");
     clname.push_back("password");
     clname.push_back("age");
-    string t1="INTE"; string t2="CHAR"; string t3="INTE";
-    DataBaseType* type1=UIC::reconvert(t1.data(),20,true);
-    DataBaseType* type2=UIC::reconvert(t2.data(),20,true);
-    DataBaseType* type3=UIC::reconvert(t3.data(),2,true);
+    string t1 = "INTE";
+    string t2 = "CHAR";
+    string t3 = "INTE";
+    DataBaseType* type1 = UIC::reconvert(t1.data(), 20, true);
+    DataBaseType* type2 = UIC::reconvert(t2.data(), 20, true);
+    DataBaseType* type3 = UIC::reconvert(t3.data(), 2, true);
     cltype.push_back(type1);
     cltype.push_back(type2);
     cltype.push_back(type3);

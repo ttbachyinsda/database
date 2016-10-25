@@ -17,14 +17,14 @@ void FixedSizeRecord::Initialize(DataBaseType** inidata, int datasize)
         this->columnsize[i] = this->size;
     }
     this->data = new char[this->size];
-    cout<<"initial"<<this->size<<endl;
+    cout << "initial" << this->size << endl;
 }
 void FixedSizeRecord::Input(char* input)
 {
     for (int i = 0; i < this->columncount; i++) {
         int position = ((i == 0) ? 0 : columnsize[i - 1]);
-        int nowsize = ((i == 0) ? columnsize[0] : columnsize[i] - columnsize[i - 1]);
-        int index=0;
+        //int nowsize = ((i == 0) ? columnsize[0] : columnsize[i] - columnsize[i - 1]);
+        int index = 0;
         columns[i]->read(input + position, index);
     }
     memcpy(this->data, input, this->size);
@@ -43,16 +43,14 @@ string FixedSizeRecord::getAt(int num)
 {
     if (num >= this->columncount)
         return "";
-    int position = ((num == 0) ? 0 : columnsize[num - 1]);
-    int nowsize = ((num == 0) ? columnsize[0] : columnsize[num] - columnsize[num - 1]);
-    string temp(this->data + position, nowsize);
-    return temp;
+    return columns[num]->output();
 }
 bool FixedSizeRecord::set(string* input)
 {
     for (int i = 0; i < this->columncount; i++) {
-        bool can=columns[i]->checkRight(input[i]);
-        if (!can) return false;
+        bool can = columns[i]->checkRight(input[i]);
+        if (!can)
+            return false;
     }
     for (int i = 0; i < this->columncount; i++) {
         columns[i]->checkRightAndChange(input[i]);
@@ -60,11 +58,12 @@ bool FixedSizeRecord::set(string* input)
     update();
     return true;
 }
-bool FixedSizeRecord::set(char** input,int*inputlen)
+bool FixedSizeRecord::set(char** input, int* inputlen)
 {
     for (int i = 0; i < this->columncount; i++) {
-        bool can=columns[i]->checkRightc(input[i],inputlen[i]);
-        if (!can) return false;
+        bool can = columns[i]->checkRightc(input[i], inputlen[i]);
+        if (!can)
+            return false;
     }
     for (int i = 0; i < this->columncount; i++) {
         columns[i]->checkRightAndChangec(input[i], inputlen[i]);
@@ -72,12 +71,21 @@ bool FixedSizeRecord::set(char** input,int*inputlen)
     update();
     return true;
 }
+bool FixedSizeRecord::setAt(int wz,string input,bool isnull)
+{
+    if (wz>=this->columncount) return false;
+    bool can=columns[wz]->checkRight(input,isnull);
+    if (!can)
+        return false;
+    columns[wz]->checkRightAndChange(input,isnull);
+    return true;
+}
+
 void FixedSizeRecord::update()
 {
-    for (int i=0;i<this->columncount;i++)
-    {
+    for (int i = 0; i < this->columncount; i++) {
         int position = ((i == 0) ? 0 : columnsize[i - 1]);
         int nowsize = ((i == 0) ? columnsize[0] : columnsize[i] - columnsize[i - 1]);
-        memcpy(this->data+position,columns[i]->getdata(),nowsize);
+        memcpy(this->data + position, columns[i]->getdata(), nowsize);
     }
 }

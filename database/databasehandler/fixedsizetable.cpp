@@ -72,16 +72,18 @@ void FixedSizeTable::PackageFromHeadFile(BufType b)
         UIC::readchar(b, position, temptype, 4);
         int tempsize = UIC::readint(b, position);
         char* nullable = (char*)malloc(4);
-        UIC::readchar(b,position,nullable,4);
+        UIC::readchar(b, position, nullable, 4);
         bool cannull;
-        if (nullable[0]=='A') cannull=true; else cannull=false;
-        DataBaseType* t = UIC::realreconvert(temptype, tempsize,cannull);
-        t->readcondition(b+position,position);
+        if (nullable[0] == 'A')
+            cannull = true;
+        else
+            cannull = false;
+        DataBaseType* t = UIC::realreconvert(temptype, tempsize, cannull);
+        t->readcondition(b + position, position);
         column[i] = t;
         free(temptype);
         free(nullable);
     }
-
 
     MaxRecordSize = UIC::readint(b, position);
     if (RowNumInPage != NULL)
@@ -111,17 +113,17 @@ void FixedSizeTable::PackageHeadFile(BufType b)
         UIC::convert(column[i], temptype, nullable);
         UIC::writechar(b, position, temptype, 4);
         UIC::writeint(b, position, column[i]->getSize());
-        UIC::writechar(b,position,nullable,4);
+        UIC::writechar(b, position, nullable, 4);
         free(temptype);
         free(nullable);
-        column[i]->writecondition(b+position,position);
+        column[i]->writecondition(b + position, position);
     }
     UIC::writeint(b, position, MaxRecordSize);
     for (int i = 0; i < MaxRecordSize; i++)
         UIC::writeint(b, position, RowNumInPage[i]);
 }
 
-void FixedSizeTable::createTable(vector<string> clname, vector<DataBaseType*>cltype)
+void FixedSizeTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
 {
     remove(this->filename.c_str());
     int totalheadsize = 4 * 4 + 4 * 3 + name.length();
@@ -262,7 +264,7 @@ void FixedSizeTable::UnPackager(BufType b, int position)
     int totalsize = 0;
     for (int i = 0; i < columncount; i++) {
         // cout<<"unpacker at:"<<totalsize<<endl;
-        column[i]->read(temp+totalsize,totalsize);
+        column[i]->read(temp + totalsize, totalsize);
     }
     free(temp);
 }

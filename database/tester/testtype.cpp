@@ -102,32 +102,32 @@ void testtype::begintest(bool timetest)
 }
 void testtype::beginjingxitest()
 {
-    cout<<"begin type test 2"<<endl;
-    string t1="INTE";
-    DataBaseType *s1=UIC::reconvert(t1.data(),5,false);
-    cout<<s1->checkRight("abc",true)<<endl;
-    char* s=new char[5];
-    cout<<s1->checkRightc(s,5,true)<<endl;
-    string condition="FRTO000000123450";
-    char *testcondition = new char[condition.length()];
-    memcpy(testcondition,condition.data(),condition.length());
-    int index=0;
-    s1->readcondition(testcondition,index);
-    cout<<s1->checkRight("999",false)<<endl;
-    cout<<s1->checkRight("12345",false)<<endl;
-    string *cons=new string[5];
-    cons[0]="CHOI";
-    char* sl= (char*)malloc(4);
-    UIC::inttochar(3,sl);
-    string tmp(sl,4);
-    cons[1]=tmp;
-    cons[2]="00000";
-    cons[3]="12345";
-    cons[4]="10101";
+    cout << "begin type test 2" << endl;
+    string t1 = "INTE";
+    DataBaseType* s1 = UIC::reconvert(t1.data(), 5, false);
+    cout << s1->checkRight("abc", true) << endl;
+    char* s = new char[5];
+    cout << s1->checkRightc(s, 5, true) << endl;
+    string condition = "FRTO000000123450";
+    char* testcondition = new char[condition.length()];
+    memcpy(testcondition, condition.data(), condition.length());
+    int index = 0;
+    s1->readcondition(testcondition, index);
+    cout << s1->checkRight("999", false) << endl;
+    cout << s1->checkRight("12345", false) << endl;
+    string* cons = new string[5];
+    cons[0] = "CHOI";
+    char* sl = (char*)malloc(4);
+    UIC::inttochar(3, sl);
+    string tmp(sl, 4);
+    cons[1] = tmp;
+    cons[2] = "00000";
+    cons[3] = "12345";
+    cons[4] = "10101";
     s1->readcondition(cons);
-    cout<<s1->checkRight("999",false)<<endl;
-    cout<<s1->checkRight("0",false)<<endl;
-    delete [] cons;
+    cout << s1->checkRight("999", false) << endl;
+    cout << s1->checkRight("0", false) << endl;
+    delete[] cons;
     free(sl);
     delete[] testcondition;
 }
