@@ -1,4 +1,5 @@
 使用说明：
+不要问我为什么没有换行，其实有，下载下来就有了
 如何创建数据表：
     string filename = "onetable.tb";
     Table* onetable = new FixedSizeTable();                            //此处创建了一个新的表
