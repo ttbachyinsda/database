@@ -123,4 +123,6 @@ NTEQ PARA1 表示 ≠PARA1
 
 CHOI PARANUM PARA1 PARA2 ... PARANUM 表示在这些中选择一个。
 
+注意PARA的长度是实际长度+1，最后一位保存是不是NULL。
+
 DataBaseType有两个函数readcondition可以读取条件信息。
