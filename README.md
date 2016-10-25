@@ -98,4 +98,29 @@
 另外
 
     ++(*iterator); 可以使迭代器+1，即访问下一个元素
-    
+
+注意：当使用
+    record 某->getAt(i)时，如果那个数据是NULL，会返回一个NULL__DATA字符串。如果那个数据类型是int，高位会补0。注意这一点。
+    如果担心出问题，也可以record 某->getcolumns() 和 record 某->getcolumncount()可以直接使用read、write（这两个函数不会判断，且输入的长度
+需要为实际长度+1，最后一位存是不是null），checkRightAndChange()（这一系列函数都是安全的），然后使用record的update函数更新（别忘了）再插入。
+同理，setAt函数也是需要执行完之后update的。
+
+条件判断的类型有以下几种：
+
+FRTO frTO FRto frto NTEQ CHOI
+
+格式如下：
+
+FRTO PARA1 PARA2 表示[PARA1,PARA2]
+
+frTO PARA1 PARA2 表示(PARA1,PARA2]
+
+FRto PARA1 PARA2 表示[PARA1,PARA2)
+
+frto PARA1 PARA2 表示(PARA2,PARA2)
+
+NTEQ PARA1 表示 ≠PARA1
+
+CHOI PARANUM PARA1 PARA2 ... PARANUM 表示在这些中选择一个。
+
+DataBaseType有两个函数readcondition可以读取条件信息。
