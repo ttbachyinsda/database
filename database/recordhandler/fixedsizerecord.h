@@ -10,7 +10,8 @@ public:
     bool getAt(int num, char* returndata, int& returndatasize);
     string getAt(int num);
     bool set(string* input);
-    bool set(char** input);
+    bool set(char** input,int*inputlen);
+    void update();
 };
 
 #endif // FIXEDSIZERECORD_H

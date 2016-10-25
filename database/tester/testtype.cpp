@@ -9,14 +9,14 @@ void testtype::begintestchar()
     a->printdata("a");
     char* x = new char[20];
     memcpy(x, "acefg               ", 20);
-    bool c = a->checkRightAndChange(x, 20);
-    delete x;
+    bool c = a->checkRightAndChangec(x, 20);
+    delete[] x;
     char* y = new char[53];
     memcpy(y, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 53);
     a->printdata("a");
     cout << a->output() << endl;
-    c = a->checkRightAndChange(y, 53);
-    delete y;
+    c = a->checkRightAndChangec(y, 53);
+    delete[] y;
     a->printdata("a");
     cout << a->output() << 'E' << a->output().length() << endl;
     cout << a->getType() << endl;
@@ -27,8 +27,8 @@ void testtype::begintestchar()
     b->printdata("b");
     cout << b->output() << 'E' << b->output().length() << endl;
     cout << b->checkRight("1aa") << endl;
-    c = b->checkRightAndChange(z, 5);
-    delete z;
+    c = b->checkRightAndChangec(z, 5);
+    delete[] z;
     b->printdata("b");
     cout << b->output() << endl;
     delete b;
@@ -79,23 +79,55 @@ void testtype::begintest(bool timetest)
             DataBaseType* a = new DatabaseChar(20);
             char* x = new char[20];
             memcpy(x, "acefg               ", 20);
-            bool c = a->checkRightAndChange(x, 20);
-            delete x;
+            bool c = a->checkRightAndChangec(x, 20);
+            delete[] x;
             char* y = new char[53];
             memcpy(y, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 53);
-            c = a->checkRightAndChange(y, 53);
-            delete y;
+            c = a->checkRightAndChangec(y, 53);
+            delete[] y;
             delete a;
             DataBaseType* b = new DatabaseInt(5);
             char* z = new char[5];
             memcpy(z, "12345", 5);
-            c = b->checkRightAndChange(z, 5);
-            delete z;
+            c = b->checkRightAndChangec(z, 5);
+            delete[] z;
             delete b;
         }
         time_Diff = time2.elapsed();
         f = time_Diff / 1000.0;
         cout << "Time char: " << f << endl;
     }
+    beginjingxitest();
     cout << "Type test complete." << endl;
+}
+void testtype::beginjingxitest()
+{
+    cout<<"begin type test 2"<<endl;
+    string t1="INTE";
+    DataBaseType *s1=UIC::reconvert(t1.data(),5,false);
+    cout<<s1->checkRight("abc",true)<<endl;
+    char* s=new char[5];
+    cout<<s1->checkRightc(s,5,true)<<endl;
+    string condition="FRTO000000123450";
+    char *testcondition = new char[condition.length()];
+    memcpy(testcondition,condition.data(),condition.length());
+    int index=0;
+    s1->readcondition(testcondition,index);
+    cout<<s1->checkRight("999",false)<<endl;
+    cout<<s1->checkRight("12345",false)<<endl;
+    string *cons=new string[5];
+    cons[0]="CHOI";
+    char* sl= (char*)malloc(4);
+    UIC::inttochar(3,sl);
+    string tmp(sl,4);
+    cons[1]=tmp;
+    cons[2]="00000";
+    cons[3]="12345";
+    cons[4]="10101";
+    s1->readcondition(cons);
+    cout<<s1->checkRight("999",false)<<endl;
+    cout<<s1->checkRight("0",false)<<endl;
+    delete [] cons;
+    free(sl);
+    delete[] testcondition;
 }

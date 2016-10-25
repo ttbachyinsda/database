@@ -22,7 +22,6 @@ SOURCES += main.cpp\
     tester/testtype.cpp \
     databasehandler/fixedsizetable.cpp \
     managementhandler/uic.cpp \
-    tester/testtable.cpp \
     tester/testdatabase.cpp \
     typehandler/databasetype.cpp \
     layer/databasemanager.cpp \
@@ -50,7 +49,6 @@ HEADERS  += mainwindow.h \
     pagefilesystem/FindReplace.h \
     pagefilesystem/FileTable.h \
     managementhandler/uic.h \
-    tester/testtable.h \
     tester/testdatabase.h \
     typehandler/databasetype.h \
     layer/databasemanager.h \

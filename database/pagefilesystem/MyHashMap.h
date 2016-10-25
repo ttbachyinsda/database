@@ -64,7 +64,7 @@ public:
 	 * @参数k1:指定的第一个key
 	 * @参数k2:指定的第二个key
 	 * 功能:在hash表中，将指定value对应的两个key设置为k1和k2
-	 */
+     */
     void replace(int index, int k1, int k2)
     {
         int h = hash(k1, k2);

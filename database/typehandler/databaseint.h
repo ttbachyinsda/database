@@ -10,20 +10,34 @@ using namespace std;
 class DatabaseInt : public DataBaseType {
 public:
     DatabaseInt(int size);
+    DatabaseInt(int size,bool cannull);
     DatabaseInt(string input);
+    DatabaseInt(string input,bool cannull);
     DatabaseInt(char* input, int size);
+    DatabaseInt(char* input, int size,bool cannull);
+    bool read(char *input,int &position);
+    bool write(char *output,int &position);
     bool checkRight(string input);
+    bool checkRight(string input,bool inputisnull);
     bool checkRightAndChange(string input);
-    bool checkRight(char* input, int size);
-    bool checkRightAndChange(char* input, int size);
+    bool checkRightAndChange(string input,bool inputisnull);
+    bool checkRightc(char* input, int size);
+    bool checkRightc(char* input, int size,bool inputisnull);
+    bool checkRightAndChangec(char* input, int size);
+    bool checkRightAndChangec(char* input, int size,bool inputisnull);
+    bool analysisc(char* input,int inputsize);
+    bool analysis(string input);
     int getSize();
+    int getRealSize();
+    int getMaxSize();
     string getType();
-    ~DatabaseInt();
     string output();
+    ~DatabaseInt();
 
 private:
     void change(string input);
     void change(char* input, int size);
+    void changetoNull();
 };
 
 #endif // DATABASEINT_H

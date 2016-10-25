@@ -24,7 +24,7 @@ bool UIC::equal(const char* s1, char* s2, int len)
             return false;
     return true;
 }
-void UIC::convert(DataBaseType* t1, char* s1)
+void UIC::convert(DataBaseType* t1, char* s1,char* s2)
 {
     string temp = t1->getType();
     if (temp[6] == 'C') {
@@ -39,27 +39,64 @@ void UIC::convert(DataBaseType* t1, char* s1)
         *(s1 + 2) = 'T';
         *(s1 + 3) = 'E';
     }
+    if (t1->getNullable()==true)
+    {
+        *(s2) = 'A';
+        *(s2 + 1) = 'B';
+        *(s2 + 2) = 'L';
+        *(s2 + 3) = 'E';
+    } else
+    {
+        *(s2) = 'U';
+        *(s2 + 1) = 'N';
+        *(s2 + 2) = 'A';
+        *(s2 + 3) = 'B';
+    }
 }
-DataBaseType* UIC::reconvert(char* s1, int size)
+DataBaseType* UIC::reconvert(char* s1, int size,bool cannull)
 {
     if (*(s1) == 'C') {
-        DataBaseType* temp = new DatabaseChar(size);
+        DataBaseType* temp = new DatabaseChar(size,cannull);
         return temp;
     }
     if (*(s1) == 'I') {
-        DataBaseType* temp = new DatabaseInt(size);
+        DataBaseType* temp = new DatabaseInt(size,cannull);
         return temp;
     }
     return NULL;
 }
-DataBaseType* UIC::reconvert(string s1, int size)
+DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
 {
     if (s1[0] == 'C') {
-        DataBaseType* temp = new DatabaseChar(size);
+        DataBaseType* temp = new DatabaseChar(size,cannull);
         return temp;
     }
     if (s1[0] == 'I') {
-        DataBaseType* temp = new DatabaseInt(size);
+        DataBaseType* temp = new DatabaseInt(size,cannull);
+        return temp;
+    }
+    return NULL;
+}
+DataBaseType* UIC::realreconvert(char* s1, int size,bool cannull)
+{
+    if (*(s1) == 'C') {
+        DataBaseType* temp = new DatabaseChar(size-1,cannull);
+        return temp;
+    }
+    if (*(s1) == 'I') {
+        DataBaseType* temp = new DatabaseInt(size-1,cannull);
+        return temp;
+    }
+    return NULL;
+}
+DataBaseType* UIC::realreconvert(string s1, int size, bool cannull)
+{
+    if (s1[0] == 'C') {
+        DataBaseType* temp = new DatabaseChar(size-1,cannull);
+        return temp;
+    }
+    if (s1[0] == 'I') {
+        DataBaseType* temp = new DatabaseInt(size-1,cannull);
         return temp;
     }
     return NULL;
@@ -124,12 +161,37 @@ string UIC::readstringandjump(BufType b, FileIterator& iterator, int size_t, int
 }
 DataBaseType** UIC::copytype(DataBaseType** input, int inputlen)
 {
+    cout<<"inputlen="<<inputlen<<endl;
     DataBaseType** temp = new DataBaseType*[inputlen];
     for (int i = 0; i < inputlen; i++) {
-        char* s = (char*)malloc(4);
-        int nowsize = input[i]->getSize();
-        convert(input[i], s);
-        temp[i] = reconvert(s, nowsize);
+        string temptype=input[i]->getType();
+        if (temptype[6]=='I')
+        {
+            temp[i]=new DatabaseInt(0);
+        } else if (temptype[6]=='C')
+        {
+            temp[i]=new DatabaseChar(0);
+        } else
+        {
+            cout<<"eeeeeRR"<<endl;
+        }
+        temp[i]->initialize(input[i]);
     }
     return temp;
+}
+int UIC::stringtoint(string text)
+{
+    std::stringstream ss;
+    int number;
+    ss << text;
+    ss >> number;
+    return number;
+}
+string UIC::inttostring(int text)
+{
+    std::stringstream ss;
+    string number;
+    ss << text;
+    number=ss.str();
+    return number;
 }

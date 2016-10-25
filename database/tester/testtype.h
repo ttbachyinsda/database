@@ -4,6 +4,7 @@
 #include "typehandler/databaseint.h"
 #include "typehandler/databasetype.h"
 #include <QTime>
+#include "managementhandler/uic.h"
 
 class testtype {
 public:
@@ -11,6 +12,7 @@ public:
     void begintest(bool timetest);
     void begintestchar();
     void beginteststring();
+    void beginjingxitest();
 };
 
 #endif // TESTTYPE_H

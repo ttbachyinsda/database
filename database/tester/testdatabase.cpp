@@ -6,18 +6,18 @@ testdatabase::testdatabase()
 void testdatabase::trytoInitializeTable(Table* temp)
 {
     vector<string> clname;
-    vector<string> cltype;
-    vector<int> clsize;
+    vector<DataBaseType*> cltype;
     clname.push_back("userid");
     clname.push_back("password");
     clname.push_back("age");
-    cltype.push_back("INT");
-    cltype.push_back("CHAR");
-    cltype.push_back("INT");
-    clsize.push_back(20);
-    clsize.push_back(20);
-    clsize.push_back(2);
-    temp->createTable(clname, cltype, clsize);
+    string t1="INTE"; string t2="CHAR"; string t3="INTE";
+    DataBaseType* type1=UIC::reconvert(t1.data(),20,true);
+    DataBaseType* type2=UIC::reconvert(t2.data(),20,true);
+    DataBaseType* type3=UIC::reconvert(t3.data(),2,true);
+    cltype.push_back(type1);
+    cltype.push_back(type2);
+    cltype.push_back(type3);
+    temp->createTable(clname, cltype);
     temp->Initialize();
 }
 
