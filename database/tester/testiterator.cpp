@@ -28,18 +28,26 @@ void testiterator::begintest()
     onetable->setfilename(filename);
     onetable->setname("testiterator");
     vector<string> clname;
-    vector<string> cltype;
-    vector<int> clsize;
+    vector<DataBaseType*> cltype;
     clname.push_back("userid");
     clname.push_back("password");
     clname.push_back("age");
-    cltype.push_back("INT");
-    cltype.push_back("CHAR");
-    cltype.push_back("INT");
-    clsize.push_back(20);
-    clsize.push_back(20);
-    clsize.push_back(2);
-    onetable->createTable(clname, cltype, clsize);
+    string t1 = "INTE";
+    string t2 = "CHAR";
+    string t3 = "INTE";
+    string condition = "FRTO00000000791160";
+    char* testcondition = new char[condition.length()];
+    memcpy(testcondition, condition.data(), condition.length());
+    DataBaseType* type1 = UIC::reconvert(t1.data(), 6, true);
+    int index = 0;
+    type1->readcondition(testcondition, index);
+    delete[] testcondition;
+    DataBaseType* type2 = UIC::reconvert(t2.data(), 20, true);
+    DataBaseType* type3 = UIC::reconvert(t3.data(), 2, true);
+    cltype.push_back(type1);
+    cltype.push_back(type2);
+    cltype.push_back(type3);
+    onetable->createTable(clname, cltype);
     onetable->Initialize();
     string* aaa = new string[3];
     int pagenum, pageposition;
@@ -50,8 +58,11 @@ void testiterator::begintest()
         aaa[0] = InttoString(i);
         aaa[1] = "12345678";
         aaa[2] = "58";
-        t->set(aaa);
-        onetable->FastAllInsert(pagenum, pageposition, t);
+        bool can = t->set(aaa);
+        can=t->setAt(1,"",true);
+        t->update();
+        if (can)
+            onetable->FastAllInsert(pagenum, pageposition, t);
         //if (i%1000==0) cout<<pagenum<<' '<<pageposition<<endl;
     }
     delete t;
@@ -72,6 +83,58 @@ void testiterator::begintest()
         int tempsize;
         iterator->getdata(temp, tempsize);
         record->Input(temp);
+
+        for (int i = 0; i < 3; i++) {
+            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+        }
+    }
+
+    ++(*iterator);
+    if (iterator->available()) {
+        int tempsize;
+        iterator->getdata(temp, tempsize);
+        record->Input(temp);
+        for (int i = 0; i < 3; i++) {
+            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+        }
+    }
+    iterator->access(300, 178);
+    if (iterator->available()) {
+        int tempsize;
+        iterator->getdata(temp, tempsize);
+        record->Input(temp);
+        for (int i = 0; i < 3; i++) {
+            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+        }
+    }
+    iterator->access(300, 0);
+    cout << "try to delete" << endl;
+    iterator->deletedata();
+    if (iterator->available()) {
+        int tempsize;
+        iterator->getdata(temp, tempsize);
+        record->Input(temp);
+        for (int i = 0; i < 3; i++) {
+            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+        }
+    }
+
+    delete iterator;
+    delete record;
+    delete onetable;
+    delete[] temp;
+
+    cout << "Open again" << endl;
+    onetable = new FixedSizeTable();
+    onetable->setfilename(filename);
+    onetable->Initialize();
+    iterator = IteratorFactory::getiterator(onetable);
+    record = RecordFactory::getrecord(onetable);
+    temp = new char[iterator->getcurrentsize()];
+    if (iterator->available()) {
+        int tempsize;
+        iterator->getdata(temp, tempsize);
+        record->Input(temp);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
@@ -85,18 +148,7 @@ void testiterator::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-    iterator->access(1031, 179);
-    if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
-        for (int i = 0; i < 3; i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
-    iterator->access(1031, 0);
-    cout << "try to delete" << endl;
-    iterator->deletedata();
+    iterator->access(300, 179);
     if (iterator->available()) {
         int tempsize;
         iterator->getdata(temp, tempsize);
@@ -109,4 +161,7 @@ void testiterator::begintest()
     delete iterator;
     delete record;
     delete[] temp;
+    cout << onetable->getname() << endl;
+    cout << "test table end" << endl;
+
 }

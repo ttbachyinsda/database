@@ -1,5 +1,6 @@
 #ifndef TESTTYPE_H
 #define TESTTYPE_H
+#include "managementhandler/uic.h"
 #include "typehandler/databasechar.h"
 #include "typehandler/databaseint.h"
 #include "typehandler/databasetype.h"
@@ -11,6 +12,7 @@ public:
     void begintest(bool timetest);
     void begintestchar();
     void beginteststring();
+    void beginjingxitest();
 };
 
 #endif // TESTTYPE_H

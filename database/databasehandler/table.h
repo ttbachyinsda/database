@@ -30,17 +30,17 @@ public:
     virtual bool FastAllInsert(int& pagenum, int& pageposition, Record* rec) = 0;
     virtual Record* FastOutput(int pagenum, int pageposition) = 0;
     virtual void FastOutput(int pagenum, int pageposition, char* output, int& outputsize) = 0;
-    virtual bool Insert() = 0;
     virtual bool Initialize() = 0;
     virtual string gettabletype() = 0;
     bool havecreatetable = false;
     bool haveinitialize = false;
     virtual int getPageNum() = 0;
     virtual int getPageRowNum(int pagenum) = 0;
+    virtual int getRowSize() = 0;
+    virtual int getMaxRowNum() = 0;
     virtual bool Modify(int pagenum, int rownum) = 0;
     virtual bool DeleteAt(int pagenum, int rownum) = 0;
-    virtual bool FindAt(int pagenum, int rownum) = 0;
-    virtual void createTable(vector<string> clname, vector<string> cltype, vector<int> clsize) = 0;
+    virtual void createTable(vector<string> clname, vector<DataBaseType*> cltype) = 0;
     vector<string> gettype();
     virtual ~Table();
 
@@ -51,7 +51,6 @@ protected:
     int fileid;
     int columncount;
     DataBaseType** column; //per size if 8
-    int* order;
     string* columnname;
     BufPageManager* BPM;
     FileManager* FM;

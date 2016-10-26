@@ -57,27 +57,34 @@ void FixedSizeTable::PackageFromHeadFile(BufType b)
 {
     FileIterator position = 4;
     RowSize = UIC::readint(b, position);
+    MaxRowNum = UIC::readint(b, position);
     int namelen = UIC::readint(b, position);
-    name = UIC::readstringandjump(b, position, namelen, MAX_NAME_SIZE);
+    name = UIC::readstring(b, position, namelen);
     PageNum = UIC::readint(b, position);
     clearcolumn();
     columncount = UIC::readint(b, position);
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
-    order = new int[this->columncount];
     for (int i = 0; i < this->columncount; i++) {
         int namelen = UIC::readint(b, position);
-        columnname[i] = UIC::readstringandjump(b, position, namelen, MAX_NAME_SIZE);
+        columnname[i] = UIC::readstring(b, position, namelen);
         char* temptype = (char*)malloc(4);
         UIC::readchar(b, position, temptype, 4);
         int tempsize = UIC::readint(b, position);
-        DataBaseType* t = UIC::reconvert(temptype, tempsize);
+        char* nullable = (char*)malloc(4);
+        UIC::readchar(b, position, nullable, 4);
+        bool cannull;
+        if (nullable[0] == 'A')
+            cannull = true;
+        else
+            cannull = false;
+        DataBaseType* t = UIC::realreconvert(temptype, tempsize, cannull);
+        t->readcondition(b + position, position);
         column[i] = t;
         free(temptype);
-        order[i] = UIC::readint(b, position);
+        free(nullable);
     }
 
-    MaxRowNum = UIC::readint(b, position);
     MaxRecordSize = UIC::readint(b, position);
     if (RowNumInPage != NULL)
         delete[] RowNumInPage;
@@ -91,52 +98,45 @@ void FixedSizeTable::PackageHeadFile(BufType b)
     string temp = "HEAD";
     UIC::writechar(b, position, temp.data(), 4);
     UIC::writeint(b, position, RowSize);
+    UIC::writeint(b, position, MaxRowNum);
     int namelen = name.length();
     UIC::writeint(b, position, namelen);
-    UIC::writecharandjump(b, position, name.data(), namelen, MAX_NAME_SIZE);
+    UIC::writechar(b, position, name.data(), namelen);
     UIC::writeint(b, position, PageNum);
     UIC::writeint(b, position, columncount);
     for (int i = 0; i < columncount; i++) {
         int namelen = columnname[i].length();
         UIC::writeint(b, position, namelen);
-        UIC::writecharandjump(b, position, columnname[i].data(), namelen, MAX_NAME_SIZE);
+        UIC::writechar(b, position, columnname[i].data(), namelen);
         char* temptype = (char*)malloc(4);
-        UIC::convert(column[i], temptype);
+        char* nullable = (char*)malloc(4);
+        UIC::convert(column[i], temptype, nullable);
         UIC::writechar(b, position, temptype, 4);
-        free(temptype);
         UIC::writeint(b, position, column[i]->getSize());
-        UIC::writeint(b, position, order[i]);
+        UIC::writechar(b, position, nullable, 4);
+        free(temptype);
+        free(nullable);
+        column[i]->writecondition(b + position, position);
     }
-    UIC::writeint(b, position, MaxRowNum);
     UIC::writeint(b, position, MaxRecordSize);
     for (int i = 0; i < MaxRecordSize; i++)
         UIC::writeint(b, position, RowNumInPage[i]);
 }
 
-void FixedSizeTable::createTable(vector<string> clname, vector<string> cltype,
-    vector<int> clsize)
+void FixedSizeTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
 {
     remove(this->filename.c_str());
-    int totalheadsize = 4 * 4 + 4 * 3 + MAX_NAME_SIZE;
+    int totalheadsize = 4 * 4 + 4 * 3 + name.length();
     this->clearcolumn();
     this->RowSize = 0;
     this->columncount = clname.size();
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
-    order = new int[this->columncount];
     for (int i = 0; i < columncount; i++) {
-        totalheadsize += MAX_NAME_SIZE + 4 * 4;
+        totalheadsize += clname[i].length() + 4 * 4 + cltype[i]->getconditionsize();
         columnname[i] = clname[i];
-        if (cltype[i] == "CHAR") {
-            DataBaseType* temp = new DatabaseChar(clsize[i]);
-            column[i] = temp;
-        }
-        if (cltype[i] == "INT") {
-            DataBaseType* temp = new DatabaseInt(clsize[i]);
-            column[i] = temp;
-        }
-        order[i] = i;
-        this->RowSize += clsize[i];
+        column[i] = cltype[i];
+        this->RowSize += cltype[i]->getSize();
     }
     this->MaxRowNum = (PAGE_SIZE - 8) / this->RowSize;
     this->PageNum = 0;
@@ -198,32 +198,6 @@ bool FixedSizeTable::InsertAt(int pagenum, char* insertdata, int& rownum)
     BPM->markDirty(nowindex);
     return true;
 }
-bool FixedSizeTable::Insert()
-{
-    char* insertdata = Packager();
-    int rownum;
-    bool can = false;
-    for (int i = 1; i < this->MaxRecordSize; i++)
-        if (this->RowNumInPage[i] < this->MaxRowNum) {
-            can = InsertAt(i, insertdata, rownum);
-            if (!can) {
-                cout << "ERROR:: ?????" << endl;
-            }
-            if (can) {
-                if (this->PageNum < i)
-                    this->PageNum = i;
-                return true;
-            }
-        }
-    for (int i = this->MaxRecordSize; i <= this->PageNum; i++) {
-        can = InsertAt(i, insertdata, rownum);
-        if (can)
-            return true;
-    }
-    this->PageNum++;
-    can = InsertAt(this->PageNum, insertdata, rownum);
-    return can;
-}
 bool FixedSizeTable::modifypd(int pagenum, int rownum, BufType& ct,
     int& newindex, int& pagenewnum)
 {
@@ -282,16 +256,6 @@ bool FixedSizeTable::DeleteAt(int pagenum, int rownum)
     free(temp);
     return true;
 }
-bool FixedSizeTable::FindAt(int pagenum, int rownum)
-{
-    BufType b;
-    int nowindex, pagerownum;
-    if (!modifypd(pagenum, rownum, b, nowindex, pagerownum))
-        return false;
-    UnPackager(b, 8 + this->RowSize * rownum);
-    BPM->access(nowindex);
-    return true;
-}
 void FixedSizeTable::UnPackager(BufType b, int position)
 {
     // cout<<"unpack position="<<position<<endl;
@@ -300,9 +264,7 @@ void FixedSizeTable::UnPackager(BufType b, int position)
     int totalsize = 0;
     for (int i = 0; i < columncount; i++) {
         // cout<<"unpacker at:"<<totalsize<<endl;
-        int size = column[i]->getSize();
-        column[i]->checkRightAndChange(temp + totalsize, size);
-        totalsize += size;
+        column[i]->read(temp + totalsize, totalsize);
     }
     free(temp);
 }

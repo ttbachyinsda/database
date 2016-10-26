@@ -4,6 +4,7 @@
 #include "typehandler/databasechar.h"
 #include "typehandler/databaseint.h"
 #include "typehandler/databasetype.h"
+#include <sstream>
 
 typedef int FileIterator;
 typedef char* BufType;
@@ -13,9 +14,11 @@ public:
     static bool equal(char* s1, char* s2, int len);
     static bool equal(char* s1, const char* s2, int len);
     static bool equal(const char* s1, char* s2, int len);
-    static void convert(DataBaseType* t1, char* s1);
-    static DataBaseType* reconvert(char* s1, int size);
-    static DataBaseType* reconvert(string s1, int size);
+    static void convert(DataBaseType* t1, char* s1, char *s2);
+    static DataBaseType* reconvert(char* s1, int size, bool cannull);
+    static DataBaseType* reconvert(string s1, int size,bool cannull);
+    static DataBaseType* realreconvert(char* s1, int size, bool cannull);
+    static DataBaseType* realreconvert(string s1, int size,bool cannull);
     static int chartoint(char* s1); //length = 4
     static void inttochar(int i1, char* s1); //length = 4
     static void readchar(BufType b, FileIterator& iterator, char* dest, int size_t);
@@ -28,6 +31,8 @@ public:
     static string readstring(BufType b, FileIterator& iterator, int size_t);
     static string readstringandjump(BufType b, FileIterator& iterator, int size_t, int jumpsize);
     static DataBaseType** copytype(DataBaseType** input, int inputlen);
+    static int stringtoint(string text);
+    static string inttostring(int text);
 };
 
 #endif // UIC_H

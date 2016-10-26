@@ -7,7 +7,6 @@ Table::Table()
     this->columncount = 0;
     this->column = NULL;
     this->columnname = NULL;
-    this->order = NULL;
     this->fileid = 0;
     this->FM = NULL;
     this->BPM = NULL;
@@ -19,7 +18,6 @@ Table::Table(string name, string filename)
     this->columncount = 0;
     this->column = NULL;
     this->columnname = NULL;
-    this->order = NULL;
     this->fileid = 0;
     this->name = name;
     this->filename = filename;
@@ -76,9 +74,6 @@ void Table::clearcolumn()
         delete[] columnname;
     column = NULL;
     columnname = NULL;
-    if (order != NULL)
-        delete[] order;
-    order = NULL;
 }
 DataBaseType* Table::getcolumn(int i) { return column[i]; }
 string Table::getcolumnname(int i) { return columnname[i]; }

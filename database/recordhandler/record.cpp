@@ -31,3 +31,15 @@ Record::~Record()
     columncount = 0;
     size = 0;
 }
+DataBaseType** Record::getcolumns()
+{
+    return this->columns;
+}
+int Record::getcolumncount()
+{
+    return this->columncount;
+}
+int* Record::getcolumnsize()
+{
+    return this->columnsize;
+}
