@@ -22,7 +22,44 @@ void SQLType::dump() const
 
 void SQLValue::dump() const
 {
-    std::cout << "- SQL Value -" << std::endl;
-    std::cout << "Type = " << type << std::endl;
-    std::cout << "Content = " << content << std::endl;
+    std::cout << "SQLValue (Type = " << type << ", Content = "
+              << content << ")" << std::endl;
+}
+
+void SQLCondition::dump() const
+{
+    std::cout << "- SQL Condition -" << std::endl;
+    lValue.dump();
+    std::cout << ' ' << operand << ' ';
+    if (type == SQLCondition::VALUE)
+        rValue.dump();
+    else
+        rValueColumn.dump();
+}
+
+void SQLSet::dump() const
+{
+    std::cout << "SQLSet: Let " << identifier << " = ";
+    value.dump();
+}
+
+void SQLSelector::dump() const
+{
+    if (hasPrefix())
+        std::cout << databaseName << "." << tableName;
+    else
+        std::cout << tableName;
+}
+
+void SQLSelectorGroup::dump() const
+{
+    if (allMatched)
+        std::cout << "Everything!";
+    else
+    {
+        for (SQLSelector* s : selectors) {
+            s->dump();
+            std::cout << ' ';
+        }
+    }
 }

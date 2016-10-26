@@ -308,23 +308,48 @@ namespace yy {
       // QueryStmt
       char dummy1[sizeof(SQLAction*)];
 
+      // WhereClause
+      char dummy2[sizeof(SQLCondition*)];
+
+      // WhereClauseList
+      char dummy3[sizeof(SQLConditionGroup*)];
+
+      // Operand
+      char dummy4[sizeof(SQLOperand)];
+
+      // Column
+      char dummy5[sizeof(SQLSelector*)];
+
+      // Selector
+      // SelectorList
+      char dummy6[sizeof(SQLSelectorGroup*)];
+
+      // SetClause
+      char dummy7[sizeof(SQLSetGroup*)];
+
+      // TableList
+      char dummy8[sizeof(SQLTableGroup*)];
+
       // Field
       // Type
-      char dummy2[sizeof(SQLType*)];
+      char dummy9[sizeof(SQLType*)];
 
       // Value
-      char dummy3[sizeof(SQLValue*)];
+      char dummy10[sizeof(SQLValue*)];
+
+      // ValueList
+      char dummy11[sizeof(SQLValueGroup*)];
 
       // IDENTIFIER
       // VALUE_STRING
       // VALUE_INT
-      char dummy4[sizeof(std::string)];
+      char dummy12[sizeof(std::string)];
 
       // FieldList
-      char dummy5[sizeof(std::vector<SQLType*>*)];
+      char dummy13[sizeof(std::vector<SQLType*>*)];
 
-      // ValueList
-      char dummy6[sizeof(std::vector<SQLValue*>*)];
+      // ValueLists
+      char dummy14[sizeof(std::vector<SQLValueGroup*>*)];
 };
 
     /// Symbol semantic values.
@@ -359,22 +384,27 @@ namespace yy {
         INT = 267,
         VARCHAR = 268,
         CHAR = 269,
-        NOT = 270,
-        NUL = 271,
-        PRIMARY = 272,
-        KEY = 273,
-        INSERT = 274,
-        INTO = 275,
-        VALUES = 276,
-        DELETE = 277,
-        FROM = 278,
-        UPDATE = 279,
-        SET = 280,
-        WHERE = 281,
-        SELECT = 282,
-        IDENTIFIER = 283,
-        VALUE_STRING = 284,
-        VALUE_INT = 285
+        IS = 270,
+        NOT = 271,
+        NUL = 272,
+        PRIMARY = 273,
+        KEY = 274,
+        INSERT = 275,
+        INTO = 276,
+        VALUES = 277,
+        DELETE = 278,
+        FROM = 279,
+        UPDATE = 280,
+        SET = 281,
+        WHERE = 282,
+        SELECT = 283,
+        AND = 284,
+        NOT_EQUAL = 285,
+        GREATER_EQUAL = 286,
+        LESS_EQUAL = 287,
+        IDENTIFIER = 288,
+        VALUE_STRING = 289,
+        VALUE_INT = 290
       };
     };
 
@@ -414,15 +444,31 @@ namespace yy {
 
   basic_symbol (typename Base::kind_type t, const SQLAction* v, const location_type& l);
 
+  basic_symbol (typename Base::kind_type t, const SQLCondition* v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const SQLConditionGroup* v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const SQLOperand v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const SQLSelector* v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const SQLSelectorGroup* v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const SQLSetGroup* v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const SQLTableGroup* v, const location_type& l);
+
   basic_symbol (typename Base::kind_type t, const SQLType* v, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const SQLValue* v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const SQLValueGroup* v, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const std::string v, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const std::vector<SQLType*>* v, const location_type& l);
 
-  basic_symbol (typename Base::kind_type t, const std::vector<SQLValue*>* v, const location_type& l);
+  basic_symbol (typename Base::kind_type t, const std::vector<SQLValueGroup*>* v, const location_type& l);
 
 
       /// Constructor for symbols with semantic value.
@@ -541,6 +587,10 @@ namespace yy {
 
     static inline
     symbol_type
+    make_IS (const location_type& l);
+
+    static inline
+    symbol_type
     make_NOT (const location_type& l);
 
     static inline
@@ -590,6 +640,22 @@ namespace yy {
     static inline
     symbol_type
     make_SELECT (const location_type& l);
+
+    static inline
+    symbol_type
+    make_AND (const location_type& l);
+
+    static inline
+    symbol_type
+    make_NOT_EQUAL (const location_type& l);
+
+    static inline
+    symbol_type
+    make_GREATER_EQUAL (const location_type& l);
+
+    static inline
+    symbol_type
+    make_LESS_EQUAL (const location_type& l);
 
     static inline
     symbol_type
@@ -706,7 +772,7 @@ namespace yy {
     static const char* const yytname_[];
 
   // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-  static const unsigned char yyrline_[];
+  static const unsigned short int yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r);
     /// Print the state stack on the debug stream.
@@ -805,12 +871,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 69,     ///< Last index in yytable_.
-      yynnts_ = 10,  ///< Number of nonterminal symbols.
+      yylast_ = 113,     ///< Last index in yytable_.
+      yynnts_ = 19,  ///< Number of nonterminal symbols.
       yyfinal_ = 2, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 38  ///< Number of tokens.
+      yyntokens_ = 45  ///< Number of tokens.
     };
 
 
@@ -822,7 +888,7 @@ namespace yy {
 
 
 } // yy
-#line 826 "sqlparser.hpp" // lalr1.cc:377
+#line 892 "sqlparser.hpp" // lalr1.cc:377
 
 
 

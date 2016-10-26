@@ -141,11 +141,54 @@ public:
 class SQLInsertAction : public SQLAction
 {
     std::string identifier;
-    std::vector<SQLValue*>* valueList;
+    std::vector<SQLValueGroup*>* valueGroupList;
 public:
-    SQLInsertAction(const std::string& identifier, std::vector<SQLValue*>* vList)
-        : identifier(identifier), valueList(vList) {}
+    SQLInsertAction(const std::string& identifier, std::vector<SQLValueGroup*>* vList)
+        : identifier(identifier), valueGroupList(vList) {}
     ~SQLInsertAction();
+    bool execute();
+};
+
+/**
+ * @brief The SQLDeleteAction class
+ */
+class SQLDeleteAction : public SQLAction
+{
+    std::string identifier;
+    SQLConditionGroup* conditionGroup;
+public:
+    SQLDeleteAction(const std::string& identifier, SQLConditionGroup* cList)
+        : identifier(identifier), conditionGroup(cList) {}
+    ~SQLDeleteAction();
+    bool execute();
+};
+
+
+/**
+ * @brief The SQLUpdateAction class
+ */
+class SQLUpdateAction : public SQLAction
+{
+    std::string identifier;
+    SQLConditionGroup* conditionGroup;
+    SQLSetGroup* setGroup;
+public:
+    SQLUpdateAction(const std::string& identifier, SQLConditionGroup* cList,
+                    SQLSetGroup* sList)
+        : identifier(identifier), conditionGroup(cList), setGroup(sList) {}
+    ~SQLUpdateAction();
+    bool execute();
+};
+
+class SQLSelectAction : public SQLAction
+{
+    SQLTableGroup* fromGroup;
+    SQLSelectorGroup* selectorGroup;
+    SQLConditionGroup* conditionGroup;
+public:
+    SQLSelectAction(SQLTableGroup* tList, SQLSelectorGroup* sList, SQLConditionGroup* cList)
+        : fromGroup(tList), selectorGroup(sList), conditionGroup(cList) {}
+    ~SQLSelectAction();
     bool execute();
 };
 

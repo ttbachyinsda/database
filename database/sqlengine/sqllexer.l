@@ -36,7 +36,11 @@ using token = yy::SQLParser::token;
 
 ([ \t]+)                { /* Just ignore */         }
 (\r|\n|\r\n)            {  loc->lines();            }
-(";"|"("|")"|","|"="|">"|"<")       { return (int) yytext[0];   }
+(";"|"("|")"|","|"="|">"|"<"|"."|"*")       { return (int) yytext[0];   }
+
+"<>"                    { return token::NOT_EQUAL;      }
+"<="                    { return token::LESS_EQUAL;     }
+">="                    { return token::GREATER_EQUAL;  }
 
 (?i:"create")           { return token::CREATE;     }
 (?i:"drop")             { return token::DROP;       }
@@ -50,6 +54,7 @@ using token = yy::SQLParser::token;
 (?i:"int")              { return token::INT;        }
 (?i:"varchar")          { return token::VARCHAR;    }
 (?i:"char")             { return token::CHAR;       }
+(?i:"is")               { return token::IS;         }
 (?i:"not")              { return token::NOT;        }
 (?i:"null")             { return token::NUL;        }
 (?i:"primary")          { return token::PRIMARY;    }
@@ -64,6 +69,7 @@ using token = yy::SQLParser::token;
 (?i:"where")            { return token::WHERE;      }
 (?i:"select")           { return token::SELECT;     }
 (?i:"from")             { return token::FROM;       }
+(?i:"and")              { return token::AND;        }
 
 [0-9]+                  {
                             yylval->build<std::string>(yytext);
