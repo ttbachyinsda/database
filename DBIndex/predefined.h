@@ -6,10 +6,17 @@
 namespace bpt {
 
 /* predefined B+ info */
-#define BP_ORDER 20
+#define CHILDREN_NUM 20
 
 /* key/value type */
-typedef int value_t;
+struct value_t {
+  char v[32];
+
+  value_t(const char *str = "") {
+    bzero(v, sizeof(v));
+    strcpy(v, str);
+  }
+};
 struct key_t {
   char k[32];
 
@@ -24,19 +31,19 @@ inline int keycmp(const key_t &a, const key_t &b) {
   return x == 0 ? strcmp(a.k, b.k) : x;
 }
 
-#define OPERATOR_KEYCMP(type)                                                  \
-  bool operator<(const key_t &l, const type &r) {                              \
-    return keycmp(l, r.key) < 0;                                               \
-  }                                                                            \
-  bool operator<(const type &l, const key_t &r) {                              \
-    return keycmp(l.key, r) < 0;                                               \
-  }                                                                            \
-  bool operator==(const key_t &l, const type &r) {                             \
-    return keycmp(l, r.key) == 0;                                              \
-  }                                                                            \
-  bool operator==(const type &l, const key_t &r) {                             \
-    return keycmp(l.key, r) == 0;                                              \
-  }
+//#define OPERATOR_KEYCMP(type)                                                  \
+//  bool operator<(const key_t &l, const type &r) {                              \
+//    return keycmp(l, r.key) < 0;                                               \
+//  }                                                                            \
+//  bool operator<(const type &l, const key_t &r) {                              \
+//    return keycmp(l.key, r) < 0;                                               \
+//  }                                                                            \
+//  bool operator==(const key_t &l, const type &r) {                             \
+//    return keycmp(l, r.key) == 0;                                              \
+//  }                                                                            \
+//  bool operator==(const type &l, const key_t &r) {                             \
+//    return keycmp(l.key, r) == 0;                                              \
+//  }
 }
 
 #endif /* end of PREDEFINED_H */
