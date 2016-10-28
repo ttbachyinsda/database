@@ -7,10 +7,12 @@
 using namespace std;
 
 int main() {
-    db_index index("test.db", true);
-    char value[32];
-    index.insert("huangjiahui", "nan");
-    index.search("huangjiahui", value);
-    cout << value << endl;
+    db_index index("test.db", false, true);
+    bpt::value_t value[250];
+//    index.remove("huangjiahui");
+//    index.insert("huangjiahui", "nan");
+    int num = index.search("huangjiahui", value, 10);
+    for (int i = 0; i < num; i++)
+        cout << value[i].v << endl;
     return 0;
 }
