@@ -120,7 +120,7 @@ int DatabaseInt::getRealSize()
 }
 int DatabaseInt::getMaxSize()
 {
-    return this->size;
+    return this->size + 1;
 }
 /* Don't try to use it in a public method. Try to use checkRight or
  * checkRightAndChange instead.
@@ -277,7 +277,7 @@ string DatabaseInt::output()
 DatabaseInt::~DatabaseInt()
 {
 }
-bool DatabaseInt::read(char* input, int& position)
+bool DatabaseInt::read(char* input, int inputlen,int& position)
 {
     memcpy(data, input, this->size + 1);
     position += this->size + 1;
@@ -315,8 +315,8 @@ bool DatabaseInt::analysis(string input)
         for (int i = 0; i < size; i++)
             if (*(par2 + i) == 0 || *(par2 + i) == 32)
                 *(par2 + i) = '0';
-        int res1 = compare(temp, size + 1, par1, size + 1);
-        int res2 = compare(temp, size + 1, par2, size + 1);
+        int res1 = compare(temp, size , par1, size );
+        int res2 = compare(temp, size , par2, size );
         free(temp);
         free(par1);
         free(par2);
@@ -342,8 +342,8 @@ bool DatabaseInt::analysis(string input)
         for (int i = 0; i < size; i++)
             if (*(par2 + i) == 0 || *(par2 + i) == 32)
                 *(par2 + i) = '0';
-        int res1 = compare(temp, size + 1, par1, size + 1);
-        int res2 = compare(temp, size + 1, par2, size + 1);
+        int res1 = compare(temp, size , par1, size );
+        int res2 = compare(temp, size , par2, size );
         free(temp);
         free(par1);
         free(par2);
@@ -369,8 +369,8 @@ bool DatabaseInt::analysis(string input)
         for (int i = 0; i < size; i++)
             if (*(par2 + i) == 0 || *(par2 + i) == 32)
                 *(par2 + i) = '0';
-        int res1 = compare(temp, size + 1, par1, size + 1);
-        int res2 = compare(temp, size + 1, par2, size + 1);
+        int res1 = compare(temp, size , par1, size );
+        int res2 = compare(temp, size , par2, size );
         free(temp);
         free(par1);
         free(par2);
@@ -396,8 +396,8 @@ bool DatabaseInt::analysis(string input)
         for (int i = 0; i < size; i++)
             if (*(par2 + i) == 0 || *(par2 + i) == 32)
                 *(par2 + i) = '0';
-        int res1 = compare(temp, size + 1, par1, size + 1);
-        int res2 = compare(temp, size + 1, par2, size + 1);
+        int res1 = compare(temp, size , par1, size );
+        int res2 = compare(temp, size , par2, size );
         free(temp);
         free(par1);
         free(par2);
@@ -418,7 +418,7 @@ bool DatabaseInt::analysis(string input)
         for (int i = 0; i < size; i++)
             if (*(par1 + i) == 0 || *(par1 + i) == 32)
                 *(par1 + i) = '0';
-        int res1 = compare(temp, size + 1, par1, size + 1);
+        int res1 = compare(temp, size , par1, size );
         free(temp);
         free(par1);
         if (res1 == 0)
@@ -440,7 +440,7 @@ bool DatabaseInt::analysis(string input)
             for (int i = 0; i < size; i++)
                 if (*(par + i) == 0 || *(par + i) == 32)
                     *(par + i) = '0';
-            int res = compare(temp, size + 1, par, size + 1);
+            int res = compare(temp, size , par, size );
             if (res == 0) {
                 free(par);
                 free(temp);

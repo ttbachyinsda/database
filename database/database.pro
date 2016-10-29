@@ -31,7 +31,11 @@ SOURCES += main.cpp\
     managementhandler/fixedsizediterator.cpp \
     tester/testiterator.cpp \
     recordhandler/recordfactory.cpp \
-    managementhandler/iteratorfactory.cpp
+    managementhandler/iteratorfactory.cpp \
+    databasehandler/flexibletable.cpp \
+    recordhandler/flexiblerecord.cpp \
+    managementhandler/flexibleiterator.cpp \
+    tester/testflexible.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -58,7 +62,11 @@ HEADERS  += mainwindow.h \
     managementhandler/fixedsizediterator.h \
     tester/testiterator.h \
     recordhandler/recordfactory.h \
-    managementhandler/iteratorfactory.h
+    managementhandler/iteratorfactory.h \
+    databasehandler/flexibletable.h \
+    recordhandler/flexiblerecord.h \
+    managementhandler/flexibleiterator.h \
+    tester/testflexible.h
 
 FORMS    += mainwindow.ui
 

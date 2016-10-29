@@ -73,11 +73,12 @@ Record* FixedSizedIterator::getdata()
 bool FixedSizedIterator::insertdata(Record* rec)
 {
     int temppagenum, temppageposition;
-    bool can = this->nowtable->FastInsert(temppagenum, temppageposition, rec);
+    bool can = this->nowtable->FastAllInsert(temppagenum, temppageposition, rec);
     if (can) {
-        this->nowpagerownum++;
+        nowpagenum=temppagenum;
         nowpageposition = temppageposition;
         nowrownum = (nowpageposition - 8) / nowrowsize;
+        this->nowpagerownum = this->nowtable->getPageRowNum(nowpagenum);
         return true;
     } else
         return false;

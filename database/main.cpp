@@ -2,6 +2,7 @@
 #include "tester/testdatabase.h"
 #include "tester/testiterator.h"
 #include "tester/testtype.h"
+#include "tester/testflexible.h"
 #include <QApplication>
 #include <QQmlExtensionPlugin>
 #include <iostream>
@@ -15,6 +16,7 @@ int main(int argc, char* argv[])
     v.begintest();
     testiterator w;
     w.begintest();
-
+    testflexible x;
+    x.begintest();
     return 0;
 }

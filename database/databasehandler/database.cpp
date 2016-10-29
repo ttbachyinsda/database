@@ -72,7 +72,7 @@ bool Database::Initialize()
         can = fscanf(this->f, "%s", tp);
         if (can == -1)
             return false;
-        if (tp[0] == 'F') {
+        if (tp[0] == 'F' && tp[1] == 'i') {
             Table* t = new FixedSizeTable();
             string temp = s;
             t->setfilename(temp);
