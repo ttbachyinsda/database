@@ -83,7 +83,6 @@ void testflexible::begintest()
     Record* record = RecordFactory::getrecord(onetable);
     if (iterator->available()) {
         iterator->getdata(record);
-
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
