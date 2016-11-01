@@ -9,11 +9,16 @@
 #include <vector>
 #include "sqlstruct.h"
 
+class SQLDriver;
+
 class SQLAction
 {
+protected:
+    SQLDriver* driver;
 public:
     virtual bool execute() = 0;
     virtual ~SQLAction() {}
+    void setDriver(SQLDriver* d) { driver = d; }
 };
 
 /**

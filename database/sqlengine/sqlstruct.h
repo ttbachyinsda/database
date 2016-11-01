@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 
 struct SQLType
 {
@@ -36,6 +37,16 @@ struct SQLValue
 
     SQLValue() {
         type = SQLValue::STRING;
+    }
+
+    bool typeFitChar(char c) {
+        if (c == 'I' && type == ENUMERATE)
+            return true;
+        if ((c == 'V' || c == 'C') && type == STRING)
+            return true;
+        // Insert or where clause (NULL is always acceptable)
+        // But NULL is not comparable (< > <= >= ...)
+        return (type == NUL);
     }
 
     void dump() const;
@@ -106,5 +117,30 @@ struct SQLSet
 
 typedef std::vector<SQLSet*> SQLSetGroup;
 typedef std::vector<std::string> SQLTableGroup;
+
+class SQLResult
+{
+    const int columns;
+    std::list<std::string> title;
+    std::list<std::vector<std::string> > data;
+public:
+    SQLResult(int col) : columns(col) {}
+    ~SQLResult() {}
+
+    void addNew() {
+        data.push_back(std::vector<std::string>(columns));
+    }
+
+    void setData(int idx, const std::string& str) {
+        if (idx >= columns) return;
+        if (data.size() == 0) return;
+        data.back().at(idx) = str;
+    }
+    void addTitleField(const std::string& str) {
+        title.push_back(str);
+    }
+
+    void dumpToConsole();
+};
 
 #endif // SQLSTRUCT_H

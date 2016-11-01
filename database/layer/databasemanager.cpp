@@ -43,6 +43,7 @@ bool DatabaseManager::writeToFile()
     fprintf(this->f, "%d\n", databasenum);
     for (int i = 0; i < databasenum; i++) {
         fprintf(this->f, "%s\n", databaselist[i]->getfilename().c_str());
+        fprintf(this->f, "%s\n", databaselist[i]->getdatabasetype().c_str());
     }
     fclose(this->f);
     return true;
@@ -74,6 +75,7 @@ bool DatabaseManager::Initialize()
             Database* t = new Database();
             string temp = s;
             t->setfilename(temp);
+            t->Initialize();
             databaselist.push_back(t);
         }
     }
@@ -88,6 +90,16 @@ Database* DatabaseManager::getDatabase(int num)
     else
         return NULL;
 }
+
+Database *DatabaseManager::getDatabaseByName(const string &name)
+{
+    for (Database* db : databaselist) {
+        if (db->getname() == name)
+            return db;
+    }
+    return NULL;
+}
+
 void DatabaseManager::addDatabase(Database* now)
 {
     databasenum++;
@@ -104,6 +116,24 @@ void DatabaseManager::removeDatabase(int num)
     databaselist.erase(k);
     databasenum--;
 }
+
+bool DatabaseManager::removeDatabaseByName(const string &name)
+{
+    for (vector<Database*>::iterator it = databaselist.begin();
+         it != databaselist.end(); ++ it) {
+        if ((*it)->getname() == name) {
+            Database* temp = *it;
+            string tempFilename = temp->getfilename();
+            delete temp;
+            remove(tempFilename.c_str());
+            databaselist.erase(it);
+            -- databasenum;
+            return true;
+        }
+    }
+    return false;
+}
+
 string DatabaseManager::getname()
 {
     return this->name;

@@ -1,4 +1,5 @@
 #include "sqlstruct.h"
+#include <cstring>
 #include <iostream>
 
 const char *const SQLType::INT = "INT";
@@ -61,5 +62,19 @@ void SQLSelectorGroup::dump() const
             s->dump();
             std::cout << ' ';
         }
+    }
+}
+
+void SQLResult::dumpToConsole()
+{
+    for (std::string& t : title) {
+        std::cout << t << "\t";
+    }
+    std::cout << "\n";
+    for (std::vector<std::string>& r : data) {
+        for (std::string& t : r) {
+            std::cout << t << "\t";
+        }
+        std::cout << "\n";
     }
 }

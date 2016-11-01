@@ -12,8 +12,10 @@ public:
     string getfilename();
     bool Initialize();
     Database* getDatabase(int num);
+    Database* getDatabaseByName(const std::string&);
     void addDatabase(Database* now);
     void removeDatabase(int num);
+    bool removeDatabaseByName(const std::string&);
     bool writeToFile();
     ~DatabaseManager();
 

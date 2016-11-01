@@ -13,7 +13,6 @@ Database::Database(string filename)
     this->tablenum = 0;
     this->tablelist.clear();
     this->f = NULL;
-    writeToFile();
 }
 Database::~Database()
 {
@@ -37,6 +36,7 @@ bool Database::writeToFile()
     fprintf(this->f, "%d\n", tablenum);
     for (int i = 0; i < tablenum; i++) {
         fprintf(this->f, "%s\n", tablelist[i]->getfilename().c_str());
+        fprintf(this->f, "%s\n", tablelist[i]->gettabletype().c_str());
     }
     fclose(this->f);
     return true;
@@ -76,6 +76,7 @@ bool Database::Initialize()
             Table* t = new FixedSizeTable();
             string temp = s;
             t->setfilename(temp);
+            t->Initialize();
             tablelist.push_back(t);
         }
     }
@@ -90,6 +91,16 @@ Table* Database::getTable(int num)
     else
         return NULL;
 }
+
+Table *Database::getTableByName(const string &name)
+{
+    for (Table* tb : tablelist) {
+        if (tb->getname() == name)
+            return tb;
+    }
+    return NULL;
+}
+
 void Database::addTable(Table* now)
 {
     tablenum++;
@@ -106,5 +117,28 @@ void Database::removeTable(int num)
     tablelist.erase(k);
     tablenum--;
 }
+
+bool Database::removeTableByName(const string &name)
+{
+    for (vector<Table*>::iterator it = tablelist.begin();
+         it != tablelist.end(); ++ it) {
+        if ((*it)->getname() == name) {
+            Table* temp = *it;
+            string tempFilename = temp->getfilename();
+            delete temp;
+            remove(tempFilename.c_str());
+            tablelist.erase(it);
+            -- tablenum;
+            return true;
+        }
+    }
+    return false;
+}
+
 string Database::getname() { return this->name; }
 string Database::getfilename() { return this->filename; }
+
+string Database::getdatabasetype()
+{
+    return "Database";
+}

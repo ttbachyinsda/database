@@ -37,7 +37,9 @@ SOURCES += main.cpp\
     sqlengine/sqllexer.cpp \
     sqlengine/sqldriver.cpp \
     sqlengine/sqlaction.cpp \
-    sqlengine/sqlstruct.cpp
+    sqlengine/sqlstruct.cpp \
+    queryhandler/querycondition.cpp \
+    queryhandler/queryexecuter.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -73,7 +75,9 @@ HEADERS  += mainwindow.h \
     sqlengine/position.hh \
     sqlengine/location.hh \
     sqlengine/sqlaction.h \
-    sqlengine/sqlstruct.h
+    sqlengine/sqlstruct.h \
+    queryhandler/querycondition.h \
+    queryhandler/queryexecuter.h
 
 FORMS    += mainwindow.ui
 

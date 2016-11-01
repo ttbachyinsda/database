@@ -13,8 +13,11 @@ public:
     string getfilename();
     bool Initialize();
     Table* getTable(int num);
+    string getdatabasetype();
+    Table* getTableByName(const std::string& name);
     void addTable(Table* now);
     void removeTable(int num);
+    bool removeTableByName(const std::string& name);
     bool writeToFile();
     ~Database();
 
