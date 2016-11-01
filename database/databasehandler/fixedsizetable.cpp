@@ -78,8 +78,9 @@ void FixedSizeTable::PackageFromHeadFile(BufType b)
             cannull = true;
         else
             cannull = false;
+        int conditionsize=UIC::readint(b,position);
         DataBaseType* t = UIC::realreconvert(temptype, tempsize, cannull);
-        t->readcondition(b + position, position);
+        t->readcondition(b + position,conditionsize, position);
         column[i] = t;
         free(temptype);
         free(nullable);
@@ -116,6 +117,7 @@ void FixedSizeTable::PackageHeadFile(BufType b)
         UIC::writechar(b, position, nullable, 4);
         free(temptype);
         free(nullable);
+        UIC::writeint(b,position,column[i]->getconditionsize());
         column[i]->writecondition(b + position, position);
     }
     UIC::writeint(b, position, MaxRecordSize);
@@ -133,7 +135,7 @@ void FixedSizeTable::createTable(vector<string> clname, vector<DataBaseType*> cl
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
     for (int i = 0; i < columncount; i++) {
-        totalheadsize += clname[i].length() + 4 * 4 + cltype[i]->getconditionsize();
+        totalheadsize += clname[i].length() + 4 * 5 + cltype[i]->getconditionsize();
         columnname[i] = clname[i];
         column[i] = cltype[i];
         this->RowSize += cltype[i]->getSize();

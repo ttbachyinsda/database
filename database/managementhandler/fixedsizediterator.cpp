@@ -29,6 +29,7 @@ bool FixedSizedIterator::access(int pagenum, int rownum)
 }
 bool FixedSizedIterator::available()
 {
+    if (this->nowpagenum > this->nowtable->getPageNum()) return false;
     if (this->nowrownum >= this->nowpagerownum)
         return false;
     else

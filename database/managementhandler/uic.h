@@ -3,6 +3,7 @@
 
 #include "typehandler/databasechar.h"
 #include "typehandler/databaseint.h"
+#include "typehandler/databasevarchar.h"
 #include "typehandler/databasetype.h"
 #include <sstream>
 

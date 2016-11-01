@@ -47,7 +47,7 @@ int DataBaseType::getconditionsize()
 {
     return this->conditionsize;
 }
-bool DataBaseType::readcondition(char* input, int& position)
+bool DataBaseType::readcondition(char* input,int inputsize, int& position)
 {
     if (condition != NULL)
         free(condition);
@@ -55,12 +55,12 @@ bool DataBaseType::readcondition(char* input, int& position)
     memcpy(contype, input, 4);
     string scontype(contype, 4);
     if (scontype == "FRTO" || scontype == "frTO" || scontype == "FRto" || scontype == "frto") {
-        conditionsize = (this->getMaxSize() + 1) * 2 + 4;
+        conditionsize = inputsize;
         condition = (char*)malloc(conditionsize);
         memcpy(condition, input, conditionsize);
         position += conditionsize;
     } else if (scontype == "NTEQ") {
-        conditionsize = (this->getMaxSize() + 1) + 4;
+        conditionsize = inputsize;
         condition = (char*)malloc(conditionsize);
         memcpy(condition, input, conditionsize);
         position += conditionsize;
@@ -68,7 +68,7 @@ bool DataBaseType::readcondition(char* input, int& position)
         int num;
         memcpy((char*)&num, input + 4, 4);
         cout << "scontype num=" << num << endl;
-        conditionsize = (this->getMaxSize() + 1) * num + 4 + 4;
+        conditionsize = inputsize;
         condition = (char*)malloc(conditionsize);
         memcpy(condition, input, conditionsize);
         position += conditionsize;
@@ -79,6 +79,7 @@ bool DataBaseType::readcondition(char* input, int& position)
         position += conditionsize;
     } else {
         cout << "ERROR: NO CONDITION" << endl;
+        NullCondition();
     }
     return true;
 }
@@ -94,48 +95,43 @@ bool DataBaseType::readcondition(string* input)
         free(condition);
     conditionsize = 0;
     if (input[0] == "FRTO" || input[0] == "frTO" || input[0] == "FRto" || input[0] == "frto") {
-        int maxsize = this->getMaxSize();
-        char* t1 = (char*)malloc(maxsize + 1);
-        memset(t1, 0, maxsize + 1);
-        memcpy(t1, input[1].data(), min(maxsize + 1, (int)input[1].length()));
-        char* t2 = (char*)malloc(maxsize + 1);
-        memset(t2, 0, maxsize + 1);
-        memcpy(t2, input[2].data(), min(maxsize + 1, (int)input[2].length()));
-        conditionsize = (this->getMaxSize() + 1) * 2 + 4;
+        int size1=input[1].length();
+        int size2=input[2].length();
+        conditionsize = size1+size2+12;
         condition = (char*)malloc(conditionsize);
         memcpy(condition, input[0].data(), 4);
-        memcpy(condition + 4, t1, maxsize + 1);
-        memcpy(condition + 4 + maxsize + 1, t2, maxsize + 1);
-        free(t1);
-        free(t2);
+        memcpy(condition + 4, &size1,4);
+        memcpy(condition + 8, input[1].data(), size1);
+        memcpy(condition + 8 + size1, &size2,4);
+        memcpy(condition + 12 + size1, input[2].data(), size2);
     } else if (input[0] == "NTEQ") {
-        int maxsize = this->getMaxSize();
-        char* t1 = (char*)malloc(maxsize + 1);
-        memset(t1, 0, maxsize + 1);
-        memcpy(t1, input[1].data(), min(maxsize + 1, (int)input[1].length()));
-        conditionsize = (this->getMaxSize() + 1) + 4;
+        int size1=input[1].length();
+        conditionsize = size1 + 8;
         condition = (char*)malloc(conditionsize);
         memcpy(condition, input[0].data(), 4);
-        memcpy(condition + 4, t1, maxsize + 1);
-        free(t1);
+        memcpy(condition + 4, &size1,4);
+        memcpy(condition + 8, input[1].data(), size1);
     } else if (input[0] == "CHOI") {
         char* tmp = (char*)malloc(4);
         memcpy(tmp, input[1].data(), 4);
         int num = chartoint(tmp);
-        int maxsize = this->getMaxSize();
-        condition = (char*)malloc(8 + (maxsize + 1) * num);
-        memset(condition, 0, 8 + (maxsize + 1) * num);
+        conditionsize=8;
+        for (int i=0;i<num;i++)
+        {
+            conditionsize += input[i+2].length()+4;
+        }
+        condition = (char*)malloc(conditionsize);
+        memset(condition, 0, conditionsize);
         memcpy(condition, input[0].data(), 4);
         memcpy(condition + 4, input[1].data(), 4);
-        char* t1 = (char*)malloc(maxsize + 1);
+        int index=8;
         for (int i = 0; i < num; i++) {
-            memset(t1, 0, maxsize + 1);
-            memcpy(t1, input[i + 2].data(), min(maxsize + 1, (int)input[i + 2].length()));
-            conditionsize = 8 + i * (maxsize + 1);
-            memcpy(condition + conditionsize, t1, maxsize + 1);
+            int sizei=input[i+2].length();
+            memcpy(condition+index,&sizei,4);
+            index += 4;
+            memcpy(condition+index,input[i+2].data(),input[i+2].length());
+            index += input[i+2].length();
         }
-        conditionsize += (maxsize + 1);
-        free(t1);
     } else if (input[0] == "NULL") {
         NullCondition();
     } else {
@@ -184,14 +180,6 @@ int DataBaseType::compare(char* source, int sourcelength, char* dest, int destle
         return 1;
     if (sourcelength < destlength)
         return -1;
-    if (source[sourcelength] == IS_NULL) {
-        if (dest[destlength] == IS_NULL)
-            return 0;
-        else
-            return -1;
-    }
-    if (dest[destlength] == IS_NULL)
-        return 1;
     for (int i = 0; i < sourcelength; i++) {
         if (source[i] > dest[i])
             return 1;

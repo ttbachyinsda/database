@@ -35,13 +35,12 @@ void testiterator::begintest()
     string t1 = "INTE";
     string t2 = "CHAR";
     string t3 = "INTE";
-    string condition = "FRTO00000000791160";
-    char* testcondition = new char[condition.length()];
-    memcpy(testcondition, condition.data(), condition.length());
+    string *conditions = new string[3];
+    conditions[0]="FRTO";
+    conditions[1]="0";
+    conditions[2]="12345";
     DataBaseType* type1 = UIC::reconvert(t1.data(), 6, true);
-    int index = 0;
-    type1->readcondition(testcondition, index);
-    delete[] testcondition;
+    type1->readcondition(conditions);
     DataBaseType* type2 = UIC::reconvert(t2.data(), 20, true);
     DataBaseType* type3 = UIC::reconvert(t3.data(), 2, true);
     cltype.push_back(type1);
@@ -59,8 +58,11 @@ void testiterator::begintest()
         aaa[1] = "12345678";
         aaa[2] = "58";
         bool can = t->set(aaa);
-        can=t->setAt(1,"",true);
-        t->update();
+        if (can)
+        {
+            can=t->setAt(1,"",true);
+            t->update();
+        }
         if (can)
             onetable->FastAllInsert(pagenum, pageposition, t);
         //if (i%1000==0) cout<<pagenum<<' '<<pageposition<<endl;
@@ -78,7 +80,7 @@ void testiterator::begintest()
 
     Iterator* iterator = IteratorFactory::getiterator(onetable);
     Record* record = RecordFactory::getrecord(onetable);
-    char* temp = new char[iterator->getcurrentsize()];
+    char* temp = new char[record->getMaxSize()];
     if (iterator->available()) {
         int tempsize;
         iterator->getdata(temp, tempsize);

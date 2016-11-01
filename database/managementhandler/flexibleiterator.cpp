@@ -19,20 +19,26 @@ int FlexibleIterator::getThisRowSize()
 bool FlexibleIterator::access(int pagenum, int rownum)
 {
     this->nowpagenum = pagenum;
-    if (rownum >= nowpagerownum) {
-        rownum=0;
+    this->nowrownum = rownum;
+    if (this->nowpagenum > this->nowtable->getPageNum())
+    {
+        return false;
     }
     int index=0;
     BufType b= BPM->getPage(fileid,this->nowpagenum,index);
     BPM->access(index);
-    this->nowrownum = rownum;
     int pagerownum = UIC::chartoint(b + 4);
     this->nowpagerownum = pagerownum;
+    if (rownum >= nowpagerownum) {
+        this->nowpageposition=0;
+        return false;
+    }
     int pageposition = UIC::chartoint(b + __position(rownum));
     this->nowpageposition=pageposition;
 }
 bool FlexibleIterator::available()
 {
+    if (this->nowpagenum > this->nowtable->getPageNum()) return false;
     int maxpagenum=this->nowtable->getPageNum();
     if (this->nowpagenum>maxpagenum) return false;
     int index=0;

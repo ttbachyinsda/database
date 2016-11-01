@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     databasehandler/flexibletable.cpp \
     recordhandler/flexiblerecord.cpp \
     managementhandler/flexibleiterator.cpp \
-    tester/testflexible.cpp
+    tester/testflexible.cpp \
+    typehandler/databasevarchar.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -66,7 +67,8 @@ HEADERS  += mainwindow.h \
     databasehandler/flexibletable.h \
     recordhandler/flexiblerecord.h \
     managementhandler/flexibleiterator.h \
-    tester/testflexible.h
+    tester/testflexible.h \
+    typehandler/databasevarchar.h
 
 FORMS    += mainwindow.ui
 

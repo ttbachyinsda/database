@@ -75,7 +75,8 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
         else
             cannull = false;
         DataBaseType* t = UIC::realreconvert(temptype, tempsize, cannull);
-        t->readcondition(b + position, position);
+        int conditionsize=UIC::readint(b,position);
+        t->readcondition(b + position,conditionsize, position);
         column[i] = t;
         free(temptype);
         free(nullable);
@@ -110,6 +111,7 @@ void FlexibleTable::PackageHeadFile(BufType b)
         UIC::writechar(b, position, nullable, 4);
         free(temptype);
         free(nullable);
+        UIC::writeint(b,position,column[i]->getconditionsize());
         column[i]->writecondition(b + position, position);
     }
     UIC::writeint(b, position, MaxRecordSize);
@@ -126,7 +128,7 @@ void FlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> clt
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
     for (int i = 0; i < columncount; i++) {
-        totalheadsize += clname[i].length() + 4 * 4 + cltype[i]->getconditionsize();
+        totalheadsize += clname[i].length() + 4 * 5 + cltype[i]->getconditionsize();
         columnname[i] = clname[i];
         column[i] = cltype[i];
     }
@@ -155,6 +157,7 @@ char* FlexibleTable::Packager(int totalsize)
 }
 void FlexibleTable::Reconstruct(int pagenum, BufType b)
 {
+    cout<<"do a reconstruct"<<endl;
     int pagerownum = 0;
     int reservedsize = 0;
     int reservedpointer = 0;
@@ -311,25 +314,15 @@ bool FlexibleTable::DeleteAt(int pagenum, int rownum)
     int nowindex, pagerownum;
     if (!modifypd(pagenum, rownum, b, nowindex, pagerownum))
         return false;
-    int realnum=-1,position;
-    int i;
-    for (i=0;i<pagerownum;i++)
-    {
-        position=UIC::chartoint(b+__position(i));
-        if (position!=0)
-        {
-            realnum++;
-            if (realnum==rownum) break;
-        }
-    }
-    if (realnum!=rownum) return false;
+    int position;
+    position=UIC::chartoint(b+__position(rownum));
+    if (position==0) return false;
+
     int newposition=0,currentsize;
-    UIC::inttochar(newposition,b+__position(i));
+    UIC::inttochar(newposition,b+__position(rownum));
     currentsize=UIC::chartoint(b+position);
     int reservedsize = UIC::chartoint(b+8);
     reservedsize -= currentsize+4;
-    pagerownum--;
-    UIC::inttochar(pagerownum, b + 4);
     UIC::inttochar(reservedsize,b+8);
     if (pagenum < this->MaxRecordSize) {
         this->reservedSizeInPage[pagenum]=reservedsize;

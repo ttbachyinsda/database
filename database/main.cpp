@@ -9,6 +9,7 @@
 using namespace std;
 int main(int argc, char* argv[])
 {
+/*
     testtype t;
     t.begintest(false);
 
@@ -16,7 +17,9 @@ int main(int argc, char* argv[])
     v.begintest();
     testiterator w;
     w.begintest();
+    */
     testflexible x;
     x.begintest();
+
     return 0;
 }

@@ -39,6 +39,12 @@ void UIC::convert(DataBaseType* t1, char* s1,char* s2)
         *(s1 + 2) = 'T';
         *(s1 + 3) = 'E';
     }
+    if (temp[6]=='V') {
+        *(s1) = 'V';
+        *(s1 + 1) = 'A';
+        *(s1 + 2) = 'R';
+        *(s1 + 3) = 'C';
+    }
     if (t1->getNullable()==true)
     {
         *(s2) = 'A';
@@ -63,6 +69,10 @@ DataBaseType* UIC::reconvert(char* s1, int size,bool cannull)
         DataBaseType* temp = new DatabaseInt(size,cannull);
         return temp;
     }
+    if (*(s1) == 'V') {
+        DataBaseType* temp = new DatabaseVarchar(size,cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
@@ -73,6 +83,10 @@ DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
     }
     if (s1[0] == 'I') {
         DataBaseType* temp = new DatabaseInt(size,cannull);
+        return temp;
+    }
+    if (s1[0] == 'V') {
+        DataBaseType* temp = new DatabaseVarchar(size,cannull);
         return temp;
     }
     return NULL;
@@ -87,6 +101,10 @@ DataBaseType* UIC::realreconvert(char* s1, int size,bool cannull)
         DataBaseType* temp = new DatabaseInt(size-1,cannull);
         return temp;
     }
+    if (*(s1) == 'V') {
+        DataBaseType* temp = new DatabaseVarchar(size-1,cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::realreconvert(string s1, int size, bool cannull)
@@ -97,6 +115,10 @@ DataBaseType* UIC::realreconvert(string s1, int size, bool cannull)
     }
     if (s1[0] == 'I') {
         DataBaseType* temp = new DatabaseInt(size-1,cannull);
+        return temp;
+    }
+    if (s1[0] == 'V') {
+        DataBaseType* temp = new DatabaseVarchar(size-1,cannull);
         return temp;
     }
     return NULL;
@@ -171,7 +193,11 @@ DataBaseType** UIC::copytype(DataBaseType** input, int inputlen)
         } else if (temptype[6]=='C')
         {
             temp[i]=new DatabaseChar(0);
-        } else
+        } else if (temptype[6]=='V')
+        {
+            temp[i]=new DatabaseVarchar(input[i]->getMaxSize()-1);
+        }
+        else
         {
             cout<<"eeeeeRR"<<endl;
         }
