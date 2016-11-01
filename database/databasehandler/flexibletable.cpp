@@ -369,7 +369,7 @@ bool FlexibleTable::FastInsert(int& pagenum, int& pageposition, Record* rec)
 bool FlexibleTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
 {
     bool can = false;
-    for (int i = 1; i < this->MaxRecordSize; i++)
+    for (int i = min(this->MaxRecordSize,this->PageNum); i > 0; i--)
         if (this->reservedSizeInPage[i] >= rec->getSize()) {
             pagenum = i;
             can = FastInsert(pagenum, pageposition, rec);
@@ -394,15 +394,12 @@ bool FlexibleTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
     return can;
 }
 
-Record* FlexibleTable::FastOutput(int pagenum, int pageposition)
+bool FlexibleTable::FastOutput(int pagenum, int pageposition, Record *rec)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
-    Record* temp = new FlexibleRecord();
-    DataBaseType** t = UIC::copytype(this->column, columncount);
-    temp->Initialize(t, columncount);
-    temp->Input(b + pageposition);
-    return temp;
+    rec->Input(b + pageposition);
+    return true;
 }
 void FlexibleTable::FastOutput(int pagenum, int pageposition, char* output, int& outputsize)
 {

@@ -321,7 +321,7 @@ bool FixedSizeTable::FastInsert(int& pagenum, int& pageposition, Record* rec)
 bool FixedSizeTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
 {
     bool can = false;
-    for (int i = 1; i < this->MaxRecordSize; i++)
+    for (int i = min(this->MaxRecordSize,this->PageNum); i > 0; i--)
         if (this->RowNumInPage[i] < this->MaxRowNum) {
             pagenum = i;
             can = FastInsert(pagenum, pageposition, rec);
@@ -346,15 +346,12 @@ bool FixedSizeTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
     return can;
 }
 
-Record* FixedSizeTable::FastOutput(int pagenum, int pageposition)
+bool FixedSizeTable::FastOutput(int pagenum, int pageposition,Record* rec)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
-    Record* temp = new FixedSizeRecord();
-    DataBaseType** t = UIC::copytype(this->column, columncount);
-    temp->Initialize(t, columncount);
-    temp->Input(b + pageposition);
-    return temp;
+    rec->Input(b + pageposition);
+    return true;
 }
 void FixedSizeTable::FastOutput(int pagenum, int pageposition, char* output, int& outputsize)
 {

@@ -37,9 +37,9 @@ void testflexible::begintest()
     string t2 = "VARC";
     string t3 = "INTE";
     string *conditions = new string[3];
-    conditions[0]="frTO";
+    conditions[0]="FRTO";
     conditions[1]="0";
-    conditions[2]="12345";
+    conditions[2]="500000";
     DataBaseType* type1 = UIC::reconvert(t1.data(), 6, true);
     type1->readcondition(conditions);
     DataBaseType* type2 = UIC::reconvert(t2.data(), 20, true);
@@ -81,11 +81,8 @@ void testflexible::begintest()
 
     Iterator* iterator = IteratorFactory::getiterator(onetable);
     Record* record = RecordFactory::getrecord(onetable);
-    char* temp = new char[record->getMaxSize()];
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
 
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
@@ -95,18 +92,14 @@ void testflexible::begintest()
 
     ++(*iterator);
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+       iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
     iterator->access(300, 1);
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+       iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
@@ -116,9 +109,7 @@ void testflexible::begintest()
     cout << "try to delete" << endl;
     iterator->deletedata();
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
@@ -127,7 +118,6 @@ void testflexible::begintest()
     delete iterator;
     delete record;
     delete onetable;
-    delete[] temp;
 
     cout << "Open again" << endl;
     onetable = new FlexibleTable();
@@ -136,29 +126,22 @@ void testflexible::begintest()
 
     iterator = IteratorFactory::getiterator(onetable);
     record = RecordFactory::getrecord(onetable);
-    temp = new char[record->getMaxSize()];
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
     ++(*iterator);
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
     iterator->access(300, 1);
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
@@ -166,7 +149,6 @@ void testflexible::begintest()
     delete onetable;
     delete iterator;
     delete record;
-    delete[] temp;
     cout << onetable->getname() << endl;
     cout << "test table end" << endl;
 

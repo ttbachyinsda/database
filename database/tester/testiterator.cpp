@@ -80,11 +80,8 @@ void testiterator::begintest()
 
     Iterator* iterator = IteratorFactory::getiterator(onetable);
     Record* record = RecordFactory::getrecord(onetable);
-    char* temp = new char[record->getMaxSize()];
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
 
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
@@ -93,18 +90,14 @@ void testiterator::begintest()
 
     ++(*iterator);
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
     iterator->access(300, 178);
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
@@ -113,9 +106,7 @@ void testiterator::begintest()
     cout << "try to delete" << endl;
     iterator->deletedata();
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
@@ -124,7 +115,6 @@ void testiterator::begintest()
     delete iterator;
     delete record;
     delete onetable;
-    delete[] temp;
 
     cout << "Open again" << endl;
     onetable = new FixedSizeTable();
@@ -132,29 +122,22 @@ void testiterator::begintest()
     onetable->Initialize();
     iterator = IteratorFactory::getiterator(onetable);
     record = RecordFactory::getrecord(onetable);
-    temp = new char[iterator->getcurrentsize()];
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
     ++(*iterator);
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
     iterator->access(300, 179);
     if (iterator->available()) {
-        int tempsize;
-        iterator->getdata(temp, tempsize);
-        record->Input(temp);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
@@ -162,7 +145,6 @@ void testiterator::begintest()
     delete onetable;
     delete iterator;
     delete record;
-    delete[] temp;
     cout << onetable->getname() << endl;
     cout << "test table end" << endl;
 

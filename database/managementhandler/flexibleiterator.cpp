@@ -96,11 +96,12 @@ bool FlexibleIterator::getdata(char* output, int& outputsize)
     this->nowtable->FastOutput(this->nowpagenum, this->nowpageposition, output, outputsize);
     return true;
 }
-Record* FlexibleIterator::getdata()
+bool FlexibleIterator::getdata(Record* rec)
 {
     if (!available())
-        return NULL;
-    return this->nowtable->FastOutput(this->nowpagenum, this->nowpageposition);
+        return false;
+    this->nowtable->FastOutput(this->nowpagenum, this->nowpageposition,rec);
+    return true;
 }
 bool FlexibleIterator::insertdata(Record* rec)
 {

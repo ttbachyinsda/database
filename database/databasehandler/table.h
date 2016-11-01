@@ -28,7 +28,7 @@ public:
     virtual bool FastModify(int pagenum, int pageposition, Record* rec) = 0;
     virtual bool FastInsert(int& pagenum, int& pageposition, Record* rec) = 0;
     virtual bool FastAllInsert(int& pagenum, int& pageposition, Record* rec) = 0;
-    virtual Record* FastOutput(int pagenum, int pageposition) = 0;
+    virtual bool FastOutput(int pagenum, int pageposition, Record* rec) = 0;
     virtual void FastOutput(int pagenum, int pageposition, char* output, int& outputsize) = 0;
     virtual bool Initialize() = 0;
     virtual string gettabletype() = 0;

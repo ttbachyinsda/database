@@ -65,11 +65,12 @@ bool FixedSizedIterator::getdata(char* output, int& outputsize)
     this->nowtable->FastOutput(this->nowpagenum, this->nowpageposition, output, outputsize);
     return true;
 }
-Record* FixedSizedIterator::getdata()
+bool FixedSizedIterator::getdata(Record* rec)
 {
     if (!available())
-        return NULL;
-    return this->nowtable->FastOutput(this->nowpagenum, this->nowpageposition);
+        return false;
+    this->nowtable->FastOutput(this->nowpagenum, this->nowpageposition,rec);
+    return true;
 }
 bool FixedSizedIterator::insertdata(Record* rec)
 {
