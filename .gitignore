@@ -5,3 +5,4 @@ build-database-Desktop*/
 # CLion Files
 .idea/
 CMakeLists.txt
+Makefile
