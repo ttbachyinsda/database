@@ -26,32 +26,32 @@ iterator->getdata(record)
 
 如何创建数据表：
 
-string filename = "oneflexibletable.tb";
-cout << "test iterator table begin..." << endl;
-Table* onetable = new FlexibleTable();  //这是一个变长表
-onetable->setfilename(filename);
-onetable->setname("testiterator");
-vector<string> clname;
-vector<DataBaseType*> cltype;
-clname.push_back("userid");
-clname.push_back("password");
-clname.push_back("age");
-string t1 = "INTE";
-string t2 = "VARC";                 //类型为VARCHAR，最大长度为20
-string t3 = "INTE";
-string *conditions = new string[3];
-conditions[0]="FRTO";
-conditions[1]="0";
-conditions[2]="500000";
-DataBaseType* type1 = UIC::reconvert(t1.data(), 6, true);
-type1->readcondition(conditions);   //新的条件输入方法
-DataBaseType* type2 = UIC::reconvert(t2.data(), 20, true);
-DataBaseType* type3 = UIC::reconvert(t3.data(), 2, true);
-cltype.push_back(type1);
-cltype.push_back(type2);
-cltype.push_back(type3);
-onetable->createTable(clname, cltype);
-onetable->Initialize();
+    string filename = "oneflexibletable.tb";
+    cout << "test iterator table begin..." << endl;
+    Table* onetable = new FlexibleTable();  //这是一个变长表
+    onetable->setfilename(filename);
+    onetable->setname("testiterator");
+    vector<string> clname;
+    vector<DataBaseType*> cltype;
+    clname.push_back("userid");
+    clname.push_back("password");
+    clname.push_back("age");
+    string t1 = "INTE";
+    string t2 = "VARC";                 //类型为VARCHAR，最大长度为20
+    string t3 = "INTE";
+    string *conditions = new string[3];
+    conditions[0]="FRTO";
+    conditions[1]="0";
+    conditions[2]="500000";
+    DataBaseType* type1 = UIC::reconvert(t1.data(), 6, true);
+    type1->readcondition(conditions);   //新的条件输入方法
+    DataBaseType* type2 = UIC::reconvert(t2.data(), 20, true);
+    DataBaseType* type3 = UIC::reconvert(t3.data(), 2, true);
+    cltype.push_back(type1);
+    cltype.push_back(type2);
+    cltype.push_back(type3);
+    onetable->createTable(clname, cltype);
+    onetable->Initialize();
 
 如何打开数据表：
 
@@ -80,43 +80,43 @@ onetable->Initialize();
 
 如何查询指定位置的数据：
 
-Iterator* iterator = IteratorFactory::getiterator(onetable);
-Record* record = RecordFactory::getrecord(onetable);
-if (iterator->available()) {
-    iterator->getdata(record);  //之前的过程也是可以使的，这样写更加简便
-    for (int i = 0; i < 3; i++) {
-        cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+    Iterator* iterator = IteratorFactory::getiterator(onetable);
+    Record* record = RecordFactory::getrecord(onetable);
+    if (iterator->available()) {
+        iterator->getdata(record);  //之前的过程也是可以使的，这样写更加简便
+        for (int i = 0; i < 3; i++) {
+            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+        }
     }
-}
 
 如何插入数据：
 
-for (int i = 0; i < 200000; i++) {
-    aaa[0] = InttoString(i);
-    aaa[1] = "a"+InttoString(i);
-    aaa[2] = "58";
-    bool can = t->set(aaa);
-    if (can && i%3)
-    {
-        can=t->setAt(1,"",true);
-        t->update();
+    for (int i = 0; i < 200000; i++) {
+        aaa[0] = InttoString(i);
+        aaa[1] = "a"+InttoString(i);
+        aaa[2] = "58";
+        bool can = t->set(aaa);
+        if (can && i%3)
+        {
+            can=t->setAt(1,"",true);
+            t->update();
+        }
+        if (can)
+            onetable->FastAllInsert(pagenum, pageposition, t);
+        //if (i%1000==0) cout<<pagenum<<' '<<pageposition<<endl;
     }
-    if (can)
-        onetable->FastAllInsert(pagenum, pageposition, t);
-    //if (i%1000==0) cout<<pagenum<<' '<<pageposition<<endl;
-}
 
 如何删除数据：
 
-iterator->access(300, 0);
-cout << "try to delete" << endl;
-iterator->deletedata();
-if (iterator->available()) {
-    iterator->getdata(record);
-    for (int i = 0; i < 3; i++) {
-        cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+    iterator->access(300, 0);
+    cout << "try to delete" << endl;
+    iterator->deletedata();
+    if (iterator->available()) {
+        iterator->getdata(record);
+        for (int i = 0; i < 3; i++) {
+            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+        }
     }
-}
 
 另外
 
