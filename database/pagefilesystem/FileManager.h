@@ -33,7 +33,7 @@ private:
     }
     int _openFile(const char* name, int fileID)
     {
-        int f = open(name, O_RDWR);
+        int f = open(name, PARA);
         if (f == -1) {
             return -1;
         }
