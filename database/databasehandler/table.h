@@ -36,7 +36,6 @@ public:
     void createemptyindex(int i);
     int getColumnIndexByName(const std::string& name);
     vector<string> checkOutput();
-    virtual bool FastModify(int pagenum, int pageposition, Record* rec) = 0;
     virtual bool FastInsert(int& pagenum, int& pageposition, Record* rec) = 0;
     virtual bool FastAllInsert(int& pagenum, int& pageposition, Record* rec) = 0;
     virtual bool FastOutput(int pagenum, int pageposition, Record* rec) = 0;
@@ -49,7 +48,6 @@ public:
     virtual int getPageRowNum(int pagenum) = 0;
     virtual int getRowSize() = 0;
     virtual int getMaxRowNum() = 0;
-    virtual bool Modify(int pagenum, int rownum) = 0;
     virtual bool DeleteAt(int pagenum, int rownum) = 0;
     virtual void createTable(vector<string> clname, vector<DataBaseType*> cltype) = 0;
     vector<string> gettype();

@@ -12,9 +12,7 @@ public:
     ~FixedSizeTable();
     bool Initialize();
     void createTable(vector<string> clname, vector<DataBaseType*> cltype);
-    bool Modify(int pagenum, int rownum);
     bool DeleteAt(int pagenum, int rownum);
-    bool FastModify(int pagenum, int pageposition, Record* rec);
     bool FastInsert(int& pagenum, int& pageposition, Record* rec);
     bool FastAllInsert(int& pagenum, int& pageposition, Record* rec);
     bool FastOutput(int pagenum, int pageposition, Record *rec);
@@ -32,6 +30,9 @@ private:
     char* Packager();
     bool modifypd(int pagenum, int rownum, BufType& ct, int& newindex, int& pagenewnum);
     void UnPackager(BufType b, int position);
+    void modifyall(char* data,int datasize,int prepagenum,int prepageposition,int newpagenum,int newpageposition);
+    void insertall(char* data,int datasize,int pagenum,int pageposition);
+    void deleteall(char* data,int datasize,int pagenum,int pageposition);
     int PageNum;
     int RowSize;
     int MaxRowNum;

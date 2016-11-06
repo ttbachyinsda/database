@@ -16,7 +16,6 @@ public:
     bool insertdata(Record* rec);
     bool available();
     void getbegin();
-    bool modify(Record* rec);
     int getcurrentsize();
 
 private:

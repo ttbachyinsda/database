@@ -45,8 +45,8 @@ class bplus_tree {
     int insert(const index_key &key, index_value value);
     int update(const index_key &key, index_value value);
 
-    void set_MultiValue(bool multi_value) { this->multi_value = multi_value; };
-    head_t get_head() const { return head; };
+    void set_MultiValue(bool multi_value) { this->multi_value = multi_value; }
+    head_t get_head() const { return head; }
 
    private:
     char path[512];

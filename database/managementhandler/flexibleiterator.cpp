@@ -82,13 +82,6 @@ bool FlexibleIterator::nextrow()
      return true;
 }
 
-bool FlexibleIterator::modify(Record* rec)
-{
-    if (!available())
-        return false;
-    bool can = this->nowtable->FastModify(this->nowpagenum, this->nowpageposition, rec);
-    return can;
-}
 bool FlexibleIterator::getdata(char* output, int& outputsize)
 {
     if (!available())

@@ -17,10 +17,10 @@ int main(int argc, char* argv[])
     t.begintest(false);
     testdatabase v;
     v.begintest();
-    */
+
     testiterator w;
     w.begintest();
-
+*/
     testflexible x;
     x.begintest();
 

@@ -295,7 +295,7 @@ bool SQLCreateIndexAction::execute()
     }
     currentTable->createemptyindex(columnID);
     // TODO: Insert everything into this new index.
-    currentTable->getindexes()[columnID]->insert();
+    //currentTable->getindexes()[columnID]->insert();
     return true;
 }
 

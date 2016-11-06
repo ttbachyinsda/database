@@ -20,6 +20,20 @@ string testflexible::InttoString(int num)
     string s1 = ss.str();
     return s1;
 }
+void testflexible::testindex(Table* onetable)
+{
+    cout<<"test index begin"<<endl;
+    string temp="0";
+    char * tst=(char*)malloc(7);
+    memset(tst,0,7);
+    memcpy(tst,temp.c_str(),temp.length()+1);
+    cout<<tst<<endl;
+    index_key k(tst);
+    index_value v;
+    cout<<onetable->getindexes()[0]->search(k,&v)<<endl;
+    cout<<v.pagenum<<' '<<v.pageposition<<endl;
+    cout<<"test index end"<<endl;
+}
 
 void testflexible::begintest()
 {
@@ -73,6 +87,7 @@ void testflexible::begintest()
     }
     delete t;
     delete[] aaa;
+    testindex(onetable);
     cout << onetable->getPageNum() << endl;
     cout << onetable->getPageRowNum(1030) << endl;
     int time_Diff = time.elapsed();

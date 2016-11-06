@@ -182,9 +182,11 @@ void FlexibleTable::Reconstruct(int pagenum, BufType b)
     reservedsize = UIC::chartoint(b+8);
     reservedpointer = UIC::chartoint(b+12);
     char ** temprecord = new char*[pagerownum];
+    int *preposition = new int[pagerownum];
     for (int i=0;i<pagerownum;i++)
     {
-        temprecord[i]=getat(b,UIC::chartoint(b+__position(i)));
+        preposition[i]=UIC::chartoint(b+__position(i));
+        temprecord[i]=getat(b,preposition[i]);
     }
     reservedpointer=16;
     reservedsize = PAGE_SIZE-16;
@@ -193,6 +195,7 @@ void FlexibleTable::Reconstruct(int pagenum, BufType b)
         if (temprecord[i]!=NULL)
         {
             int datalen=UIC::chartoint(temprecord[i]);
+            modifyall(temprecord[i],datalen,pagenum,preposition[i],pagenum,reservedpointer);
             putat(b,reservedpointer,nowrownum,temprecord[i]);
             reservedpointer += datalen;
             reservedsize -= datalen+4;
@@ -273,6 +276,7 @@ bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rowposition)
         reservedsize = UIC::chartoint(b+8);
         reservedpointer = UIC::chartoint(b+12);
     }
+    insertall(insertdata,datalen,pagenum,reservedpointer);
     putat(b,reservedpointer,pagerownum,insertdata);
     datalen=UIC::chartoint(b+reservedpointer);
     pagerownum++;
@@ -335,9 +339,12 @@ bool FlexibleTable::DeleteAt(int pagenum, int rownum)
     position=UIC::chartoint(b+__position(rownum));
     if (position==0) return false;
 
+
     int newposition=0,currentsize;
-    UIC::inttochar(newposition,b+__position(rownum));
     currentsize=UIC::chartoint(b+position);
+    deleteall(b+position,currentsize,pagenum,position);
+    UIC::inttochar(newposition,b+__position(rownum));
+
     int reservedsize = UIC::chartoint(b+8);
     reservedsize -= currentsize+4;
     UIC::inttochar(reservedsize,b+8);
@@ -356,10 +363,6 @@ FlexibleTable::~FlexibleTable()
     if (reservedSizeInPage != NULL)
         delete[] reservedSizeInPage;
 }
-bool FlexibleTable::Modify(int pagenum, int rownum)
-{
-    return false;
-}
 int FlexibleTable::getPageRowNum(int pagenum)
 {
     //cout << "maxrecordsize=" << this->MaxRecordSize << endl;
@@ -369,10 +372,6 @@ int FlexibleTable::getPageRowNum(int pagenum)
     BufType b = BPM->getPage(fileid, pagenum, index);
     int nowrownum = UIC::chartoint(b + 4);
     return nowrownum;
-}
-bool FlexibleTable::FastModify(int pagenum, int pageposition, Record* rec)
-{
-    return false;
 }
 bool FlexibleTable::FastInsert(int& pagenum, int& pageposition, Record* rec)
 {
@@ -425,6 +424,46 @@ void FlexibleTable::FastOutput(int pagenum, int pageposition, char* output, int&
     outputsize = UIC::chartoint(b+pageposition);
     memcpy(output, b + pageposition, outputsize);
 }
+void FlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prepageposition, int newpagenum, int newpageposition)
+{
+    int index=4;
+    for (int i=0;i<columncount;i++)
+        if (DBindex[i]!=NULL)
+        {
+            int nowdatasize=UIC::chartoint(data+index);
+            index += 4;
+            ModifyindexAt(i,data+index,nowdatasize-1,prepagenum,prepageposition,newpagenum,newpageposition);
+            index += nowdatasize;
+        }
+}
+void FlexibleTable::deleteall(char *data, int datasize, int pagenum, int pageposition)
+{
+    int index=4;
+    for (int i=0;i<columncount;i++)
+        if (DBindex[i]!=NULL)
+        {
+            int nowdatasize=UIC::chartoint(data+index);
+            index += 4;
+            DeleteindexAt(i,data+index,nowdatasize-1,pagenum,pageposition);
+            index += nowdatasize;
+        }
+}
+void FlexibleTable::insertall(char *data, int datasize, int pagenum, int pageposition)
+{
+
+    int index=4;
+    for (int i=0;i<columncount;i++)
+        if (DBindex[i]!=NULL)
+        {
+            int nowdatasize=UIC::chartoint(data+index);
+            index += 4;
+            string t(data+index,nowdatasize);
+            cout<<"insert"<<' '<<t<<' '<<nowdatasize<<endl;
+            InsertindexAt(i,data+index,nowdatasize-1,pagenum,pageposition);
+            index += nowdatasize;
+        }
+}
+
 string FlexibleTable::gettabletype()
 {
     return "Flexible";

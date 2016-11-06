@@ -15,7 +15,6 @@ public:
     virtual int getcurrentsize() = 0;
     virtual bool getdata(Record* rec) = 0;
     virtual bool available() = 0;
-    virtual bool modify(Record* rec) = 0;
     virtual bool deletedata() = 0;
     virtual bool insertdata(Record* rec) = 0;
     virtual void getbegin() = 0;

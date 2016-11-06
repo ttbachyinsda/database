@@ -51,13 +51,6 @@ bool FixedSizedIterator::nextrow()
         return true;
 }
 
-bool FixedSizedIterator::modify(Record* rec)
-{
-    if (!available())
-        return false;
-    bool can = this->nowtable->FastModify(this->nowpagenum, this->nowpageposition, rec);
-    return can;
-}
 bool FixedSizedIterator::getdata(char* output, int& outputsize)
 {
     if (!available())

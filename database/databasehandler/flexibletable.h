@@ -15,9 +15,7 @@ public:
     ~FlexibleTable();
     bool Initialize();
     void createTable(vector<string> clname, vector<DataBaseType*> cltype);
-    bool Modify(int pagenum, int rownum);
     bool DeleteAt(int pagenum, int rownum);
-    bool FastModify(int pagenum, int pageposition, Record* rec);
     bool FastInsert(int& pagenum, int& pageposition, Record* rec);
     bool FastAllInsert(int& pagenum, int& pageposition, Record* rec);
     bool FastOutput(int pagenum, int pageposition, Record *rec);
@@ -37,6 +35,9 @@ private:
     void Reconstruct(int pagenum, BufType b);
     char * getat(BufType b,int pageposition);
     void putat(BufType b,int pageposition,int rownum,char*data);
+    void modifyall(char* data,int datasize,int prepagenum,int prepageposition,int newpagenum,int newpageposition);
+    void insertall(char* data,int datasize,int pagenum,int pageposition);
+    void deleteall(char* data,int datasize,int pagenum,int pageposition);
     int PageNum;
     int MaxRecordSize;
     int* reservedSizeInPage;
