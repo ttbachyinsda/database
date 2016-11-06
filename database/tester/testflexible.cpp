@@ -126,6 +126,10 @@ void testflexible::begintest()
     onetable->setfilename(filename);
     onetable->Initialize();
 
+    for (int i=0;i<onetable->getcolumncount();i++)
+    {
+        cout<<"MULTIPLY: "<<onetable->getmultivalue(i)<<endl;
+    }
     iterator = IteratorFactory::getiterator(onetable);
     record = RecordFactory::getrecord(onetable);
     if (iterator->available()) {

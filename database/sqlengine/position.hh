@@ -2,7 +2,7 @@
 
 // Positions for Bison parsers in C++
 
-// Copyright (C) 2002-2015 Free Software Foundation, Inc.
+// Copyright (C) 2002-2013 Free Software Foundation, Inc.
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -42,23 +42,23 @@
 # include <iostream>
 # include <string>
 
-# ifndef YY_NULLPTR
+# ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
-#   define YY_NULLPTR nullptr
+#   define YY_NULL nullptr
 #  else
-#   define YY_NULLPTR 0
+#   define YY_NULL 0
 #  endif
 # endif
 
 
 namespace yy {
-#line 56 "position.hh" // location.cc:296
+#line 56 "position.hh" // location.cc:291
   /// Abstract a position.
   class position
   {
   public:
     /// Construct a position.
-    explicit position (std::string* f = YY_NULLPTR,
+    explicit position (std::string* f = YY_NULL,
                        unsigned int l = 1u,
                        unsigned int c = 1u)
       : filename (f)
@@ -69,7 +69,7 @@ namespace yy {
 
 
     /// Initialization.
-    void initialize (std::string* fn = YY_NULLPTR,
+    void initialize (std::string* fn = YY_NULL,
                      unsigned int l = 1u,
                      unsigned int c = 1u)
     {
@@ -114,7 +114,7 @@ namespace yy {
     }
   };
 
-  /// Add \a width columns, in place.
+  /// Add and assign a position.
   inline position&
   operator+= (position& res, int width)
   {
@@ -122,21 +122,21 @@ namespace yy {
     return res;
   }
 
-  /// Add \a width columns.
+  /// Add two position objects.
   inline position
   operator+ (position res, int width)
   {
     return res += width;
   }
 
-  /// Subtract \a width columns, in place.
+  /// Add and assign a position.
   inline position&
   operator-= (position& res, int width)
   {
     return res += -width;
   }
 
-  /// Subtract \a width columns.
+  /// Add two position objects.
   inline position
   operator- (position res, int width)
   {
@@ -176,5 +176,5 @@ namespace yy {
 
 
 } // yy
-#line 180 "position.hh" // location.cc:296
+#line 180 "position.hh" // location.cc:291
 #endif // !YY_YY_POSITION_HH_INCLUDED

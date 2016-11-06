@@ -48,7 +48,7 @@ SOURCES += main.cpp\
     DBIndex/bplus_tree.cpp \
     DBIndex/db_index.cpp \
     DBIndex/test.cpp \
-    DBIndex/testIndex.cpp
+    DBIndex/testIndex.cpp \
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -95,9 +95,43 @@ HEADERS  += mainwindow.h \
     DBIndex/bplus_node.h \
     DBIndex/bplus_tree.h \
     DBIndex/db_index.h \
-    DBIndex/predefined.h
+    DBIndex/predefined.h \
+    sqlengine/sqllexer.l \
+    sqlengine/sqlparser.yy
 
 FORMS    += mainwindow.ui
 
 DISTFILES += \
-    ../README.md
+    ../README.md \
+    bin/data/m4sugar/foreach.m4 \
+    bin/data/m4sugar/m4sugar.m4 \
+    bin/data/bison.m4 \
+    bin/data/c++-skel.m4 \
+    bin/data/c++.m4 \
+    bin/data/c-like.m4 \
+    bin/data/c-skel.m4 \
+    bin/data/c.m4 \
+    bin/data/java-skel.m4 \
+    bin/data/java.m4 \
+    bin/win_bison.exe \
+    bin/win_flex.exe \
+    bin/custom_build_rules/win_bison_only/win_bison_custom_build.xml \
+    bin/custom_build_rules/win_flex_only/win_flex_custom_build.xml \
+    bin/custom_build_rules/win_flex_bison_custom_build.xml \
+    bin/data/xslt/bison.xsl \
+    bin/data/xslt/xml2dot.xsl \
+    bin/data/xslt/xml2text.xsl \
+    bin/data/xslt/xml2xhtml.xsl \
+    bin/custom_build_rules/win_bison_only/win_bison_custom_build.props \
+    bin/custom_build_rules/win_bison_only/win_bison_custom_build.targets \
+    bin/custom_build_rules/win_flex_only/win_flex_custom_build.props \
+    bin/custom_build_rules/win_flex_only/win_flex_custom_build.targets \
+    bin/custom_build_rules/how_to_use.txt \
+    bin/custom_build_rules/win_flex_bison_custom_build.props \
+    bin/custom_build_rules/win_flex_bison_custom_build.targets \
+    sqlengine/sqlparser.output \
+    bin/data/lalr1.java \
+    bin/data/local.mk \
+    bin/data/README \
+    bin/win_bison \
+    bin/win_flex

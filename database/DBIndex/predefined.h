@@ -20,7 +20,7 @@ struct index_key {
     char k[256];
 
     index_key(const char *str = "") {
-        bzero(k, sizeof(k));
+        memset(k,0, sizeof(k));
         strcpy(k, str);
     }
 };
