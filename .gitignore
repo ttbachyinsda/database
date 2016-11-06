@@ -11,3 +11,6 @@ sqlparser.cpp
 sqlparser.hpp
 sqlparser.output
 sqllexer.cpp
+location.hh
+position.hh
+stack.hh
