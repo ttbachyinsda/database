@@ -32,6 +32,7 @@ public:
     void setfilename(string filename);
     bool checkInsert(vector<string> data);
     void readindex();
+    void createemptyindex(int i);
     vector<string> checkOutput();
     virtual bool FastModify(int pagenum, int pageposition, Record* rec) = 0;
     virtual bool FastInsert(int& pagenum, int& pageposition, Record* rec) = 0;
@@ -55,6 +56,9 @@ public:
 protected:
     void clearcolumn();
     void clearindex();
+    void InsertindexAt(int num,char* insertdata,int datalen,int pagenum,int pageposition);
+    void ModifyindexAt(int num,char* modifydata,int datalen,int pagenum,int pageposition);
+    void DeleteindexAt(int num,char* deletedata,int datalen,int pagenum,int pageposition);
     string name;
     string filename;
     int fileid;

@@ -162,8 +162,20 @@ void Table::readindex()
         {
             this->DBindex[i]=new db_index(tst,false,multivalue[i]);
         } else this->DBindex[i]=NULL;
+        free(tst);
     }
 }
+void Table::createemptyindex(int i)
+{
+    string t=UIC::inttostring(i);
+    string temp=filename+t;
+    char* tst=(char*)malloc(temp.length()+1);
+    tst[temp.length()]='\0';
+    if (this->DBindex==NULL) readindex();
+    this->DBindex[i]=new db_index(tst,true,multivalue[i]);
+    free(tst);
+}
+
 void Table::setmultivalue(int i,bool istrue)
 {
     multivalue[i]=istrue;
