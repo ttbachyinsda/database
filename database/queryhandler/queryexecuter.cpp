@@ -78,6 +78,7 @@ void QueryExecuter::addToResultIfMatch(SQLResult *result)
 {
     // retrieve all data in this combination
     for (int i = 0; i < tables.size(); ++ i) {
+        // TODO: Simplify following code using new interface.
         int dummy;
         iterators[i]->getdata(tempLinkedRowData[i], dummy);
         records[i]->Input(tempLinkedRowData[i]);
@@ -184,7 +185,7 @@ bool QueryExecuter::executeQuery()
     // ASSERT: All types are fit.
     // TODO: rearrange query sequence.
 
-    // ASSERT: Below - NO EXCEPTION COULD HAPPEN (PTR_DELETE)
+    // ASSERT: Below - NO EXCEPTION SHOULD HAPPEN (PTR_DELETE)
     SQLResult* currentResult = new SQLResult(selectors.size());
     bool titled = (tables.size() > 1);
     for (SelectorPair& pair : selectors) {
