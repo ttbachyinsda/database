@@ -5,6 +5,8 @@
 #include "typehandler/databasechar.h"
 #include "typehandler/databaseint.h"
 #include "typehandler/databasetype.h"
+#include "DBIndex/db_index.h"
+#include "managementhandler/uic.h"
 #include <string>
 #include <vector>
 using namespace std;
@@ -17,13 +19,19 @@ public:
     string getfilename();
     BufPageManager* getBPM();
     int getfileid();
+    int getmajornum();
+    void setmajornum(int nownum);
+    db_index** getindexes();
     DataBaseType* getcolumn(int i);
     string getcolumnname(int i);
     DataBaseType** getcolumns();
+    void setmultivalue(int i, bool istrue);
+    bool getmultivalue(int i);
     int getcolumncount();
     bool setname(string name);
     void setfilename(string filename);
     bool checkInsert(vector<string> data);
+    void readindex();
     vector<string> checkOutput();
     virtual bool FastModify(int pagenum, int pageposition, Record* rec) = 0;
     virtual bool FastInsert(int& pagenum, int& pageposition, Record* rec) = 0;
@@ -46,14 +54,18 @@ public:
 
 protected:
     void clearcolumn();
+    void clearindex();
     string name;
     string filename;
     int fileid;
     int columncount;
     DataBaseType** column; //per size if 8
     string* columnname;
+    int majornum;
     BufPageManager* BPM;
     FileManager* FM;
+    db_index ** DBindex;
+    bool* multivalue;
 };
 
 #endif // TABLE_H

@@ -221,3 +221,19 @@ string UIC::inttostring(int text)
     number=ss.str();
     return number;
 }
+void UIC::convertmulti(bool can,char *s1)
+{
+    if (can)
+    {
+        *(s1) = 'A';
+        *(s1 + 1) = 'B';
+        *(s1 + 2) = 'L';
+        *(s1 + 3) = 'E';
+    } else
+    {
+        *(s1) = 'U';
+        *(s1 + 1) = 'N';
+        *(s1 + 2) = 'A';
+        *(s1 + 3) = 'B';
+    }
+}

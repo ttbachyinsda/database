@@ -38,7 +38,7 @@ void testiterator::begintest()
     string *conditions = new string[3];
     conditions[0]="FRTO";
     conditions[1]="0";
-    conditions[2]="12345";
+    conditions[2]="500000";
     DataBaseType* type1 = UIC::reconvert(t1.data(), 6, true);
     type1->readcondition(conditions);
     DataBaseType* type2 = UIC::reconvert(t2.data(), 20, true);
@@ -64,8 +64,9 @@ void testiterator::begintest()
             t->update();
         }
         if (can)
+        {
             onetable->FastAllInsert(pagenum, pageposition, t);
-        //if (i%1000==0) cout<<pagenum<<' '<<pageposition<<endl;
+        }
     }
     delete t;
     delete[] aaa;

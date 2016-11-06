@@ -4,22 +4,28 @@ Table::Table()
 {
     this->havecreatetable = false;
     this->haveinitialize = false;
+    this->majornum=0;
     this->columncount = 0;
     this->column = NULL;
     this->columnname = NULL;
     this->fileid = 0;
     this->FM = NULL;
     this->BPM = NULL;
+    this->DBindex=NULL;
+    this->multivalue=NULL;
 }
 Table::Table(string name, string filename)
 {
     this->havecreatetable = false;
     this->haveinitialize = false;
+    this->majornum=0;
     this->columncount = 0;
     this->column = NULL;
     this->columnname = NULL;
+    this->DBindex=NULL;
     this->fileid = 0;
     this->name = name;
+    this->multivalue = NULL;
     this->filename = filename;
     if (BPM != NULL) {
         BPM->close();
@@ -33,6 +39,7 @@ Table::Table(string name, string filename)
 Table::~Table()
 {
     clearcolumn();
+    clearindex();
     if (BPM != NULL) {
         BPM->close();
     }
@@ -64,17 +71,31 @@ bool Table::setname(string name)
 void Table::setfilename(string filename) { this->filename = filename; }
 void Table::clearcolumn()
 {
+    if (column==NULL) return;
     for (int i = 0; i < columncount; i++)
         if (column[i] != NULL)
             delete column[i];
-    columncount = 0;
     if (column != NULL)
         delete[] column;
     if (columnname != NULL)
         delete[] columnname;
     column = NULL;
     columnname = NULL;
+    if (multivalue != NULL)
+        delete[] multivalue;
+    multivalue=NULL;
 }
+void Table::clearindex()
+{
+    if (DBindex==NULL) return;
+    for (int i = 0; i < columncount; i++)
+        if (DBindex[i] != NULL)
+            delete DBindex[i];
+    if (DBindex != NULL)
+        delete[] DBindex;
+    DBindex=NULL;
+}
+
 DataBaseType* Table::getcolumn(int i) { return column[i]; }
 string Table::getcolumnname(int i) { return columnname[i]; }
 bool Table::checkInsert(vector<string> data)
@@ -112,4 +133,42 @@ DataBaseType** Table::getcolumns()
 int Table::getcolumncount()
 {
     return this->columncount;
+}
+int Table::getmajornum()
+{
+    return this->majornum;
+}
+void Table::setmajornum(int nownum)
+{
+    this->majornum=nownum;
+}
+db_index** Table::getindexes()
+{
+    return this->DBindex;
+}
+
+void Table::readindex()
+{
+    clearindex();
+    this->DBindex=new db_index*[this->columncount];
+    for (int i=0;i<columncount;i++)
+    {
+        string t=UIC::inttostring(i);
+        string temp=filename+t;
+        char* tst=(char*)malloc(temp.length()+1);
+        tst[temp.length()]='\0';
+        int can=access(temp.c_str(),0);
+        if (can!=-1)
+        {
+            this->DBindex[i]=new db_index(tst,false,multivalue[i]);
+        } else this->DBindex[i]=NULL;
+    }
+}
+void Table::setmultivalue(int i,bool istrue)
+{
+    multivalue[i]=istrue;
+}
+bool Table::getmultivalue(int i)
+{
+    return multivalue[i];
 }
