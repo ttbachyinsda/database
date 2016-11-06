@@ -44,6 +44,7 @@ SOURCES += main.cpp\
     recordhandler/flexiblerecord.cpp \
     managementhandler/flexibleiterator.cpp \
     tester/testflexible.cpp \
+    typehandler/databasevarchar.cpp \
     DBIndex/bplus_tree.cpp \
     DBIndex/db_index.cpp \
     DBIndex/test.cpp \
@@ -90,6 +91,7 @@ HEADERS  += mainwindow.h \
     recordhandler/flexiblerecord.h \
     managementhandler/flexibleiterator.h \
     tester/testflexible.h \
+    typehandler/databasevarchar.h \
     DBIndex/bplus_node.h \
     DBIndex/bplus_tree.h \
     DBIndex/db_index.h \

@@ -96,3 +96,11 @@ void FlexibleRecord::update()
     }
     if (index!=totallen) cout<<"ERROR LEN"<<endl;
 }
+int FlexibleRecord::getMaxSize()
+{
+    int totallen=4;
+    for (int i = 0; i < this->columncount; i++) {
+        totallen += 4+columns[i]->getMaxSize();
+    }
+    return totallen;
+}

@@ -20,7 +20,7 @@ public:
     bool getisNull();
     char* getcondition();
     int getconditionsize();
-    bool readcondition(char* input, int& position);
+    bool readcondition(char* input, int inputsize, int& position);
     bool readcondition(string* input);
     bool writecondition(char* input, int& position);
     void initialize(DataBaseType* input);

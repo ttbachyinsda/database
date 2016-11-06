@@ -89,3 +89,7 @@ void FixedSizeRecord::update()
         memcpy(this->data + position, columns[i]->getdata(), nowsize);
     }
 }
+int FixedSizeRecord::getMaxSize()
+{
+    return this->size;
+}

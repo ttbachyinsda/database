@@ -58,7 +58,7 @@ inline record_t* find(leaf_node_t& node, const key_t& key) {
 bplus_tree::bplus_tree(const char* p, bool force_empty /*false*/,
                        bool multi_value /*false*/)
     : fp(NULL), fp_level(0) {
-    bzero(path, sizeof(path));
+    memset(path,0,sizeof(path));
     strcpy(path, p);
     this->multi_value = multi_value;
 
@@ -654,7 +654,7 @@ void bplus_tree::node_remove(T* prev, T* node) {
 
 void bplus_tree::init_from_empty() {
     // init default meta
-    bzero(&meta, sizeof(meta_t));
+    memset(&meta,0,sizeof(meta_t));
     meta.order = CHILDREN_NUM;
     meta.value_size = sizeof(value_t);
     meta.key_size = sizeof(key_t);

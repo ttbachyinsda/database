@@ -17,6 +17,7 @@ public:
     virtual void update() = 0;
     char* getData();
     int getSize();
+    virtual int getMaxSize()=0;
     DataBaseType** getcolumns();
     int getcolumncount();
     int* getcolumnsize();

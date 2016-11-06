@@ -3,6 +3,7 @@
 
 #include "typehandler/databasechar.h"
 #include "typehandler/databaseint.h"
+#include "typehandler/databasevarchar.h"
 #include "typehandler/databasetype.h"
 #include <sstream>
 
@@ -19,6 +20,7 @@ public:
     static DataBaseType* reconvert(string s1, int size,bool cannull);
     static DataBaseType* realreconvert(char* s1, int size, bool cannull);
     static DataBaseType* realreconvert(string s1, int size,bool cannull);
+    static void convertmulti(bool can, char* s1);
     static int chartoint(char* s1); //length = 4
     static void inttochar(int i1, char* s1); //length = 4
     static void readchar(BufType b, FileIterator& iterator, char* dest, int size_t);

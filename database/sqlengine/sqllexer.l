@@ -59,6 +59,8 @@ using token = yy::SQLParser::token;
 (?i:"null")             { return token::NUL;        }
 (?i:"primary")          { return token::PRIMARY;    }
 (?i:"key")              { return token::KEY;        }
+(?i:"check")            { return token::CHECK;      }
+(?i:"in")               { return token::IN;         }
 
 (?i:"insert")           { return token::INSERT;     }
 (?i:"into")             { return token::INTO;       }

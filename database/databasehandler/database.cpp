@@ -72,13 +72,16 @@ bool Database::Initialize()
         can = fscanf(this->f, "%s", tp);
         if (can == -1)
             return false;
-        if (tp[0] == 'F' && tp[1] == 'i') {
-            Table* t = new FixedSizeTable();
-            string temp = s;
-            t->setfilename(temp);
-            t->Initialize();
-            tablelist.push_back(t);
+        Table* t = NULL;
+        if (tp[1] == 'i') {   // F[i]xed Size
+            t = new FixedSizeTable();
+        } else {  // F[l]exible
+            t = new FlexibleTable();
         }
+        string temp = s;
+        t->setfilename(temp);
+        t->Initialize();
+        tablelist.push_back(t);
     }
     fclose(this->f);
     this->f = NULL;

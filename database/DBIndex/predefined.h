@@ -13,7 +13,7 @@ struct value_t {
   char v[256];
 
   value_t(const char *str = "") {
-    bzero(v, sizeof(v));
+    memset(v,0, sizeof(v));
     strcpy(v, str);
   }
 };
@@ -21,7 +21,7 @@ struct key_t {
   char k[256];
 
   key_t(const char *str = "") {
-    bzero(k, sizeof(k));
+    memset(k,0, sizeof(k));
     strcpy(k, str);
   }
 };

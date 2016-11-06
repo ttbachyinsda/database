@@ -58,13 +58,18 @@ bool SQLUseDatabaseAction::execute()
 
 bool SQLShowDatabasesAction::execute()
 {
-    // TODO: implemented only for fun.
-    cout << "==========ALL DB===========" << endl;
+    SQLResult* result = new SQLResult(3);
+    result->addTitleField("Database ID");
+    result->addTitleField("Name");
+    result->addTitleField("File Location");
     int idx = 0;
     while (true) {
         Database* now = driver->getDatabaseManager()->getDatabase(idx);
         if (!now) break;
-        cout << idx << ". " << now->getname() << " (stored in) " << now->getfilename() << endl;
+        result->addNew();
+        result->setData(0, UIC::inttostring(idx + 1));
+        result->setData(1, now->getname());
+        result->setData(2, now->getfilename());
         ++ idx;
     }
     return true;
@@ -85,9 +90,23 @@ bool SQLCreateTableAction::execute()
         return false;
     }
 
-    Table* fixedSizeTable = new FixedSizeTable();
-    fixedSizeTable->setfilename(this->tableName + ".tb");
-    fixedSizeTable->setname(this->tableName);
+    // Check Variable Types.
+    bool isVariableTable = false;
+    for (SQLType* type : *fieldList) {
+        if (type->type[0] == 'V') {
+            isVariableTable = true;
+            break;
+        }
+    }
+
+    Table* newTable = NULL;
+    if (isVariableTable)
+        newTable = new FlexibleTable();
+    else
+        newTable = new FixedSizeTable();
+
+    newTable->setfilename(handler->getname() + "_" + this->tableName + ".tb");
+    newTable->setname(this->tableName);
 
     vector<string> clname;
     vector<DataBaseType*> cltype;
@@ -102,16 +121,15 @@ bool SQLCreateTableAction::execute()
         cltype.push_back(dbType);
     }
 
-    fixedSizeTable->createTable(clname, cltype);
+    newTable->createTable(clname, cltype);
 
-    // TODO: WHAT IS THE FAILED REASON?
-    bool initResult = fixedSizeTable->Initialize();
+    bool initResult = newTable->Initialize();
     if (!initResult) {
         driver->addErrorMessage("Failed to initialize table " + this->tableName);
         return false;
     }
 
-    handler->addTable(fixedSizeTable);
+    handler->addTable(newTable);
     return true;
 }
 

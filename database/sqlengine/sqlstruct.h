@@ -18,7 +18,12 @@ struct SQLType
     const char* type;
     std::string identifier;
 
+    bool isCheck;
+    SQLCheckGroup* checkGroup;
+
     SQLType() {
+        isCheck = false;
+        checkGroup = NULL;
         primaryType = false;
         type = SQLType::CHAR;
         canNull = true;
@@ -142,5 +147,15 @@ public:
 
     void dumpToConsole();
 };
+
+struct SQLCheck
+{
+    bool isChoice;
+    SQLValueGroup* choiceList;
+    SQLOperand operand;
+    SQLValue value;
+};
+
+typedef std::vector<SQLCheck*> SQLCheckGroup;
 
 #endif // SQLSTRUCT_H

@@ -10,6 +10,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 using namespace std;
+#ifdef __linux
+#define PARA O_RDWR
+#else
+#define PARA O_RDWR|O_BINARY
+#endif
 class FileManager {
 private:
     //FileTable* ftable;
@@ -28,7 +33,7 @@ private:
     }
     int _openFile(const char* name, int fileID)
     {
-        int f = open(name, O_RDWR|O_BINARY);
+        int f = open(name, PARA);
         if (f == -1) {
             return -1;
         }

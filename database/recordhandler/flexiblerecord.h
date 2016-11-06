@@ -15,6 +15,7 @@ public:
     bool set(char** input, int* inputlen);
     bool setAt(int wz,string input,bool isnull);
     void update();
+    int getMaxSize();
 };
 
 #endif // FLEXIBLERECORD_H

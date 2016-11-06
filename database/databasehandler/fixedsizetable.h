@@ -17,7 +17,7 @@ public:
     bool FastModify(int pagenum, int pageposition, Record* rec);
     bool FastInsert(int& pagenum, int& pageposition, Record* rec);
     bool FastAllInsert(int& pagenum, int& pageposition, Record* rec);
-    Record* FastOutput(int pagenum, int pageposition);
+    bool FastOutput(int pagenum, int pageposition, Record *rec);
     void FastOutput(int pagenum, int pageposition, char* output, int& outputsize);
     string gettabletype();
     int getPageRowNum(int pagenum);

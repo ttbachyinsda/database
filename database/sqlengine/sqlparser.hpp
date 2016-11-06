@@ -308,48 +308,54 @@ namespace yy {
       // QueryStmt
       char dummy1[sizeof(SQLAction*)];
 
+      // CheckClause
+      char dummy2[sizeof(SQLCheck*)];
+
+      // CheckClauseList
+      char dummy3[sizeof(SQLCheckGroup*)];
+
       // WhereClause
-      char dummy2[sizeof(SQLCondition*)];
+      char dummy4[sizeof(SQLCondition*)];
 
       // WhereClauseList
-      char dummy3[sizeof(SQLConditionGroup*)];
+      char dummy5[sizeof(SQLConditionGroup*)];
 
       // Operand
-      char dummy4[sizeof(SQLOperand)];
+      char dummy6[sizeof(SQLOperand)];
 
       // Column
-      char dummy5[sizeof(SQLSelector*)];
+      char dummy7[sizeof(SQLSelector*)];
 
       // Selector
       // SelectorList
-      char dummy6[sizeof(SQLSelectorGroup*)];
+      char dummy8[sizeof(SQLSelectorGroup*)];
 
       // SetClause
-      char dummy7[sizeof(SQLSetGroup*)];
+      char dummy9[sizeof(SQLSetGroup*)];
 
       // TableList
-      char dummy8[sizeof(SQLTableGroup*)];
+      char dummy10[sizeof(SQLTableGroup*)];
 
       // Field
       // Type
-      char dummy9[sizeof(SQLType*)];
+      char dummy11[sizeof(SQLType*)];
 
       // Value
-      char dummy10[sizeof(SQLValue*)];
+      char dummy12[sizeof(SQLValue*)];
 
       // ValueList
-      char dummy11[sizeof(SQLValueGroup*)];
+      char dummy13[sizeof(SQLValueGroup*)];
 
       // IDENTIFIER
       // VALUE_STRING
       // VALUE_INT
-      char dummy12[sizeof(std::string)];
+      char dummy14[sizeof(std::string)];
 
       // FieldList
-      char dummy13[sizeof(std::vector<SQLType*>*)];
+      char dummy15[sizeof(std::vector<SQLType*>*)];
 
       // ValueLists
-      char dummy14[sizeof(std::vector<SQLValueGroup*>*)];
+      char dummy16[sizeof(std::vector<SQLValueGroup*>*)];
 };
 
     /// Symbol semantic values.
@@ -389,22 +395,24 @@ namespace yy {
         NUL = 272,
         PRIMARY = 273,
         KEY = 274,
-        INSERT = 275,
-        INTO = 276,
-        VALUES = 277,
-        DELETE = 278,
-        FROM = 279,
-        UPDATE = 280,
-        SET = 281,
-        WHERE = 282,
-        SELECT = 283,
-        AND = 284,
-        NOT_EQUAL = 285,
-        GREATER_EQUAL = 286,
-        LESS_EQUAL = 287,
-        IDENTIFIER = 288,
-        VALUE_STRING = 289,
-        VALUE_INT = 290
+        CHECK = 275,
+        IN = 276,
+        INSERT = 277,
+        INTO = 278,
+        VALUES = 279,
+        DELETE = 280,
+        FROM = 281,
+        UPDATE = 282,
+        SET = 283,
+        WHERE = 284,
+        SELECT = 285,
+        AND = 286,
+        NOT_EQUAL = 287,
+        GREATER_EQUAL = 288,
+        LESS_EQUAL = 289,
+        IDENTIFIER = 290,
+        VALUE_STRING = 291,
+        VALUE_INT = 292
       };
     };
 
@@ -443,6 +451,10 @@ namespace yy {
   basic_symbol (typename Base::kind_type t, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const SQLAction* v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const SQLCheck* v, const location_type& l);
+
+  basic_symbol (typename Base::kind_type t, const SQLCheckGroup* v, const location_type& l);
 
   basic_symbol (typename Base::kind_type t, const SQLCondition* v, const location_type& l);
 
@@ -607,6 +619,14 @@ namespace yy {
 
     static inline
     symbol_type
+    make_CHECK (const location_type& l);
+
+    static inline
+    symbol_type
+    make_IN (const location_type& l);
+
+    static inline
+    symbol_type
     make_INSERT (const location_type& l);
 
     static inline
@@ -754,7 +774,7 @@ namespace yy {
   // number is the opposite.  If YYTABLE_NINF, syntax error.
   static const unsigned char yytable_[];
 
-  static const signed char yycheck_[];
+  static const short int yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -871,12 +891,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 113,     ///< Last index in yytable_.
-      yynnts_ = 19,  ///< Number of nonterminal symbols.
+      yylast_ = 132,     ///< Last index in yytable_.
+      yynnts_ = 21,  ///< Number of nonterminal symbols.
       yyfinal_ = 2, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 45  ///< Number of tokens.
+      yyntokens_ = 47  ///< Number of tokens.
     };
 
 
@@ -888,7 +908,7 @@ namespace yy {
 
 
 } // yy
-#line 892 "sqlparser.hpp" // lalr1.cc:377
+#line 912 "sqlparser.hpp" // lalr1.cc:377
 
 
 

@@ -5,8 +5,19 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+
     TestSQL t;
     t.startTestFile("a.sql");
 //    t.startTestInteractive();
+
+//    testtype t;
+//    t.begintest(false);
+//    testdatabase v;
+//    v.begintest();
+//    testiterator w;
+//    w.begintest();
+//    testflexible x;
+//    x.begintest();
+
     return 0;
 }

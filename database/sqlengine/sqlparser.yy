@@ -46,6 +46,7 @@
 %token DATABASE DATABASES TABLE TABLES
 %token INT VARCHAR CHAR
 %token IS NOT NUL PRIMARY KEY
+%token CHECK IN
 
 %token INSERT INTO VALUES DELETE FROM
 %token UPDATE SET WHERE SELECT AND
@@ -68,6 +69,8 @@
 %type <SQLSetGroup*> SetClause
 %type <SQLTableGroup*> TableList
 %type <SQLOperand> Operand
+%type <SQLCheck*> CheckClause
+%type <SQLCheckGroup*> CheckClauseList
 
 %locations
 
@@ -154,6 +157,12 @@ Field           : IDENTIFIER Type
                     $$ = new SQLType();
                     $$->identifier = $4;
                     $$->primaryType = true;
+                }
+                | CHECK '(' CheckClauseList ')'
+                {
+                    $$ = new SQLType();
+                    $$->isCheck = true;
+                    $$->checkGroup = $3;
                 }
                 ;
 
@@ -284,6 +293,34 @@ WhereClauseList : WhereClause
                     $$->push_back($1);
                 }
                 | WhereClauseList AND WhereClause
+                {
+                    $$ = $1;
+                    $$->push_back($3);
+                }
+                ;
+
+CheckClause     : Column IN '(' ValueList ')'
+                {
+                    $$ = new SQLCheck();
+                    $$->isChoice = true;
+                    $$->choiceList = $4;
+                }
+                | Column Operand Value
+                {
+                    $$ = new SQLCheck();
+                    $$->isChoice = false;
+                    $$->operand = $2;
+                    $$->value = *($3);
+                    delete $3;
+                }
+                ;
+
+CheckClauseList : CheckClause
+                {
+                    $$ = new SQLCheckGroup();
+                    $$->push_back($1);
+                }
+                | CheckClauseList AND CheckClause
                 {
                     $$ = $1;
                     $$->push_back($3);

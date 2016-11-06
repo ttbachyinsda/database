@@ -23,69 +23,76 @@ Grammar
    15 Field: IDENTIFIER Type
    16      | IDENTIFIER Type NOT NUL
    17      | PRIMARY KEY '(' IDENTIFIER ')'
+   18      | CHECK '(' CheckClauseList ')'
 
-   18 Type: INT '(' VALUE_INT ')'
-   19     | CHAR '(' VALUE_INT ')'
-   20     | VARCHAR '(' VALUE_INT ')'
+   19 Type: INT '(' VALUE_INT ')'
+   20     | CHAR '(' VALUE_INT ')'
+   21     | VARCHAR '(' VALUE_INT ')'
 
-   21 QueryStmt: INSERT INTO IDENTIFIER VALUES ValueLists
-   22          | DELETE FROM IDENTIFIER WHERE WhereClauseList
-   23          | UPDATE IDENTIFIER SET SetClause WHERE WhereClauseList
-   24          | SELECT Selector FROM TableList WHERE WhereClauseList
+   22 QueryStmt: INSERT INTO IDENTIFIER VALUES ValueLists
+   23          | DELETE FROM IDENTIFIER WHERE WhereClauseList
+   24          | UPDATE IDENTIFIER SET SetClause WHERE WhereClauseList
+   25          | SELECT Selector FROM TableList WHERE WhereClauseList
 
-   25 ValueLists: '(' ValueList ')'
-   26           | ValueLists ',' '(' ValueList ')'
+   26 ValueLists: '(' ValueList ')'
+   27           | ValueLists ',' '(' ValueList ')'
 
-   27 ValueList: Value
-   28          | ValueList ',' Value
+   28 ValueList: Value
+   29          | ValueList ',' Value
 
-   29 Value: VALUE_INT
-   30      | VALUE_STRING
-   31      | NUL
+   30 Value: VALUE_INT
+   31      | VALUE_STRING
+   32      | NUL
 
-   32 WhereClause: Column Operand Column
-   33            | Column Operand Value
-   34            | Column IS NUL
-   35            | Column IS NOT NUL
+   33 WhereClause: Column Operand Column
+   34            | Column Operand Value
+   35            | Column IS NUL
+   36            | Column IS NOT NUL
 
-   36 WhereClauseList: WhereClause
-   37                | WhereClauseList AND WhereClause
+   37 WhereClauseList: WhereClause
+   38                | WhereClauseList AND WhereClause
 
-   38 SetClause: IDENTIFIER '=' Value
-   39          | SetClause ',' IDENTIFIER '=' Value
+   39 CheckClause: Column IN '(' ValueList ')'
+   40            | Column Operand Value
 
-   40 Column: IDENTIFIER '.' IDENTIFIER
-   41       | IDENTIFIER
+   41 CheckClauseList: CheckClause
+   42                | CheckClauseList AND CheckClause
 
-   42 Selector: '*'
-   43         | SelectorList
+   43 SetClause: IDENTIFIER '=' Value
+   44          | SetClause ',' IDENTIFIER '=' Value
 
-   44 SelectorList: Column
-   45             | SelectorList ',' Column
+   45 Column: IDENTIFIER '.' IDENTIFIER
+   46       | IDENTIFIER
 
-   46 Operand: '='
-   47        | NOT_EQUAL
-   48        | '<'
-   49        | '>'
-   50        | LESS_EQUAL
-   51        | GREATER_EQUAL
+   47 Selector: '*'
+   48         | SelectorList
 
-   52 TableList: IDENTIFIER
-   53          | TableList ',' IDENTIFIER
+   49 SelectorList: Column
+   50             | SelectorList ',' Column
+
+   51 Operand: '='
+   52        | NOT_EQUAL
+   53        | '<'
+   54        | '>'
+   55        | LESS_EQUAL
+   56        | GREATER_EQUAL
+
+   57 TableList: IDENTIFIER
+   58          | TableList ',' IDENTIFIER
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 10 17 18 19 20 25 26
-')' (41) 10 17 18 19 20 25 26
-'*' (42) 42
-',' (44) 14 26 28 39 45 53
-'.' (46) 40
+'(' (40) 10 17 18 19 20 21 26 27 39
+')' (41) 10 17 18 19 20 21 26 27 39
+'*' (42) 47
+',' (44) 14 27 29 44 50 58
+'.' (46) 45
 ';' (59) 3 4
-'<' (60) 48
-'=' (61) 38 39 46
-'>' (62) 49
+'<' (60) 53
+'=' (61) 43 44 51
+'>' (62) 54
 error (256)
 CREATE (258) 5 10
 DROP (259) 6 11
@@ -96,72 +103,78 @@ DATABASE (263) 5 6
 DATABASES (264) 7
 TABLE (265) 10 11
 TABLES (266) 9
-INT (267) 18
-VARCHAR (268) 20
-CHAR (269) 19
-IS (270) 34 35
-NOT (271) 16 35
-NUL (272) 16 31 34 35
+INT (267) 19
+VARCHAR (268) 21
+CHAR (269) 20
+IS (270) 35 36
+NOT (271) 16 36
+NUL (272) 16 32 35 36
 PRIMARY (273) 17
 KEY (274) 17
-INSERT (275) 21
-INTO (276) 21
-VALUES (277) 21
-DELETE (278) 22
-FROM (279) 22 24
-UPDATE (280) 23
-SET (281) 23
-WHERE (282) 22 23 24
-SELECT (283) 24
-AND (284) 37
-NOT_EQUAL (285) 47
-GREATER_EQUAL (286) 51
-LESS_EQUAL (287) 50
-IDENTIFIER (288) 5 6 8 10 11 12 15 16 17 21 22 23 38 39 40 41 52 53
-VALUE_STRING (289) 30
-VALUE_INT (290) 18 19 20 29
+CHECK (275) 18
+IN (276) 39
+INSERT (277) 22
+INTO (278) 22
+VALUES (279) 22
+DELETE (280) 23
+FROM (281) 23 25
+UPDATE (282) 24
+SET (283) 24
+WHERE (284) 23 24 25
+SELECT (285) 25
+AND (286) 38 42
+NOT_EQUAL (287) 52
+GREATER_EQUAL (288) 56
+LESS_EQUAL (289) 55
+IDENTIFIER (290) 5 6 8 10 11 12 15 16 17 22 23 24 43 44 45 46 57 58
+VALUE_STRING (291) 31
+VALUE_INT (292) 19 20 21 30
 
 
 Nonterminals, with rules where they appear
 
-$accept (45)
+$accept (47)
     on left: 0
-Program (46)
+Program (48)
     on left: 1 2, on right: 0 2
-Stmt (47)
+Stmt (49)
     on left: 3 4, on right: 2
-SysStmt (48)
+SysStmt (50)
     on left: 5 6 7 8 9 10 11 12, on right: 3
-FieldList (49)
+FieldList (51)
     on left: 13 14, on right: 10 14
-Field (50)
-    on left: 15 16 17, on right: 13 14
-Type (51)
-    on left: 18 19 20, on right: 15 16
-QueryStmt (52)
-    on left: 21 22 23 24, on right: 4
-ValueLists (53)
-    on left: 25 26, on right: 21 26
-ValueList (54)
-    on left: 27 28, on right: 25 26 28
-Value (55)
-    on left: 29 30 31, on right: 27 28 33 38 39
-WhereClause (56)
-    on left: 32 33 34 35, on right: 36 37
-WhereClauseList (57)
-    on left: 36 37, on right: 22 23 24 37
-SetClause (58)
-    on left: 38 39, on right: 23 39
-Column (59)
-    on left: 40 41, on right: 32 33 34 35 44 45
-Selector (60)
-    on left: 42 43, on right: 24
-SelectorList (61)
-    on left: 44 45, on right: 43 45
-Operand (62)
-    on left: 46 47 48 49 50 51, on right: 32 33
-TableList (63)
-    on left: 52 53, on right: 24 53
+Field (52)
+    on left: 15 16 17 18, on right: 13 14
+Type (53)
+    on left: 19 20 21, on right: 15 16
+QueryStmt (54)
+    on left: 22 23 24 25, on right: 4
+ValueLists (55)
+    on left: 26 27, on right: 22 27
+ValueList (56)
+    on left: 28 29, on right: 26 27 29 39
+Value (57)
+    on left: 30 31 32, on right: 28 29 34 40 43 44
+WhereClause (58)
+    on left: 33 34 35 36, on right: 37 38
+WhereClauseList (59)
+    on left: 37 38, on right: 23 24 25 38
+CheckClause (60)
+    on left: 39 40, on right: 41 42
+CheckClauseList (61)
+    on left: 41 42, on right: 18 42
+SetClause (62)
+    on left: 43 44, on right: 24 44
+Column (63)
+    on left: 45 46, on right: 33 34 35 36 39 40 49 50
+Selector (64)
+    on left: 47 48, on right: 25
+SelectorList (65)
+    on left: 49 50, on right: 48 50
+Operand (66)
+    on left: 51 52 53 54 55 56, on right: 33 34 40
+TableList (67)
+    on left: 57 58, on right: 25 58
 
 
 State 0
@@ -244,28 +257,28 @@ State 7
 
 State 8
 
-   21 QueryStmt: INSERT . INTO IDENTIFIER VALUES ValueLists
+   22 QueryStmt: INSERT . INTO IDENTIFIER VALUES ValueLists
 
     INTO  shift, and go to state 23
 
 
 State 9
 
-   22 QueryStmt: DELETE . FROM IDENTIFIER WHERE WhereClauseList
+   23 QueryStmt: DELETE . FROM IDENTIFIER WHERE WhereClauseList
 
     FROM  shift, and go to state 24
 
 
 State 10
 
-   23 QueryStmt: UPDATE . IDENTIFIER SET SetClause WHERE WhereClauseList
+   24 QueryStmt: UPDATE . IDENTIFIER SET SetClause WHERE WhereClauseList
 
     IDENTIFIER  shift, and go to state 25
 
 
 State 11
 
-   24 QueryStmt: SELECT . Selector FROM TableList WHERE WhereClauseList
+   25 QueryStmt: SELECT . Selector FROM TableList WHERE WhereClauseList
 
     IDENTIFIER  shift, and go to state 26
     '*'         shift, and go to state 27
@@ -354,64 +367,64 @@ State 22
 
 State 23
 
-   21 QueryStmt: INSERT INTO . IDENTIFIER VALUES ValueLists
+   22 QueryStmt: INSERT INTO . IDENTIFIER VALUES ValueLists
 
     IDENTIFIER  shift, and go to state 37
 
 
 State 24
 
-   22 QueryStmt: DELETE FROM . IDENTIFIER WHERE WhereClauseList
+   23 QueryStmt: DELETE FROM . IDENTIFIER WHERE WhereClauseList
 
     IDENTIFIER  shift, and go to state 38
 
 
 State 25
 
-   23 QueryStmt: UPDATE IDENTIFIER . SET SetClause WHERE WhereClauseList
+   24 QueryStmt: UPDATE IDENTIFIER . SET SetClause WHERE WhereClauseList
 
     SET  shift, and go to state 39
 
 
 State 26
 
-   40 Column: IDENTIFIER . '.' IDENTIFIER
-   41       | IDENTIFIER .
+   45 Column: IDENTIFIER . '.' IDENTIFIER
+   46       | IDENTIFIER .
 
     '.'  shift, and go to state 40
 
-    $default  reduce using rule 41 (Column)
+    $default  reduce using rule 46 (Column)
 
 
 State 27
 
-   42 Selector: '*' .
+   47 Selector: '*' .
 
-    $default  reduce using rule 42 (Selector)
+    $default  reduce using rule 47 (Selector)
 
 
 State 28
 
-   44 SelectorList: Column .
+   49 SelectorList: Column .
 
-    $default  reduce using rule 44 (SelectorList)
+    $default  reduce using rule 49 (SelectorList)
 
 
 State 29
 
-   24 QueryStmt: SELECT Selector . FROM TableList WHERE WhereClauseList
+   25 QueryStmt: SELECT Selector . FROM TableList WHERE WhereClauseList
 
     FROM  shift, and go to state 41
 
 
 State 30
 
-   43 Selector: SelectorList .
-   45 SelectorList: SelectorList . ',' Column
+   48 Selector: SelectorList .
+   50 SelectorList: SelectorList . ',' Column
 
     ','  shift, and go to state 42
 
-    $default  reduce using rule 43 (Selector)
+    $default  reduce using rule 48 (Selector)
 
 
 State 31
@@ -458,21 +471,21 @@ State 36
 
 State 37
 
-   21 QueryStmt: INSERT INTO IDENTIFIER . VALUES ValueLists
+   22 QueryStmt: INSERT INTO IDENTIFIER . VALUES ValueLists
 
     VALUES  shift, and go to state 44
 
 
 State 38
 
-   22 QueryStmt: DELETE FROM IDENTIFIER . WHERE WhereClauseList
+   23 QueryStmt: DELETE FROM IDENTIFIER . WHERE WhereClauseList
 
     WHERE  shift, and go to state 45
 
 
 State 39
 
-   23 QueryStmt: UPDATE IDENTIFIER SET . SetClause WHERE WhereClauseList
+   24 QueryStmt: UPDATE IDENTIFIER SET . SetClause WHERE WhereClauseList
 
     IDENTIFIER  shift, and go to state 46
 
@@ -481,14 +494,14 @@ State 39
 
 State 40
 
-   40 Column: IDENTIFIER '.' . IDENTIFIER
+   45 Column: IDENTIFIER '.' . IDENTIFIER
 
     IDENTIFIER  shift, and go to state 48
 
 
 State 41
 
-   24 QueryStmt: SELECT Selector FROM . TableList WHERE WhereClauseList
+   25 QueryStmt: SELECT Selector FROM . TableList WHERE WhereClauseList
 
     IDENTIFIER  shift, and go to state 49
 
@@ -497,7 +510,7 @@ State 41
 
 State 42
 
-   45 SelectorList: SelectorList ',' . Column
+   50 SelectorList: SelectorList ',' . Column
 
     IDENTIFIER  shift, and go to state 26
 
@@ -509,645 +522,774 @@ State 43
    10 SysStmt: CREATE TABLE IDENTIFIER '(' . FieldList ')'
 
     PRIMARY     shift, and go to state 52
-    IDENTIFIER  shift, and go to state 53
+    CHECK       shift, and go to state 53
+    IDENTIFIER  shift, and go to state 54
 
-    FieldList  go to state 54
-    Field      go to state 55
+    FieldList  go to state 55
+    Field      go to state 56
 
 
 State 44
 
-   21 QueryStmt: INSERT INTO IDENTIFIER VALUES . ValueLists
+   22 QueryStmt: INSERT INTO IDENTIFIER VALUES . ValueLists
 
-    '('  shift, and go to state 56
+    '('  shift, and go to state 57
 
-    ValueLists  go to state 57
+    ValueLists  go to state 58
 
 
 State 45
 
-   22 QueryStmt: DELETE FROM IDENTIFIER WHERE . WhereClauseList
+   23 QueryStmt: DELETE FROM IDENTIFIER WHERE . WhereClauseList
 
     IDENTIFIER  shift, and go to state 26
 
-    WhereClause      go to state 58
-    WhereClauseList  go to state 59
-    Column           go to state 60
+    WhereClause      go to state 59
+    WhereClauseList  go to state 60
+    Column           go to state 61
 
 
 State 46
 
-   38 SetClause: IDENTIFIER . '=' Value
+   43 SetClause: IDENTIFIER . '=' Value
 
-    '='  shift, and go to state 61
+    '='  shift, and go to state 62
 
 
 State 47
 
-   23 QueryStmt: UPDATE IDENTIFIER SET SetClause . WHERE WhereClauseList
-   39 SetClause: SetClause . ',' IDENTIFIER '=' Value
+   24 QueryStmt: UPDATE IDENTIFIER SET SetClause . WHERE WhereClauseList
+   44 SetClause: SetClause . ',' IDENTIFIER '=' Value
 
-    WHERE  shift, and go to state 62
-    ','    shift, and go to state 63
+    WHERE  shift, and go to state 63
+    ','    shift, and go to state 64
 
 
 State 48
 
-   40 Column: IDENTIFIER '.' IDENTIFIER .
+   45 Column: IDENTIFIER '.' IDENTIFIER .
 
-    $default  reduce using rule 40 (Column)
+    $default  reduce using rule 45 (Column)
 
 
 State 49
 
-   52 TableList: IDENTIFIER .
+   57 TableList: IDENTIFIER .
 
-    $default  reduce using rule 52 (TableList)
+    $default  reduce using rule 57 (TableList)
 
 
 State 50
 
-   24 QueryStmt: SELECT Selector FROM TableList . WHERE WhereClauseList
-   53 TableList: TableList . ',' IDENTIFIER
+   25 QueryStmt: SELECT Selector FROM TableList . WHERE WhereClauseList
+   58 TableList: TableList . ',' IDENTIFIER
 
-    WHERE  shift, and go to state 64
-    ','    shift, and go to state 65
+    WHERE  shift, and go to state 65
+    ','    shift, and go to state 66
 
 
 State 51
 
-   45 SelectorList: SelectorList ',' Column .
+   50 SelectorList: SelectorList ',' Column .
 
-    $default  reduce using rule 45 (SelectorList)
+    $default  reduce using rule 50 (SelectorList)
 
 
 State 52
 
    17 Field: PRIMARY . KEY '(' IDENTIFIER ')'
 
-    KEY  shift, and go to state 66
+    KEY  shift, and go to state 67
 
 
 State 53
 
-   15 Field: IDENTIFIER . Type
-   16      | IDENTIFIER . Type NOT NUL
+   18 Field: CHECK . '(' CheckClauseList ')'
 
-    INT      shift, and go to state 67
-    VARCHAR  shift, and go to state 68
-    CHAR     shift, and go to state 69
-
-    Type  go to state 70
+    '('  shift, and go to state 68
 
 
 State 54
 
-   10 SysStmt: CREATE TABLE IDENTIFIER '(' FieldList . ')'
-   14 FieldList: FieldList . ',' Field
+   15 Field: IDENTIFIER . Type
+   16      | IDENTIFIER . Type NOT NUL
 
-    ')'  shift, and go to state 71
-    ','  shift, and go to state 72
+    INT      shift, and go to state 69
+    VARCHAR  shift, and go to state 70
+    CHAR     shift, and go to state 71
+
+    Type  go to state 72
 
 
 State 55
+
+   10 SysStmt: CREATE TABLE IDENTIFIER '(' FieldList . ')'
+   14 FieldList: FieldList . ',' Field
+
+    ')'  shift, and go to state 73
+    ','  shift, and go to state 74
+
+
+State 56
 
    13 FieldList: Field .
 
     $default  reduce using rule 13 (FieldList)
 
 
-State 56
-
-   25 ValueLists: '(' . ValueList ')'
-
-    NUL           shift, and go to state 73
-    VALUE_STRING  shift, and go to state 74
-    VALUE_INT     shift, and go to state 75
-
-    ValueList  go to state 76
-    Value      go to state 77
-
-
 State 57
 
-   21 QueryStmt: INSERT INTO IDENTIFIER VALUES ValueLists .
-   26 ValueLists: ValueLists . ',' '(' ValueList ')'
+   26 ValueLists: '(' . ValueList ')'
 
-    ','  shift, and go to state 78
+    NUL           shift, and go to state 75
+    VALUE_STRING  shift, and go to state 76
+    VALUE_INT     shift, and go to state 77
 
-    $default  reduce using rule 21 (QueryStmt)
+    ValueList  go to state 78
+    Value      go to state 79
 
 
 State 58
 
-   36 WhereClauseList: WhereClause .
+   22 QueryStmt: INSERT INTO IDENTIFIER VALUES ValueLists .
+   27 ValueLists: ValueLists . ',' '(' ValueList ')'
 
-    $default  reduce using rule 36 (WhereClauseList)
-
-
-State 59
-
-   22 QueryStmt: DELETE FROM IDENTIFIER WHERE WhereClauseList .
-   37 WhereClauseList: WhereClauseList . AND WhereClause
-
-    AND  shift, and go to state 79
+    ','  shift, and go to state 80
 
     $default  reduce using rule 22 (QueryStmt)
 
 
+State 59
+
+   37 WhereClauseList: WhereClause .
+
+    $default  reduce using rule 37 (WhereClauseList)
+
+
 State 60
 
-   32 WhereClause: Column . Operand Column
-   33            | Column . Operand Value
-   34            | Column . IS NUL
-   35            | Column . IS NOT NUL
+   23 QueryStmt: DELETE FROM IDENTIFIER WHERE WhereClauseList .
+   38 WhereClauseList: WhereClauseList . AND WhereClause
 
-    IS             shift, and go to state 80
-    NOT_EQUAL      shift, and go to state 81
-    GREATER_EQUAL  shift, and go to state 82
-    LESS_EQUAL     shift, and go to state 83
-    '='            shift, and go to state 84
-    '>'            shift, and go to state 85
-    '<'            shift, and go to state 86
+    AND  shift, and go to state 81
 
-    Operand  go to state 87
+    $default  reduce using rule 23 (QueryStmt)
 
 
 State 61
 
-   38 SetClause: IDENTIFIER '=' . Value
+   33 WhereClause: Column . Operand Column
+   34            | Column . Operand Value
+   35            | Column . IS NUL
+   36            | Column . IS NOT NUL
 
-    NUL           shift, and go to state 73
-    VALUE_STRING  shift, and go to state 74
-    VALUE_INT     shift, and go to state 75
+    IS             shift, and go to state 82
+    NOT_EQUAL      shift, and go to state 83
+    GREATER_EQUAL  shift, and go to state 84
+    LESS_EQUAL     shift, and go to state 85
+    '='            shift, and go to state 86
+    '>'            shift, and go to state 87
+    '<'            shift, and go to state 88
 
-    Value  go to state 88
+    Operand  go to state 89
 
 
 State 62
 
-   23 QueryStmt: UPDATE IDENTIFIER SET SetClause WHERE . WhereClauseList
+   43 SetClause: IDENTIFIER '=' . Value
 
-    IDENTIFIER  shift, and go to state 26
+    NUL           shift, and go to state 75
+    VALUE_STRING  shift, and go to state 76
+    VALUE_INT     shift, and go to state 77
 
-    WhereClause      go to state 58
-    WhereClauseList  go to state 89
-    Column           go to state 60
+    Value  go to state 90
 
 
 State 63
 
-   39 SetClause: SetClause ',' . IDENTIFIER '=' Value
+   24 QueryStmt: UPDATE IDENTIFIER SET SetClause WHERE . WhereClauseList
 
-    IDENTIFIER  shift, and go to state 90
+    IDENTIFIER  shift, and go to state 26
+
+    WhereClause      go to state 59
+    WhereClauseList  go to state 91
+    Column           go to state 61
 
 
 State 64
 
-   24 QueryStmt: SELECT Selector FROM TableList WHERE . WhereClauseList
-
-    IDENTIFIER  shift, and go to state 26
-
-    WhereClause      go to state 58
-    WhereClauseList  go to state 91
-    Column           go to state 60
-
-
-State 65
-
-   53 TableList: TableList ',' . IDENTIFIER
+   44 SetClause: SetClause ',' . IDENTIFIER '=' Value
 
     IDENTIFIER  shift, and go to state 92
 
 
+State 65
+
+   25 QueryStmt: SELECT Selector FROM TableList WHERE . WhereClauseList
+
+    IDENTIFIER  shift, and go to state 26
+
+    WhereClause      go to state 59
+    WhereClauseList  go to state 93
+    Column           go to state 61
+
+
 State 66
 
-   17 Field: PRIMARY KEY . '(' IDENTIFIER ')'
+   58 TableList: TableList ',' . IDENTIFIER
 
-    '('  shift, and go to state 93
+    IDENTIFIER  shift, and go to state 94
 
 
 State 67
 
-   18 Type: INT . '(' VALUE_INT ')'
-
-    '('  shift, and go to state 94
-
-
-State 68
-
-   20 Type: VARCHAR . '(' VALUE_INT ')'
+   17 Field: PRIMARY KEY . '(' IDENTIFIER ')'
 
     '('  shift, and go to state 95
 
 
+State 68
+
+   18 Field: CHECK '(' . CheckClauseList ')'
+
+    IDENTIFIER  shift, and go to state 26
+
+    CheckClause      go to state 96
+    CheckClauseList  go to state 97
+    Column           go to state 98
+
+
 State 69
 
-   19 Type: CHAR . '(' VALUE_INT ')'
+   19 Type: INT . '(' VALUE_INT ')'
 
-    '('  shift, and go to state 96
+    '('  shift, and go to state 99
 
 
 State 70
 
+   21 Type: VARCHAR . '(' VALUE_INT ')'
+
+    '('  shift, and go to state 100
+
+
+State 71
+
+   20 Type: CHAR . '(' VALUE_INT ')'
+
+    '('  shift, and go to state 101
+
+
+State 72
+
    15 Field: IDENTIFIER Type .
    16      | IDENTIFIER Type . NOT NUL
 
-    NOT  shift, and go to state 97
+    NOT  shift, and go to state 102
 
     $default  reduce using rule 15 (Field)
 
 
-State 71
+State 73
 
    10 SysStmt: CREATE TABLE IDENTIFIER '(' FieldList ')' .
 
     $default  reduce using rule 10 (SysStmt)
 
 
-State 72
+State 74
 
    14 FieldList: FieldList ',' . Field
 
     PRIMARY     shift, and go to state 52
-    IDENTIFIER  shift, and go to state 53
+    CHECK       shift, and go to state 53
+    IDENTIFIER  shift, and go to state 54
 
-    Field  go to state 98
-
-
-State 73
-
-   31 Value: NUL .
-
-    $default  reduce using rule 31 (Value)
-
-
-State 74
-
-   30 Value: VALUE_STRING .
-
-    $default  reduce using rule 30 (Value)
+    Field  go to state 103
 
 
 State 75
 
-   29 Value: VALUE_INT .
+   32 Value: NUL .
 
-    $default  reduce using rule 29 (Value)
+    $default  reduce using rule 32 (Value)
 
 
 State 76
 
-   25 ValueLists: '(' ValueList . ')'
-   28 ValueList: ValueList . ',' Value
+   31 Value: VALUE_STRING .
 
-    ')'  shift, and go to state 99
-    ','  shift, and go to state 100
+    $default  reduce using rule 31 (Value)
 
 
 State 77
 
-   27 ValueList: Value .
+   30 Value: VALUE_INT .
 
-    $default  reduce using rule 27 (ValueList)
+    $default  reduce using rule 30 (Value)
 
 
 State 78
 
-   26 ValueLists: ValueLists ',' . '(' ValueList ')'
+   26 ValueLists: '(' ValueList . ')'
+   29 ValueList: ValueList . ',' Value
 
-    '('  shift, and go to state 101
+    ')'  shift, and go to state 104
+    ','  shift, and go to state 105
 
 
 State 79
 
-   37 WhereClauseList: WhereClauseList AND . WhereClause
+   28 ValueList: Value .
 
-    IDENTIFIER  shift, and go to state 26
-
-    WhereClause  go to state 102
-    Column       go to state 60
+    $default  reduce using rule 28 (ValueList)
 
 
 State 80
 
-   34 WhereClause: Column IS . NUL
-   35            | Column IS . NOT NUL
+   27 ValueLists: ValueLists ',' . '(' ValueList ')'
 
-    NOT  shift, and go to state 103
-    NUL  shift, and go to state 104
+    '('  shift, and go to state 106
 
 
 State 81
 
-   47 Operand: NOT_EQUAL .
+   38 WhereClauseList: WhereClauseList AND . WhereClause
 
-    $default  reduce using rule 47 (Operand)
+    IDENTIFIER  shift, and go to state 26
+
+    WhereClause  go to state 107
+    Column       go to state 61
 
 
 State 82
 
-   51 Operand: GREATER_EQUAL .
+   35 WhereClause: Column IS . NUL
+   36            | Column IS . NOT NUL
 
-    $default  reduce using rule 51 (Operand)
+    NOT  shift, and go to state 108
+    NUL  shift, and go to state 109
 
 
 State 83
 
-   50 Operand: LESS_EQUAL .
+   52 Operand: NOT_EQUAL .
 
-    $default  reduce using rule 50 (Operand)
+    $default  reduce using rule 52 (Operand)
 
 
 State 84
 
-   46 Operand: '=' .
+   56 Operand: GREATER_EQUAL .
 
-    $default  reduce using rule 46 (Operand)
+    $default  reduce using rule 56 (Operand)
 
 
 State 85
 
-   49 Operand: '>' .
+   55 Operand: LESS_EQUAL .
 
-    $default  reduce using rule 49 (Operand)
+    $default  reduce using rule 55 (Operand)
 
 
 State 86
 
-   48 Operand: '<' .
+   51 Operand: '=' .
 
-    $default  reduce using rule 48 (Operand)
+    $default  reduce using rule 51 (Operand)
 
 
 State 87
 
-   32 WhereClause: Column Operand . Column
-   33            | Column Operand . Value
+   54 Operand: '>' .
 
-    NUL           shift, and go to state 73
-    IDENTIFIER    shift, and go to state 26
-    VALUE_STRING  shift, and go to state 74
-    VALUE_INT     shift, and go to state 75
-
-    Value   go to state 105
-    Column  go to state 106
+    $default  reduce using rule 54 (Operand)
 
 
 State 88
 
-   38 SetClause: IDENTIFIER '=' Value .
+   53 Operand: '<' .
 
-    $default  reduce using rule 38 (SetClause)
+    $default  reduce using rule 53 (Operand)
 
 
 State 89
 
-   23 QueryStmt: UPDATE IDENTIFIER SET SetClause WHERE WhereClauseList .
-   37 WhereClauseList: WhereClauseList . AND WhereClause
+   33 WhereClause: Column Operand . Column
+   34            | Column Operand . Value
 
-    AND  shift, and go to state 79
+    NUL           shift, and go to state 75
+    IDENTIFIER    shift, and go to state 26
+    VALUE_STRING  shift, and go to state 76
+    VALUE_INT     shift, and go to state 77
 
-    $default  reduce using rule 23 (QueryStmt)
+    Value   go to state 110
+    Column  go to state 111
 
 
 State 90
 
-   39 SetClause: SetClause ',' IDENTIFIER . '=' Value
+   43 SetClause: IDENTIFIER '=' Value .
 
-    '='  shift, and go to state 107
+    $default  reduce using rule 43 (SetClause)
 
 
 State 91
 
-   24 QueryStmt: SELECT Selector FROM TableList WHERE WhereClauseList .
-   37 WhereClauseList: WhereClauseList . AND WhereClause
+   24 QueryStmt: UPDATE IDENTIFIER SET SetClause WHERE WhereClauseList .
+   38 WhereClauseList: WhereClauseList . AND WhereClause
 
-    AND  shift, and go to state 79
+    AND  shift, and go to state 81
 
     $default  reduce using rule 24 (QueryStmt)
 
 
 State 92
 
-   53 TableList: TableList ',' IDENTIFIER .
+   44 SetClause: SetClause ',' IDENTIFIER . '=' Value
 
-    $default  reduce using rule 53 (TableList)
+    '='  shift, and go to state 112
 
 
 State 93
 
-   17 Field: PRIMARY KEY '(' . IDENTIFIER ')'
+   25 QueryStmt: SELECT Selector FROM TableList WHERE WhereClauseList .
+   38 WhereClauseList: WhereClauseList . AND WhereClause
 
-    IDENTIFIER  shift, and go to state 108
+    AND  shift, and go to state 81
+
+    $default  reduce using rule 25 (QueryStmt)
 
 
 State 94
 
-   18 Type: INT '(' . VALUE_INT ')'
+   58 TableList: TableList ',' IDENTIFIER .
 
-    VALUE_INT  shift, and go to state 109
+    $default  reduce using rule 58 (TableList)
 
 
 State 95
 
-   20 Type: VARCHAR '(' . VALUE_INT ')'
+   17 Field: PRIMARY KEY '(' . IDENTIFIER ')'
 
-    VALUE_INT  shift, and go to state 110
+    IDENTIFIER  shift, and go to state 113
 
 
 State 96
 
-   19 Type: CHAR '(' . VALUE_INT ')'
+   41 CheckClauseList: CheckClause .
 
-    VALUE_INT  shift, and go to state 111
+    $default  reduce using rule 41 (CheckClauseList)
 
 
 State 97
 
-   16 Field: IDENTIFIER Type NOT . NUL
+   18 Field: CHECK '(' CheckClauseList . ')'
+   42 CheckClauseList: CheckClauseList . AND CheckClause
 
-    NUL  shift, and go to state 112
+    AND  shift, and go to state 114
+    ')'  shift, and go to state 115
 
 
 State 98
+
+   39 CheckClause: Column . IN '(' ValueList ')'
+   40            | Column . Operand Value
+
+    IN             shift, and go to state 116
+    NOT_EQUAL      shift, and go to state 83
+    GREATER_EQUAL  shift, and go to state 84
+    LESS_EQUAL     shift, and go to state 85
+    '='            shift, and go to state 86
+    '>'            shift, and go to state 87
+    '<'            shift, and go to state 88
+
+    Operand  go to state 117
+
+
+State 99
+
+   19 Type: INT '(' . VALUE_INT ')'
+
+    VALUE_INT  shift, and go to state 118
+
+
+State 100
+
+   21 Type: VARCHAR '(' . VALUE_INT ')'
+
+    VALUE_INT  shift, and go to state 119
+
+
+State 101
+
+   20 Type: CHAR '(' . VALUE_INT ')'
+
+    VALUE_INT  shift, and go to state 120
+
+
+State 102
+
+   16 Field: IDENTIFIER Type NOT . NUL
+
+    NUL  shift, and go to state 121
+
+
+State 103
 
    14 FieldList: FieldList ',' Field .
 
     $default  reduce using rule 14 (FieldList)
 
 
-State 99
-
-   25 ValueLists: '(' ValueList ')' .
-
-    $default  reduce using rule 25 (ValueLists)
-
-
-State 100
-
-   28 ValueList: ValueList ',' . Value
-
-    NUL           shift, and go to state 73
-    VALUE_STRING  shift, and go to state 74
-    VALUE_INT     shift, and go to state 75
-
-    Value  go to state 113
-
-
-State 101
-
-   26 ValueLists: ValueLists ',' '(' . ValueList ')'
-
-    NUL           shift, and go to state 73
-    VALUE_STRING  shift, and go to state 74
-    VALUE_INT     shift, and go to state 75
-
-    ValueList  go to state 114
-    Value      go to state 77
-
-
-State 102
-
-   37 WhereClauseList: WhereClauseList AND WhereClause .
-
-    $default  reduce using rule 37 (WhereClauseList)
-
-
-State 103
-
-   35 WhereClause: Column IS NOT . NUL
-
-    NUL  shift, and go to state 115
-
-
 State 104
 
-   34 WhereClause: Column IS NUL .
+   26 ValueLists: '(' ValueList ')' .
 
-    $default  reduce using rule 34 (WhereClause)
+    $default  reduce using rule 26 (ValueLists)
 
 
 State 105
 
-   33 WhereClause: Column Operand Value .
+   29 ValueList: ValueList ',' . Value
 
-    $default  reduce using rule 33 (WhereClause)
+    NUL           shift, and go to state 75
+    VALUE_STRING  shift, and go to state 76
+    VALUE_INT     shift, and go to state 77
+
+    Value  go to state 122
 
 
 State 106
 
-   32 WhereClause: Column Operand Column .
+   27 ValueLists: ValueLists ',' '(' . ValueList ')'
 
-    $default  reduce using rule 32 (WhereClause)
+    NUL           shift, and go to state 75
+    VALUE_STRING  shift, and go to state 76
+    VALUE_INT     shift, and go to state 77
+
+    ValueList  go to state 123
+    Value      go to state 79
 
 
 State 107
 
-   39 SetClause: SetClause ',' IDENTIFIER '=' . Value
+   38 WhereClauseList: WhereClauseList AND WhereClause .
 
-    NUL           shift, and go to state 73
-    VALUE_STRING  shift, and go to state 74
-    VALUE_INT     shift, and go to state 75
-
-    Value  go to state 116
+    $default  reduce using rule 38 (WhereClauseList)
 
 
 State 108
 
-   17 Field: PRIMARY KEY '(' IDENTIFIER . ')'
+   36 WhereClause: Column IS NOT . NUL
 
-    ')'  shift, and go to state 117
+    NUL  shift, and go to state 124
 
 
 State 109
 
-   18 Type: INT '(' VALUE_INT . ')'
+   35 WhereClause: Column IS NUL .
 
-    ')'  shift, and go to state 118
+    $default  reduce using rule 35 (WhereClause)
 
 
 State 110
 
-   20 Type: VARCHAR '(' VALUE_INT . ')'
+   34 WhereClause: Column Operand Value .
 
-    ')'  shift, and go to state 119
+    $default  reduce using rule 34 (WhereClause)
 
 
 State 111
 
-   19 Type: CHAR '(' VALUE_INT . ')'
+   33 WhereClause: Column Operand Column .
 
-    ')'  shift, and go to state 120
+    $default  reduce using rule 33 (WhereClause)
 
 
 State 112
+
+   44 SetClause: SetClause ',' IDENTIFIER '=' . Value
+
+    NUL           shift, and go to state 75
+    VALUE_STRING  shift, and go to state 76
+    VALUE_INT     shift, and go to state 77
+
+    Value  go to state 125
+
+
+State 113
+
+   17 Field: PRIMARY KEY '(' IDENTIFIER . ')'
+
+    ')'  shift, and go to state 126
+
+
+State 114
+
+   42 CheckClauseList: CheckClauseList AND . CheckClause
+
+    IDENTIFIER  shift, and go to state 26
+
+    CheckClause  go to state 127
+    Column       go to state 98
+
+
+State 115
+
+   18 Field: CHECK '(' CheckClauseList ')' .
+
+    $default  reduce using rule 18 (Field)
+
+
+State 116
+
+   39 CheckClause: Column IN . '(' ValueList ')'
+
+    '('  shift, and go to state 128
+
+
+State 117
+
+   40 CheckClause: Column Operand . Value
+
+    NUL           shift, and go to state 75
+    VALUE_STRING  shift, and go to state 76
+    VALUE_INT     shift, and go to state 77
+
+    Value  go to state 129
+
+
+State 118
+
+   19 Type: INT '(' VALUE_INT . ')'
+
+    ')'  shift, and go to state 130
+
+
+State 119
+
+   21 Type: VARCHAR '(' VALUE_INT . ')'
+
+    ')'  shift, and go to state 131
+
+
+State 120
+
+   20 Type: CHAR '(' VALUE_INT . ')'
+
+    ')'  shift, and go to state 132
+
+
+State 121
 
    16 Field: IDENTIFIER Type NOT NUL .
 
     $default  reduce using rule 16 (Field)
 
 
-State 113
+State 122
 
-   28 ValueList: ValueList ',' Value .
+   29 ValueList: ValueList ',' Value .
 
-    $default  reduce using rule 28 (ValueList)
-
-
-State 114
-
-   26 ValueLists: ValueLists ',' '(' ValueList . ')'
-   28 ValueList: ValueList . ',' Value
-
-    ')'  shift, and go to state 121
-    ','  shift, and go to state 100
+    $default  reduce using rule 29 (ValueList)
 
 
-State 115
+State 123
 
-   35 WhereClause: Column IS NOT NUL .
+   27 ValueLists: ValueLists ',' '(' ValueList . ')'
+   29 ValueList: ValueList . ',' Value
 
-    $default  reduce using rule 35 (WhereClause)
-
-
-State 116
-
-   39 SetClause: SetClause ',' IDENTIFIER '=' Value .
-
-    $default  reduce using rule 39 (SetClause)
+    ')'  shift, and go to state 133
+    ','  shift, and go to state 105
 
 
-State 117
+State 124
+
+   36 WhereClause: Column IS NOT NUL .
+
+    $default  reduce using rule 36 (WhereClause)
+
+
+State 125
+
+   44 SetClause: SetClause ',' IDENTIFIER '=' Value .
+
+    $default  reduce using rule 44 (SetClause)
+
+
+State 126
 
    17 Field: PRIMARY KEY '(' IDENTIFIER ')' .
 
     $default  reduce using rule 17 (Field)
 
 
-State 118
+State 127
 
-   18 Type: INT '(' VALUE_INT ')' .
+   42 CheckClauseList: CheckClauseList AND CheckClause .
 
-    $default  reduce using rule 18 (Type)
-
-
-State 119
-
-   20 Type: VARCHAR '(' VALUE_INT ')' .
-
-    $default  reduce using rule 20 (Type)
+    $default  reduce using rule 42 (CheckClauseList)
 
 
-State 120
+State 128
 
-   19 Type: CHAR '(' VALUE_INT ')' .
+   39 CheckClause: Column IN '(' . ValueList ')'
+
+    NUL           shift, and go to state 75
+    VALUE_STRING  shift, and go to state 76
+    VALUE_INT     shift, and go to state 77
+
+    ValueList  go to state 134
+    Value      go to state 79
+
+
+State 129
+
+   40 CheckClause: Column Operand Value .
+
+    $default  reduce using rule 40 (CheckClause)
+
+
+State 130
+
+   19 Type: INT '(' VALUE_INT ')' .
 
     $default  reduce using rule 19 (Type)
 
 
-State 121
+State 131
 
-   26 ValueLists: ValueLists ',' '(' ValueList ')' .
+   21 Type: VARCHAR '(' VALUE_INT ')' .
 
-    $default  reduce using rule 26 (ValueLists)
+    $default  reduce using rule 21 (Type)
+
+
+State 132
+
+   20 Type: CHAR '(' VALUE_INT ')' .
+
+    $default  reduce using rule 20 (Type)
+
+
+State 133
+
+   27 ValueLists: ValueLists ',' '(' ValueList ')' .
+
+    $default  reduce using rule 27 (ValueLists)
+
+
+State 134
+
+   29 ValueList: ValueList . ',' Value
+   39 CheckClause: Column IN '(' ValueList . ')'
+
+    ')'  shift, and go to state 135
+    ','  shift, and go to state 105
+
+
+State 135
+
+   39 CheckClause: Column IN '(' ValueList ')' .
+
+    $default  reduce using rule 39 (CheckClause)

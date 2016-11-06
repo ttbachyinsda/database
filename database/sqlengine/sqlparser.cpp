@@ -190,65 +190,73 @@ namespace yy {
   {
       switch (other.type_get ())
     {
-      case 47: // Stmt
-      case 48: // SysStmt
-      case 52: // QueryStmt
+      case 49: // Stmt
+      case 50: // SysStmt
+      case 54: // QueryStmt
         value.copy< SQLAction* > (other.value);
         break;
 
-      case 56: // WhereClause
+      case 60: // CheckClause
+        value.copy< SQLCheck* > (other.value);
+        break;
+
+      case 61: // CheckClauseList
+        value.copy< SQLCheckGroup* > (other.value);
+        break;
+
+      case 58: // WhereClause
         value.copy< SQLCondition* > (other.value);
         break;
 
-      case 57: // WhereClauseList
+      case 59: // WhereClauseList
         value.copy< SQLConditionGroup* > (other.value);
         break;
 
-      case 62: // Operand
+      case 66: // Operand
         value.copy< SQLOperand > (other.value);
         break;
 
-      case 59: // Column
+      case 63: // Column
         value.copy< SQLSelector* > (other.value);
         break;
 
-      case 60: // Selector
-      case 61: // SelectorList
+      case 64: // Selector
+      case 65: // SelectorList
         value.copy< SQLSelectorGroup* > (other.value);
         break;
 
-      case 58: // SetClause
+      case 62: // SetClause
         value.copy< SQLSetGroup* > (other.value);
         break;
 
-      case 63: // TableList
+      case 67: // TableList
         value.copy< SQLTableGroup* > (other.value);
         break;
 
-      case 50: // Field
-      case 51: // Type
+      case 52: // Field
+      case 53: // Type
         value.copy< SQLType* > (other.value);
         break;
 
-      case 55: // Value
+      case 57: // Value
         value.copy< SQLValue* > (other.value);
         break;
 
-      case 54: // ValueList
+      case 56: // ValueList
         value.copy< SQLValueGroup* > (other.value);
         break;
 
-      case 33: // IDENTIFIER
-      case 34: // VALUE_STRING
-      case 35: // VALUE_INT
+      case 35: // IDENTIFIER
+      case 36: // VALUE_STRING
+      case 37: // VALUE_INT
         value.copy< std::string > (other.value);
         break;
 
-      case 49: // FieldList
+      case 51: // FieldList
         value.copy< std::vector<SQLType*>* > (other.value);
         break;
 
-      case 53: // ValueLists
+      case 55: // ValueLists
         value.copy< std::vector<SQLValueGroup*>* > (other.value);
         break;
 
@@ -269,65 +277,73 @@ namespace yy {
     (void) v;
       switch (this->type_get ())
     {
-      case 47: // Stmt
-      case 48: // SysStmt
-      case 52: // QueryStmt
+      case 49: // Stmt
+      case 50: // SysStmt
+      case 54: // QueryStmt
         value.copy< SQLAction* > (v);
         break;
 
-      case 56: // WhereClause
+      case 60: // CheckClause
+        value.copy< SQLCheck* > (v);
+        break;
+
+      case 61: // CheckClauseList
+        value.copy< SQLCheckGroup* > (v);
+        break;
+
+      case 58: // WhereClause
         value.copy< SQLCondition* > (v);
         break;
 
-      case 57: // WhereClauseList
+      case 59: // WhereClauseList
         value.copy< SQLConditionGroup* > (v);
         break;
 
-      case 62: // Operand
+      case 66: // Operand
         value.copy< SQLOperand > (v);
         break;
 
-      case 59: // Column
+      case 63: // Column
         value.copy< SQLSelector* > (v);
         break;
 
-      case 60: // Selector
-      case 61: // SelectorList
+      case 64: // Selector
+      case 65: // SelectorList
         value.copy< SQLSelectorGroup* > (v);
         break;
 
-      case 58: // SetClause
+      case 62: // SetClause
         value.copy< SQLSetGroup* > (v);
         break;
 
-      case 63: // TableList
+      case 67: // TableList
         value.copy< SQLTableGroup* > (v);
         break;
 
-      case 50: // Field
-      case 51: // Type
+      case 52: // Field
+      case 53: // Type
         value.copy< SQLType* > (v);
         break;
 
-      case 55: // Value
+      case 57: // Value
         value.copy< SQLValue* > (v);
         break;
 
-      case 54: // ValueList
+      case 56: // ValueList
         value.copy< SQLValueGroup* > (v);
         break;
 
-      case 33: // IDENTIFIER
-      case 34: // VALUE_STRING
-      case 35: // VALUE_INT
+      case 35: // IDENTIFIER
+      case 36: // VALUE_STRING
+      case 37: // VALUE_INT
         value.copy< std::string > (v);
         break;
 
-      case 49: // FieldList
+      case 51: // FieldList
         value.copy< std::vector<SQLType*>* > (v);
         break;
 
-      case 53: // ValueLists
+      case 55: // ValueLists
         value.copy< std::vector<SQLValueGroup*>* > (v);
         break;
 
@@ -348,6 +364,20 @@ namespace yy {
 
   template <typename Base>
   SQLParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const SQLAction* v, const location_type& l)
+    : Base (t)
+    , value (v)
+    , location (l)
+  {}
+
+  template <typename Base>
+  SQLParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const SQLCheck* v, const location_type& l)
+    : Base (t)
+    , value (v)
+    , location (l)
+  {}
+
+  template <typename Base>
+  SQLParser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const SQLCheckGroup* v, const location_type& l)
     : Base (t)
     , value (v)
     , location (l)
@@ -470,65 +500,73 @@ namespace yy {
     // Type destructor.
     switch (yytype)
     {
-      case 47: // Stmt
-      case 48: // SysStmt
-      case 52: // QueryStmt
+      case 49: // Stmt
+      case 50: // SysStmt
+      case 54: // QueryStmt
         value.template destroy< SQLAction* > ();
         break;
 
-      case 56: // WhereClause
+      case 60: // CheckClause
+        value.template destroy< SQLCheck* > ();
+        break;
+
+      case 61: // CheckClauseList
+        value.template destroy< SQLCheckGroup* > ();
+        break;
+
+      case 58: // WhereClause
         value.template destroy< SQLCondition* > ();
         break;
 
-      case 57: // WhereClauseList
+      case 59: // WhereClauseList
         value.template destroy< SQLConditionGroup* > ();
         break;
 
-      case 62: // Operand
+      case 66: // Operand
         value.template destroy< SQLOperand > ();
         break;
 
-      case 59: // Column
+      case 63: // Column
         value.template destroy< SQLSelector* > ();
         break;
 
-      case 60: // Selector
-      case 61: // SelectorList
+      case 64: // Selector
+      case 65: // SelectorList
         value.template destroy< SQLSelectorGroup* > ();
         break;
 
-      case 58: // SetClause
+      case 62: // SetClause
         value.template destroy< SQLSetGroup* > ();
         break;
 
-      case 63: // TableList
+      case 67: // TableList
         value.template destroy< SQLTableGroup* > ();
         break;
 
-      case 50: // Field
-      case 51: // Type
+      case 52: // Field
+      case 53: // Type
         value.template destroy< SQLType* > ();
         break;
 
-      case 55: // Value
+      case 57: // Value
         value.template destroy< SQLValue* > ();
         break;
 
-      case 54: // ValueList
+      case 56: // ValueList
         value.template destroy< SQLValueGroup* > ();
         break;
 
-      case 33: // IDENTIFIER
-      case 34: // VALUE_STRING
-      case 35: // VALUE_INT
+      case 35: // IDENTIFIER
+      case 36: // VALUE_STRING
+      case 37: // VALUE_INT
         value.template destroy< std::string > ();
         break;
 
-      case 49: // FieldList
+      case 51: // FieldList
         value.template destroy< std::vector<SQLType*>* > ();
         break;
 
-      case 53: // ValueLists
+      case 55: // ValueLists
         value.template destroy< std::vector<SQLValueGroup*>* > ();
         break;
 
@@ -555,65 +593,73 @@ namespace yy {
     super_type::move(s);
       switch (this->type_get ())
     {
-      case 47: // Stmt
-      case 48: // SysStmt
-      case 52: // QueryStmt
+      case 49: // Stmt
+      case 50: // SysStmt
+      case 54: // QueryStmt
         value.move< SQLAction* > (s.value);
         break;
 
-      case 56: // WhereClause
+      case 60: // CheckClause
+        value.move< SQLCheck* > (s.value);
+        break;
+
+      case 61: // CheckClauseList
+        value.move< SQLCheckGroup* > (s.value);
+        break;
+
+      case 58: // WhereClause
         value.move< SQLCondition* > (s.value);
         break;
 
-      case 57: // WhereClauseList
+      case 59: // WhereClauseList
         value.move< SQLConditionGroup* > (s.value);
         break;
 
-      case 62: // Operand
+      case 66: // Operand
         value.move< SQLOperand > (s.value);
         break;
 
-      case 59: // Column
+      case 63: // Column
         value.move< SQLSelector* > (s.value);
         break;
 
-      case 60: // Selector
-      case 61: // SelectorList
+      case 64: // Selector
+      case 65: // SelectorList
         value.move< SQLSelectorGroup* > (s.value);
         break;
 
-      case 58: // SetClause
+      case 62: // SetClause
         value.move< SQLSetGroup* > (s.value);
         break;
 
-      case 63: // TableList
+      case 67: // TableList
         value.move< SQLTableGroup* > (s.value);
         break;
 
-      case 50: // Field
-      case 51: // Type
+      case 52: // Field
+      case 53: // Type
         value.move< SQLType* > (s.value);
         break;
 
-      case 55: // Value
+      case 57: // Value
         value.move< SQLValue* > (s.value);
         break;
 
-      case 54: // ValueList
+      case 56: // ValueList
         value.move< SQLValueGroup* > (s.value);
         break;
 
-      case 33: // IDENTIFIER
-      case 34: // VALUE_STRING
-      case 35: // VALUE_INT
+      case 35: // IDENTIFIER
+      case 36: // VALUE_STRING
+      case 37: // VALUE_INT
         value.move< std::string > (s.value);
         break;
 
-      case 49: // FieldList
+      case 51: // FieldList
         value.move< std::vector<SQLType*>* > (s.value);
         break;
 
-      case 53: // ValueLists
+      case 55: // ValueLists
         value.move< std::vector<SQLValueGroup*>* > (s.value);
         break;
 
@@ -762,6 +808,18 @@ namespace yy {
   SQLParser::make_KEY (const location_type& l)
   {
     return symbol_type (token::KEY, l);
+  }
+
+  SQLParser::symbol_type
+  SQLParser::make_CHECK (const location_type& l)
+  {
+    return symbol_type (token::CHECK, l);
+  }
+
+  SQLParser::symbol_type
+  SQLParser::make_IN (const location_type& l)
+  {
+    return symbol_type (token::IN, l);
   }
 
   SQLParser::symbol_type
@@ -914,65 +972,73 @@ namespace yy {
   {
       switch (that.type_get ())
     {
-      case 47: // Stmt
-      case 48: // SysStmt
-      case 52: // QueryStmt
+      case 49: // Stmt
+      case 50: // SysStmt
+      case 54: // QueryStmt
         value.move< SQLAction* > (that.value);
         break;
 
-      case 56: // WhereClause
+      case 60: // CheckClause
+        value.move< SQLCheck* > (that.value);
+        break;
+
+      case 61: // CheckClauseList
+        value.move< SQLCheckGroup* > (that.value);
+        break;
+
+      case 58: // WhereClause
         value.move< SQLCondition* > (that.value);
         break;
 
-      case 57: // WhereClauseList
+      case 59: // WhereClauseList
         value.move< SQLConditionGroup* > (that.value);
         break;
 
-      case 62: // Operand
+      case 66: // Operand
         value.move< SQLOperand > (that.value);
         break;
 
-      case 59: // Column
+      case 63: // Column
         value.move< SQLSelector* > (that.value);
         break;
 
-      case 60: // Selector
-      case 61: // SelectorList
+      case 64: // Selector
+      case 65: // SelectorList
         value.move< SQLSelectorGroup* > (that.value);
         break;
 
-      case 58: // SetClause
+      case 62: // SetClause
         value.move< SQLSetGroup* > (that.value);
         break;
 
-      case 63: // TableList
+      case 67: // TableList
         value.move< SQLTableGroup* > (that.value);
         break;
 
-      case 50: // Field
-      case 51: // Type
+      case 52: // Field
+      case 53: // Type
         value.move< SQLType* > (that.value);
         break;
 
-      case 55: // Value
+      case 57: // Value
         value.move< SQLValue* > (that.value);
         break;
 
-      case 54: // ValueList
+      case 56: // ValueList
         value.move< SQLValueGroup* > (that.value);
         break;
 
-      case 33: // IDENTIFIER
-      case 34: // VALUE_STRING
-      case 35: // VALUE_INT
+      case 35: // IDENTIFIER
+      case 36: // VALUE_STRING
+      case 37: // VALUE_INT
         value.move< std::string > (that.value);
         break;
 
-      case 49: // FieldList
+      case 51: // FieldList
         value.move< std::vector<SQLType*>* > (that.value);
         break;
 
-      case 53: // ValueLists
+      case 55: // ValueLists
         value.move< std::vector<SQLValueGroup*>* > (that.value);
         break;
 
@@ -991,65 +1057,73 @@ namespace yy {
     state = that.state;
       switch (that.type_get ())
     {
-      case 47: // Stmt
-      case 48: // SysStmt
-      case 52: // QueryStmt
+      case 49: // Stmt
+      case 50: // SysStmt
+      case 54: // QueryStmt
         value.copy< SQLAction* > (that.value);
         break;
 
-      case 56: // WhereClause
+      case 60: // CheckClause
+        value.copy< SQLCheck* > (that.value);
+        break;
+
+      case 61: // CheckClauseList
+        value.copy< SQLCheckGroup* > (that.value);
+        break;
+
+      case 58: // WhereClause
         value.copy< SQLCondition* > (that.value);
         break;
 
-      case 57: // WhereClauseList
+      case 59: // WhereClauseList
         value.copy< SQLConditionGroup* > (that.value);
         break;
 
-      case 62: // Operand
+      case 66: // Operand
         value.copy< SQLOperand > (that.value);
         break;
 
-      case 59: // Column
+      case 63: // Column
         value.copy< SQLSelector* > (that.value);
         break;
 
-      case 60: // Selector
-      case 61: // SelectorList
+      case 64: // Selector
+      case 65: // SelectorList
         value.copy< SQLSelectorGroup* > (that.value);
         break;
 
-      case 58: // SetClause
+      case 62: // SetClause
         value.copy< SQLSetGroup* > (that.value);
         break;
 
-      case 63: // TableList
+      case 67: // TableList
         value.copy< SQLTableGroup* > (that.value);
         break;
 
-      case 50: // Field
-      case 51: // Type
+      case 52: // Field
+      case 53: // Type
         value.copy< SQLType* > (that.value);
         break;
 
-      case 55: // Value
+      case 57: // Value
         value.copy< SQLValue* > (that.value);
         break;
 
-      case 54: // ValueList
+      case 56: // ValueList
         value.copy< SQLValueGroup* > (that.value);
         break;
 
-      case 33: // IDENTIFIER
-      case 34: // VALUE_STRING
-      case 35: // VALUE_INT
+      case 35: // IDENTIFIER
+      case 36: // VALUE_STRING
+      case 37: // VALUE_INT
         value.copy< std::string > (that.value);
         break;
 
-      case 49: // FieldList
+      case 51: // FieldList
         value.copy< std::vector<SQLType*>* > (that.value);
         break;
 
-      case 53: // ValueLists
+      case 55: // ValueLists
         value.copy< std::vector<SQLValueGroup*>* > (that.value);
         break;
 
@@ -1280,65 +1354,73 @@ namespace yy {
          when using variants.  */
         switch (yyr1_[yyn])
     {
-      case 47: // Stmt
-      case 48: // SysStmt
-      case 52: // QueryStmt
+      case 49: // Stmt
+      case 50: // SysStmt
+      case 54: // QueryStmt
         yylhs.value.build< SQLAction* > ();
         break;
 
-      case 56: // WhereClause
+      case 60: // CheckClause
+        yylhs.value.build< SQLCheck* > ();
+        break;
+
+      case 61: // CheckClauseList
+        yylhs.value.build< SQLCheckGroup* > ();
+        break;
+
+      case 58: // WhereClause
         yylhs.value.build< SQLCondition* > ();
         break;
 
-      case 57: // WhereClauseList
+      case 59: // WhereClauseList
         yylhs.value.build< SQLConditionGroup* > ();
         break;
 
-      case 62: // Operand
+      case 66: // Operand
         yylhs.value.build< SQLOperand > ();
         break;
 
-      case 59: // Column
+      case 63: // Column
         yylhs.value.build< SQLSelector* > ();
         break;
 
-      case 60: // Selector
-      case 61: // SelectorList
+      case 64: // Selector
+      case 65: // SelectorList
         yylhs.value.build< SQLSelectorGroup* > ();
         break;
 
-      case 58: // SetClause
+      case 62: // SetClause
         yylhs.value.build< SQLSetGroup* > ();
         break;
 
-      case 63: // TableList
+      case 67: // TableList
         yylhs.value.build< SQLTableGroup* > ();
         break;
 
-      case 50: // Field
-      case 51: // Type
+      case 52: // Field
+      case 53: // Type
         yylhs.value.build< SQLType* > ();
         break;
 
-      case 55: // Value
+      case 57: // Value
         yylhs.value.build< SQLValue* > ();
         break;
 
-      case 54: // ValueList
+      case 56: // ValueList
         yylhs.value.build< SQLValueGroup* > ();
         break;
 
-      case 33: // IDENTIFIER
-      case 34: // VALUE_STRING
-      case 35: // VALUE_INT
+      case 35: // IDENTIFIER
+      case 36: // VALUE_STRING
+      case 37: // VALUE_INT
         yylhs.value.build< std::string > ();
         break;
 
-      case 49: // FieldList
+      case 51: // FieldList
         yylhs.value.build< std::vector<SQLType*>* > ();
         break;
 
-      case 53: // ValueLists
+      case 55: // ValueLists
         yylhs.value.build< std::vector<SQLValueGroup*>* > ();
         break;
 
@@ -1360,269 +1442,279 @@ namespace yy {
           switch (yyn)
             {
   case 3:
-#line 80 "sqlparser.yy" // lalr1.cc:859
+#line 83 "sqlparser.yy" // lalr1.cc:859
     {
                     driver.addAction(yystack_[0].value.as< SQLAction* > ());
                 }
-#line 1368 "sqlparser.cpp" // lalr1.cc:859
+#line 1450 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 4:
-#line 86 "sqlparser.yy" // lalr1.cc:859
+#line 89 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLAction* > () = yystack_[1].value.as< SQLAction* > ();
                 }
-#line 1376 "sqlparser.cpp" // lalr1.cc:859
+#line 1458 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 5:
-#line 90 "sqlparser.yy" // lalr1.cc:859
+#line 93 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLAction* > () = yystack_[1].value.as< SQLAction* > ();
-                }
-#line 1384 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 6:
-#line 96 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< SQLAction* > () = new SQLCreateDatabaseAction(yystack_[0].value.as< std::string > ());
-                }
-#line 1392 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 7:
-#line 100 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< SQLAction* > () = new SQLDropDatabaseAction(yystack_[0].value.as< std::string > ());
-                }
-#line 1400 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 8:
-#line 104 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< SQLAction* > () = new SQLShowDatabasesAction();
-                }
-#line 1408 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 9:
-#line 108 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< SQLAction* > () = new SQLUseDatabaseAction(yystack_[0].value.as< std::string > ());
-                }
-#line 1416 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 10:
-#line 112 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< SQLAction* > () = new SQLShowTablesAction();
-                }
-#line 1424 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 11:
-#line 116 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< SQLAction* > () = new SQLCreateTableAction(yystack_[3].value.as< std::string > (), yystack_[1].value.as< std::vector<SQLType*>* > ());
-                }
-#line 1432 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 12:
-#line 120 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< SQLAction* > () = new SQLDropTableAction(yystack_[0].value.as< std::string > ());
-                }
-#line 1440 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 13:
-#line 124 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< SQLAction* > () = new SQLDescAction(yystack_[0].value.as< std::string > ());
-                }
-#line 1448 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 14:
-#line 130 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< std::vector<SQLType*>* > () = new std::vector<SQLType*>();
-                    yylhs.value.as< std::vector<SQLType*>* > ()->push_back(yystack_[0].value.as< SQLType* > ());
-                }
-#line 1457 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 15:
-#line 135 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< std::vector<SQLType*>* > () = yystack_[2].value.as< std::vector<SQLType*>* > ();
-                    yylhs.value.as< std::vector<SQLType*>* > ()->push_back(yystack_[0].value.as< SQLType* > ());
                 }
 #line 1466 "sqlparser.cpp" // lalr1.cc:859
     break;
 
+  case 6:
+#line 99 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLAction* > () = new SQLCreateDatabaseAction(yystack_[0].value.as< std::string > ());
+                }
+#line 1474 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 7:
+#line 103 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLAction* > () = new SQLDropDatabaseAction(yystack_[0].value.as< std::string > ());
+                }
+#line 1482 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 8:
+#line 107 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLAction* > () = new SQLShowDatabasesAction();
+                }
+#line 1490 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 9:
+#line 111 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLAction* > () = new SQLUseDatabaseAction(yystack_[0].value.as< std::string > ());
+                }
+#line 1498 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 10:
+#line 115 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLAction* > () = new SQLShowTablesAction();
+                }
+#line 1506 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 11:
+#line 119 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLAction* > () = new SQLCreateTableAction(yystack_[3].value.as< std::string > (), yystack_[1].value.as< std::vector<SQLType*>* > ());
+                }
+#line 1514 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 12:
+#line 123 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLAction* > () = new SQLDropTableAction(yystack_[0].value.as< std::string > ());
+                }
+#line 1522 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 13:
+#line 127 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLAction* > () = new SQLDescAction(yystack_[0].value.as< std::string > ());
+                }
+#line 1530 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 14:
+#line 133 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< std::vector<SQLType*>* > () = new std::vector<SQLType*>();
+                    yylhs.value.as< std::vector<SQLType*>* > ()->push_back(yystack_[0].value.as< SQLType* > ());
+                }
+#line 1539 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 15:
+#line 138 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< std::vector<SQLType*>* > () = yystack_[2].value.as< std::vector<SQLType*>* > ();
+                    yylhs.value.as< std::vector<SQLType*>* > ()->push_back(yystack_[0].value.as< SQLType* > ());
+                }
+#line 1548 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
   case 16:
-#line 142 "sqlparser.yy" // lalr1.cc:859
+#line 145 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLType* > () = yystack_[0].value.as< SQLType* > ();
                     yylhs.value.as< SQLType* > ()->identifier = yystack_[1].value.as< std::string > ();
                 }
-#line 1475 "sqlparser.cpp" // lalr1.cc:859
+#line 1557 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 17:
-#line 147 "sqlparser.yy" // lalr1.cc:859
+#line 150 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLType* > () = yystack_[2].value.as< SQLType* > ();
                     yylhs.value.as< SQLType* > ()->identifier = yystack_[3].value.as< std::string > ();
                     yylhs.value.as< SQLType* > ()->canNull = false;
                 }
-#line 1485 "sqlparser.cpp" // lalr1.cc:859
+#line 1567 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 18:
-#line 153 "sqlparser.yy" // lalr1.cc:859
+#line 156 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLType* > () = new SQLType();
                     yylhs.value.as< SQLType* > ()->identifier = yystack_[1].value.as< std::string > ();
                     yylhs.value.as< SQLType* > ()->primaryType = true;
                 }
-#line 1495 "sqlparser.cpp" // lalr1.cc:859
+#line 1577 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 19:
-#line 161 "sqlparser.yy" // lalr1.cc:859
+#line 162 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLType* > () = new SQLType();
+                    yylhs.value.as< SQLType* > ()->isCheck = true;
+                    yylhs.value.as< SQLType* > ()->checkGroup = yystack_[1].value.as< SQLCheckGroup* > ();
+                }
+#line 1587 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 20:
+#line 170 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLType* > () = new SQLType();
                     yylhs.value.as< SQLType* > ()->type = SQLType::INT;
                     yylhs.value.as< SQLType* > ()->length = atoi(yystack_[1].value.as< std::string > ().c_str());
                 }
-#line 1505 "sqlparser.cpp" // lalr1.cc:859
+#line 1597 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 20:
-#line 167 "sqlparser.yy" // lalr1.cc:859
+  case 21:
+#line 176 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLType* > () = new SQLType();
                     yylhs.value.as< SQLType* > ()->type = SQLType::CHAR;
                     yylhs.value.as< SQLType* > ()->length = atoi(yystack_[1].value.as< std::string > ().c_str());
                 }
-#line 1515 "sqlparser.cpp" // lalr1.cc:859
+#line 1607 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 21:
-#line 173 "sqlparser.yy" // lalr1.cc:859
+  case 22:
+#line 182 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLType* > () = new SQLType();
                     yylhs.value.as< SQLType* > ()->type = SQLType::VARCHAR;
                     yylhs.value.as< SQLType* > ()->length = atoi(yystack_[1].value.as< std::string > ().c_str());
                 }
-#line 1525 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 22:
-#line 181 "sqlparser.yy" // lalr1.cc:859
-    {
-                    yylhs.value.as< SQLAction* > () = new SQLInsertAction(yystack_[2].value.as< std::string > (), yystack_[0].value.as< std::vector<SQLValueGroup*>* > ());
-                }
-#line 1533 "sqlparser.cpp" // lalr1.cc:859
+#line 1617 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 23:
-#line 185 "sqlparser.yy" // lalr1.cc:859
+#line 190 "sqlparser.yy" // lalr1.cc:859
     {
-                    yylhs.value.as< SQLAction* > () = new SQLDeleteAction(yystack_[2].value.as< std::string > (), yystack_[0].value.as< SQLConditionGroup* > ());
+                    yylhs.value.as< SQLAction* > () = new SQLInsertAction(yystack_[2].value.as< std::string > (), yystack_[0].value.as< std::vector<SQLValueGroup*>* > ());
                 }
-#line 1541 "sqlparser.cpp" // lalr1.cc:859
+#line 1625 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 24:
-#line 189 "sqlparser.yy" // lalr1.cc:859
+#line 194 "sqlparser.yy" // lalr1.cc:859
     {
-                    yylhs.value.as< SQLAction* > () = new SQLUpdateAction(yystack_[4].value.as< std::string > (), yystack_[0].value.as< SQLConditionGroup* > (), yystack_[2].value.as< SQLSetGroup* > ());
+                    yylhs.value.as< SQLAction* > () = new SQLDeleteAction(yystack_[2].value.as< std::string > (), yystack_[0].value.as< SQLConditionGroup* > ());
                 }
-#line 1549 "sqlparser.cpp" // lalr1.cc:859
+#line 1633 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 25:
-#line 193 "sqlparser.yy" // lalr1.cc:859
+#line 198 "sqlparser.yy" // lalr1.cc:859
     {
-                    yylhs.value.as< SQLAction* > () = new SQLSelectAction(yystack_[2].value.as< SQLTableGroup* > (), yystack_[4].value.as< SQLSelectorGroup* > (), yystack_[0].value.as< SQLConditionGroup* > ());
+                    yylhs.value.as< SQLAction* > () = new SQLUpdateAction(yystack_[4].value.as< std::string > (), yystack_[0].value.as< SQLConditionGroup* > (), yystack_[2].value.as< SQLSetGroup* > ());
                 }
-#line 1557 "sqlparser.cpp" // lalr1.cc:859
+#line 1641 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 26:
-#line 199 "sqlparser.yy" // lalr1.cc:859
+#line 202 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLAction* > () = new SQLSelectAction(yystack_[2].value.as< SQLTableGroup* > (), yystack_[4].value.as< SQLSelectorGroup* > (), yystack_[0].value.as< SQLConditionGroup* > ());
+                }
+#line 1649 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 27:
+#line 208 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< std::vector<SQLValueGroup*>* > () = new std::vector<SQLValueGroup*>();
                     yylhs.value.as< std::vector<SQLValueGroup*>* > ()->push_back(yystack_[1].value.as< SQLValueGroup* > ());
                 }
-#line 1566 "sqlparser.cpp" // lalr1.cc:859
+#line 1658 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 27:
-#line 204 "sqlparser.yy" // lalr1.cc:859
+  case 28:
+#line 213 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< std::vector<SQLValueGroup*>* > () = yystack_[4].value.as< std::vector<SQLValueGroup*>* > ();
                     yylhs.value.as< std::vector<SQLValueGroup*>* > ()->push_back(yystack_[1].value.as< SQLValueGroup* > ());
                 }
-#line 1575 "sqlparser.cpp" // lalr1.cc:859
+#line 1667 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 28:
-#line 210 "sqlparser.yy" // lalr1.cc:859
+  case 29:
+#line 219 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLValueGroup* > () = new SQLValueGroup();
                     yylhs.value.as< SQLValueGroup* > ()->push_back(yystack_[0].value.as< SQLValue* > ());
                 }
-#line 1584 "sqlparser.cpp" // lalr1.cc:859
+#line 1676 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 29:
-#line 215 "sqlparser.yy" // lalr1.cc:859
+  case 30:
+#line 224 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLValueGroup* > () = yystack_[2].value.as< SQLValueGroup* > ();
                     yylhs.value.as< SQLValueGroup* > ()->push_back(yystack_[0].value.as< SQLValue* > ());
                 }
-#line 1593 "sqlparser.cpp" // lalr1.cc:859
+#line 1685 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 30:
-#line 222 "sqlparser.yy" // lalr1.cc:859
+  case 31:
+#line 231 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLValue* > () = new SQLValue();
                     yylhs.value.as< SQLValue* > ()->type = SQLValue::ENUMERATE;
                     yylhs.value.as< SQLValue* > ()->content = yystack_[0].value.as< std::string > ();
                 }
-#line 1603 "sqlparser.cpp" // lalr1.cc:859
+#line 1695 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 31:
-#line 228 "sqlparser.yy" // lalr1.cc:859
+  case 32:
+#line 237 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLValue* > () = new SQLValue();
                     yylhs.value.as< SQLValue* > ()->type = SQLValue::STRING;
                     yylhs.value.as< SQLValue* > ()->content = yystack_[0].value.as< std::string > ();
                 }
-#line 1613 "sqlparser.cpp" // lalr1.cc:859
+#line 1705 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 32:
-#line 234 "sqlparser.yy" // lalr1.cc:859
+  case 33:
+#line 243 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLValue* > () = new SQLValue();
                     yylhs.value.as< SQLValue* > ()->type = SQLValue::NUL;
                 }
-#line 1622 "sqlparser.cpp" // lalr1.cc:859
+#line 1714 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 33:
-#line 241 "sqlparser.yy" // lalr1.cc:859
+  case 34:
+#line 250 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLCondition* > () = new SQLCondition();
                     yylhs.value.as< SQLCondition* > ()->type = SQLCondition::COLUMN;
@@ -1633,11 +1725,11 @@ namespace yy {
                     yylhs.value.as< SQLCondition* > ()->operand = yystack_[1].value.as< SQLOperand > ();
 
                 }
-#line 1637 "sqlparser.cpp" // lalr1.cc:859
+#line 1729 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 34:
-#line 252 "sqlparser.yy" // lalr1.cc:859
+  case 35:
+#line 261 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLCondition* > () = new SQLCondition();
                     yylhs.value.as< SQLCondition* > ()->type = SQLCondition::VALUE;
@@ -1647,11 +1739,11 @@ namespace yy {
                     delete yystack_[0].value.as< SQLValue* > ();
                     yylhs.value.as< SQLCondition* > ()->operand = yystack_[1].value.as< SQLOperand > ();
                 }
-#line 1651 "sqlparser.cpp" // lalr1.cc:859
+#line 1743 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 35:
-#line 262 "sqlparser.yy" // lalr1.cc:859
+  case 36:
+#line 271 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLCondition* > () = new SQLCondition();
                     yylhs.value.as< SQLCondition* > ()->type = SQLCondition::VALUE;
@@ -1660,11 +1752,11 @@ namespace yy {
                     delete yystack_[2].value.as< SQLSelector* > ();
                     yylhs.value.as< SQLCondition* > ()->rValue.type = SQLValue::NUL;
                 }
-#line 1664 "sqlparser.cpp" // lalr1.cc:859
+#line 1756 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 36:
-#line 271 "sqlparser.yy" // lalr1.cc:859
+  case 37:
+#line 280 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLCondition* > () = new SQLCondition();
                     yylhs.value.as< SQLCondition* > ()->type = SQLCondition::VALUE;
@@ -1673,29 +1765,69 @@ namespace yy {
                     delete yystack_[3].value.as< SQLSelector* > ();
                     yylhs.value.as< SQLCondition* > ()->rValue.type = SQLValue::NUL;
                 }
-#line 1677 "sqlparser.cpp" // lalr1.cc:859
+#line 1769 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 37:
-#line 282 "sqlparser.yy" // lalr1.cc:859
+  case 38:
+#line 291 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLConditionGroup* > () = new SQLConditionGroup();
                     yylhs.value.as< SQLConditionGroup* > ()->push_back(yystack_[0].value.as< SQLCondition* > ());
                 }
-#line 1686 "sqlparser.cpp" // lalr1.cc:859
+#line 1778 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 38:
-#line 287 "sqlparser.yy" // lalr1.cc:859
+  case 39:
+#line 296 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLConditionGroup* > () = yystack_[2].value.as< SQLConditionGroup* > ();
                     yylhs.value.as< SQLConditionGroup* > ()->push_back(yystack_[0].value.as< SQLCondition* > ());
                 }
-#line 1695 "sqlparser.cpp" // lalr1.cc:859
+#line 1787 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 39:
-#line 294 "sqlparser.yy" // lalr1.cc:859
+  case 40:
+#line 303 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLCheck* > () = new SQLCheck();
+                    yylhs.value.as< SQLCheck* > ()->isChoice = true;
+                    yylhs.value.as< SQLCheck* > ()->choiceList = yystack_[1].value.as< SQLValueGroup* > ();
+                }
+#line 1797 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 41:
+#line 309 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLCheck* > () = new SQLCheck();
+                    yylhs.value.as< SQLCheck* > ()->isChoice = false;
+                    yylhs.value.as< SQLCheck* > ()->operand = yystack_[1].value.as< SQLOperand > ();
+                    yylhs.value.as< SQLCheck* > ()->value = *(yystack_[0].value.as< SQLValue* > ());
+                    delete yystack_[0].value.as< SQLValue* > ();
+                }
+#line 1809 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 42:
+#line 319 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLCheckGroup* > () = new SQLCheckGroup();
+                    yylhs.value.as< SQLCheckGroup* > ()->push_back(yystack_[0].value.as< SQLCheck* > ());
+                }
+#line 1818 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 43:
+#line 324 "sqlparser.yy" // lalr1.cc:859
+    {
+                    yylhs.value.as< SQLCheckGroup* > () = yystack_[2].value.as< SQLCheckGroup* > ();
+                    yylhs.value.as< SQLCheckGroup* > ()->push_back(yystack_[0].value.as< SQLCheck* > ());
+                }
+#line 1827 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 44:
+#line 331 "sqlparser.yy" // lalr1.cc:859
     {
                     SQLSet* thisValue = new SQLSet();
                     thisValue->identifier = yystack_[2].value.as< std::string > ();
@@ -1704,11 +1836,11 @@ namespace yy {
                     yylhs.value.as< SQLSetGroup* > () = new SQLSetGroup();
                     yylhs.value.as< SQLSetGroup* > ()->push_back(thisValue);
                 }
-#line 1708 "sqlparser.cpp" // lalr1.cc:859
+#line 1840 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 40:
-#line 303 "sqlparser.yy" // lalr1.cc:859
+  case 45:
+#line 340 "sqlparser.yy" // lalr1.cc:859
     {
                     SQLSet* thisValue = new SQLSet();
                     thisValue->identifier = yystack_[2].value.as< std::string > ();
@@ -1717,120 +1849,120 @@ namespace yy {
                     yylhs.value.as< SQLSetGroup* > () = yystack_[4].value.as< SQLSetGroup* > ();
                     yylhs.value.as< SQLSetGroup* > ()->push_back(thisValue);
                 }
-#line 1721 "sqlparser.cpp" // lalr1.cc:859
+#line 1853 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 41:
-#line 314 "sqlparser.yy" // lalr1.cc:859
+  case 46:
+#line 351 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLSelector* > () = new SQLSelector();
                     yylhs.value.as< SQLSelector* > ()->databaseName = yystack_[2].value.as< std::string > ();
                     yylhs.value.as< SQLSelector* > ()->tableName = yystack_[0].value.as< std::string > ();
                 }
-#line 1731 "sqlparser.cpp" // lalr1.cc:859
+#line 1863 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 42:
-#line 320 "sqlparser.yy" // lalr1.cc:859
+  case 47:
+#line 357 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLSelector* > () = new SQLSelector();
                     yylhs.value.as< SQLSelector* > ()->tableName = yystack_[0].value.as< std::string > ();
                 }
-#line 1740 "sqlparser.cpp" // lalr1.cc:859
+#line 1872 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 43:
-#line 327 "sqlparser.yy" // lalr1.cc:859
+  case 48:
+#line 364 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLSelectorGroup* > () = new SQLSelectorGroup();
                     yylhs.value.as< SQLSelectorGroup* > ()->allMatched = true;
                 }
-#line 1749 "sqlparser.cpp" // lalr1.cc:859
+#line 1881 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 44:
-#line 332 "sqlparser.yy" // lalr1.cc:859
+  case 49:
+#line 369 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLSelectorGroup* > () = yystack_[0].value.as< SQLSelectorGroup* > ();
                     yylhs.value.as< SQLSelectorGroup* > ()->allMatched = false;
                 }
-#line 1758 "sqlparser.cpp" // lalr1.cc:859
+#line 1890 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 45:
-#line 339 "sqlparser.yy" // lalr1.cc:859
+  case 50:
+#line 376 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLSelectorGroup* > () = new SQLSelectorGroup();
                     yylhs.value.as< SQLSelectorGroup* > ()->selectors.push_back(yystack_[0].value.as< SQLSelector* > ());
                 }
-#line 1767 "sqlparser.cpp" // lalr1.cc:859
+#line 1899 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 46:
-#line 344 "sqlparser.yy" // lalr1.cc:859
+  case 51:
+#line 381 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLSelectorGroup* > () = yystack_[2].value.as< SQLSelectorGroup* > ();
                     yylhs.value.as< SQLSelectorGroup* > ()->selectors.push_back(yystack_[0].value.as< SQLSelector* > ());
                 }
-#line 1776 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 47:
-#line 350 "sqlparser.yy" // lalr1.cc:859
-    { yylhs.value.as< SQLOperand > () = SQLOperand::EQUAL;         }
-#line 1782 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 48:
-#line 351 "sqlparser.yy" // lalr1.cc:859
-    { yylhs.value.as< SQLOperand > () = SQLOperand::NOT_EQUAL;     }
-#line 1788 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 49:
-#line 352 "sqlparser.yy" // lalr1.cc:859
-    { yylhs.value.as< SQLOperand > () = SQLOperand::LESS;          }
-#line 1794 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 50:
-#line 353 "sqlparser.yy" // lalr1.cc:859
-    { yylhs.value.as< SQLOperand > () = SQLOperand::GREATER;       }
-#line 1800 "sqlparser.cpp" // lalr1.cc:859
-    break;
-
-  case 51:
-#line 354 "sqlparser.yy" // lalr1.cc:859
-    { yylhs.value.as< SQLOperand > () = SQLOperand::LESS_EQUAL;    }
-#line 1806 "sqlparser.cpp" // lalr1.cc:859
+#line 1908 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 52:
-#line 355 "sqlparser.yy" // lalr1.cc:859
-    { yylhs.value.as< SQLOperand > () = SQLOperand::GREATER_EQUAL; }
-#line 1812 "sqlparser.cpp" // lalr1.cc:859
+#line 387 "sqlparser.yy" // lalr1.cc:859
+    { yylhs.value.as< SQLOperand > () = SQLOperand::EQUAL;         }
+#line 1914 "sqlparser.cpp" // lalr1.cc:859
     break;
 
   case 53:
-#line 359 "sqlparser.yy" // lalr1.cc:859
+#line 388 "sqlparser.yy" // lalr1.cc:859
+    { yylhs.value.as< SQLOperand > () = SQLOperand::NOT_EQUAL;     }
+#line 1920 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 54:
+#line 389 "sqlparser.yy" // lalr1.cc:859
+    { yylhs.value.as< SQLOperand > () = SQLOperand::LESS;          }
+#line 1926 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 55:
+#line 390 "sqlparser.yy" // lalr1.cc:859
+    { yylhs.value.as< SQLOperand > () = SQLOperand::GREATER;       }
+#line 1932 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 56:
+#line 391 "sqlparser.yy" // lalr1.cc:859
+    { yylhs.value.as< SQLOperand > () = SQLOperand::LESS_EQUAL;    }
+#line 1938 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 57:
+#line 392 "sqlparser.yy" // lalr1.cc:859
+    { yylhs.value.as< SQLOperand > () = SQLOperand::GREATER_EQUAL; }
+#line 1944 "sqlparser.cpp" // lalr1.cc:859
+    break;
+
+  case 58:
+#line 396 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLTableGroup* > () = new SQLTableGroup();
                     yylhs.value.as< SQLTableGroup* > ()->push_back(yystack_[0].value.as< std::string > ());
                 }
-#line 1821 "sqlparser.cpp" // lalr1.cc:859
+#line 1953 "sqlparser.cpp" // lalr1.cc:859
     break;
 
-  case 54:
-#line 364 "sqlparser.yy" // lalr1.cc:859
+  case 59:
+#line 401 "sqlparser.yy" // lalr1.cc:859
     {
                     yylhs.value.as< SQLTableGroup* > () = yystack_[2].value.as< SQLTableGroup* > ();
                     yylhs.value.as< SQLTableGroup* > ()->push_back(yystack_[0].value.as< std::string > ());
                 }
-#line 1830 "sqlparser.cpp" // lalr1.cc:859
+#line 1962 "sqlparser.cpp" // lalr1.cc:859
     break;
 
 
-#line 1834 "sqlparser.cpp" // lalr1.cc:859
+#line 1966 "sqlparser.cpp" // lalr1.cc:859
             default:
               break;
             }
@@ -1996,26 +2128,27 @@ namespace yy {
   }
 
 
-  const signed char SQLParser::yypact_ninf_ = -61;
+  const signed char SQLParser::yypact_ninf_ = -104;
 
   const signed char SQLParser::yytable_ninf_ = -1;
 
   const signed char
   SQLParser::yypact_[] =
   {
-     -61,     5,   -61,     6,    43,    45,   -26,   -20,     2,     8,
-      -4,    -7,   -61,    16,    19,    10,    25,    33,    34,   -61,
-     -61,   -61,   -61,    35,    37,    47,    28,   -61,   -61,    48,
-      30,   -61,   -61,   -61,    38,   -61,   -61,    52,    50,    49,
-      51,    53,    54,   -16,    41,    54,    39,   -24,   -61,   -61,
-     -21,   -61,    61,    36,     0,   -61,     7,    42,   -61,    56,
-       4,     7,    54,    55,    54,    57,    58,    59,    60,    62,
-      67,   -61,   -16,   -61,   -61,   -61,    22,   -61,    63,    54,
-      46,   -61,   -61,   -61,   -61,   -61,   -61,   -13,   -61,    56,
-      64,    56,   -61,    65,    66,    68,    70,    72,   -61,   -61,
-       7,     7,   -61,    74,   -61,   -61,   -61,     7,    69,    71,
-      73,    75,   -61,   -61,    26,   -61,   -61,   -61,   -61,   -61,
-     -61,   -61
+    -104,     2,  -104,     5,     9,    50,   -14,    -9,    19,    17,
+      33,   -23,  -104,    43,    44,    48,    49,    51,    52,  -104,
+    -104,  -104,  -104,    53,    54,    27,    29,  -104,  -104,    59,
+      55,  -104,  -104,  -104,    58,  -104,  -104,    66,    62,    57,
+      60,    63,    64,    40,    61,    64,    65,   -25,  -104,  -104,
+     -19,  -104,    74,    67,    26,    25,  -104,    -3,    68,  -104,
+      70,     3,    -3,    64,    69,    64,    73,    71,    64,    72,
+      75,    76,    78,  -104,    40,  -104,  -104,  -104,    30,  -104,
+      77,    64,    56,  -104,  -104,  -104,  -104,  -104,  -104,    13,
+    -104,    70,    79,    70,  -104,    82,  -104,   -20,    20,    81,
+      83,    85,    88,  -104,  -104,    -3,    -3,  -104,    95,  -104,
+    -104,  -104,    -3,    84,    64,  -104,    80,    -3,    86,    87,
+      89,  -104,  -104,    36,  -104,  -104,  -104,  -104,    -3,  -104,
+    -104,  -104,  -104,  -104,    39,  -104
   };
 
   const unsigned char
@@ -2023,94 +2156,102 @@ namespace yy {
   {
        2,     0,     1,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     3,     0,     0,     0,     0,     0,     0,     8,
-      10,     9,    13,     0,     0,     0,    42,    43,    45,     0,
-      44,     4,     5,     6,     0,     7,    12,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,    41,    53,
-       0,    46,     0,     0,     0,    14,     0,    22,    37,    23,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-      16,    11,     0,    32,    31,    30,     0,    28,     0,     0,
-       0,    48,    52,    51,    47,    50,    49,     0,    39,    24,
-       0,    25,    54,     0,     0,     0,     0,     0,    15,    26,
-       0,     0,    38,     0,    35,    34,    33,     0,     0,     0,
-       0,     0,    17,    29,     0,    36,    40,    18,    19,    21,
-      20,    27
+      10,     9,    13,     0,     0,     0,    47,    48,    50,     0,
+      49,     4,     5,     6,     0,     7,    12,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    46,    58,
+       0,    51,     0,     0,     0,     0,    14,     0,    23,    38,
+      24,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    16,    11,     0,    33,    32,    31,     0,    29,
+       0,     0,     0,    53,    57,    56,    52,    55,    54,     0,
+      44,    25,     0,    26,    59,     0,    42,     0,     0,     0,
+       0,     0,     0,    15,    27,     0,     0,    39,     0,    36,
+      35,    34,     0,     0,     0,    19,     0,     0,     0,     0,
+       0,    17,    30,     0,    37,    45,    18,    43,     0,    41,
+      20,    22,    21,    28,     0,    40
   };
 
   const signed char
   SQLParser::yypgoto_[] =
   {
-     -61,   -61,   -61,   -61,   -61,    20,   -61,   -61,   -61,    -8,
-     -60,    15,    -5,   -61,   -11,   -61,   -61,   -61,   -61
+    -104,  -104,  -104,  -104,  -104,    28,  -104,  -104,  -104,  -103,
+     -61,    32,     4,    11,  -104,  -104,   -11,  -104,  -104,    34,
+    -104
   };
 
   const signed char
   SQLParser::yydefgoto_[] =
   {
-      -1,     1,    12,    13,    54,    55,    70,    14,    57,    76,
-      77,    58,    59,    47,    60,    29,    30,    87,    50
+      -1,     1,    12,    13,    55,    56,    72,    14,    58,    78,
+      79,    59,    60,    96,    97,    47,    61,    29,    30,    89,
+      50
   };
 
   const unsigned char
   SQLParser::yytable_[] =
   {
-      28,    88,    52,    62,    73,     2,    64,    21,     3,     4,
-       5,     6,     7,    22,    15,    63,    16,    53,    65,    80,
-      26,    74,    75,    23,    73,     8,    26,   105,     9,    25,
-      10,    51,    24,    11,    81,    82,    83,    27,    71,    72,
-     113,    74,    75,    33,    84,    85,    86,   116,    67,    68,
-      69,    17,    31,    18,    19,    32,    20,    89,    34,    91,
-      99,   100,   103,   104,   121,   100,    35,    36,    37,    42,
-      38,    40,    41,    39,    44,    43,   106,    45,    56,    61,
-      66,    78,    46,    97,    48,    79,    49,    26,    90,   112,
-      92,   115,    98,   114,   102,    93,    94,    95,   108,    96,
-     101,   109,     0,   110,   107,   111,     0,   117,     0,   118,
-       0,   119,     0,   120
+      28,    90,     2,   123,    63,     3,     4,     5,     6,     7,
+      65,   114,    26,    15,    75,    16,    64,    17,    82,    18,
+     115,    21,    66,    27,     8,   134,    22,     9,   110,    10,
+      75,    51,    11,    76,    77,    83,    84,    85,    69,    70,
+      71,   116,    23,    24,   122,    86,    87,    88,    26,    76,
+      77,   125,    83,    84,    85,    39,   129,    98,    52,    19,
+      53,    20,    86,    87,    88,    73,    74,    91,    25,    93,
+     104,   105,   108,   109,    40,    54,   133,   105,   111,   135,
+     105,    31,    32,    33,    34,    41,    35,    36,    37,    38,
+      44,    45,    46,    67,   102,    48,    42,    43,    49,    26,
+      57,    81,   103,    98,    92,   121,    68,    62,    94,    80,
+      95,    99,   124,   107,   100,   101,   106,   113,   118,   128,
+     119,   112,   120,     0,   126,   127,   130,   131,     0,   132,
+       0,     0,   117
   };
 
-  const signed char
+  const short int
   SQLParser::yycheck_[] =
   {
-      11,    61,    18,    27,    17,     0,    27,    33,     3,     4,
-       5,     6,     7,    33,     8,    39,    10,    33,    39,    15,
-      33,    34,    35,    21,    17,    20,    33,    87,    23,    33,
-      25,    42,    24,    28,    30,    31,    32,    44,    38,    39,
-     100,    34,    35,    33,    40,    41,    42,   107,    12,    13,
-      14,     8,    36,    10,     9,    36,    11,    62,    33,    64,
-      38,    39,    16,    17,    38,    39,    33,    33,    33,    39,
-      33,    43,    24,    26,    22,    37,    87,    27,    37,    40,
-      19,    39,    33,    16,    33,    29,    33,    33,    33,    17,
-      33,    17,    72,   101,    79,    37,    37,    37,    33,    37,
-      37,    35,    -1,    35,    40,    35,    -1,    38,    -1,    38,
-      -1,    38,    -1,    38
+      11,    62,     0,   106,    29,     3,     4,     5,     6,     7,
+      29,    31,    35,     8,    17,    10,    41,     8,    15,    10,
+      40,    35,    41,    46,    22,   128,    35,    25,    89,    27,
+      17,    42,    30,    36,    37,    32,    33,    34,    12,    13,
+      14,    21,    23,    26,   105,    42,    43,    44,    35,    36,
+      37,   112,    32,    33,    34,    28,   117,    68,    18,     9,
+      20,    11,    42,    43,    44,    40,    41,    63,    35,    65,
+      40,    41,    16,    17,    45,    35,    40,    41,    89,    40,
+      41,    38,    38,    35,    35,    26,    35,    35,    35,    35,
+      24,    29,    35,    19,    16,    35,    41,    39,    35,    35,
+      39,    31,    74,   114,    35,    17,    39,    42,    35,    41,
+      39,    39,    17,    81,    39,    39,    39,    35,    37,    39,
+      37,    42,    37,    -1,    40,   114,    40,    40,    -1,    40,
+      -1,    -1,    98
   };
 
   const unsigned char
   SQLParser::yystos_[] =
   {
-       0,    46,     0,     3,     4,     5,     6,     7,    20,    23,
-      25,    28,    47,    48,    52,     8,    10,     8,    10,     9,
-      11,    33,    33,    21,    24,    33,    33,    44,    59,    60,
-      61,    36,    36,    33,    33,    33,    33,    33,    33,    26,
-      43,    24,    39,    37,    22,    27,    33,    58,    33,    33,
-      63,    59,    18,    33,    49,    50,    37,    53,    56,    57,
-      59,    40,    27,    39,    27,    39,    19,    12,    13,    14,
-      51,    38,    39,    17,    34,    35,    54,    55,    39,    29,
-      15,    30,    31,    32,    40,    41,    42,    62,    55,    57,
-      33,    57,    33,    37,    37,    37,    37,    16,    50,    38,
-      39,    37,    56,    16,    17,    55,    59,    40,    33,    35,
-      35,    35,    17,    55,    54,    17,    55,    38,    38,    38,
-      38,    38
+       0,    48,     0,     3,     4,     5,     6,     7,    22,    25,
+      27,    30,    49,    50,    54,     8,    10,     8,    10,     9,
+      11,    35,    35,    23,    26,    35,    35,    46,    63,    64,
+      65,    38,    38,    35,    35,    35,    35,    35,    35,    28,
+      45,    26,    41,    39,    24,    29,    35,    62,    35,    35,
+      67,    63,    18,    20,    35,    51,    52,    39,    55,    58,
+      59,    63,    42,    29,    41,    29,    41,    19,    39,    12,
+      13,    14,    53,    40,    41,    17,    36,    37,    56,    57,
+      41,    31,    15,    32,    33,    34,    42,    43,    44,    66,
+      57,    59,    35,    59,    35,    39,    60,    61,    63,    39,
+      39,    39,    16,    52,    40,    41,    39,    58,    16,    17,
+      57,    63,    42,    35,    31,    40,    21,    66,    37,    37,
+      37,    17,    57,    56,    17,    57,    40,    60,    39,    57,
+      40,    40,    40,    40,    56,    40
   };
 
   const unsigned char
   SQLParser::yyr1_[] =
   {
-       0,    45,    46,    46,    47,    47,    48,    48,    48,    48,
-      48,    48,    48,    48,    49,    49,    50,    50,    50,    51,
-      51,    51,    52,    52,    52,    52,    53,    53,    54,    54,
-      55,    55,    55,    56,    56,    56,    56,    57,    57,    58,
-      58,    59,    59,    60,    60,    61,    61,    62,    62,    62,
-      62,    62,    62,    63,    63
+       0,    47,    48,    48,    49,    49,    50,    50,    50,    50,
+      50,    50,    50,    50,    51,    51,    52,    52,    52,    52,
+      53,    53,    53,    54,    54,    54,    54,    55,    55,    56,
+      56,    57,    57,    57,    58,    58,    58,    58,    59,    59,
+      60,    60,    61,    61,    62,    62,    63,    63,    64,    64,
+      65,    65,    66,    66,    66,    66,    66,    66,    67,    67
   };
 
   const unsigned char
@@ -2118,10 +2259,10 @@ namespace yy {
   {
        0,     2,     0,     2,     2,     2,     3,     3,     2,     2,
        2,     6,     3,     2,     1,     3,     2,     4,     5,     4,
-       4,     4,     5,     5,     6,     6,     3,     5,     1,     3,
-       1,     1,     1,     3,     3,     3,     4,     1,     3,     3,
-       5,     3,     1,     1,     1,     1,     3,     1,     1,     1,
-       1,     1,     1,     1,     3
+       4,     4,     4,     5,     5,     6,     6,     3,     5,     1,
+       3,     1,     1,     1,     3,     3,     3,     4,     1,     3,
+       5,     3,     1,     3,     3,     5,     3,     1,     1,     1,
+       1,     3,     1,     1,     1,     1,     1,     1,     1,     3
   };
 
 
@@ -2133,26 +2274,26 @@ namespace yy {
   {
   "$end", "error", "$undefined", "CREATE", "DROP", "SHOW", "USE", "DESC",
   "DATABASE", "DATABASES", "TABLE", "TABLES", "INT", "VARCHAR", "CHAR",
-  "IS", "NOT", "NUL", "PRIMARY", "KEY", "INSERT", "INTO", "VALUES",
-  "DELETE", "FROM", "UPDATE", "SET", "WHERE", "SELECT", "AND", "NOT_EQUAL",
-  "GREATER_EQUAL", "LESS_EQUAL", "IDENTIFIER", "VALUE_STRING", "VALUE_INT",
-  "';'", "'('", "')'", "','", "'='", "'>'", "'<'", "'.'", "'*'", "$accept",
-  "Program", "Stmt", "SysStmt", "FieldList", "Field", "Type", "QueryStmt",
-  "ValueLists", "ValueList", "Value", "WhereClause", "WhereClauseList",
-  "SetClause", "Column", "Selector", "SelectorList", "Operand",
-  "TableList", YY_NULLPTR
+  "IS", "NOT", "NUL", "PRIMARY", "KEY", "CHECK", "IN", "INSERT", "INTO",
+  "VALUES", "DELETE", "FROM", "UPDATE", "SET", "WHERE", "SELECT", "AND",
+  "NOT_EQUAL", "GREATER_EQUAL", "LESS_EQUAL", "IDENTIFIER", "VALUE_STRING",
+  "VALUE_INT", "';'", "'('", "')'", "','", "'='", "'>'", "'<'", "'.'",
+  "'*'", "$accept", "Program", "Stmt", "SysStmt", "FieldList", "Field",
+  "Type", "QueryStmt", "ValueLists", "ValueList", "Value", "WhereClause",
+  "WhereClauseList", "CheckClause", "CheckClauseList", "SetClause",
+  "Column", "Selector", "SelectorList", "Operand", "TableList", YY_NULLPTR
   };
 
 
   const unsigned short int
   SQLParser::yyrline_[] =
   {
-       0,    78,    78,    79,    85,    89,    95,    99,   103,   107,
-     111,   115,   119,   123,   129,   134,   141,   146,   152,   160,
-     166,   172,   180,   184,   188,   192,   198,   203,   209,   214,
-     221,   227,   233,   240,   251,   261,   270,   281,   286,   293,
-     302,   313,   319,   326,   331,   338,   343,   350,   351,   352,
-     353,   354,   355,   358,   363
+       0,    81,    81,    82,    88,    92,    98,   102,   106,   110,
+     114,   118,   122,   126,   132,   137,   144,   149,   155,   161,
+     169,   175,   181,   189,   193,   197,   201,   207,   212,   218,
+     223,   230,   236,   242,   249,   260,   270,   279,   290,   295,
+     302,   308,   318,   323,   330,   339,   350,   356,   363,   368,
+     375,   380,   387,   388,   389,   390,   391,   392,   395,   400
   };
 
   // Print the state stack on the debug stream.
@@ -2197,9 +2338,9 @@ namespace yy {
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      37,    38,    44,     2,    39,     2,    43,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    36,
-      42,    40,    41,     2,     2,     2,     2,     2,     2,     2,
+      39,    40,    46,     2,    41,     2,    45,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    38,
+      44,    42,    43,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -2222,9 +2363,9 @@ namespace yy {
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35
+      35,    36,    37
     };
-    const unsigned int user_token_number_max_ = 290;
+    const unsigned int user_token_number_max_ = 292;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int>(t) <= yyeof_)
@@ -2237,8 +2378,8 @@ namespace yy {
 
 
 } // yy
-#line 2241 "sqlparser.cpp" // lalr1.cc:1167
-#line 370 "sqlparser.yy" // lalr1.cc:1168
+#line 2382 "sqlparser.cpp" // lalr1.cc:1167
+#line 407 "sqlparser.yy" // lalr1.cc:1168
 
 
 
