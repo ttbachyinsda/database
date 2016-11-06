@@ -32,6 +32,7 @@ public:
     void setfilename(string filename);
     bool checkInsert(vector<string> data);
     void readindex();
+    void Nullindex();
     void createemptyindex(int i);
     vector<string> checkOutput();
     virtual bool FastModify(int pagenum, int pageposition, Record* rec) = 0;

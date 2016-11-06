@@ -42,9 +42,11 @@ cout<<"Now end "<<"testment"<<endl;
     if (!UIC::equal(temp, ob1.data(), 4) || havecreatetable) {
         PackageHeadFile(b);
         BPM->markDirty(index);
+        Nullindex();
     } else {
         PackageFromHeadFile(b);
         BPM->access(index);
+        readindex();
     }
     free(temp);
     haveinitialize = true;
@@ -90,7 +92,6 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
         free(nullable);
         free(canmulti);
     }
-
     MaxRecordSize = UIC::readint(b, position);
     if (reservedSizeInPage != NULL)
         delete[] reservedSizeInPage;
@@ -128,7 +129,6 @@ void FlexibleTable::PackageHeadFile(BufType b)
         UIC::writeint(b,position,column[i]->getconditionsize());
         column[i]->writecondition(b + position, position);
     }
-    readindex();
     UIC::writeint(b, position, MaxRecordSize);
     for (int i = 0; i < MaxRecordSize; i++)
         UIC::writeint(b, position, reservedSizeInPage[i]);
@@ -149,7 +149,6 @@ void FlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> clt
         column[i] = cltype[i];
         multivalue[i]=true;
     }
-    readindex();
     this->PageNum = 0;
     this->MaxRecordSize = max((PAGE_SIZE - totalheadsize - 16) / 4, 0);
     if (this->reservedSizeInPage != NULL)
