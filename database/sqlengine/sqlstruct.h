@@ -5,6 +5,9 @@
 #include <vector>
 #include <list>
 
+struct SQLCheck;
+typedef std::vector<SQLCheck*> SQLCheckGroup;
+
 struct SQLType
 {
     // Not using enumerate type for future efficiency considerations
@@ -155,7 +158,5 @@ struct SQLCheck
     SQLOperand operand;
     SQLValue value;
 };
-
-typedef std::vector<SQLCheck*> SQLCheckGroup;
 
 #endif // SQLSTRUCT_H
