@@ -1,5 +1,13 @@
 使用说明：
 
+2.0.9变化：
+
+使windows、linux和mac平台均可编译运行所有文件，且不会污染其他平台。注意sqlengine文件夹下的makefile.win是专为windows系统编译使用的，在windows系统下使用make -f makefile.wim 就可以生成windows的版本，在linux和mac系统下使用make 可以生成linux和mac的版本。
+
+合并了底层、索引、语句处理三个模块
+
+修复了一些bug
+
 2.0.8进行了大量的改动，包括如下：
 
 1.加入了varchar类型，可以存储变长字符串
