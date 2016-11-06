@@ -1,0 +1,6 @@
+all: parser lexer
+parser: sqlparser.yy
+	..\bin\win_bison -d -v sqlparser.yy
+
+lexer: sqllexer.l
+	..\bin\win_flex -s --outfile=sqllexer.cpp  $<
