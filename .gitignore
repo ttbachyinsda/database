@@ -6,3 +6,8 @@ build-database-Desktop*/
 .idea/
 CMakeLists.txt
 Makefile
+
+sqlparser.cpp
+sqlparser.hpp
+sqlparser.output
+sqllexer.cpp
