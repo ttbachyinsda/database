@@ -35,7 +35,11 @@ SOURCES += main.cpp\
     databasehandler/flexibletable.cpp \
     recordhandler/flexiblerecord.cpp \
     managementhandler/flexibleiterator.cpp \
-    tester/testflexible.cpp
+    tester/testflexible.cpp \
+    DBIndex/bplus_tree.cpp \
+    DBIndex/db_index.cpp \
+    DBIndex/test.cpp \
+    DBIndex/testIndex.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -66,7 +70,11 @@ HEADERS  += mainwindow.h \
     databasehandler/flexibletable.h \
     recordhandler/flexiblerecord.h \
     managementhandler/flexibleiterator.h \
-    tester/testflexible.h
+    tester/testflexible.h \
+    DBIndex/bplus_node.h \
+    DBIndex/bplus_tree.h \
+    DBIndex/db_index.h \
+    DBIndex/predefined.h
 
 FORMS    += mainwindow.ui
 
