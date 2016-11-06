@@ -12,6 +12,8 @@
 using namespace std;
 #ifdef __linux
 #define PARA O_RDWR
+#elif __APPLE__
+#define PARA O_RDWR
 #else
 #define PARA O_RDWR|O_BINARY
 #endif
