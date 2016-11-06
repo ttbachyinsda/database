@@ -9,8 +9,6 @@
 #include "bplus_node.h"
 #include "predefined.h"
 
-namespace bpt {
-
 /* offsets */
 #define OFFSET_META 0
 #define OFFSET_BLOCK OFFSET_META + sizeof(head_t)
@@ -37,13 +35,17 @@ class bplus_tree {
     bplus_tree(const char *path, bool force_empty = false,
                bool multi_value = false);
 
+    ~bplus_tree() {
+        fclose(fp);
+    }
+
     /* abstract operations */
-    int search(const key_t &key, value_t *value) const;
-    int search_range(const key_t &left, const key_t &right, value_t *values,
+    int search(const index_key &key, index_value *value) const;
+    int search_range(const index_key &left, const index_key &right, index_value *values,
                      size_t max) const;
-    int remove(const key_t &key);
-    int insert(const key_t &key, value_t value);
-    int update(const key_t &key, value_t value);
+    int remove(const index_key &key);
+    int insert(const index_key &key, index_value value);
+    int update(const index_key &key, index_value value);
 
     void set_MultiValue(bool multi_value) { this->multi_value = multi_value; };
     head_t get_head() const { return head; };
@@ -57,22 +59,22 @@ class bplus_tree {
     void init_from_empty();
 
     /* find index */
-    off_t search_index(const key_t &key) const;
-    off_t search_index_l(const key_t &key) const;
+    off_t search_index(const index_key &key) const;
+    off_t search_index_l(const index_key &key) const;
 
     /* find leaf */
-    off_t search_leaf_l(off_t index, const key_t& key) const;
-    off_t search_leaf_l(const key_t &key) const {
+    off_t search_leaf_l(off_t index, const index_key &key) const;
+    off_t search_leaf_l(const index_key &key) const {
         return search_leaf_l(search_index_l(key), key);
     }
-    off_t search_leaf(off_t index, const key_t &key) const;
-    off_t search_leaf(const key_t &key) const {
+    off_t search_leaf(off_t index, const index_key &key) const;
+    off_t search_leaf(const index_key &key) const {
         return search_leaf(search_index(key), key);
     }
 
     /* remove internal node */
     void remove_from_index(off_t offset, internal_node_t &node,
-                           const key_t &key);
+                           const index_key &key);
 
     /* borrow one key from other internal node */
     bool borrow_key(bool from_right, internal_node_t &borrower, off_t offset);
@@ -81,7 +83,7 @@ class bplus_tree {
     bool borrow_key(bool from_right, leaf_node_t &borrower);
 
     /* change one's parent key to another key */
-    void change_parent_child(off_t parent, const key_t &o, const key_t &n);
+    void change_parent_child(off_t parent, const index_key &o, const index_key &n);
 
     /* merge right leaf to left leaf */
     void merge_leafs(leaf_node_t *left, leaf_node_t *right);
@@ -90,13 +92,13 @@ class bplus_tree {
                     internal_node_t &right);
 
     /* insert into leaf without split */
-    void insert_record_no_split(leaf_node_t *leaf, const key_t &key,
-                                const value_t &value);
+    void insert_record_no_split(leaf_node_t *leaf, const index_key &key,
+                                const index_value &value);
 
     /* add key to the internal node */
-    void insert_key_to_index(off_t offset, const key_t &key, off_t value,
+    void insert_index_keyo_index(off_t offset, const index_key &key, off_t value,
                              off_t after);
-    void insert_key_to_index_no_split(internal_node_t &node, const key_t &key,
+    void insert_index_keyo_index_no_split(internal_node_t &node, const index_key &key,
                                       off_t value);
 
     /* change children's parent */
@@ -110,7 +112,7 @@ class bplus_tree {
     void node_remove(T *prev, T *node);
 
     /* multi-level file open/close */
-    mutable FILE *fp;
+    mutable FILE * fp = 0;
     mutable int fp_level;
     void open_file(const char *mode = "rb+") const {
         // `rb+` will make sure we can write everywhere without truncating
@@ -181,6 +183,5 @@ class bplus_tree {
         return block_write(block, offset, sizeof(T));
     }
 };
-}
 
 #endif /* end of BPT_H */

@@ -9,8 +9,6 @@
 #include <stdio.h>
 #include "predefined.h"
 
-namespace bpt {
-
 struct bplus_node {
     off_t parent; /* parent node offset */
     off_t next;
@@ -19,27 +17,26 @@ struct bplus_node {
 };
 
 struct index_t {
-    key_t key;
+    index_key key;
     off_t child; /* child's offset */
 };
 
 struct record_t {
-    key_t key;
+    index_key key;
 
-    value_t value;
+    index_value value;
 };
 
-struct internal_node_t : public bplus_node{
+struct internal_node_t : public bplus_node {
     typedef index_t *child_t;
 
     index_t children[CHILDREN_NUM];
 };
 
-struct leaf_node_t : public bplus_node{
+struct leaf_node_t : public bplus_node {
     typedef record_t *child_t;
 
     record_t children[CHILDREN_NUM];
 };
-}
 
 #endif  // DBINDEX_BPLUS_NODE_H
