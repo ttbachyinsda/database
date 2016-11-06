@@ -57,7 +57,7 @@ protected:
     void clearcolumn();
     void clearindex();
     void InsertindexAt(int num,char* insertdata,int datalen,int pagenum,int pageposition);
-    void ModifyindexAt(int num,char* modifydata,int datalen,int pagenum,int pageposition);
+    void ModifyindexAt(int num,char* modifydata,int datalen,int prepagenum,int prepageposition,int newpagenum,int newpageposition);
     void DeleteindexAt(int num,char* deletedata,int datalen,int pagenum,int pageposition);
     string name;
     string filename;
