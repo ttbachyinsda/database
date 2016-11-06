@@ -25,7 +25,7 @@ public:
     bool writecondition(char* input, int& position);
     void initialize(DataBaseType* input);
     int stringtoint(string text);
-    virtual bool read(char* input, int& position) = 0;
+    virtual bool read(char* input,int inputlen, int& position) = 0;
     virtual bool write(char* output, int& position) = 0;
     virtual bool checkRight(string input) = 0;
     virtual bool checkRight(string input, bool inputisnull) = 0;

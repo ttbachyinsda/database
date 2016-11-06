@@ -39,7 +39,15 @@ SOURCES += main.cpp\
     sqlengine/sqlaction.cpp \
     sqlengine/sqlstruct.cpp \
     queryhandler/querycondition.cpp \
-    queryhandler/queryexecuter.cpp
+    queryhandler/queryexecuter.cpp \
+    databasehandler/flexibletable.cpp \
+    recordhandler/flexiblerecord.cpp \
+    managementhandler/flexibleiterator.cpp \
+    tester/testflexible.cpp \
+    DBIndex/bplus_tree.cpp \
+    DBIndex/db_index.cpp \
+    DBIndex/test.cpp \
+    DBIndex/testIndex.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -77,7 +85,15 @@ HEADERS  += mainwindow.h \
     sqlengine/sqlaction.h \
     sqlengine/sqlstruct.h \
     queryhandler/querycondition.h \
-    queryhandler/queryexecuter.h
+    queryhandler/queryexecuter.h \
+    databasehandler/flexibletable.h \
+    recordhandler/flexiblerecord.h \
+    managementhandler/flexibleiterator.h \
+    tester/testflexible.h \
+    DBIndex/bplus_node.h \
+    DBIndex/bplus_tree.h \
+    DBIndex/db_index.h \
+    DBIndex/predefined.h
 
 FORMS    += mainwindow.ui
 

@@ -25,7 +25,7 @@ void FixedSizeRecord::Input(char* input)
         int position = ((i == 0) ? 0 : columnsize[i - 1]);
         //int nowsize = ((i == 0) ? columnsize[0] : columnsize[i] - columnsize[i - 1]);
         int index = 0;
-        columns[i]->read(input + position, index);
+        columns[i]->read(input + position,columns[i]->getSize(), index);
     }
     memcpy(this->data, input, this->size);
 }

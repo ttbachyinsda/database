@@ -112,7 +112,7 @@ int DatabaseChar::getRealSize()
 }
 int DatabaseChar::getMaxSize()
 {
-    return this->size;
+    return this->size + 1;
 }
 /* Don't try to use them in a public method. Try to use checkRight or
  * checkRightAndChange instead.
@@ -237,7 +237,7 @@ string DatabaseChar::output()
 DatabaseChar::~DatabaseChar()
 {
 }
-bool DatabaseChar::read(char* input, int& position)
+bool DatabaseChar::read(char* input, int inputlen,int& position)
 {
     memcpy(data, input, this->size + 1);
     position += this->size + 1;

@@ -1,18 +1,16 @@
-#include "fixedsizetable.h"
+#include "flexibletable.h"
 
-FixedSizeTable::FixedSizeTable()
+FlexibleTable::FlexibleTable()
 {
     this->PageNum = 0;
     this->MaxRecordSize = 0;
-    this->MaxRowNum = 0;
-    this->RowSize = 0;
-    this->RowNumInPage = NULL;
+    this->reservedSizeInPage = NULL;
 }
-int FixedSizeTable::getPageNum() { return PageNum; }
-int FixedSizeTable::getMaxRowNum() { return MaxRowNum; }
-int FixedSizeTable::getRowSize() { return RowSize; }
+int FlexibleTable::getPageNum() { return PageNum; }
+int FlexibleTable::getMaxRowNum() { return 0; }
+int FlexibleTable::getRowSize() { return 0; }
 
-bool FixedSizeTable::Initialize()
+bool FlexibleTable::Initialize()
 {
     FM = new FileManager;
     bool canopen = FM->openFile(filename.data(), fileid);
@@ -53,11 +51,9 @@ cout<<"Now end "<<"testment"<<endl;
     return true;
 }
 
-void FixedSizeTable::PackageFromHeadFile(BufType b)
+void FlexibleTable::PackageFromHeadFile(BufType b)
 {
     FileIterator position = 4;
-    RowSize = UIC::readint(b, position);
-    MaxRowNum = UIC::readint(b, position);
     int namelen = UIC::readint(b, position);
     name = UIC::readstring(b, position, namelen);
     PageNum = UIC::readint(b, position);
@@ -86,19 +82,17 @@ void FixedSizeTable::PackageFromHeadFile(BufType b)
     }
 
     MaxRecordSize = UIC::readint(b, position);
-    if (RowNumInPage != NULL)
-        delete[] RowNumInPage;
-    RowNumInPage = new int[MaxRecordSize];
+    if (reservedSizeInPage != NULL)
+        delete[] reservedSizeInPage;
+    reservedSizeInPage = new int[MaxRecordSize];
     for (int i = 0; i < MaxRecordSize; i++)
-        RowNumInPage[i] = UIC::readint(b, position);
+        reservedSizeInPage[i] = UIC::readint(b, position);
 }
-void FixedSizeTable::PackageHeadFile(BufType b)
+void FlexibleTable::PackageHeadFile(BufType b)
 {
     FileIterator position = 0;
     string temp = "HEAD";
     UIC::writechar(b, position, temp.data(), 4);
-    UIC::writeint(b, position, RowSize);
-    UIC::writeint(b, position, MaxRowNum);
     int namelen = name.length();
     UIC::writeint(b, position, namelen);
     UIC::writechar(b, position, name.data(), namelen);
@@ -112,7 +106,7 @@ void FixedSizeTable::PackageHeadFile(BufType b)
         char* nullable = (char*)malloc(4);
         UIC::convert(column[i], temptype, nullable);
         UIC::writechar(b, position, temptype, 4);
-        UIC::writeint(b, position, column[i]->getSize());
+        UIC::writeint(b, position, column[i]->getMaxSize());
         UIC::writechar(b, position, nullable, 4);
         free(temptype);
         free(nullable);
@@ -120,15 +114,14 @@ void FixedSizeTable::PackageHeadFile(BufType b)
     }
     UIC::writeint(b, position, MaxRecordSize);
     for (int i = 0; i < MaxRecordSize; i++)
-        UIC::writeint(b, position, RowNumInPage[i]);
+        UIC::writeint(b, position, reservedSizeInPage[i]);
 }
 
-void FixedSizeTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
+void FlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
 {
     remove(this->filename.c_str());
-    int totalheadsize = 4 * 4 + 4 * 3 + name.length();
+    int totalheadsize = 4 * 2 + 4 * 3 + name.length();
     this->clearcolumn();
-    this->RowSize = 0;
     this->columncount = clname.size();
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
@@ -136,84 +129,160 @@ void FixedSizeTable::createTable(vector<string> clname, vector<DataBaseType*> cl
         totalheadsize += clname[i].length() + 4 * 4 + cltype[i]->getconditionsize();
         columnname[i] = clname[i];
         column[i] = cltype[i];
-        this->RowSize += cltype[i]->getSize();
     }
-    this->MaxRowNum = (PAGE_SIZE - 8) / this->RowSize;
     this->PageNum = 0;
     this->MaxRecordSize = max((PAGE_SIZE - totalheadsize - 16) / 4, 0);
-    if (this->RowNumInPage != NULL)
-        delete[] RowNumInPage;
-    RowNumInPage = new int[MaxRecordSize];
+    if (this->reservedSizeInPage != NULL)
+        delete[] reservedSizeInPage;
+    reservedSizeInPage = new int[MaxRecordSize];
     for (int i = 0; i < this->MaxRecordSize; i++)
-        this->RowNumInPage[i] = 0;
+        this->reservedSizeInPage[i] = PAGE_SIZE-16;
     havecreatetable = true;
 }
-char* FixedSizeTable::Packager()
+char* FlexibleTable::Packager(int totalsize)
 {
-    char* temp = (char*)malloc(this->RowSize);
-    int nowsize = 0;
+    char* temp = (char*)malloc(totalsize);
+    UIC::inttochar(totalsize,temp);
+    int nowsize = 4;
     for (int i = 0; i < columncount; i++) {
-        memcpy(temp + nowsize, column[i]->getdata(), column[i]->getSize());
-        nowsize += column[i]->getSize();
+        int csize=column[i]->getSize();
+        UIC::inttochar(csize,temp+nowsize);
+        nowsize += 4;
+        memcpy(temp + nowsize, column[i]->getdata(), csize);
+        nowsize += csize;
     }
     return temp;
 }
-bool FixedSizeTable::InsertAt(int pagenum, char* insertdata, int& rownum)
+void FlexibleTable::Reconstruct(int pagenum, BufType b)
+{
+    int pagerownum = 0;
+    int reservedsize = 0;
+    int reservedpointer = 0;
+    pagerownum = UIC::chartoint(b + 4);
+    reservedsize = UIC::chartoint(b+8);
+    reservedpointer = UIC::chartoint(b+12);
+    char ** temprecord = new char*[pagerownum];
+    for (int i=0;i<pagerownum;i++)
+    {
+        temprecord[i]=getat(b,UIC::chartoint(b+__position(i)));
+    }
+    reservedpointer=16;
+    reservedsize = PAGE_SIZE-16;
+    int nowrownum=0;
+    for (int i=0;i<pagerownum;i++)
+        if (temprecord[i]!=NULL)
+        {
+            int datalen=UIC::chartoint(temprecord[i]);
+            putat(b,reservedpointer,nowrownum,temprecord[i]);
+            reservedpointer += datalen;
+            reservedsize -= datalen+4;
+            nowrownum++;
+        }
+    UIC::inttochar(pagerownum, b + 4);
+    UIC::inttochar(reservedsize,b+8);
+    UIC::inttochar(reservedpointer,b+12);
+    if (pagenum < this->MaxRecordSize) {
+        this->reservedSizeInPage[pagenum] = reservedsize;
+    }
+    for (int i=0;i<pagerownum;i++)
+        if (temprecord[i]!=NULL)
+            free(temprecord[i]);
+    delete[] temprecord;
+}
+char* FlexibleTable::getat(BufType b, int pageposition)
+{
+    if (pageposition==0) return NULL;
+    int recordsize=UIC::chartoint(b+pageposition);
+    char* temprecord = (char*)malloc(recordsize);
+    memcpy(temprecord,b+pageposition,recordsize);
+    return temprecord;
+}
+void FlexibleTable::putat(BufType b, int pageposition, int rownum, char *data)
+{
+    int datalen=UIC::chartoint(data);
+    memcpy(b+pageposition,data,datalen);
+    UIC::inttochar(pageposition,b+__position(rownum));
+}
+
+bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rowposition)
 {
     if (pagenum == 0)
         return false;
     int nowindex = 0;
     BufType b = BPM->getPage(fileid, pagenum, nowindex);
-    int position = 0;
     int pagerownum = 0;
+    int reservedsize = 0;
+    int reservedpointer = 0;
     char* temp = (char*)malloc(4);
     string option1 = "PAGE";
     char* option2 = (char*)malloc(4);
     memset(option2, 0, 4);
-    memcpy(temp, b + position, 4);
+    memcpy(temp, b, 4);
     if (UIC::equal(temp, option1.data(), 4)) {
-        pagerownum = UIC::chartoint(b + position + 4);
+        pagerownum = UIC::chartoint(b + 4);
+        reservedsize = UIC::chartoint(b+8);
+        reservedpointer = UIC::chartoint(b+12);
     } else if (UIC::equal(temp, option2, 4)) {
-        memcpy(b + position, option1.data(), 4);
-        UIC::inttochar(0, b + position + 4);
+        memcpy(b, option1.data(), 4);
         pagerownum = 0;
+        reservedsize = PAGE_SIZE-16;
+        reservedpointer = 16;
+        UIC::inttochar(pagerownum, b + 4);
+        UIC::inttochar(reservedsize,b+8);
+        UIC::inttochar(reservedpointer,b+12);
+
     } else {
         // cout<<"ERROR:: ????"<<endl;
-        memcpy(b + position, option1.data(), 4);
-        UIC::inttochar(0, b + position + 4);
+        memcpy(b , option1.data(), 4);
         pagerownum = 0;
+        reservedsize = PAGE_SIZE-16;
+        reservedpointer = 16;
+        UIC::inttochar(pagerownum, b  + 4);
+        UIC::inttochar(reservedsize,b+8);
+        UIC::inttochar(reservedpointer,b+12);
     }
     free(temp);
     free(option2);
-    if (pagerownum == this->MaxRowNum)
+    int datalen=UIC::chartoint(insertdata);
+    if (datalen>reservedsize)
         return false;
-    position += 8 + this->RowSize * pagerownum;
-    rownum = pagerownum;
-    memcpy(b + position, insertdata, this->RowSize);
-    pagerownum++;
-    UIC::inttochar(pagerownum, b + 4);
-    if (pagenum < this->MaxRecordSize) {
-        this->RowNumInPage[pagenum]++;
+    if (reservedsize>PAGE_SIZE-pagerownum*4-reservedpointer)
+    {
+        Reconstruct(pagenum,b);
+        pagerownum = UIC::chartoint(b + 4);
+        reservedsize = UIC::chartoint(b+8);
+        reservedpointer = UIC::chartoint(b+12);
     }
+    putat(b,reservedpointer,pagerownum,insertdata);
+    datalen=UIC::chartoint(b+reservedpointer);
+    pagerownum++;
+    reservedsize -= datalen+4;
+    reservedpointer += datalen;
+    UIC::inttochar(pagerownum, b + 4);
+    UIC::inttochar(reservedsize,b+8);
+    UIC::inttochar(reservedpointer,b+12);
+    if (pagenum < this->MaxRecordSize) {
+        this->reservedSizeInPage[pagenum] = reservedsize;
+    }
+    rowposition=reservedpointer;
     BPM->markDirty(nowindex);
     return true;
 }
-bool FixedSizeTable::modifypd(int pagenum, int rownum, BufType& ct,
+bool FlexibleTable::modifypd(int pagenum, int rownum, BufType& ct,
     int& newindex, int& pagenewnum)
 {
     if (pagenum > this->PageNum || pagenum == 0)
         return false;
     int nowindex = 0;
     BufType b = BPM->getPage(fileid, pagenum, nowindex);
-    int position = 0;
     int pagerownum = 0;
     char* temp = (char*)malloc(4);
     string option1 = "PAGE";
     char* option2 = (char*)malloc(4);
     memset(option2, 0, 4);
-    memcpy(temp, b + position, 4);
+    memcpy(temp, b, 4);
     if (UIC::equal(temp, option1.data(), 4)) {
-        pagerownum = UIC::chartoint(b + position + 4);
+        pagerownum = UIC::chartoint(b + 4);
     } else if (UIC::equal(temp, option2, 4)) {
         free(temp);
         free(option2);
@@ -236,91 +305,79 @@ bool FixedSizeTable::modifypd(int pagenum, int rownum, BufType& ct,
     return true;
 }
 
-bool FixedSizeTable::DeleteAt(int pagenum, int rownum)
+bool FlexibleTable::DeleteAt(int pagenum, int rownum)
 {
     BufType b;
     int nowindex, pagerownum;
     if (!modifypd(pagenum, rownum, b, nowindex, pagerownum))
         return false;
-    int position1 = 8 + this->RowSize * (pagerownum - 1);
-    int position2 = 8 + this->RowSize * rownum;
-    char* temp = (char*)malloc(this->RowSize);
-    memcpy(temp, b + position1, this->RowSize);
-    memcpy(b + position2, temp, this->RowSize);
+    int realnum=-1,position;
+    int i;
+    for (i=0;i<pagerownum;i++)
+    {
+        position=UIC::chartoint(b+__position(i));
+        if (position!=0)
+        {
+            realnum++;
+            if (realnum==rownum) break;
+        }
+    }
+    if (realnum!=rownum) return false;
+    int newposition=0,currentsize;
+    UIC::inttochar(newposition,b+__position(i));
+    currentsize=UIC::chartoint(b+position);
+    int reservedsize = UIC::chartoint(b+8);
+    reservedsize -= currentsize+4;
     pagerownum--;
     UIC::inttochar(pagerownum, b + 4);
+    UIC::inttochar(reservedsize,b+8);
     if (pagenum < this->MaxRecordSize) {
-        this->RowNumInPage[pagenum]--;
+        this->reservedSizeInPage[pagenum]=reservedsize;
     }
     BPM->markDirty(nowindex);
-    free(temp);
     return true;
 }
-void FixedSizeTable::UnPackager(BufType b, int position)
-{
-    // cout<<"unpack position="<<position<<endl;
-    char* temp = (char*)malloc(this->RowSize);
-    memcpy(temp, b + position, this->RowSize);
-    int totalsize = 0;
-    for (int i = 0; i < columncount; i++) {
-        // cout<<"unpacker at:"<<totalsize<<endl;
-        column[i]->read(temp + totalsize,column[i]->getSize(),totalsize);
-    }
-    free(temp);
-}
-FixedSizeTable::~FixedSizeTable()
+FlexibleTable::~FlexibleTable()
 {
     int index = 0;
     BufType b = BPM->getPage(fileid, 0, index);
     PackageHeadFile(b);
     BPM->markDirty(index);
-    if (RowNumInPage != NULL)
-        delete[] RowNumInPage;
+    if (reservedSizeInPage != NULL)
+        delete[] reservedSizeInPage;
 }
-bool FixedSizeTable::Modify(int pagenum, int rownum)
+bool FlexibleTable::Modify(int pagenum, int rownum)
 {
-    BufType b;
-    int nowindex, pagerownum;
-    if (!modifypd(pagenum, rownum, b, nowindex, pagerownum))
-        return false;
-    char* temp = Packager();
-    int position2 = 8 + this->RowSize * rownum;
-    memcpy(b + position2, temp, this->RowSize);
-    return true;
+    return false;
 }
-int FixedSizeTable::getPageRowNum(int pagenum)
+int FlexibleTable::getPageRowNum(int pagenum)
 {
     //cout << "maxrecordsize=" << this->MaxRecordSize << endl;
     if (pagenum > this->PageNum)
         return 0;
-    if (pagenum < this->MaxRecordSize)
-        return RowNumInPage[pagenum];
-    int index = 0;
+    int index=0;
     BufType b = BPM->getPage(fileid, pagenum, index);
     int nowrownum = UIC::chartoint(b + 4);
     return nowrownum;
 }
-bool FixedSizeTable::FastModify(int pagenum, int pageposition, Record* rec)
+bool FlexibleTable::FastModify(int pagenum, int pageposition, Record* rec)
 {
-    int index;
-    BufType b = BPM->getPage(fileid, pagenum, index);
-    memcpy(b + pageposition, rec->getData(), this->RowSize);
-    return true;
+    return false;
 }
-bool FixedSizeTable::FastInsert(int& pagenum, int& pageposition, Record* rec)
+bool FlexibleTable::FastInsert(int& pagenum, int& pageposition, Record* rec)
 {
-    int rownum;
-    bool can = InsertAt(pagenum, rec->getData(), rownum);
+    int rowposition;
+    bool can = InsertAt(pagenum, rec->getData(), rowposition);
     if (!can)
         return false;
-    pageposition = rownum * this->RowSize + 8;
+    pageposition = rowposition;
     return true;
 }
-bool FixedSizeTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
+bool FlexibleTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
 {
     bool can = false;
     for (int i = 1; i < this->MaxRecordSize; i++)
-        if (this->RowNumInPage[i] < this->MaxRowNum) {
+        if (this->reservedSizeInPage[i] >= rec->getSize()) {
             pagenum = i;
             can = FastInsert(pagenum, pageposition, rec);
             if (!can) {
@@ -344,24 +401,24 @@ bool FixedSizeTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
     return can;
 }
 
-Record* FixedSizeTable::FastOutput(int pagenum, int pageposition)
+Record* FlexibleTable::FastOutput(int pagenum, int pageposition)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
-    Record* temp = new FixedSizeRecord();
+    Record* temp = new FlexibleRecord();
     DataBaseType** t = UIC::copytype(this->column, columncount);
     temp->Initialize(t, columncount);
     temp->Input(b + pageposition);
     return temp;
 }
-void FixedSizeTable::FastOutput(int pagenum, int pageposition, char* output, int& outputsize)
+void FlexibleTable::FastOutput(int pagenum, int pageposition, char* output, int& outputsize)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
-    outputsize = this->RowSize;
+    outputsize = UIC::chartoint(b+pageposition);
     memcpy(output, b + pageposition, outputsize);
 }
-string FixedSizeTable::gettabletype()
+string FlexibleTable::gettabletype()
 {
-    return "Fixed";
+    return "Flexible";
 }

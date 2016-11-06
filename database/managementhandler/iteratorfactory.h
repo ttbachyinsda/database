@@ -2,6 +2,7 @@
 #define ITERATORFACTORY_H
 
 #include "fixedsizediterator.h"
+#include "flexibleiterator.h"
 #include "iterator.h"
 class IteratorFactory {
 public:

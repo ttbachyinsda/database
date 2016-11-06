@@ -2,8 +2,10 @@
 #define RECORDFACTORY_H
 
 #include "databasehandler/fixedsizetable.h"
+#include "databasehandler/flexibletable.h"
 #include "databasehandler/table.h"
 #include "recordhandler/fixedsizerecord.h"
+#include "recordhandler/flexiblerecord.h"
 #include "recordhandler/record.h"
 class RecordFactory {
 public:

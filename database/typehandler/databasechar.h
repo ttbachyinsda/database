@@ -15,7 +15,7 @@ public:
     DatabaseChar(string input, bool cannull);
     DatabaseChar(char* input, int size);
     DatabaseChar(char* input, int size, bool cannull);
-    bool read(char* input, int& position);
+    bool read(char* input,int inputlen, int& position);
     bool write(char* output, int& position);
     bool checkRight(string input);
     bool checkRight(string input, bool inputisnull);
