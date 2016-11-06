@@ -35,9 +35,7 @@ class bplus_tree {
     bplus_tree(const char *path, bool force_empty = false,
                bool multi_value = false);
 
-    ~bplus_tree() {
-        fclose(fp);
-    }
+    ~bplus_tree() {}
 
     /* abstract operations */
     int search(const index_key &key, index_value *value) const;

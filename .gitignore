@@ -5,8 +5,10 @@ build-database-Desktop*/
 # CLion Files
 .idea/
 CMakeLists.txt
+
 sqlparser.cpp
 sqlparser.hpp
+sqlparser.output
 sqllexer.cpp
 location.hh
 position.hh

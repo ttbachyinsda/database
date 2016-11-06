@@ -32,6 +32,7 @@ public:
     void setfilename(string filename);
     bool checkInsert(vector<string> data);
     void readindex();
+    void Nullindex();
     void createemptyindex(int i);
     int getColumnIndexByName(const std::string& name);
     vector<string> checkOutput();

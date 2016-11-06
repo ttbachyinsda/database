@@ -44,9 +44,11 @@ cout<<"Now end "<<"testment"<<endl;
     if (!UIC::equal(temp, ob1.data(), 4) || havecreatetable) {
         PackageHeadFile(b);
         BPM->markDirty(index);
+        Nullindex();
     } else {
         PackageFromHeadFile(b);
         BPM->access(index);
+        readindex();
     }
     free(temp);
     haveinitialize = true;
@@ -94,7 +96,6 @@ void FixedSizeTable::PackageFromHeadFile(BufType b)
         free(nullable);
         free(canmulti);
     }
-    readindex();
     MaxRecordSize = UIC::readint(b, position);
     if (RowNumInPage != NULL)
         delete[] RowNumInPage;
@@ -156,7 +157,6 @@ void FixedSizeTable::createTable(vector<string> clname, vector<DataBaseType*> cl
         multivalue[i]=true;
         this->RowSize += cltype[i]->getSize();
     }
-    readindex();
     this->MaxRowNum = (PAGE_SIZE - 8) / this->RowSize;
     this->PageNum = 0;
     this->MaxRecordSize = max((PAGE_SIZE - totalheadsize - 16) / 4, 0);
