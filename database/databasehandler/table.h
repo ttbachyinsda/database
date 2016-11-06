@@ -33,6 +33,7 @@ public:
     bool checkInsert(vector<string> data);
     void readindex();
     void createemptyindex(int i);
+    int getColumnIndexByName(const std::string& name);
     vector<string> checkOutput();
     virtual bool FastModify(int pagenum, int pageposition, Record* rec) = 0;
     virtual bool FastInsert(int& pagenum, int& pageposition, Record* rec) = 0;

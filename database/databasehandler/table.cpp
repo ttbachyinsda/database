@@ -176,6 +176,15 @@ void Table::createemptyindex(int i)
     free(tst);
 }
 
+int Table::getColumnIndexByName(const string &name)
+{
+    for (int i = 0; i < columncount; ++ i) {
+        if (columnname[i] == name)
+            return i;
+    }
+    return -1;
+}
+
 void Table::setmultivalue(int i,bool istrue)
 {
     multivalue[i]=istrue;

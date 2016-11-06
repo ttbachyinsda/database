@@ -39,13 +39,14 @@ bool QueryExecuter::getTableColumnIndex(int &tid, int &cid, SQLSelector *s,
         }
     }
     // Decide Column ID
-    cid = -1;
-    for (int j = 0; j < records[tid]->getcolumncount(); ++ j) {
-        if (s->tableName == tables[tid]->getcolumnname(j)) {
-            cid = j;
-            break;
-        }
-    }
+//    cid = -1;
+//    for (int j = 0; j < records[tid]->getcolumncount(); ++ j) {
+//        if (s->tableName == tables[tid]->getcolumnname(j)) {
+//            cid = j;
+//            break;
+//        }
+//    }
+    cid = tables[tid]->getColumnIndexByName(s->tableName);
     if (cid == -1) {
         driver->addErrorMessage("No such column (" + s->tableName + ") in table " + s->databaseName);
         return false;

@@ -32,6 +32,14 @@ struct SQLType
         canNull = true;
     }
 
+    ~SQLType() {
+        if (isCheck && checkGroup) {
+            for (SQLCheck* c : *checkGroup)
+                delete c;
+            delete checkGroup;
+        }
+    }
+
     void dump() const;
 };
 

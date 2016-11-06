@@ -10,6 +10,7 @@
 #include "sqlstruct.h"
 
 class SQLDriver;
+class Table;
 
 class SQLAction
 {
@@ -194,6 +195,39 @@ public:
     SQLSelectAction(SQLTableGroup* tList, SQLSelectorGroup* sList, SQLConditionGroup* cList)
         : fromGroup(tList), selectorGroup(sList), conditionGroup(cList) {}
     ~SQLSelectAction();
+    bool execute();
+};
+
+/**
+ * @brief The SQLIndexAction class
+ */
+class SQLIndexAction : public SQLAction
+{
+protected:
+    std::string tableName;
+    std::string columnName;
+    Table* currentTable;
+    int columnID;
+public:
+    SQLIndexAction(const std::string& tident, const std::string& cident)
+        : tableName(tident), columnName(cident) {}
+    ~SQLIndexAction() {}
+    virtual bool execute();
+};
+
+class SQLCreateIndexAction : public SQLIndexAction
+{
+public:
+    SQLCreateIndexAction(const std::string& tident, const std::string& cident)
+        : SQLIndexAction(tident, cident) {}
+    bool execute();
+};
+
+class SQLDropIndexAction : public SQLIndexAction
+{
+public:
+    SQLDropIndexAction(const std::string& tident, const std::string& cident)
+        : SQLIndexAction(tident, cident) {}
     bool execute();
 };
 

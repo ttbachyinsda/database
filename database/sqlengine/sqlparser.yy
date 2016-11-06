@@ -1,7 +1,6 @@
 %skeleton "lalr1.cc"
 %require  "3.0"
 %output "sqlparser.cpp"
-%debug
 %defines
 %define parser_class_name {SQLParser}
 
@@ -49,7 +48,7 @@
 %token CHECK IN
 
 %token INSERT INTO VALUES DELETE FROM
-%token UPDATE SET WHERE SELECT AND
+%token UPDATE SET WHERE SELECT AND INDEX
 
 %token NOT_EQUAL GREATER_EQUAL LESS_EQUAL
 
@@ -126,6 +125,14 @@ SysStmt         : CREATE DATABASE IDENTIFIER
                 | DESC IDENTIFIER
                 {
                     $$ = new SQLDescAction($2);
+                }
+                | CREATE INDEX IDENTIFIER '(' IDENTIFIER ')'
+                {
+                    $$ = new SQLCreateIndexAction($3, $5);
+                }
+                | DROP INDEX IDENTIFIER '(' IDENTIFIER ')'
+                {
+                    $$ = new SQLDropIndexAction($3, $5);
                 }
                 ;
 

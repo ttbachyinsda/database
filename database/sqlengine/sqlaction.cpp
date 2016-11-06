@@ -37,11 +37,11 @@ bool SQLDropDatabaseAction::execute()
         driver->addWarningMessage("Currently used database is set to NULL.");
         driver->setCurrentDatabase(0);
     }
-    bool success = driver->getDatabaseManager()->removeDatabaseByName(databaseName);
-    if (!success) {
-        driver->addErrorMessage("Database " + databaseName + " does not exist.");
+    bool dbExist = driver->getDatabaseManager()->removeDatabaseByName(databaseName);
+    if (!dbExist) {
+        driver->addWarningMessage("Database " + databaseName + " does not exist.");
     }
-    return success;
+    return true;
 }
 
 
@@ -115,6 +115,7 @@ bool SQLCreateTableAction::execute()
         // TODO: CREATE INDEX FOR PRIMARY TYPE
         // TODO: PRIMARY KEY NOT UNIQUE.
         if (type->primaryType) continue;
+        if (type->isCheck) continue;
         clname.push_back(type->identifier);
         // TODO: WHAT IS CONDITION?
         DataBaseType* dbType = UIC::reconvert(type->type, type->length, type->canNull);
@@ -142,11 +143,11 @@ bool SQLDropTableAction::execute()
                                 + this->tableName);
         return false;
     }
-    bool success = handler->removeTableByName(tableName);
-    if (!success) {
-        driver->addErrorMessage("Table " + tableName + " does not exist.");
+    bool tableExist = handler->removeTableByName(tableName);
+    if (!tableExist) {
+        driver->addWarningMessage("Table " + tableName + " does not exist.");
     }
-    return success;
+    return true;
 }
 
 bool SQLDescAction::execute()
@@ -261,6 +262,52 @@ bool SQLSelectAction::execute()
     bool prepareSucceeded = driver->getQueryExecuter()->setQuery(fromGroup, selectorGroup, conditionGroup);
     if (!prepareSucceeded) return false;
     return driver->getQueryExecuter()->executeQuery();
+}
+
+bool SQLIndexAction::execute()
+{
+    Database* handler = driver->getCurrentDatabase();
+    if (handler == 0) {
+        driver->addErrorMessage("No database is selected when operating indexes.");
+        return false;
+    }
+    currentTable = handler->getTableByName(tableName);
+    if (currentTable == 0) {
+        driver->addErrorMessage("Table " + tableName + " does not exist.");
+        return false;
+    }
+    columnID = currentTable->getColumnIndexByName(columnName);
+    if (columnID == -1) {
+        driver->addErrorMessage("Column " + columnName + " does not exist in table "
+                                + tableName);
+        return false;
+    }
+    return true;
+}
+
+bool SQLCreateIndexAction::execute()
+{
+    if (!SQLIndexAction::execute())
+        return false;
+    if (currentTable->getindexes()[columnID] != 0) {
+        driver->addErrorMessage("Index for " + columnName + " already exists.");
+        return false;
+    }
+    currentTable->createemptyindex(columnID);
+    // TODO: Insert everything into this new index.
+    currentTable->getindexes()[columnID]->insert();
+    return true;
+}
+
+bool SQLDropIndexAction::execute()
+{
+    if (!SQLIndexAction::execute())
+        return false;
+    if (currentTable->getindexes()[columnID] == 0) {
+        driver->addWarningMessage("Index for " + columnName + " does not exist!");
+        return true;
+    }
+    return true;
 }
 
 

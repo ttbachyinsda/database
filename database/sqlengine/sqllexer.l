@@ -22,7 +22,6 @@ using token = yy::SQLParser::token;
 #define YY_USER_ACTION loc->step(); loc->columns(yyleng);
 
 %}
-%option debug
 %option nodefault
 %option yyclass="SQLLexer"
 %option noyywrap
@@ -72,6 +71,7 @@ using token = yy::SQLParser::token;
 (?i:"select")           { return token::SELECT;     }
 (?i:"from")             { return token::FROM;       }
 (?i:"and")              { return token::AND;        }
+(?i:"index")            { return token::INDEX;      }
 
 [0-9]+                  {
                             yylval->build<std::string>(yytext);
