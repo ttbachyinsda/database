@@ -13,10 +13,10 @@ namespace bpt {
 
 /* offsets */
 #define OFFSET_META 0
-#define OFFSET_BLOCK OFFSET_META + sizeof(meta_t)
+#define OFFSET_BLOCK OFFSET_META + sizeof(head_t)
 #define SIZE_NO_CHILDREN sizeof(leaf_node_t) - CHILDREN_NUM * sizeof(record_t)
 
-/* meta information of B+ tree */
+/* head information of B+ tree */
 typedef struct {
     size_t order;             /* `order` of B+ tree */
     size_t value_size;        /* size of value */
@@ -27,7 +27,7 @@ typedef struct {
     off_t slot;               /* where to store new block */
     off_t root_offset;        /* where is the root of internal nodes */
     off_t leaf_offset;        /* where is the first leaf */
-} meta_t;
+} head_t;
 
 /* internal nodes' index segment */
 
@@ -46,11 +46,11 @@ class bplus_tree {
     int update(const key_t &key, value_t value);
 
     void set_MultiValue(bool multi_value) { this->multi_value = multi_value; };
-    meta_t get_meta() const { return meta; };
+    head_t get_head() const { return head; };
 
    private:
     char path[512];
-    meta_t meta;
+    head_t head;
     bool multi_value;
 
     /* init empty tree */
@@ -128,31 +128,31 @@ class bplus_tree {
 
     /* alloc from disk */
     off_t alloc(size_t size) {
-        off_t slot = meta.slot;
-        meta.slot += size;
+        off_t slot = head.slot;
+        head.slot += size;
         return slot;
     }
 
     off_t alloc(leaf_node_t *leaf) {
         leaf->n = 0;
-        meta.leaf_node_num++;
+        head.leaf_node_num++;
         return alloc(sizeof(leaf_node_t));
     }
 
     off_t alloc(internal_node_t *node) {
         node->n = 1;
-        meta.internal_node_num++;
+        head.internal_node_num++;
         return alloc(sizeof(internal_node_t));
     }
 
-    void unalloc(leaf_node_t *leaf, off_t offset) { --meta.leaf_node_num; }
+    void unalloc(leaf_node_t *leaf, off_t offset) { --head.leaf_node_num; }
 
     void unalloc(internal_node_t *node, off_t offset) {
-        --meta.internal_node_num;
+        --head.internal_node_num;
     }
 
     /* read block from disk */
-    int map(void *block, off_t offset, size_t size) const {
+    int block_read(void *block, off_t offset, size_t size) const {
         open_file();
         fseek(fp, offset, SEEK_SET);
         size_t rd = fread(block, size, 1, fp);
@@ -162,12 +162,12 @@ class bplus_tree {
     }
 
     template <class T>
-    int map(T *block, off_t offset) const {
-        return map(block, offset, sizeof(T));
+    int block_read(T *block, off_t offset) const {
+        return block_read(block, offset, sizeof(T));
     }
 
     /* write block to disk */
-    int unmap(void *block, off_t offset, size_t size) const {
+    int block_write(void *block, off_t offset, size_t size) const {
         open_file();
         fseek(fp, offset, SEEK_SET);
         size_t wd = fwrite(block, size, 1, fp);
@@ -177,8 +177,8 @@ class bplus_tree {
     }
 
     template <class T>
-    int unmap(T *block, off_t offset) const {
-        return unmap(block, offset, sizeof(T));
+    int block_write(T *block, off_t offset) const {
+        return block_write(block, offset, sizeof(T));
     }
 };
 }

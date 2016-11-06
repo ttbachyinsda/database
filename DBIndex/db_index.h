@@ -4,9 +4,9 @@ class db_index {
    public:
     db_index(char *path, bool forceNewIndex = false, bool multi_value = false);
 
-    int search(const bpt::key_t &key, bpt::value_t *value, int max_num) const;
+    int search(const bpt::key_t &key, bpt::value_t *value, int max_num = 1000) const;
     int search_range(const bpt::key_t &left, const bpt::key_t &right,
-                     bpt::value_t *values, size_t max) const;
+                     bpt::value_t *values, size_t max = 1000) const;
     int remove(const bpt::key_t &key);
     int insert(const bpt::key_t &key, bpt::value_t value);
     int update(const bpt::key_t &key, bpt::value_t value);

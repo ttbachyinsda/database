@@ -13,7 +13,7 @@ void db_index::setMulti_value(bool multi_value) {
     b_tree.set_MultiValue(multi_value);
 }
 
-int db_index::search(const bpt::key_t &key, bpt::value_t *value, int max_num) const {
+int db_index::search(const bpt::key_t &key, bpt::value_t *value, int max_num /*= 1000*/) const {
     if (!multi_value)
         return b_tree.search(key, value);
     else
@@ -21,7 +21,7 @@ int db_index::search(const bpt::key_t &key, bpt::value_t *value, int max_num) co
 }
 
 int db_index::search_range(const bpt::key_t &left, const bpt::key_t &right,
-                           bpt::value_t *values, size_t max) const {
+                           bpt::value_t *values, size_t max /*= 1000*/) const {
     return b_tree.search_range(left, right, values, max);
 }
 
