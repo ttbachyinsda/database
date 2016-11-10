@@ -49,7 +49,7 @@ void testiterator::begintest()
     onetable->createTable(clname, cltype);
     onetable->Initialize();
     string* aaa = new string[3];
-    int pagenum, pageposition;
+    int pagenum, rownum;
     Record* t = RecordFactory::getrecord(onetable);
     QTime time;
     time.start();
@@ -65,7 +65,8 @@ void testiterator::begintest()
         }
         if (can)
         {
-            onetable->FastAllInsert(pagenum, pageposition, t);
+            onetable->FastAllInsert(pagenum, rownum, t);
+            //cout<<pagenum<<' '<<rownum<<endl;
         }
     }
     delete t;

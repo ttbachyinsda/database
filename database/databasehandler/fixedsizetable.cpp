@@ -316,22 +316,20 @@ int FixedSizeTable::getPageRowNum(int pagenum)
     int nowrownum = UIC::chartoint(b + 4);
     return nowrownum;
 }
-bool FixedSizeTable::FastInsert(int& pagenum, int& pageposition, Record* rec)
+bool FixedSizeTable::FastInsert(int& pagenum, int& rownum, Record* rec)
 {
-    int rownum;
     bool can = InsertAt(pagenum, rec->getData(), rownum);
     if (!can)
         return false;
-    pageposition = rownum * this->RowSize + 8;
     return true;
 }
-bool FixedSizeTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
+bool FixedSizeTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
 {
     bool can = false;
     for (int i = min(this->MaxRecordSize,this->PageNum); i > 0; i--)
         if (this->RowNumInPage[i] < this->MaxRowNum) {
             pagenum = i;
-            can = FastInsert(pagenum, pageposition, rec);
+            can = FastInsert(pagenum, rownum, rec);
             if (!can) {
                 cout << "ERROR:: ?????" << endl;
             }
@@ -343,29 +341,29 @@ bool FixedSizeTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
         }
     for (int i = this->MaxRecordSize; i <= this->PageNum; i++) {
         pagenum = i;
-        can = FastInsert(pagenum, pageposition, rec);
+        can = FastInsert(pagenum, rownum, rec);
         if (can)
             return true;
     }
     this->PageNum++;
     pagenum = this->PageNum;
-    can = FastInsert(pagenum, pageposition, rec);
+    can = FastInsert(pagenum, rownum, rec);
     return can;
 }
 
-bool FixedSizeTable::FastOutput(int pagenum, int pageposition,Record* rec)
+bool FixedSizeTable::FastOutput(int pagenum, int rownum,Record* rec)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
-    rec->Input(b + pageposition);
+    rec->Input(b + __FIXPOSITION(rownum));
     return true;
 }
-void FixedSizeTable::FastOutput(int pagenum, int pageposition, char* output, int& outputsize)
+void FixedSizeTable::FastOutput(int pagenum, int rownum, char* output, int& outputsize)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
     outputsize = this->RowSize;
-    memcpy(output, b + pageposition, outputsize);
+    memcpy(output, b + __FIXPOSITION(rownum), outputsize);
 }
 void FixedSizeTable::modifyall(char *data, int datasize, int prepagenum, int prepageposition, int newpagenum, int newpageposition)
 {

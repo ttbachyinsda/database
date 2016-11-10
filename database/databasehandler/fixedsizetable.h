@@ -5,7 +5,7 @@
 #include "managementhandler/uic.h"
 #include "recordhandler/fixedsizerecord.h"
 #include <sstream>
-
+#define __FIXPOSITION(x) (8+(x)*this->RowSize)
 class FixedSizeTable : public Table {
 public:
     FixedSizeTable();
@@ -13,10 +13,10 @@ public:
     bool Initialize();
     void createTable(vector<string> clname, vector<DataBaseType*> cltype);
     bool DeleteAt(int pagenum, int rownum);
-    bool FastInsert(int& pagenum, int& pageposition, Record* rec);
-    bool FastAllInsert(int& pagenum, int& pageposition, Record* rec);
-    bool FastOutput(int pagenum, int pageposition, Record *rec);
-    void FastOutput(int pagenum, int pageposition, char* output, int& outputsize);
+    bool FastInsert(int& pagenum, int& rownum, Record* rec);
+    bool FastAllInsert(int& pagenum, int& rownum, Record* rec);
+    bool FastOutput(int pagenum, int rownum, Record *rec);
+    void FastOutput(int pagenum, int rownum, char* output, int& outputsize);
     string gettabletype();
     int getPageRowNum(int pagenum);
     int getPageNum();

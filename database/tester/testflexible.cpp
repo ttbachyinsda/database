@@ -67,7 +67,7 @@ void testflexible::begintest()
     onetable->setmultivalue(0,false);
     onetable->createemptyindex(0);
     string* aaa = new string[3];
-    int pagenum, pageposition;
+    int pagenum, rownum;
     Record* t = RecordFactory::getrecord(onetable);
     QTime time;
     time.start();
@@ -82,8 +82,8 @@ void testflexible::begintest()
             t->update();
         }
         if (can)
-            onetable->FastAllInsert(pagenum, pageposition, t);
-        //if (i%1000==0) cout<<pagenum<<' '<<pageposition<<endl;
+            onetable->FastAllInsert(pagenum, rownum, t);
+        //if (i<3) cout<<pagenum<<' '<<rownum<<endl;
     }
     delete t;
     delete[] aaa;

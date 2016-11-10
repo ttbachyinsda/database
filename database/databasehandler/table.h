@@ -36,10 +36,10 @@ public:
     void createemptyindex(int i);
     int getColumnIndexByName(const std::string& name);
     vector<string> checkOutput();
-    virtual bool FastInsert(int& pagenum, int& pageposition, Record* rec) = 0;
-    virtual bool FastAllInsert(int& pagenum, int& pageposition, Record* rec) = 0;
-    virtual bool FastOutput(int pagenum, int pageposition, Record* rec) = 0;
-    virtual void FastOutput(int pagenum, int pageposition, char* output, int& outputsize) = 0;
+    virtual bool FastInsert(int& pagenum, int& rownum, Record* rec) = 0;
+    virtual bool FastAllInsert(int& pagenum, int& rownum, Record* rec) = 0;
+    virtual bool FastOutput(int pagenum, int rownum, Record* rec) = 0;
+    virtual void FastOutput(int pagenum, int rownum, char* output, int& outputsize) = 0;
     virtual bool Initialize() = 0;
     virtual string gettabletype() = 0;
     bool havecreatetable = false;
@@ -56,9 +56,9 @@ public:
 protected:
     void clearcolumn();
     void clearindex();
-    void InsertindexAt(int num,char* insertdata,int datalen,int pagenum,int pageposition);
-    void ModifyindexAt(int num,char* modifydata,int datalen,int prepagenum,int prepageposition,int newpagenum,int newpageposition);
-    void DeleteindexAt(int num,char* deletedata,int datalen,int pagenum,int pageposition);
+    void InsertindexAt(int num,char* insertdata,int datalen,int pagenum,int rownum);
+    void ModifyindexAt(int num,char* modifydata,int datalen,int prepagenum,int prerownum,int newpagenum,int newrownum);
+    void DeleteindexAt(int num,char* deletedata,int datalen,int pagenum,int rownum);
     string name;
     string filename;
     int fileid;

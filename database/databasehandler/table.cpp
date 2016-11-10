@@ -205,15 +205,15 @@ void Table::Nullindex()
         this->DBindex[i]=NULL;
     }
 }
-void Table::InsertindexAt(int num, char *insertdata, int datalen, int pagenum, int pageposition)
+void Table::InsertindexAt(int num, char *insertdata, int datalen, int pagenum, int rownum)
 {
-    this->DBindex[num]->insert(insertdata,datalen,pagenum,pageposition);
+    this->DBindex[num]->insert(insertdata,datalen,pagenum,rownum);
 }
-void Table::ModifyindexAt(int num, char *modifydata, int datalen, int prepagenum, int prepageposition, int newpagenum, int newpageposition)
+void Table::ModifyindexAt(int num, char *modifydata, int datalen, int prepagenum, int prerownum, int newpagenum, int newrownum)
 {
-    this->DBindex[num]->update(modifydata,datalen,prepagenum,prepageposition,newpagenum,newpageposition);
+    this->DBindex[num]->update(modifydata,datalen,prepagenum,prerownum,newpagenum,newrownum);
 }
-void Table::DeleteindexAt(int num, char *deletedata, int datalen, int pagenum, int pageposition)
+void Table::DeleteindexAt(int num, char *deletedata, int datalen, int pagenum, int rownum)
 {
-    this->DBindex[num]->remove(deletedata,datalen,pagenum,pageposition);
+    this->DBindex[num]->remove(deletedata,datalen,pagenum,rownum);
 }

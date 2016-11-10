@@ -103,7 +103,7 @@ void testtype::begintest(bool timetest)
 void testtype::beginjingxitest()
 {
     cout << "begin type test 2" << endl;
-    string t1 = "CHAR";
+    string t1 = "INTE";
     DataBaseType* s1 = UIC::reconvert(t1.data(), 5, false);
     cout << s1->checkRight("abc", true) << endl;
     char* s = new char[5];

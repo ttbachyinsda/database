@@ -227,7 +227,7 @@ void FlexibleTable::putat(BufType b, int pageposition, int rownum, char *data)
     UIC::inttochar(pageposition,b+__position(rownum));
 }
 
-bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rowposition)
+bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rownum)
 {
     if (pagenum == 0)
         return false;
@@ -278,6 +278,9 @@ bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rowposition)
     }
     insertall(insertdata,datalen,pagenum,reservedpointer);
     putat(b,reservedpointer,pagerownum,insertdata);
+    rownum=pagerownum;
+    //if (pagenum==1 && rownum<3)
+    //cout<<rownum<<' '<<reservedpointer<<' '<<datalen<<endl;
     datalen=UIC::chartoint(b+reservedpointer);
     pagerownum++;
     reservedsize -= datalen+4;
@@ -288,7 +291,6 @@ bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rowposition)
     if (pagenum < this->MaxRecordSize) {
         this->reservedSizeInPage[pagenum] = reservedsize;
     }
-    rowposition=reservedpointer;
     BPM->markDirty(nowindex);
     return true;
 }
@@ -373,22 +375,20 @@ int FlexibleTable::getPageRowNum(int pagenum)
     int nowrownum = UIC::chartoint(b + 4);
     return nowrownum;
 }
-bool FlexibleTable::FastInsert(int& pagenum, int& pageposition, Record* rec)
+bool FlexibleTable::FastInsert(int& pagenum, int& rownum, Record* rec)
 {
-    int rowposition;
-    bool can = InsertAt(pagenum, rec->getData(), rowposition);
+    bool can = InsertAt(pagenum, rec->getData(), rownum);
     if (!can)
         return false;
-    pageposition = rowposition;
     return true;
 }
-bool FlexibleTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
+bool FlexibleTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
 {
     bool can = false;
     for (int i = min(this->MaxRecordSize,this->PageNum); i > 0; i--)
         if (this->reservedSizeInPage[i] >= rec->getSize()) {
             pagenum = i;
-            can = FastInsert(pagenum, pageposition, rec);
+            can = FastInsert(pagenum, rownum, rec);
             if (!can) {
                 cout << "ERROR:: ?????" << endl;
             }
@@ -400,31 +400,34 @@ bool FlexibleTable::FastAllInsert(int& pagenum, int& pageposition, Record* rec)
         }
     for (int i = this->MaxRecordSize; i <= this->PageNum; i++) {
         pagenum = i;
-        can = FastInsert(pagenum, pageposition, rec);
+        can = FastInsert(pagenum, rownum, rec);
         if (can)
             return true;
     }
     this->PageNum++;
     pagenum = this->PageNum;
-    can = FastInsert(pagenum, pageposition, rec);
+    can = FastInsert(pagenum, rownum, rec);
     return can;
 }
 
-bool FlexibleTable::FastOutput(int pagenum, int pageposition, Record *rec)
+bool FlexibleTable::FastOutput(int pagenum, int rownum, Record *rec)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
+    //cout<<"position at "<<__position(rownum)<<endl;
+    int pageposition = UIC::chartoint(b+__position(rownum));
     rec->Input(b + pageposition);
     return true;
 }
-void FlexibleTable::FastOutput(int pagenum, int pageposition, char* output, int& outputsize)
+void FlexibleTable::FastOutput(int pagenum, int rownum, char* output, int& outputsize)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
+    int pageposition = UIC::chartoint(b+__position(rownum));
     outputsize = UIC::chartoint(b+pageposition);
     memcpy(output, b + pageposition, outputsize);
 }
-void FlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prepageposition, int newpagenum, int newpageposition)
+void FlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prerownum, int newpagenum, int newrownum)
 {
     int index=4;
     for (int i=0;i<columncount;i++)
@@ -432,11 +435,11 @@ void FlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prep
         {
             int nowdatasize=UIC::chartoint(data+index);
             index += 4;
-            ModifyindexAt(i,data+index,nowdatasize-1,prepagenum,prepageposition,newpagenum,newpageposition);
+            ModifyindexAt(i,data+index,nowdatasize-1,prepagenum,prerownum,newpagenum,newrownum);
             index += nowdatasize;
         }
 }
-void FlexibleTable::deleteall(char *data, int datasize, int pagenum, int pageposition)
+void FlexibleTable::deleteall(char *data, int datasize, int pagenum, int rownum)
 {
     int index=4;
     for (int i=0;i<columncount;i++)
@@ -444,11 +447,11 @@ void FlexibleTable::deleteall(char *data, int datasize, int pagenum, int pagepos
         {
             int nowdatasize=UIC::chartoint(data+index);
             index += 4;
-            DeleteindexAt(i,data+index,nowdatasize-1,pagenum,pageposition);
+            DeleteindexAt(i,data+index,nowdatasize-1,pagenum,rownum);
             index += nowdatasize;
         }
 }
-void FlexibleTable::insertall(char *data, int datasize, int pagenum, int pageposition)
+void FlexibleTable::insertall(char *data, int datasize, int pagenum, int rownum)
 {
 
     int index=4;
@@ -459,7 +462,7 @@ void FlexibleTable::insertall(char *data, int datasize, int pagenum, int pagepos
             index += 4;
             //string t(data+index,nowdatasize);
             //cout<<"insert"<<' '<<t<<' '<<nowdatasize<<endl;
-            InsertindexAt(i,data+index,nowdatasize-1,pagenum,pageposition);
+            InsertindexAt(i,data+index,nowdatasize-1,pagenum,rownum);
             index += nowdatasize;
         }
 }

@@ -9,7 +9,8 @@ DatabaseInt::DatabaseInt(int size)
         size = MAX_INT_SIZE;
     this->size = size;
     data = (char*)malloc(size + 1);
-    memset(data, 0, size + 1);
+    memset(data, '0', size + 1);
+    data[size]=IS_NOT_NULL;
     this->Nullable = true;
     this->isNull = false;
 }
@@ -20,7 +21,8 @@ DatabaseInt::DatabaseInt(int size, bool cannull)
         size = MAX_INT_SIZE;
     this->size = size;
     data = (char*)malloc(size + 1);
-    memset(data, 0, size + 1);
+    memset(data, '0', size + 1);
+    data[size]=IS_NOT_NULL;
     this->Nullable = cannull;
     this->isNull = false;
 }
@@ -134,6 +136,9 @@ void DatabaseInt::change(string input)
     memset(data, 0, this->size);
     memcpy(data + (this->size - size), input.data(), size);
     data[this->size] = IS_NOT_NULL;
+    for (int i=0;i<this->size;i++)
+        if (data[i]==0 || data[i]==32)
+            data[i]='0';
     this->isNull = false;
 }
 void DatabaseInt::change(char* input, int size)
@@ -142,6 +147,9 @@ void DatabaseInt::change(char* input, int size)
     memset(data, 0, this->size);
     memcpy(data + (this->size - size), input, size);
     data[this->size] = IS_NOT_NULL;
+    for (int i=0;i<this->size;i++)
+        if (data[i]==0 || data[i]==32)
+            data[i]='0';
     this->isNull = false;
 }
 void DatabaseInt::changetoNull()
@@ -265,12 +273,19 @@ string DatabaseInt::output()
 {
     if (isNull)
         return "NULL__DATA";
-    char* tmp = new char[size];
-    memcpy(tmp, data, size);
-    for (int i = 0; i < size; i++)
-        if (*(tmp + i) == 0 || *(tmp + i) == 32)
-            *(tmp + i) = '0';
-    string s(tmp, size);
+    int i;
+    for (i=0;i<this->size;i++)
+        if (data[i]==0 || data[i]==32)
+            data[i]='0';
+    for (i = 0; i < size; i++)
+        if (data[i] != '0')
+            break;
+    char* temp = (char*)malloc(this->size);
+    memset(temp,0,size);
+    memcpy(temp+i,data+i,size-i);
+    if (i==size) temp[size-1]='0';
+    string s(temp, size);
+    free(temp);
     return s;
 }
 

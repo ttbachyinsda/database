@@ -20,11 +20,9 @@ bool FixedSizedIterator::access(int pagenum, int rownum)
     this->nowpagerownum = this->nowtable->getPageRowNum(pagenum);
     if (rownum >= nowpagerownum) {
         this->nowrownum = 0;
-        this->nowpageposition = 8;
         return false;
     }
     this->nowrownum = rownum;
-    this->nowpageposition = 8 + this->nowrowsize * rownum;
     return true;
 }
 bool FixedSizedIterator::available()
@@ -38,7 +36,6 @@ bool FixedSizedIterator::available()
 bool FixedSizedIterator::nextrow()
 {
     this->nowrownum++;
-    this->nowpageposition += nowrowsize;
     if (nowrownum >= nowpagerownum) {
         this->nowpagenum++;
         this->nowrownum = 0;
@@ -55,24 +52,23 @@ bool FixedSizedIterator::getdata(char* output, int& outputsize)
 {
     if (!available())
         return false;
-    this->nowtable->FastOutput(this->nowpagenum, this->nowpageposition, output, outputsize);
+    this->nowtable->FastOutput(this->nowpagenum, this->nowrownum, output, outputsize);
     return true;
 }
 bool FixedSizedIterator::getdata(Record* rec)
 {
     if (!available())
         return false;
-    this->nowtable->FastOutput(this->nowpagenum, this->nowpageposition,rec);
+    this->nowtable->FastOutput(this->nowpagenum, this->nowrownum,rec);
     return true;
 }
 bool FixedSizedIterator::insertdata(Record* rec)
 {
-    int temppagenum, temppageposition;
-    bool can = this->nowtable->FastAllInsert(temppagenum, temppageposition, rec);
+    int temppagenum, temprownum;
+    bool can = this->nowtable->FastAllInsert(temppagenum, temprownum, rec);
     if (can) {
         nowpagenum=temppagenum;
-        nowpageposition = temppageposition;
-        nowrownum = (nowpageposition - 8) / nowrowsize;
+        nowrownum = temprownum;
         this->nowpagerownum = this->nowtable->getPageRowNum(nowpagenum);
         return true;
     } else
@@ -90,7 +86,6 @@ void FixedSizedIterator::getbegin()
     int maxpagenum = this->nowtable->getPageNum();
     nowrownum = 0;
     nowpagenum = 1;
-    nowpageposition = 8;
     while (nowpagenum <= maxpagenum) {
         nowpagerownum = this->nowtable->getPageRowNum(nowpagenum);
         if (nowpagerownum != 0)
