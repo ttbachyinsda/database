@@ -14,8 +14,7 @@ class db_index {
     int insert(char* insertData, int dataLen, int pagenum, int pageposition) {
         char key[255];
         memcpy(key, insertData, dataLen);
-        key[dataLen] = '\0';
-        return insert(key, index_value(pagenum, pageposition));
+        return insert(index_key(key, dataLen), index_value(pagenum, pageposition));
     }
     int update(const index_key &key, index_value value);
     int update(char* insertData, int dataLen, int prepagenum, int prepageposition, int pagenum, int pageposition);
@@ -28,4 +27,5 @@ class db_index {
 
     char path[512];
     bool multi_value;
+    int insertTime;
 };

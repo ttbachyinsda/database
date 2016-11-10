@@ -47,10 +47,9 @@ SOURCES += main.cpp\
     typehandler/databasevarchar.cpp \
     DBIndex/bplus_tree.cpp \
     DBIndex/db_index.cpp \
-    DBIndex/test.cpp \
-    DBIndex/testIndex.cpp \
 
 HEADERS  += mainwindow.h \
+    bin/FlexLexer.h \
     pagefilesystem/BufPageManager.h \
     pagefilesystem/FileManager.h \
     pagefilesystem/pagedef.h \
@@ -97,7 +96,8 @@ HEADERS  += mainwindow.h \
     DBIndex/db_index.h \
     DBIndex/predefined.h \
     sqlengine/sqllexer.l \
-    sqlengine/sqlparser.yy
+    sqlengine/sqlparser.yy \
+    FlexLexer.h
 
 FORMS    += mainwindow.ui
 
@@ -134,4 +134,4 @@ DISTFILES += \
     bin/data/local.mk \
     bin/data/README \
     bin/win_bison \
-    bin/win_flex
+    bin/win_flex \

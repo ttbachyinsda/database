@@ -18,16 +18,25 @@ struct index_value {
 };
 struct index_key {
     char k[256];
-
-    index_key(const char *str = "") {
+    int len;
+    index_key(const char *str = "", int len = 0) {
         memset(k,0, sizeof(k));
-        strcpy(k, str);
+        memcpy(k, str, len);
+        this->len = len;
     }
 };
 
 inline int keycmp(const index_key &a, const index_key &b) {
-    int x = strlen(a.k) - strlen(b.k);
-    return x == 0 ? strcmp(a.k, b.k) : x;
+    int x = a.len - b.len;
+    if (x == 0) {
+        for (int i = 0; i < a.len; i++) {
+            if (a.k[i] > b.k[i])
+                return 1;
+            else if (b.k[i] > a.k[i])
+                return -1;
+        }
+    }
+    else return 0;
 }
 
 #endif /* end of PREDEFINED_H */
