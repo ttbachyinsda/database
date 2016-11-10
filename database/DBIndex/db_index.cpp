@@ -1,9 +1,12 @@
 #include "db_index.h"
+#include <iostream>
+using namespace std;
 
 db_index::db_index(char *path, bool forceNewIndex, bool multi_value)
     : b_tree(path, forceNewIndex, multi_value) {
     strcpy(this->path, path);
     this->multi_value = multi_value;
+    insertTime = 0;
 }
 
 bool db_index::isMulti_value() const { return multi_value; }
@@ -39,8 +42,10 @@ int db_index::remove(const index_key &key) {
 int db_index::insert(const index_key &key, index_value value) {
     if (!multi_value) {
         index_value *temp;
-        if (search(key, temp) >= 0)
+        if (search(key, temp) < 0) {
+            cout << ++insertTime << endl;
             return b_tree.insert(key, value);
+        }
         else
             return 0;
     }
@@ -59,9 +64,8 @@ int
 db_index::update(char *insertData, int dataLen, int prepagenum, int prepageposition, int pagenum, int pageposition) {
     char key[255];
     memcpy(key, insertData, dataLen);
-    key[dataLen] = '\0';
     if (!multi_value) {
-        return update(key, index_value(pagenum, pageposition));
+        return update(index_key(key, dataLen), index_value(pagenum, pageposition));
     } else {
         return -1;
     }
@@ -70,9 +74,8 @@ db_index::update(char *insertData, int dataLen, int prepagenum, int prepageposit
 int db_index::remove(char *insertData, int dataLen, int pagenum, int pageposition) {
     char key[255];
     memcpy(key, insertData, dataLen);
-    key[dataLen] = '\0';
     if (!multi_value)
-        return b_tree.remove(key);
+        return b_tree.remove(index_key(key, dataLen));
     else {
         return -1;
     }

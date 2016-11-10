@@ -28,7 +28,7 @@ void testflexible::testindex(Table* onetable)
     memset(tst,0,7);
     memcpy(tst,temp.c_str(),temp.length()+1);
     cout<<tst<<endl;
-    index_key k(tst);
+    index_key k(tst, 7);
     index_value v;
     cout<<onetable->getindexes()[0]->search(k,&v)<<endl;
     cout<<v.pagenum<<' '<<v.pageposition<<endl;
