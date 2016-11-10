@@ -30,9 +30,9 @@ private:
     char* Packager();
     bool modifypd(int pagenum, int rownum, BufType& ct, int& newindex, int& pagenewnum);
     void UnPackager(BufType b, int position);
-    void modifyall(char* data,int datasize,int prepagenum,int prepageposition,int newpagenum,int newpageposition);
-    void insertall(char* data,int datasize,int pagenum,int pageposition);
-    void deleteall(char* data,int datasize,int pagenum,int pageposition);
+    void modifyall(char* data,int datasize,int prepagenum,int prerownum,int newpagenum,int newrownum);
+    void insertall(char* data,int datasize,int pagenum,int rownum);
+    void deleteall(char* data,int datasize,int pagenum,int rownum);
     int PageNum;
     int RowSize;
     int MaxRowNum;

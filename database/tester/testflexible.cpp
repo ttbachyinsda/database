@@ -20,16 +20,21 @@ string testflexible::InttoString(int num)
     string s1 = ss.str();
     return s1;
 }
-void testflexible::testindex(Table* onetable)
+void testflexible::testindex(Table* onetable,string input)
 {
     cout<<"test index begin"<<endl;
-    string temp="5";
     Iterator* it = IteratorFactory::getiterator(onetable);
-    temp=it->compile(temp,0);
+    string temp=it->compile(input,0);
+    cout<<"try to search "<<temp<<endl;
     index_key k(temp.c_str(),temp.length());
     index_value v;
-    cout<<onetable->getindexes()[0]->search(k,&v)<<endl;
-    cout<<v.pagenum<<' '<<v.pageposition<<endl;
+    int answer=onetable->getindexes()[0]->search(k,&v);
+    if (answer==0)
+    {
+        cout<<"has found"<<endl;
+        cout<<v.pagenum<<' '<<v.pageposition<<endl;
+    } else
+        cout<<"has not found"<<endl;
     cout<<"test index end"<<endl;
 }
 
@@ -85,7 +90,7 @@ void testflexible::begintest()
     }
     delete t;
     delete[] aaa;
-    testindex(onetable);
+    testindex(onetable,"5");
     cout << onetable->getPageNum() << endl;
     cout << onetable->getPageRowNum(1030) << endl;
     int time_Diff = time.elapsed();
@@ -120,7 +125,7 @@ void testflexible::begintest()
         }
     }
 
-    iterator->access(300, 0);
+    iterator->access(1, 0);
     cout << "try to delete" << endl;
     iterator->deletedata();
     if (iterator->available()) {
@@ -129,7 +134,9 @@ void testflexible::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-
+    testindex(onetable,"0");
+    testindex(onetable,"1");
+    testindex(onetable,"19");
     delete iterator;
     delete record;
     delete onetable;

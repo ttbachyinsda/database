@@ -19,7 +19,23 @@ string testiterator::InttoString(int num)
     string s1 = ss.str();
     return s1;
 }
-
+void testiterator::testindex(Table* onetable,string input)
+{
+    cout<<"test index begin"<<endl;
+    Iterator* it = IteratorFactory::getiterator(onetable);
+    string temp=it->compile(input,0);
+    cout<<"try to search "<<temp<<endl;
+    index_key k(temp.c_str(),temp.length());
+    index_value v;
+    int answer=onetable->getindexes()[0]->search(k,&v);
+    if (answer==0)
+    {
+        cout<<"has found"<<endl;
+        cout<<v.pagenum<<' '<<v.pageposition<<endl;
+    } else
+        cout<<"has not found"<<endl;
+    cout<<"test index end"<<endl;
+}
 void testiterator::begintest()
 {
     string filename = "onetable.tb";
@@ -48,12 +64,13 @@ void testiterator::begintest()
     cltype.push_back(type3);
     onetable->createTable(clname, cltype);
     onetable->Initialize();
+    onetable->createemptyindex(0);
     string* aaa = new string[3];
     int pagenum, rownum;
     Record* t = RecordFactory::getrecord(onetable);
     QTime time;
     time.start();
-    for (int i = 0; i < 200000; i++) {
+    for (int i = 0; i < 20; i++) {
         aaa[0] = InttoString(i);
         aaa[1] = "12345678";
         aaa[2] = "58";
@@ -71,6 +88,8 @@ void testiterator::begintest()
     }
     delete t;
     delete[] aaa;
+    testindex(onetable,"5");
+    testindex(onetable,"0");
     cout << onetable->getPageNum() << endl;
     cout << onetable->getPageRowNum(1030) << endl;
     int time_Diff = time.elapsed();
@@ -104,7 +123,7 @@ void testiterator::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-    iterator->access(300, 0);
+    iterator->access(0, 0);
     cout << "try to delete" << endl;
     iterator->deletedata();
     if (iterator->available()) {
@@ -113,7 +132,8 @@ void testiterator::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-
+    testindex(onetable,"0");
+    testindex(onetable,"19");
     delete iterator;
     delete record;
     delete onetable;

@@ -366,36 +366,38 @@ void FixedSizeTable::FastOutput(int pagenum, int rownum, char* output, int& outp
     outputsize = this->RowSize;
     memcpy(output, b + __FIXPOSITION(rownum), outputsize);
 }
-void FixedSizeTable::modifyall(char *data, int datasize, int prepagenum, int prepageposition, int newpagenum, int newpageposition)
+void FixedSizeTable::modifyall(char *data, int datasize, int prepagenum, int prerownum, int newpagenum, int newrownum)
 {
     int index=0;
     for (int i=0;i<columncount;i++)
         if (DBindex[i]!=NULL)
         {
             int nowdatasize=column[i]->getSize();
-            ModifyindexAt(i,data+index,nowdatasize-1,prepagenum,prepageposition,newpagenum,newpageposition);
+            ModifyindexAt(i,data+index,nowdatasize-1,prepagenum,prerownum,newpagenum,newrownum);
             index += nowdatasize;
         }
 }
-void FixedSizeTable::deleteall(char *data, int datasize, int pagenum, int pageposition)
+void FixedSizeTable::deleteall(char *data, int datasize, int pagenum, int rownum)
 {
     int index=0;
     for (int i=0;i<columncount;i++)
         if (DBindex[i]!=NULL)
         {
             int nowdatasize=column[i]->getSize();
-            DeleteindexAt(i,data+index,nowdatasize-1,pagenum,pageposition);
+            DeleteindexAt(i,data+index,nowdatasize-1,pagenum,rownum);
             index += nowdatasize;
         }
 }
-void FixedSizeTable::insertall(char *data, int datasize, int pagenum, int pageposition)
+void FixedSizeTable::insertall(char *data, int datasize, int pagenum, int rownum)
 {
-    int index=4;
+    int index=0;
     for (int i=0;i<columncount;i++)
         if (DBindex[i]!=NULL)
         {
             int nowdatasize=column[i]->getSize();
-            InsertindexAt(i,data+index,nowdatasize-1,pagenum,pageposition);
+            string t(data+index,nowdatasize-1);
+            cout<<"insert at "<<t<<' '<<pagenum<<' '<<rownum<<endl;
+            InsertindexAt(i,data+index,nowdatasize-1,pagenum,rownum);
             index += nowdatasize;
         }
 }

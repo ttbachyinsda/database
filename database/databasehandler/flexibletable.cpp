@@ -447,11 +447,15 @@ void FlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prer
 void FlexibleTable::deleteall(char *data, int datasize, int pagenum, int rownum)
 {
     int index=4;
+
     for (int i=0;i<columncount;i++)
         if (DBindex[i]!=NULL)
         {
+
             int nowdatasize=UIC::chartoint(data+index);
             index += 4;
+            string t(data+index,nowdatasize-1);
+            cout<<"delete at "<<t<<' '<<pagenum<<' '<<rownum<<endl;
             DeleteindexAt(i,data+index,nowdatasize-1,pagenum,rownum);
             index += nowdatasize;
         }
