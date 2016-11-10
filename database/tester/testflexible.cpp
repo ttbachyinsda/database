@@ -71,7 +71,7 @@ void testflexible::begintest()
     Record* t = RecordFactory::getrecord(onetable);
     QTime time;
     time.start();
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 200000; i++) {
         aaa[0] = InttoString(i);
         aaa[1] = "a"+InttoString(i);
         aaa[2] = "58";

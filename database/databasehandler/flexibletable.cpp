@@ -457,8 +457,8 @@ void FlexibleTable::insertall(char *data, int datasize, int pagenum, int pagepos
         {
             int nowdatasize=UIC::chartoint(data+index);
             index += 4;
-            string t(data+index,nowdatasize);
-            cout<<"insert"<<' '<<t<<' '<<nowdatasize<<endl;
+            //string t(data+index,nowdatasize);
+            //cout<<"insert"<<' '<<t<<' '<<nowdatasize<<endl;
             InsertindexAt(i,data+index,nowdatasize-1,pagenum,pageposition);
             index += nowdatasize;
         }
