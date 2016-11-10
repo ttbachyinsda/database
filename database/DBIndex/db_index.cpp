@@ -43,7 +43,8 @@ int db_index::insert(const index_key &key, index_value value) {
     if (!multi_value) {
         index_value *temp;
         if (search(key, temp) < 0) {
-            cout << ++insertTime << endl;
+            ++insertTime;
+            //cout << ++insertTime << endl;
             return b_tree.insert(key, value);
         }
         else

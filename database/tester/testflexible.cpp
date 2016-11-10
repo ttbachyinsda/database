@@ -23,12 +23,10 @@ string testflexible::InttoString(int num)
 void testflexible::testindex(Table* onetable)
 {
     cout<<"test index begin"<<endl;
-    string temp="0";
-    char * tst=(char*)malloc(7);
-    memset(tst,0,7);
-    memcpy(tst,temp.c_str(),temp.length()+1);
-    cout<<tst<<endl;
-    index_key k(tst, 7);
+    string temp="5";
+    Iterator* it = IteratorFactory::getiterator(onetable);
+    temp=it->compile(temp,0);
+    index_key k(temp.c_str(),temp.length());
     index_value v;
     cout<<onetable->getindexes()[0]->search(k,&v)<<endl;
     cout<<v.pagenum<<' '<<v.pageposition<<endl;
@@ -71,7 +69,7 @@ void testflexible::begintest()
     Record* t = RecordFactory::getrecord(onetable);
     QTime time;
     time.start();
-    for (int i = 0; i < 200000; i++) {
+    for (int i = 0; i < 20; i++) {
         aaa[0] = InttoString(i);
         aaa[1] = "a"+InttoString(i);
         aaa[2] = "58";

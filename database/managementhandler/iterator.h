@@ -19,6 +19,7 @@ public:
     virtual bool insertdata(Record* rec) = 0;
     virtual void getbegin() = 0;
     bool find(string input,int columnnum);
+    string compile(string input,int columnnum);
 
 protected:
     int nowpagenum;
@@ -26,7 +27,7 @@ protected:
     int nowrowsize;
     int nowpagerownum;
     Table* nowtable;
-    string compile(string input,int columnnum);
+
 };
 
 #endif // ITERATOR_H

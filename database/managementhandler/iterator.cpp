@@ -22,13 +22,14 @@ string Iterator::compile(string input, int columnnum)
 {
     DataBaseType* temp=this->nowtable->getcolumn(columnnum);
     int tempsize = temp->getRealSize();
-    int inputlen = min(input.length(),tempsize);
+    int inputlen = input.length();
+    if (tempsize<inputlen) inputlen=tempsize;
     string temptype = temp->getType();
     if (temptype[6]=='I')
     {
         char* tempdata = (char*)malloc(tempsize);
         memset(tempdata,'0',tempsize);
-        memcpy(tempdata+tempsize-inputlen,input,inputlen);
+        memcpy(tempdata+tempsize-inputlen,input.c_str(),inputlen);
         string t(tempdata,tempsize);
         free(tempdata);
         return t;
@@ -36,7 +37,7 @@ string Iterator::compile(string input, int columnnum)
     {
         char* tempdata = (char*)malloc(tempsize);
         memset(tempdata,0,tempsize);
-        memcpy(tempdata,input,inputlen);
+        memcpy(tempdata,input.c_str(),inputlen);
         string t(tempdata,tempsize);
         free(tempdata);
         return t;

@@ -207,10 +207,10 @@ bool FixedSizeTable::InsertAt(int pagenum, char* insertdata, int& rownum)
     if (pagerownum == this->MaxRowNum)
         return false;
     position += 8 + this->RowSize * pagerownum;
-
-    insertall(insertdata,this->RowSize,pagenum,position);
-
     rownum = pagerownum;
+
+    insertall(insertdata,this->RowSize,pagenum,rownum);
+
     memcpy(b + position, insertdata, this->RowSize);
     pagerownum++;
     UIC::inttochar(pagerownum, b + 4);
@@ -266,14 +266,15 @@ bool FixedSizeTable::DeleteAt(int pagenum, int rownum)
         return false;
     int position1 = 8 + this->RowSize * (pagerownum - 1);
     int position2 = 8 + this->RowSize * rownum;
-
-    deleteall(b+position1,this->RowSize,pagenum,position1);
-    if (position1!=position2)
-        modifyall(b+position2,this->RowSize,pagenum,position2,pagenum,position1);
-
     char* temp = (char*)malloc(this->RowSize);
     memcpy(temp, b + position1, this->RowSize);
     memcpy(b + position2, temp, this->RowSize);
+
+    deleteall(b+position1,this->RowSize,pagenum,rownum);
+
+    if (position1!=position2)
+        modifyall(b+position2,this->RowSize,pagenum,position1,pagenum,position2);
+
     pagerownum--;
     UIC::inttochar(pagerownum, b + 4);
     if (pagenum < this->MaxRecordSize) {

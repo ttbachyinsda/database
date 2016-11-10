@@ -276,9 +276,12 @@ bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rownum)
         reservedsize = UIC::chartoint(b+8);
         reservedpointer = UIC::chartoint(b+12);
     }
-    insertall(insertdata,datalen,pagenum,reservedpointer);
+
     putat(b,reservedpointer,pagerownum,insertdata);
     rownum=pagerownum;
+
+    insertall(insertdata,datalen,pagenum,rownum);
+
     //if (pagenum==1 && rownum<3)
     //cout<<rownum<<' '<<reservedpointer<<' '<<datalen<<endl;
     datalen=UIC::chartoint(b+reservedpointer);
@@ -344,7 +347,9 @@ bool FlexibleTable::DeleteAt(int pagenum, int rownum)
 
     int newposition=0,currentsize;
     currentsize=UIC::chartoint(b+position);
-    deleteall(b+position,currentsize,pagenum,position);
+
+    deleteall(b+position,currentsize,pagenum,rownum);
+
     UIC::inttochar(newposition,b+__position(rownum));
 
     int reservedsize = UIC::chartoint(b+8);
