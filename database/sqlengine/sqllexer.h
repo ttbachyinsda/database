@@ -6,7 +6,7 @@
 #define DATABASE_SQLLEXER_H
 
 #if !defined(yyFlexLexerOnce)
-#include "FlexLexer.h"
+#include <FlexLexer.h>
 #endif
 
 #include "sqlparser.hpp"

@@ -49,7 +49,6 @@ SOURCES += main.cpp\
     DBIndex/db_index.cpp \
 
 HEADERS  += mainwindow.h \
-    bin/FlexLexer.h \
     pagefilesystem/BufPageManager.h \
     pagefilesystem/FileManager.h \
     pagefilesystem/pagedef.h \
@@ -97,7 +96,6 @@ HEADERS  += mainwindow.h \
     DBIndex/predefined.h \
     sqlengine/sqllexer.l \
     sqlengine/sqlparser.yy \
-    FlexLexer.h
 
 FORMS    += mainwindow.ui
 

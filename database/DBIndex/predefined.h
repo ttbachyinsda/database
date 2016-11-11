@@ -18,7 +18,7 @@ struct index_value {
 };
 struct index_key {
     int len;
-    char k[];
+    char k[20];
     index_key(const char *str = "", int len = 0) {
         memcpy(k, str, len);
         this->len = len;
@@ -36,6 +36,7 @@ inline int keycmp(const index_key &a, const index_key &b) {
         }
     }
     else return 0;
+    return 0;
 }
 
 #endif /* end of PREDEFINED_H */

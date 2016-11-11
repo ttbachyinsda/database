@@ -64,6 +64,8 @@ void testiterator::begintest()
     cltype.push_back(type3);
     onetable->createTable(clname, cltype);
     onetable->Initialize();
+    onetable->setmajornum(0);
+    onetable->setmultivalue(0,false);
     onetable->createemptyindex(0);
     string* aaa = new string[3];
     int pagenum, rownum;
