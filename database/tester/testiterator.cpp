@@ -126,7 +126,7 @@ void testiterator::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-    iterator->access(0, 0);
+    iterator->access(1, 0);
     cout << "try to delete" << endl;
     iterator->deletedata();
     if (iterator->available()) {

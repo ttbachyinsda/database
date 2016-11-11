@@ -267,13 +267,14 @@ bool FixedSizeTable::DeleteAt(int pagenum, int rownum)
     int position1 = 8 + this->RowSize * (pagerownum - 1);
     int position2 = 8 + this->RowSize * rownum;
     char* temp = (char*)malloc(this->RowSize);
-    memcpy(temp, b + position1, this->RowSize);
-    memcpy(b + position2, temp, this->RowSize);
 
-    deleteall(b+position1,this->RowSize,pagenum,rownum);
+    deleteall(b+position2,this->RowSize,pagenum,rownum);
 
     if (position1!=position2)
-        modifyall(b+position2,this->RowSize,pagenum,position1,pagenum,position2);
+        modifyall(b+position1,this->RowSize,pagenum,position1,pagenum,position2);
+
+    memcpy(temp, b + position1, this->RowSize);
+    memcpy(b + position2, temp, this->RowSize);
 
     pagerownum--;
     UIC::inttochar(pagerownum, b + 4);
@@ -384,6 +385,8 @@ void FixedSizeTable::deleteall(char *data, int datasize, int pagenum, int rownum
         if (DBindex[i]!=NULL)
         {
             int nowdatasize=column[i]->getSize();
+            string t(data+index,nowdatasize-1);
+            cout<<"delete data at "<<t<<' '<<pagenum<<' '<<rownum<<endl;
             DeleteindexAt(i,data+index,nowdatasize-1,pagenum,rownum);
             index += nowdatasize;
         }
@@ -395,8 +398,8 @@ void FixedSizeTable::insertall(char *data, int datasize, int pagenum, int rownum
         if (DBindex[i]!=NULL)
         {
             int nowdatasize=column[i]->getSize();
-            string t(data+index,nowdatasize-1);
-            cout<<"insert at "<<t<<' '<<pagenum<<' '<<rownum<<endl;
+            //string t(data+index,nowdatasize-1);
+            //cout<<"insert at "<<t<<' '<<pagenum<<' '<<rownum<<endl;
             InsertindexAt(i,data+index,nowdatasize-1,pagenum,rownum);
             index += nowdatasize;
         }
