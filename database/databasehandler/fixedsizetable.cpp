@@ -328,7 +328,7 @@ bool FixedSizeTable::FastInsert(int& pagenum, int& rownum, Record* rec)
 bool FixedSizeTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
 {
     bool can = false;
-    for (int i = min(this->MaxRecordSize,this->PageNum); i > 0; i--)
+    for (int i = min(this->MaxRecordSize-1,this->PageNum); i > 0; i--)
         if (this->RowNumInPage[i] < this->MaxRowNum) {
             pagenum = i;
             can = FastInsert(pagenum, rownum, rec);

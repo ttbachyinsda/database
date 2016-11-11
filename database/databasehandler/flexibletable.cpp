@@ -268,7 +268,10 @@ bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rownum)
     free(option2);
     int datalen=UIC::chartoint(insertdata);
     if (datalen>reservedsize)
+    {
+        //cout<<"error becaule datalen>reservedsize"<<' '<<datalen<<' '<<reservedsize<<endl;
         return false;
+    }
     if (reservedsize>PAGE_SIZE-pagerownum*4-reservedpointer)
     {
         Reconstruct(pagenum,b);
@@ -390,12 +393,12 @@ bool FlexibleTable::FastInsert(int& pagenum, int& rownum, Record* rec)
 bool FlexibleTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
 {
     bool can = false;
-    for (int i = min(this->MaxRecordSize,this->PageNum); i > 0; i--)
+    for (int i = min(this->MaxRecordSize-1,this->PageNum); i > 0; i--)
         if (this->reservedSizeInPage[i] >= rec->getSize()) {
             pagenum = i;
             can = FastInsert(pagenum, rownum, rec);
             if (!can) {
-                cout << "ERROR:: ?????" << endl;
+                cout << "ERROR:: ?????" <<' '<<this->reservedSizeInPage[i]<<' '<<rec->getSize()<< endl;
             }
             if (can) {
                 if (this->PageNum < i)
