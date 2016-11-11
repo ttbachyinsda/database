@@ -5,7 +5,9 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <iostream>
+using std::cout;
+using std::endl;
 #include "bplus_node.h"
 #include "predefined.h"
 
@@ -33,9 +35,11 @@ typedef struct {
 class bplus_tree {
    public:
     bplus_tree(const char *path, bool force_empty = false,
-               bool multi_value = false);
+               bool multi_value = false, int keySize = 20);
 
-    ~bplus_tree() {}
+    ~bplus_tree() {
+        close_file();
+    }
 
     /* abstract operations */
     int search(const index_key &key, index_value *value) const;
@@ -54,7 +58,7 @@ class bplus_tree {
     bool multi_value;
 
     /* init empty tree */
-    void init_from_empty();
+    void init_from_empty(int keySize);
 
     /* find index */
     off_t search_index(const index_key &key) const;
@@ -153,10 +157,8 @@ class bplus_tree {
 
     /* read block from disk */
     int block_read(void *block, off_t offset, size_t size) const {
-        open_file();
         fseek(fp, offset, SEEK_SET);
         size_t rd = fread(block, size, 1, fp);
-        close_file();
 
         return rd - 1;
     }
@@ -168,11 +170,8 @@ class bplus_tree {
 
     /* write block to disk */
     int block_write(void *block, off_t offset, size_t size) const {
-        open_file();
         fseek(fp, offset, SEEK_SET);
         size_t wd = fwrite(block, size, 1, fp);
-        close_file();
-
         return wd - 1;
     }
 

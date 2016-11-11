@@ -68,9 +68,10 @@ void testiterator::begintest()
     string* aaa = new string[3];
     int pagenum, rownum;
     Record* t = RecordFactory::getrecord(onetable);
+    Record* temp = t;
     QTime time;
     time.start();
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 200000; i++) {
         aaa[0] = InttoString(i);
         aaa[1] = "12345678";
         aaa[2] = "58";

@@ -2,7 +2,7 @@
 
 class db_index {
    public:
-    db_index(char *path, bool forceNewIndex = false, bool multi_value = false);
+    db_index(char *path, bool forceNewIndex = false, bool multi_value = false, int keySize = 20);
 
     int search(const index_key &key, index_value *value,
                int max_num = 1000) const;

@@ -17,10 +17,9 @@ struct index_value {
     }
 };
 struct index_key {
-    char k[256];
     int len;
+    char k[];
     index_key(const char *str = "", int len = 0) {
-        memset(k,0, sizeof(k));
         memcpy(k, str, len);
         this->len = len;
     }

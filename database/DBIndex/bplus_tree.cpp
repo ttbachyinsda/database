@@ -1,9 +1,11 @@
 #include "bplus_tree.h"
 
 #include <stdlib.h>
-
+#include <iostream>
 #include <algorithm>
 #include <list>
+using std::cout;
+using std::endl;
 using std::swap;
 using std::binary_search;
 using std::lower_bound;
@@ -54,22 +56,24 @@ inline record_t* find(leaf_node_t& node, const index_key& key) {
 }
 
 bplus_tree::bplus_tree(const char* p, bool force_empty /*false*/,
-                       bool multi_value /*false*/)
+                       bool multi_value /*false*/, int keySize /*20*/)
     : fp(NULL), fp_level(0) {
     memset(path,0, sizeof(path));
     strcpy(path, p);
     this->multi_value = multi_value;
 
-    if (!force_empty)
+    if (!force_empty) {
         // read tree from file
+        open_file();
         if (block_read(&head, OFFSET_META) != 0) force_empty = true;
+    }
 
     if (force_empty) {
         open_file("w+");  // truncate file
 
         // create empty tree if file doesn't exist
-        init_from_empty();
-        close_file();
+        init_from_empty(0);
+//        close_file();
     }
 }
 
@@ -605,7 +609,6 @@ off_t bplus_tree::search_index_l(const index_key& key) const {
 off_t bplus_tree::search_leaf(off_t index, const index_key& key) const {
     internal_node_t node;
     block_read(&node, index);
-
     index_t* i = upper_bound(begin(node), end(node) - 1, key);
     return i->child;
 }
@@ -648,12 +651,12 @@ void bplus_tree::node_remove(T* prev, T* node) {
     block_write(&head, OFFSET_META);
 }
 
-void bplus_tree::init_from_empty() {
+void bplus_tree::init_from_empty(int keySize) {
     // init default head
     memset(&head,0, sizeof(head_t));
     head.order = CHILDREN_NUM;
     head.value_size = sizeof(index_value);
-    head.key_size = sizeof(index_key);
+    head.key_size = sizeof(keySize);
     head.height = 1;
     head.slot = OFFSET_BLOCK;
 
@@ -661,7 +664,8 @@ void bplus_tree::init_from_empty() {
     internal_node_t root;
     root.next = root.prev = root.parent = 0;
     head.root_offset = alloc(&root);
-
+    cout << root.n << endl;
+    
     // init empty leaf
     leaf_node_t leaf;
     leaf.next = leaf.prev = 0;
