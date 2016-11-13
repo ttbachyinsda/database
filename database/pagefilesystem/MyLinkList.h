@@ -72,5 +72,9 @@ public:
             a[i].prev = i;
         }
     }
+    ~MyLinkList()
+    {
+        if (a!=0) delete[] a;
+    }
 };
 #endif

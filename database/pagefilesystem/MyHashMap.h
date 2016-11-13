@@ -111,5 +111,10 @@ public:
         }
         list = new MyLinkList(CAP_, MOD_);
     }
+    ~MyHashMap()
+    {
+        if (a!=NULL) delete[] a;
+        if (list!=NULL) delete list;
+    }
 };
 #endif

@@ -56,5 +56,9 @@ public:
             list->insert(0, i);
         }
     }
+    ~FindReplace()
+    {
+        if (list!=0) delete list;
+    }
 };
 #endif

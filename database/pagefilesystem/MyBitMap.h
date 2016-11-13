@@ -244,6 +244,11 @@ public:
         size = (cap >> BIAS);
         init();
     }
+    ~MyBitMap()
+    {
+        if (data!=NULL) delete[] data;
+    }
+
     void reLoad(uint* da)
     {
         data = da;

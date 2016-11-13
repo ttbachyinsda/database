@@ -54,6 +54,7 @@ bool DataBaseType::readcondition(char* input,int inputsize, int& position)
     char* contype = (char*)malloc(4);
     memcpy(contype, input, 4);
     string scontype(contype, 4);
+    free(contype);
     if (scontype == "FRTO" || scontype == "frTO" || scontype == "FRto" || scontype == "frto") {
         conditionsize = inputsize;
         condition = (char*)malloc(conditionsize);

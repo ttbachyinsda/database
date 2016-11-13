@@ -398,7 +398,7 @@ bool FlexibleTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
             pagenum = i;
             can = FastInsert(pagenum, rownum, rec);
             if (!can) {
-                cout << "ERROR:: ?????" <<' '<<this->reservedSizeInPage[i]<<' '<<rec->getSize()<< endl;
+                cout << "ERROR:: ?????" <<' '<<i<<' '<<this->reservedSizeInPage[i]<<' '<<rec->getSize()<< endl;
             }
             if (can) {
                 if (this->PageNum < i)

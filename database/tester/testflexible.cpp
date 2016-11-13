@@ -36,6 +36,7 @@ void testflexible::testindex(Table* onetable,string input)
     } else
         cout<<"has not found"<<endl;
     cout<<"test index end"<<endl;
+    delete it;
 }
 
 void testflexible::begintest()
@@ -66,6 +67,7 @@ void testflexible::begintest()
     cltype.push_back(type3);
     onetable->createTable(clname, cltype);
     onetable->Initialize();
+    delete[] conditions;
     onetable->setmajornum(0);
     onetable->setmultivalue(0,false);
     onetable->createemptyindex(0);
