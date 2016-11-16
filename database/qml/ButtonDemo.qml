@@ -1,8 +1,13 @@
 import QtQuick 2.4
 import Material 0.2
+import thjdb.QMLif 1.0
 import QtQuick.Controls 1.3 as Controls
 
 Item {
+
+    QMLif {
+        id:qmlif
+    }
 
     Column {
         anchors.centerIn: parent
@@ -11,7 +16,7 @@ Item {
         Button {
             text: "Simple Button"
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: snackbar.open("Simple, isn't it?")
+            onClicked: text = qmlif.doSomething()
         }
 
         Button {

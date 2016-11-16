@@ -4,6 +4,7 @@
 #include "tester/testtype.h"
 #include "tester/testflexible.h"
 #include "tester/testiterator.h"
+#include "layer/qmlif.h"
 #include <QQmlApplicationEngine>
 #include <QGuiApplication>
 using namespace std;
@@ -26,6 +27,7 @@ int main(int argc, char* argv[])
 
 //    testflexible x;
 //    x.begintest();
+    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
     QPM_INIT(engine)

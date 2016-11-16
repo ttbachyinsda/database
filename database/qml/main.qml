@@ -5,77 +5,70 @@ import Material.ListItems 0.1 as ListItem
 ApplicationWindow {
     id: demo
 
-    title: "Material for QtQuick Demo"
+    title: "THJDB 2.0.9.5"
 
     // Necessary when loading the window from C++
     visible: true
 
     theme {
-        primaryColor: "blue"
-        accentColor: "red"
+        primaryColor: "red"
+        accentColor: "purple"
         tabHighlightColor: "white"
     }
 
-    property var styles: [
+    property var databaseSettings: [
             "Custom Icons", "Color Palette", "Typography"
     ]
-
-    property var basicComponents: [
+    property var databaseCommand: [
             "Button", "CheckBox", "Progress Bar", "Radio Button",
             "Slider", "Switch", "TextField"
     ]
-
-    property var compoundComponents: [
+    property var aboutDatabase: [
             "Bottom Sheet", "Dialog", "Forms", "List Items", "Page Stack", "Time Picker", "Date Picker"
     ]
+    property var aboutDatabaseString: [
+        "About Author","Thanks","Libs Included","License","test1","test2","test3"
+    ]
+    property var sections: [ databaseCommand, databaseSettings, aboutDatabase ]
 
-    property var sections: [ basicComponents, styles, compoundComponents ]
-
-    property var sectionTitles: [ "Basic Components", "Style", "Compound Components" ]
+    property var sectionTitles: [ "Database Command", "Database Settings", "About Database" ]
 
     property string selectedComponent: sections[0][0]
+
+    property var gettext:
+    {
+        "Custom Icons":"basic settings",
+        "Color Palette":"search optimize",
+        "Typography":"database optimize",
+        "Button":"Database Overview",
+        "CheckBox":"execute SQL",
+        "Progress Bar":"Manage Database",
+        "Radio Button":"test1",
+        "Slider":"test2",
+        "Switch":"test3",
+        "TextField":"test4",
+        "Bottom Sheet":"About Author",
+        "Dialog":"Thanks",
+        "Forms":"Libs Included",
+        "List Items":"License",
+        "Page Stack":"test1",
+        "Time Picker":"test2",
+        "Date Picker":"test3"
+    }
 
     initialPage: TabbedPage {
         id: page
 
-        title: "Demo"
+        title: "THJDB 一个有情怀的数据库"
 
         actionBar.maxActionCount: navDrawer.enabled ? 3 : 4
 
         actions: [
-            Action {
-                iconName: "alert/warning"
-                name: "Dummy error"
-                onTriggered: demo.showError("Something went wrong", "Do you want to retry?", "Close", true)
-            },
 
             Action {
                 iconName: "image/color_lens"
                 name: "Colors"
                 onTriggered: colorPicker.show()
-            },
-
-            Action {
-                iconName: "action/settings"
-                name: "Settings"
-                hoverAnimation: true
-            },
-
-            Action {
-                iconName: "alert/warning"
-                name: "THIS SHOULD BE HIDDEN!"
-                visible: false
-            },
-
-            Action {
-                iconName: "action/language"
-                name: "Language"
-                enabled: false
-            },
-
-            Action {
-                iconName: "action/account_circle"
-                name: "Accounts"
             }
         ]
 
@@ -111,7 +104,10 @@ ApplicationWindow {
                                 model: modelData
                                 delegate: ListItem.Standard {
                                     text: modelData
-                                    selected: modelData == demo.selectedComponent
+                                    selected:
+                                    {
+                                        modelData == demo.selectedComponent
+                                    }
                                     onClicked: {
                                         demo.selectedComponent = modelData
                                         navDrawer.close()
@@ -133,6 +129,7 @@ ApplicationWindow {
                 property string selectedComponent: modelData[0]
                 property var section: modelData
 
+
                 sourceComponent: tabDelegate
             }
         }
@@ -150,7 +147,7 @@ ApplicationWindow {
 
     Dialog {
         id: colorPicker
-        title: "Pick color"
+        title: "Choose your favorite color"
 
         positiveButtonText: "Done"
 
@@ -223,9 +220,15 @@ ApplicationWindow {
                     Repeater {
                         model: section
                         delegate: ListItem.Standard {
-                            text: modelData
-                            selected: modelData == selectedComponent
-                            onClicked: selectedComponent = modelData
+                            text: gettext[modelData]
+                            selected:
+                            {
+                                modelData == selectedComponent
+                            }
+                            onClicked:
+                            {
+                                selectedComponent = modelData
+                            }
                         }
                     }
                 }

@@ -48,7 +48,8 @@ SOURCES += main.cpp\
     tester/testflexible.cpp \
     typehandler/databasevarchar.cpp \
     DBIndex/bplus_tree.cpp \
-    DBIndex/db_index.cpp
+    DBIndex/db_index.cpp \
+    layer/qmlif.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -99,7 +100,8 @@ HEADERS  += mainwindow.h \
     sqlengine/sqllexer.l \
     sqlengine/sqlparser.yy \
     layer/pythonif.h \
-    layer/pythonif.i
+    layer/pythonif.i \
+    layer/qmlif.h
 
 FORMS    += mainwindow.ui
 
