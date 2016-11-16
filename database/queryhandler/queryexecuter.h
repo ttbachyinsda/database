@@ -10,10 +10,10 @@ class SQLResult;
 
 #include <vector>
 #include <map>
-#include "databasehandler/table.h"
-#include "queryhandler/querycondition.h"
-#include "recordhandler/recordfactory.h"
-#include "managementhandler/iteratorfactory.h"
+#include "../databasehandler/table.h"
+#include "../queryhandler/querycondition.h"
+#include "../recordhandler/recordfactory.h"
+#include "../managementhandler/iteratorfactory.h"
 
 class QueryExecuter
 {

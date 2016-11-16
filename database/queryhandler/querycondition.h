@@ -1,7 +1,7 @@
 #ifndef QUERYCONDITION_H
 #define QUERYCONDITION_H
 
-#include "sqlengine/sqlstruct.h"
+#include "../sqlengine/sqlstruct.h"
 
 struct SelectorPair
 {

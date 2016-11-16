@@ -2,7 +2,7 @@
 #define FIXEDSIZEDITERATOR_H
 
 #include "iterator.h"
-#include "recordhandler/fixedsizerecord.h"
+#include "../recordhandler/fixedsizerecord.h"
 class FixedSizedIterator : public Iterator {
 public:
     FixedSizedIterator(Table* table);

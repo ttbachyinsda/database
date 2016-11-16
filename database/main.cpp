@@ -4,6 +4,8 @@
 #include "tester/testtype.h"
 #include "tester/testflexible.h"
 #include "tester/testiterator.h"
+#include <QQmlApplicationEngine>
+#include <QGuiApplication>
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -19,12 +21,14 @@ int main(int argc, char* argv[])
     v.begintest();
 */
 
-    testiterator w;
-    w.begintest();
+//    testiterator w;
+//    w.begintest();
 
-    testflexible x;
-    x.begintest();
-
-
-    return 0;
+//    testflexible x;
+//    x.begintest();
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
+    QPM_INIT(engine)
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    return app.exec();
 }

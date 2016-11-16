@@ -1,12 +1,12 @@
 #ifndef TABLE_H
 #define TABLE_H
-#include "pagefilesystem/BufPageManager.h"
-#include "recordhandler/record.h"
-#include "typehandler/databasechar.h"
-#include "typehandler/databaseint.h"
-#include "typehandler/databasetype.h"
-#include "DBIndex/db_index.h"
-#include "managementhandler/uic.h"
+#include "../pagefilesystem/BufPageManager.h"
+#include "../recordhandler/record.h"
+#include "../typehandler/databasechar.h"
+#include "../typehandler/databaseint.h"
+#include "../typehandler/databasetype.h"
+#include "../DBIndex/db_index.h"
+#include "../managementhandler/uic.h"
 #include <string>
 #include <vector>
 using namespace std;

@@ -1,6 +1,6 @@
 #ifndef DATABASEMANAGER_H
 #define DATABASEMANAGER_H
-#include "databasehandler/database.h"
+#include "../databasehandler/database.h"
 
 class DatabaseManager {
 public:

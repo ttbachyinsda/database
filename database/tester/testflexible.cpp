@@ -74,8 +74,8 @@ void testflexible::begintest()
     string* aaa = new string[3];
     int pagenum, rownum;
     Record* t = RecordFactory::getrecord(onetable);
-    QTime time;
-    time.start();
+//    QTime time;
+//    time.start();
     for (int i = 0; i < 200000; i++) {
         aaa[0] = InttoString(i);
         aaa[1] = "a"+InttoString(i);
@@ -95,9 +95,9 @@ void testflexible::begintest()
     testindex(onetable,"5");
     cout << onetable->getPageNum() << endl;
     cout << onetable->getPageRowNum(1030) << endl;
-    int time_Diff = time.elapsed();
-    float f = time_Diff / 1000.0;
-    cout << "Time table: " << f << endl;
+//    int time_Diff = time.elapsed();
+//    float f = time_Diff / 1000.0;
+//    cout << "Time table: " << f << endl;
 
     cout << "test table end" << endl;
     cout << "test iterator begin" << endl;

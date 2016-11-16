@@ -1,8 +1,8 @@
 #ifndef ITERATOR_H
 #define ITERATOR_H
 
-#include "databasehandler/table.h"
-#include "recordhandler/record.h"
+#include "../databasehandler/table.h"
+#include "../recordhandler/record.h"
 #include "uic.h"
 class Iterator {
 public:

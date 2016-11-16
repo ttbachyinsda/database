@@ -1,10 +1,10 @@
 #ifndef UIC_H
 #define UIC_H
 
-#include "typehandler/databasechar.h"
-#include "typehandler/databaseint.h"
-#include "typehandler/databasevarchar.h"
-#include "typehandler/databasetype.h"
+#include "../typehandler/databasechar.h"
+#include "../typehandler/databaseint.h"
+#include "../typehandler/databasevarchar.h"
+#include "../typehandler/databasetype.h"
 #include <sstream>
 
 typedef int FileIterator;

@@ -58,8 +58,8 @@ void testtype::begintest(bool timetest)
     begintestchar();
     beginteststring();
     begintestchar();
-    QTime time;
-    time.start();
+    //QTime time;
+    //time.start();
     if (timetest) {
         for (int i = 0; i < 100000000; i++) {
             DataBaseType* a = new DatabaseChar(20);
@@ -70,11 +70,11 @@ void testtype::begintest(bool timetest)
             b->checkRightAndChange("12345");
             delete b;
         }
-        int time_Diff = time.elapsed();
-        float f = time_Diff / 1000.0;
-        cout << "Time string: " << f << endl;
-        QTime time2;
-        time2.start();
+//        int time_Diff = time.elapsed();
+//        float f = time_Diff / 1000.0;
+//        cout << "Time string: " << f << endl;
+//        QTime time2;
+//        time2.start();
         for (int i = 0; i < 100000000; i++) {
             DataBaseType* a = new DatabaseChar(20);
             char* x = new char[20];
@@ -93,9 +93,9 @@ void testtype::begintest(bool timetest)
             delete[] z;
             delete b;
         }
-        time_Diff = time2.elapsed();
-        f = time_Diff / 1000.0;
-        cout << "Time char: " << f << endl;
+//        time_Diff = time2.elapsed();
+//        f = time_Diff / 1000.0;
+//        cout << "Time char: " << f << endl;
     }
     beginjingxitest();
     cout << "Type test complete." << endl;

@@ -1,0 +1,46 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/TypographyDemo.qml</file>
+        <file>qml/TimePickerDemo.qml</file>
+        <file>qml/TextFieldDemo.qml</file>
+        <file>qml/SwitchDemo.qml</file>
+        <file>qml/SubPage.qml</file>
+        <file>qml/SliderDemo.qml</file>
+        <file>qml/SidebarPage.qml</file>
+        <file>qml/RadioButtonDemo.qml</file>
+        <file>qml/ProgressBarDemo.qml</file>
+        <file>qml/PageStackDemo.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/ListItemsDemo.qml</file>
+        <file>qml/FormsDemo.qml</file>
+        <file>qml/DialogDemo.qml</file>
+        <file>qml/DatePickerDemo.qml</file>
+        <file>qml/CustomIconsDemo.qml</file>
+        <file>qml/ColorPaletteDemo.qml</file>
+        <file>qml/CheckBoxDemo.qml</file>
+        <file>qml/ButtonDemo.qml</file>
+        <file>qml/BottomSheetDemo.qml</file>
+        <file>icons/social_share.svg</file>
+        <file>icons/navigation_arrow_drop_down.svg</file>
+        <file>icons/maps_place.svg</file>
+        <file>icons/image_edit.svg</file>
+        <file>icons/image_color_lens.svg</file>
+        <file>icons/file_file_download.svg</file>
+        <file>icons/device_access_alarm.svg</file>
+        <file>icons/content_forward.svg</file>
+        <file>icons/content_create.svg</file>
+        <file>icons/content_add.svg</file>
+        <file>icons/communication_email.svg</file>
+        <file>icons/alert_warning.svg</file>
+        <file>icons/action_settings.svg</file>
+        <file>icons/action_language.svg</file>
+        <file>icons/action_delete.svg</file>
+        <file>icons/action_autorenew.svg</file>
+        <file>icons/action_account_circle.svg</file>
+        <file>qml/images/weather-sunset.svg</file>
+        <file>qml/images/weather-pouring.svg</file>
+        <file>qml/images/list-add.color.svg</file>
+        <file>qml/images/go-last.color.svg</file>
+        <file>qml/images/balloon.jpg</file>
+    </qresource>
+</RCC>

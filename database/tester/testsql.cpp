@@ -1,6 +1,6 @@
 #include "testsql.h"
-#include "sqlengine/sqldriver.h"
-#include "sqlengine/sqlstruct.h"
+#include "../sqlengine/sqldriver.h"
+#include "../sqlengine/sqlstruct.h"
 #include <iostream>
 #include <fstream>
 using namespace std;

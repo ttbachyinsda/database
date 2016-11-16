@@ -1,7 +1,7 @@
 #include "queryexecuter.h"
-#include "sqlengine/sqlstruct.h"
-#include "sqlengine/sqldriver.h"
-#include "typehandler/databaseint.h"
+#include "../sqlengine/sqlstruct.h"
+#include "../sqlengine/sqldriver.h"
+#include "../typehandler/databaseint.h"
 
 #include <iostream>
 using namespace std;

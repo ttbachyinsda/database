@@ -2,10 +2,10 @@
 #define FLEXIBLETABLE_H
 
 
-#include "databasehandler/table.h"
-#include "managementhandler/uic.h"
-#include "recordhandler/record.h"
-#include "recordhandler/flexiblerecord.h"
+#include "../databasehandler/table.h"
+#include "../managementhandler/uic.h"
+#include "../recordhandler/record.h"
+#include "../recordhandler/flexiblerecord.h"
 #include <sstream>
 
 #define __position(x) (PAGE_SIZE-((x)+1)*4)

@@ -1,9 +1,9 @@
 #ifndef FIXEDSIZETABLE_H
 #define FIXEDSIZETABLE_H
 
-#include "databasehandler/table.h"
-#include "managementhandler/uic.h"
-#include "recordhandler/fixedsizerecord.h"
+#include "../databasehandler/table.h"
+#include "../managementhandler/uic.h"
+#include "../recordhandler/fixedsizerecord.h"
 #include <sstream>
 #define __FIXPOSITION(x) (8+(x)*this->RowSize)
 class FixedSizeTable : public Table {

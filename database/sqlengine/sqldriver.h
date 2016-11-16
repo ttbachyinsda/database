@@ -10,9 +10,9 @@
 #include "sqlparser.hpp"
 #include "sqllexer.h"
 #include "sqlaction.h"
-#include "databasehandler/database.h"
-#include "layer/databasemanager.h"
-#include "queryhandler/queryexecuter.h"
+#include "../databasehandler/database.h"
+#include "../layer/databasemanager.h"
+#include "../queryhandler/queryexecuter.h"
 
 class SQLDriver {
 

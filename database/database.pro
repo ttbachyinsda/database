@@ -12,7 +12,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = database
 TEMPLATE = app
 
+DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
 
+include(../material/material.pri)
 SOURCES += main.cpp\
         mainwindow.cpp \
     databasehandler/database.cpp \
@@ -46,7 +48,7 @@ SOURCES += main.cpp\
     tester/testflexible.cpp \
     typehandler/databasevarchar.cpp \
     DBIndex/bplus_tree.cpp \
-    DBIndex/db_index.cpp \
+    DBIndex/db_index.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -96,6 +98,8 @@ HEADERS  += mainwindow.h \
     DBIndex/predefined.h \
     sqlengine/sqllexer.l \
     sqlengine/sqlparser.yy \
+    layer/pythonif.h \
+    layer/pythonif.i
 
 FORMS    += mainwindow.ui
 
@@ -133,3 +137,7 @@ DISTFILES += \
     bin/data/README \
     bin/win_bison \
     bin/win_flex \
+
+RESOURCES += \
+    thjdb.qrc \
+    icons/icons.qrc

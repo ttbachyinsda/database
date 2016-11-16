@@ -4,10 +4,10 @@
 
 #include "sqlaction.h"
 #include "sqldriver.h"
-#include "databasehandler/database.h"
-#include "databasehandler/fixedsizetable.h"
-#include "recordhandler/record.h"
-#include "recordhandler/recordfactory.h"
+#include "../databasehandler/database.h"
+#include "../databasehandler/fixedsizetable.h"
+#include "../recordhandler/record.h"
+#include "../recordhandler/recordfactory.h"
 #include <iostream>
 using namespace std;
 

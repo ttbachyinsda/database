@@ -2,8 +2,8 @@
 #define FLEXIBLEITERATOR_H
 
 #include "iterator.h"
-#include "recordhandler/flexiblerecord.h"
-#include "databasehandler/flexibletable.h"
+#include "../recordhandler/flexiblerecord.h"
+#include "../databasehandler/flexibletable.h"
 class FlexibleIterator : public Iterator
 {
 public:

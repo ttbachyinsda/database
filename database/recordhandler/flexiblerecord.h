@@ -2,7 +2,7 @@
 #define FLEXIBLERECORD_H
 
 #include "record.h"
-#include "managementhandler/uic.h"
+#include "../managementhandler/uic.h"
 class FlexibleRecord : public Record
 {
 public:

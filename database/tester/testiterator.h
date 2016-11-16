@@ -1,11 +1,11 @@
 #ifndef TESTITERATOR_H
 #define TESTITERATOR_H
 
-#include "databasehandler/database.h"
-#include "databasehandler/fixedsizetable.h"
-#include "managementhandler/iteratorfactory.h"
-#include "recordhandler/recordfactory.h"
-#include <QTime>
+#include "../databasehandler/database.h"
+#include "../databasehandler/fixedsizetable.h"
+#include "../managementhandler/iteratorfactory.h"
+#include "../recordhandler/recordfactory.h"
+//#include <QTime>
 class testiterator {
 public:
     testiterator();

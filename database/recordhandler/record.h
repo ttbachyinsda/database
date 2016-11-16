@@ -1,7 +1,7 @@
 #ifndef RECORD_H
 #define RECORD_H
 
-#include "typehandler/databasetype.h"
+#include "../typehandler/databasetype.h"
 #include <cstdlib>
 #include <cstring>
 class Record {
