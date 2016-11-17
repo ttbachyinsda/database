@@ -1,5 +1,5 @@
-#ifndef DATABASEINT_H
-#define DATABASEINT_H
+#ifndef DATABASEREAL_H
+#define DATABASEREAL_H
 #include "databasetype.h"
 #include <bitset>
 #include <cstdio>
@@ -7,10 +7,10 @@
 #include <cstring>
 using namespace std;
 #define MAX_INT_SIZE 255
-class DatabaseInt : public DataBaseType {
+class DatabaseReal : public DataBaseType {
 public:
-    DatabaseInt(int size);
-    DatabaseInt(int size, bool cannull);
+    DatabaseReal();
+    DatabaseReal(bool cannull);
     bool read(char* input,int inputlen, int& position);
     bool write(char* output, int& position);
     bool checkRight(string input);
@@ -28,12 +28,11 @@ public:
     int getMaxSize();
     string getType();
     string output();
-    ~DatabaseInt();
+    ~DatabaseReal();
 
 private:
     void change(string input);
     void change(char* input, int size);
     void changetoNull();
 };
-
-#endif // DATABASEINT_H
+#endif // DATABASEREAL_H

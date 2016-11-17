@@ -283,8 +283,8 @@ string DatabaseInt::output()
     char* temp = (char*)malloc(this->size);
     memset(temp,0,size);
     memcpy(temp+i,data+i,size-i);
-    if (i==size) temp[size-1]='0';
-    string s(temp, size);
+    if (i==size) temp[size-1]='0',i--;
+    string s(temp+i, size-i);
     free(temp);
     return s;
 }

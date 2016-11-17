@@ -45,6 +45,18 @@ void UIC::convert(DataBaseType* t1, char* s1,char* s2)
         *(s1 + 2) = 'R';
         *(s1 + 3) = 'C';
     }
+    if (temp[6]=='R'){
+        *(s1) = 'R';
+        *(s1 + 1) = 'E';
+        *(s1 + 2) = 'A';
+        *(s1 + 3) = 'L';
+    }
+    if (temp[6]=='L'){
+        *(s1) = 'L';
+        *(s1 + 1) = 'I';
+        *(s1 + 2) = 'N';
+        *(s1 + 3) = 'T';
+    }
     if (t1->getNullable()==true)
     {
         *(s2) = 'A';
@@ -73,6 +85,14 @@ DataBaseType* UIC::reconvert(char* s1, int size,bool cannull)
         DataBaseType* temp = new DatabaseVarchar(size,cannull);
         return temp;
     }
+    if (*(s1) == 'R'){
+        DataBaseType* temp = new DatabaseReal(cannull);
+        return temp;
+    }
+    if (*(s1) == 'L'){
+        DataBaseType* temp = new DatabaseLint(cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
@@ -87,6 +107,16 @@ DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
     }
     if (s1[0] == 'V') {
         DataBaseType* temp = new DatabaseVarchar(size,cannull);
+        return temp;
+    }
+    if (s1[0]=='R')
+    {
+        DataBaseType* temp = new DatabaseReal(cannull);
+        return temp;
+    }
+    if (s1[0]=='L')
+    {
+        DataBaseType* temp = new DatabaseLint(cannull);
         return temp;
     }
     return NULL;
@@ -105,6 +135,14 @@ DataBaseType* UIC::realreconvert(char* s1, int size,bool cannull)
         DataBaseType* temp = new DatabaseVarchar(size-1,cannull);
         return temp;
     }
+    if (*(s1) == 'R') {
+        DataBaseType* temp = new DatabaseReal(cannull);
+        return temp;
+    }
+    if (*(s1) == 'L') {
+        DataBaseType* temp = new DatabaseLint(cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::realreconvert(string s1, int size, bool cannull)
@@ -119,6 +157,14 @@ DataBaseType* UIC::realreconvert(string s1, int size, bool cannull)
     }
     if (s1[0] == 'V') {
         DataBaseType* temp = new DatabaseVarchar(size-1,cannull);
+        return temp;
+    }
+    if (s1[0] == 'R') {
+        DataBaseType* temp = new DatabaseReal(cannull);
+        return temp;
+    }
+    if (s1[0] == 'L') {
+        DataBaseType* temp = new DatabaseLint(cannull);
         return temp;
     }
     return NULL;
@@ -196,6 +242,12 @@ DataBaseType** UIC::copytype(DataBaseType** input, int inputlen)
         } else if (temptype[6]=='V')
         {
             temp[i]=new DatabaseVarchar(input[i]->getMaxSize()-1);
+        } else if (temptype[6]=='R')
+        {
+            temp[i]=new DatabaseReal();
+        } else if (temptype[6]=='L')
+        {
+            temp[i]=new DatabaseLint();
         }
         else
         {

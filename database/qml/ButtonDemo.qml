@@ -6,7 +6,16 @@ import QtQuick.Controls 1.3 as Controls
 Item {
 
     QMLif {
-        id:qmlif
+        id:qmlif1
+        onResultReady: button1.text = qmlif1.gettext()
+    }
+    QMLif {
+        id:qmlif2
+        onResultReady:
+        {
+            snackbar.open(qmlif2.gettext())
+            button2.text = qmlif2.gettext()
+        }
     }
 
     Column {
@@ -14,16 +23,23 @@ Item {
         spacing: dp(20)
 
         Button {
+            id:button1
             text: "Simple Button"
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: text = qmlif.doSomething()
+            onClicked: qmlif1.doSomething()
         }
 
         Button {
+            id:button2
             text: "Raised Button"
             elevation: 1
             anchors.horizontalCenter: parent.horizontalCenter
-            onClicked: snackbar.open("This is a snackbar")
+            onClicked:
+            {
+                qmlif2.doSomething()
+                qmlif2.receivedastring(button2.text)
+                snackbar.open("This is a snackbar")
+            }
         }
 
         Button {

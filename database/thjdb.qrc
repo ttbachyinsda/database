@@ -42,5 +42,7 @@
         <file>qml/images/list-add.color.svg</file>
         <file>qml/images/go-last.color.svg</file>
         <file>qml/images/balloon.jpg</file>
+        <file>qml/loading.qml</file>
+        <file>qml/images/loadingimage.jpeg</file>
     </qresource>
 </RCC>

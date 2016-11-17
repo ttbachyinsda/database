@@ -2,5 +2,5 @@
 
 QMLif::QMLif()
 {
-
+    i=0;
 }

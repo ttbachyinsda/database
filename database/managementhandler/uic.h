@@ -5,6 +5,8 @@
 #include "../typehandler/databaseint.h"
 #include "../typehandler/databasevarchar.h"
 #include "../typehandler/databasetype.h"
+#include "../typehandler/databasereal.h"
+#include "../typehandler/databaselint.h"
 #include <sstream>
 
 typedef int FileIterator;

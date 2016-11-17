@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    QPM_INIT(engine)
-    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    QPM_INIT(engine);
+    engine.load(QUrl(QStringLiteral("qrc:/qml/loading.qml")));
     return app.exec();
 }

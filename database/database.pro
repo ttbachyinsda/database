@@ -49,7 +49,9 @@ SOURCES += main.cpp\
     typehandler/databasevarchar.cpp \
     DBIndex/bplus_tree.cpp \
     DBIndex/db_index.cpp \
-    layer/qmlif.cpp
+    layer/qmlif.cpp \
+    typehandler/databasereal.cpp \
+    typehandler/databaselint.cpp
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -101,7 +103,9 @@ HEADERS  += mainwindow.h \
     sqlengine/sqlparser.yy \
     layer/pythonif.h \
     layer/pythonif.i \
-    layer/qmlif.h
+    layer/qmlif.h \
+    typehandler/databasereal.h \
+    typehandler/databaselint.h
 
 FORMS    += mainwindow.ui
 
