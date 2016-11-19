@@ -1,7 +1,9 @@
 #include "sqlstruct.h"
+#include "../layer/json.hpp"
 #include <cstring>
 #include <iostream>
 
+using json = nlohmann::json;
 const char *const SQLType::INT = "INT";
 const char *const SQLType::CHAR = "CHAR";
 const char *const SQLType::VARCHAR = "VARCHAR";
@@ -63,6 +65,19 @@ void SQLSelectorGroup::dump() const
             std::cout << ' ';
         }
     }
+}
+
+std::string SQLResult::toJSON()
+{
+    json res;
+    for (std::vector<std::string>& r : data) {
+        json now;
+        for (std::string& t : r) {
+            now.push_back(t);
+        }
+        res.push_back(now);
+    }
+    return res.dump();
 }
 
 void SQLResult::dumpToConsole()

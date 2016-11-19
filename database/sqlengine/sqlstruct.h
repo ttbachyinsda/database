@@ -5,44 +5,6 @@
 #include <vector>
 #include <list>
 
-struct SQLCheck;
-typedef std::vector<SQLCheck*> SQLCheckGroup;
-
-struct SQLType
-{
-    // Not using enumerate type for future efficiency considerations
-    static const char *const INT;
-    static const char *const CHAR;
-    static const char *const VARCHAR;
-
-    bool primaryType;
-    bool canNull;
-    int length;
-    const char* type;
-    std::string identifier;
-
-    bool isCheck;
-    SQLCheckGroup* checkGroup;
-
-    SQLType() {
-        isCheck = false;
-        checkGroup = NULL;
-        primaryType = false;
-        type = SQLType::CHAR;
-        canNull = true;
-    }
-
-    ~SQLType() {
-        if (isCheck && checkGroup) {
-            for (SQLCheck* c : *checkGroup)
-                delete c;
-            delete checkGroup;
-        }
-    }
-
-    void dump() const;
-};
-
 struct SQLValue
 {
     enum {
@@ -78,6 +40,50 @@ enum SQLOperand
     LESS,
     GREATER_EQUAL,
     LESS_EQUAL
+};
+
+struct SQLCheck
+{
+    bool isChoice;
+    SQLValueGroup* choiceList;
+    SQLOperand operand;
+    SQLValue value;
+};
+typedef std::vector<SQLCheck*> SQLCheckGroup;
+
+struct SQLType
+{
+    // Not using enumerate type for future efficiency considerations
+    static const char *const INT;
+    static const char *const CHAR;
+    static const char *const VARCHAR;
+
+    bool primaryType;
+    bool canNull;
+    int length;
+    const char* type;
+    std::string identifier;
+
+    bool isCheck;
+    SQLCheckGroup* checkGroup;
+
+    SQLType() {
+        isCheck = false;
+        checkGroup = NULL;
+        primaryType = false;
+        type = SQLType::CHAR;
+        canNull = true;
+    }
+
+    ~SQLType() {
+        if (isCheck && checkGroup) {
+            for (SQLCheck* c : *checkGroup)
+                delete c;
+            delete checkGroup;
+        }
+    }
+
+    void dump() const;
 };
 
 struct SQLSelector
@@ -156,15 +162,9 @@ public:
         title.push_back(str);
     }
 
-    void dumpToConsole();
-};
+    std::string toJSON();
 
-struct SQLCheck
-{
-    bool isChoice;
-    SQLValueGroup* choiceList;
-    SQLOperand operand;
-    SQLValue value;
+    void dumpToConsole();
 };
 
 #endif // SQLSTRUCT_H

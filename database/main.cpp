@@ -5,6 +5,7 @@
 #include "tester/testflexible.h"
 #include "tester/testiterator.h"
 #include "layer/qmlif.h"
+#include "layer/pythonif.h"
 #include <QQmlApplicationEngine>
 #include <QGuiApplication>
 using namespace std;
@@ -27,10 +28,24 @@ int main(int argc, char* argv[])
 
 //    testflexible x;
 //    x.begintest();
-    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
-    QGuiApplication app(argc, argv);
-    QQmlApplicationEngine engine;
-    QPM_INIT(engine);
-    engine.load(QUrl(QStringLiteral("qrc:/qml/loading.qml")));
-    return app.exec();
+
+//    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
+//    QGuiApplication app(argc, argv);
+//    QQmlApplicationEngine engine;
+//    QPM_INIT(engine);
+//    engine.load(QUrl(QStringLiteral("qrc:/qml/loading.qml")));
+//    return app.exec();
+
+    string a = "create database student;\
+            use student;\
+            create table book (id int(10), name char(20));\
+            insert into book values (1, 'Good'), (2, 'Sth'), (3, 'Test');\
+            create table orders (id int(10), goods char(30), buyer char(10));\
+            insert into orders values (120, 'Soap','James'), (1, 'Laptop', 'John');\
+            select book.name, orders.buyer from book,orders where book.id = orders.id;";
+    open();
+    cout << execSQL(a) << endl;;
+    close();
+
+    return 0;
 }

@@ -232,7 +232,7 @@ string DatabaseChar::output()
 {
     if (isNull)
         return "NULL__DATA";
-    string s(data, size);
+    string s(data);
     return s;
 }
 

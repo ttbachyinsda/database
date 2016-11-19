@@ -105,7 +105,8 @@ HEADERS  += mainwindow.h \
     layer/pythonif.i \
     layer/qmlif.h \
     typehandler/databasereal.h \
-    typehandler/databaselint.h
+    typehandler/databaselint.h \
+    layer/json.hpp
 
 FORMS    += mainwindow.ui
 
