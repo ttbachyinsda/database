@@ -13,21 +13,25 @@ using std::endl;
 
 /* offsets */
 #define OFFSET_META 0
-#define OFFSET_BLOCK OFFSET_META + sizeof(head_t)
-#define SIZE_NO_CHILDREN sizeof(leaf_node_t) - CHILDREN_NUM * sizeof(record_t)
+#define OFFSET_BLOCK OFFSET_META + head_t::getSize()
+#define SIZE_NO_CHILDREN leaf_node_t::getSize() - CHILDREN_NUM * sizeof(record_t)
 
 /* head information of B+ tree */
-typedef struct {
-    size_t order;             /* `order` of B+ tree */
-    size_t value_size;        /* size of value */
-    size_t key_size;          /* size of key */
-    size_t internal_node_num; /* how many internal nodes */
-    size_t leaf_node_num;     /* how many leafs */
-    size_t height;            /* height of tree (exclude leafs) */
-    off_t slot;               /* where to store new block */
-    off_t root_offset;        /* where is the root of internal nodes */
-    off_t leaf_offset;        /* where is the first leaf */
-} head_t;
+struct head_t{
+    int order;             /* `order` of B+ tree */
+    int value_size;        /* size of value */
+    int key_size;          /* size of key */
+    int internal_node_num; /* how many internal nodes */
+    int leaf_node_num;     /* how many leafs */
+    int height;            /* height of tree (exclude leafs) */
+    int slot;               /* where to store new block */
+    int root_offset;        /* where is the root of internal nodes */
+    int leaf_offset;        /* where is the first leaf */
+
+    head_t() {order = value_size = key_size = internal_node_num = leaf_node_num = height = slot =
+               root_offset = leaf_offset = 0;}
+    static int getSize() {return sizeof(head_t);}
+};
 
 /* internal nodes' index segment */
 
@@ -44,7 +48,7 @@ class bplus_tree {
     /* abstract operations */
     int search(const index_key &key, index_value *value) const;
     int search_range(const index_key &left, const index_key &right, index_value *values,
-                     size_t max) const;
+                     int max) const;
     int remove(const index_key &key);
     int insert(const index_key &key, index_value value);
     int update(const index_key &key, index_value value);
@@ -61,31 +65,31 @@ class bplus_tree {
     void init_from_empty(int keySize);
 
     /* find index */
-    off_t search_index(const index_key &key) const;
-    off_t search_index_l(const index_key &key) const;
+    int search_index(const index_key &key) const;
+    int search_index_l(const index_key &key) const;
 
     /* find leaf */
-    off_t search_leaf_l(off_t index, const index_key &key) const;
-    off_t search_leaf_l(const index_key &key) const {
+    int search_leaf_l(int index, const index_key &key) const;
+    int search_leaf_l(const index_key &key) const {
         return search_leaf_l(search_index_l(key), key);
     }
-    off_t search_leaf(off_t index, const index_key &key) const;
-    off_t search_leaf(const index_key &key) const {
+    int search_leaf(int index, const index_key &key) const;
+    int search_leaf(const index_key &key) const {
         return search_leaf(search_index(key), key);
     }
 
     /* remove internal node */
-    void remove_from_index(off_t offset, internal_node_t &node,
+    void remove_from_index(int offset, internal_node_t &node,
                            const index_key &key);
 
     /* borrow one key from other internal node */
-    bool borrow_key(bool from_right, internal_node_t &borrower, off_t offset);
+    bool borrow_key(bool from_right, internal_node_t &borrower, int offset);
 
     /* borrow one record from other leaf */
     bool borrow_key(bool from_right, leaf_node_t &borrower);
 
     /* change one's parent key to another key */
-    void change_parent_child(off_t parent, const index_key &o, const index_key &n);
+    void change_parent_child(int parent, const index_key &o, const index_key &n);
 
     /* merge right leaf to left leaf */
     void merge_leafs(leaf_node_t *left, leaf_node_t *right);
@@ -98,17 +102,17 @@ class bplus_tree {
                                 const index_value &value);
 
     /* add key to the internal node */
-    void insert_index_keyo_index(off_t offset, const index_key &key, off_t value,
-                             off_t after);
+    void insert_index_keyo_index(int offset, const index_key &key, int value,
+                             int after);
     void insert_index_keyo_index_no_split(internal_node_t &node, const index_key &key,
-                                      off_t value);
+                                      int value);
 
     /* change children's parent */
     void reset_index_children_parent(index_t *begin, index_t *end,
-                                     off_t parent);
+                                     int parent);
 
     template <class T>
-    void node_create(off_t offset, T *node, T *next);
+    void node_create(int offset, T *node, T *next);
 
     template <class T>
     void node_remove(T *prev, T *node);
@@ -131,53 +135,53 @@ class bplus_tree {
     }
 
     /* alloc from disk */
-    off_t alloc(size_t size) {
-        off_t slot = head.slot;
+    int alloc(int size) {
+        int slot = head.slot;
         head.slot += size;
         return slot;
     }
 
-    off_t alloc(leaf_node_t *leaf) {
+    int alloc(leaf_node_t *leaf) {
         leaf->n = 0;
         head.leaf_node_num++;
-        return alloc(sizeof(leaf_node_t));
+        return alloc(leaf_node_t::getSize());
     }
 
-    off_t alloc(internal_node_t *node) {
+    int alloc(internal_node_t *node) {
         node->n = 1;
         head.internal_node_num++;
-        return alloc(sizeof(internal_node_t));
+        return alloc(internal_node_t::getSize());
     }
 
-    void unalloc(leaf_node_t *leaf, off_t offset) { --head.leaf_node_num; }
+    void unalloc(leaf_node_t *leaf, int offset) { --head.leaf_node_num; }
 
-    void unalloc(internal_node_t *node, off_t offset) {
+    void unalloc(internal_node_t *node, int offset) {
         --head.internal_node_num;
     }
 
     /* read block from disk */
-    int block_read(void *block, off_t offset, size_t size) const {
+    int block_read(void *block, int offset, int size) const {
         fseek(fp, offset, SEEK_SET);
-        size_t rd = fread(block, size, 1, fp);
+        int rd = fread(block, size, 1, fp);
 
         return rd - 1;
     }
 
     template <class T>
-    int block_read(T *block, off_t offset) const {
-        return block_read(block, offset, sizeof(T));
+    int block_read(T *block, int offset) const {
+        return block_read(block, offset, T::getSize());
     }
 
     /* write block to disk */
-    int block_write(void *block, off_t offset, size_t size) const {
+    int block_write(void *block, int offset, int size) const {
         fseek(fp, offset, SEEK_SET);
-        size_t wd = fwrite(block, size, 1, fp);
+        int wd = fwrite(block, size, 1, fp);
         return wd - 1;
     }
 
     template <class T>
-    int block_write(T *block, off_t offset) const {
-        return block_write(block, offset, sizeof(T));
+    int block_write(T *block, int offset) const {
+        return block_write(block, offset, T::getSize());
     }
 };
 

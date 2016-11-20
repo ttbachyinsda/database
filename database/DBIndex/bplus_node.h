@@ -9,34 +9,59 @@
 #include <stdio.h>
 #include "predefined.h"
 
-struct bplus_node {
-    off_t parent; /* parent node offset */
-    off_t next;
-    off_t prev;
-    size_t n; /* num of children */
-};
+//struct bplus_node {
+//    int parent; /* parent node offset */
+//    int next;
+//    int prev;
+//    int n; /* num of children */
+//};
 
 struct index_t {
     index_key key;
-    off_t child; /* child's offset */
+    int child; /* child's offset */
+
+    static int getSize() {return index_key::getSize() + sizeof(int);}
 };
 
 struct record_t {
     index_key key;
 
     index_value value;
+    static int getSize() {return index_key::getSize() + index_value::getSize();}
 };
 
-struct internal_node_t : public bplus_node {
+struct internal_node_t {
     typedef index_t *child_t;
 
+    internal_node_t() {
+        parent = next = prev = n = 0;
+    }
+
+    int parent; /* parent node offset */
+    int next;
+    int prev;
+    int n; /* num of children */
+
     index_t children[CHILDREN_NUM];
+
+    static int getSize() {return 4 * sizeof(int) + CHILDREN_NUM*sizeof(index_t);}
 };
 
-struct leaf_node_t : public bplus_node {
+struct leaf_node_t {
     typedef record_t *child_t;
 
+    leaf_node_t() {
+        parent = next = prev = n = 0;
+    }
+
+    int parent; /* parent node offset */
+    int next;
+    int prev;
+    int n; /* num of children */
+
     record_t children[CHILDREN_NUM];
+
+    static int getSize() {return 4 * sizeof(int) + CHILDREN_NUM*sizeof(record_t);}
 };
 
 #endif  // DBINDEX_BPLUS_NODE_H

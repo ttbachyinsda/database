@@ -94,13 +94,13 @@ int bplus_tree::search(const index_key& key, index_value* value) const {
 }
 
 int bplus_tree::search_range(const index_key& left, const index_key& right,
-                             index_value* values, size_t max) const {
+                             index_value* values, int max) const {
     if (keycmp(left, right) > 0) return -1;
 
-    off_t off_left = search_leaf_l(left);
-    off_t off_right = search_leaf(right);
-    off_t off = off_left;
-    size_t i = 0;
+    int off_left = search_leaf_l(left);
+    int off_right = search_leaf(right);
+    int off = off_left;
+    int i = 0;
     record_t *b, *e;
 
     leaf_node_t leaf;
@@ -137,18 +137,18 @@ int bplus_tree::remove(const index_key& key) {
     leaf_node_t leaf;
 
     // find parent node
-    off_t parent_off = search_index(key);
+    int parent_off = search_index(key);
     block_read(&parent, parent_off);
 
     // find current node
     index_t* where = find(parent, key);
-    off_t offset = where->child;
+    int offset = where->child;
     block_read(&leaf, offset);
 
     // verify
     if (!binary_search(begin(leaf), end(leaf), key)) return -1;
 
-    size_t min_n = head.leaf_node_num == 1 ? 0 : head.order / 2;
+    int min_n = head.leaf_node_num == 1 ? 0 : head.order / 2;
     assert(leaf.n >= min_n && leaf.n <= head.order);
 
     // delete the key
@@ -206,8 +206,8 @@ int bplus_tree::remove(const index_key& key) {
 }
 
 int bplus_tree::insert(const index_key& key, index_value value) {
-    off_t parent = search_index(key);
-    off_t offset = search_leaf(parent, key);
+    int parent = search_index(key);
+    int offset = search_leaf(parent, key);
     leaf_node_t leaf;
     block_read(&leaf, offset);
 
@@ -223,7 +223,7 @@ int bplus_tree::insert(const index_key& key, index_value value) {
         node_create(offset, &leaf, &new_leaf);
 
         // find even split point
-        size_t point = leaf.n / 2;
+        int point = leaf.n / 2;
         bool place_right = keycmp(key, leaf.children[point].key) > 0;
         if (place_right) ++point;
 
@@ -255,7 +255,7 @@ int bplus_tree::insert(const index_key& key, index_value value) {
 }
 
 int bplus_tree::update(const index_key& key, index_value value) {
-    off_t offset = search_leaf(key);
+    int offset = search_leaf(key);
     leaf_node_t leaf;
     block_read(&leaf, offset);
 
@@ -273,9 +273,9 @@ int bplus_tree::update(const index_key& key, index_value value) {
         return -1;
 }
 
-void bplus_tree::remove_from_index(off_t offset, internal_node_t& node,
+void bplus_tree::remove_from_index(int offset, internal_node_t& node,
                                    const index_key& key) {
-    size_t min_n = head.root_offset == offset ? 1 : head.order / 2;
+    int min_n = head.root_offset == offset ? 1 : head.order / 2;
     assert(node.n >= min_n && node.n <= head.order);
 
     // remove key
@@ -350,10 +350,10 @@ void bplus_tree::remove_from_index(off_t offset, internal_node_t& node,
 }
 
 bool bplus_tree::borrow_key(bool from_right, internal_node_t& borrower,
-                            off_t offset) {
+                            int offset) {
     typedef typename internal_node_t::child_t child_t;
 
-    off_t lender_off = from_right ? borrower.next : borrower.prev;
+    int lender_off = from_right ? borrower.next : borrower.prev;
     internal_node_t lender;
     block_read(&lender, lender_off);
 
@@ -401,7 +401,7 @@ bool bplus_tree::borrow_key(bool from_right, internal_node_t& borrower,
 }
 
 bool bplus_tree::borrow_key(bool from_right, leaf_node_t& borrower) {
-    off_t lender_off = from_right ? borrower.next : borrower.prev;
+    int lender_off = from_right ? borrower.next : borrower.prev;
     leaf_node_t lender;
     block_read(&lender, lender_off);
 
@@ -437,7 +437,7 @@ bool bplus_tree::borrow_key(bool from_right, leaf_node_t& borrower) {
     return false;
 }
 
-void bplus_tree::change_parent_child(off_t parent, const index_key& o,
+void bplus_tree::change_parent_child(int parent, const index_key& o,
                                      const index_key& n) {
     internal_node_t node;
     block_read(&node, parent);
@@ -476,8 +476,8 @@ void bplus_tree::insert_record_no_split(leaf_node_t* leaf, const index_key& key,
     leaf->n++;
 }
 
-void bplus_tree::insert_index_keyo_index(off_t offset, const index_key& key, off_t old,
-                                     off_t after) {
+void bplus_tree::insert_index_keyo_index(int offset, const index_key& key, int old,
+                                     int after) {
     if (offset == 0) {
         // create new root node
         internal_node_t root;
@@ -510,7 +510,7 @@ void bplus_tree::insert_index_keyo_index(off_t offset, const index_key& key, off
         node_create(offset, &node, &new_node);
 
         // find even split point
-        size_t point = (node.n - 1) / 2;
+        int point = (node.n - 1) / 2;
         bool place_right = keycmp(key, node.children[point].key) > 0;
         if (place_right) ++point;
 
@@ -547,7 +547,7 @@ void bplus_tree::insert_index_keyo_index(off_t offset, const index_key& key, off
 }
 
 void bplus_tree::insert_index_keyo_index_no_split(internal_node_t& node,
-                                              const index_key& key, off_t value) {
+                                              const index_key& key, int value) {
     index_t* where = upper_bound(begin(node), end(node) - 1, key);
 
     // move later index forward
@@ -562,7 +562,7 @@ void bplus_tree::insert_index_keyo_index_no_split(internal_node_t& node,
 }
 
 void bplus_tree::reset_index_children_parent(index_t* begin, index_t* end,
-                                             off_t parent) {
+                                             int parent) {
     // this function can change both internal_node_t and leaf_node_t's parent
     // field, but we should ensure that:
     // 1. sizeof(internal_node_t) <= sizeof(leaf_node_t)
@@ -576,8 +576,8 @@ void bplus_tree::reset_index_children_parent(index_t* begin, index_t* end,
     }
 }
 
-off_t bplus_tree::search_index(const index_key& key) const {
-    off_t org = head.root_offset;
+int bplus_tree::search_index(const index_key& key) const {
+    int org = head.root_offset;
     int height = head.height;
     while (height > 1) {
         internal_node_t node;
@@ -591,8 +591,8 @@ off_t bplus_tree::search_index(const index_key& key) const {
     return org;
 }
 
-off_t bplus_tree::search_index_l(const index_key& key) const {
-    off_t org = head.root_offset;
+int bplus_tree::search_index_l(const index_key& key) const {
+    int org = head.root_offset;
     int height = head.height;
     while (height > 1) {
         internal_node_t node;
@@ -606,14 +606,14 @@ off_t bplus_tree::search_index_l(const index_key& key) const {
     return org;
 }
 
-off_t bplus_tree::search_leaf(off_t index, const index_key& key) const {
+int bplus_tree::search_leaf(int index, const index_key& key) const {
     internal_node_t node;
     block_read(&node, index);
     index_t* i = upper_bound(begin(node), end(node) - 1, key);
     return i->child;
 }
 
-off_t bplus_tree::search_leaf_l(off_t index, const index_key& key) const {
+int bplus_tree::search_leaf_l(int index, const index_key& key) const {
     internal_node_t node;
     block_read(&node, index);
 
@@ -622,7 +622,7 @@ off_t bplus_tree::search_leaf_l(off_t index, const index_key& key) const {
 }
 
 template <class T>
-void bplus_tree::node_create(off_t offset, T* node, T* next) {
+void bplus_tree::node_create(int offset, T* node, T* next) {
     // new sibling node
     next->parent = node->parent;
     next->next = node->next;
@@ -653,10 +653,10 @@ void bplus_tree::node_remove(T* prev, T* node) {
 
 void bplus_tree::init_from_empty(int keySize) {
     // init default head
-    memset(&head,0, sizeof(head_t));
+    memset(&head,0, head_t::getSize());
     head.order = CHILDREN_NUM;
-    head.value_size = sizeof(index_value);
-    head.key_size = sizeof(keySize);
+    head.value_size = index_value::getSize();
+    head.key_size = keySize;
     head.height = 1;
     head.slot = OFFSET_BLOCK;
 
