@@ -4,6 +4,7 @@
 #include "tester/testtype.h"
 #include "tester/testflexible.h"
 #include "tester/testiterator.h"
+#include "tester/testdate.h"
 #include "layer/qmlif.h"
 #include "layer/pythonif.h"
 #include <QQmlApplicationEngine>
@@ -23,8 +24,8 @@ int main(int argc, char* argv[])
     v.begintest();
 */
 
-    testiterator w;
-    w.begintest();
+//    testiterator w;
+//    w.begintest();
 
 //    testflexible x;
 //    x.begintest();
@@ -47,5 +48,7 @@ int main(int argc, char* argv[])
 //    cout << execSQL(a) << endl;;
 //    close();
 
+    testdate x;
+    x.begintest();
     return 0;
 }

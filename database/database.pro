@@ -12,6 +12,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = database
 TEMPLATE = app
 
+LIBS += -lcurl
+QMAKE_CXXFLAGS += --std=c++14
+
 DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
 
 include(../material/material.pri)
@@ -51,7 +54,11 @@ SOURCES += main.cpp\
     DBIndex/db_index.cpp \
     layer/qmlif.cpp \
     typehandler/databasereal.cpp \
-    typehandler/databaselint.cpp
+    typehandler/databaselint.cpp \
+    typehandler/databasedate.cpp \
+    tester/testdate.cpp \
+    typehandler/tz.cpp \
+
 
 HEADERS  += mainwindow.h \
     pagefilesystem/BufPageManager.h \
@@ -101,17 +108,25 @@ HEADERS  += mainwindow.h \
     DBIndex/predefined.h \
     sqlengine/sqllexer.l \
     sqlengine/sqlparser.yy \
-    layer/pythonif.h \
-    layer/pythonif.i \
-    layer/qmlif.h \
     typehandler/databasereal.h \
     typehandler/databaselint.h \
-    layer/json.hpp
+    layer/json.hpp \
+    layer/pythonif.h \
+    layer/qmlif.h \
+    typehandler/date.h \
+    typehandler/databasedate.h \
+    typehandler/tz.h \
+    typehandler/chrono_io.h \
+    tester/testdate.h \
+    typehandler/tz_private.h \
+    typehandler/ios.h \
 
 FORMS    += mainwindow.ui
 
 DISTFILES += \
     ../README.md \
+    layer/pythonif_wrap.cxx \
+    layer/pythonif.i \
     bin/data/m4sugar/foreach.m4 \
     bin/data/m4sugar/m4sugar.m4 \
     bin/data/bison.m4 \
@@ -144,7 +159,37 @@ DISTFILES += \
     bin/data/README \
     bin/win_bison \
     bin/win_flex \
-
+    tzdata/checklinks.awk \
+    tzdata/checktab.awk \
+    tzdata/leapseconds.awk \
+    tzdata/zoneinfo2tdf.pl \
+    tzdata/yearistype.sh \
+    tzdata/africa \
+    tzdata/antarctica \
+    tzdata/asia \
+    tzdata/australasia \
+    tzdata/backward \
+    tzdata/backzone \
+    tzdata/CONTRIBUTING \
+    tzdata/etcetera \
+    tzdata/europe \
+    tzdata/factory \
+    tzdata/iso3166.tab \
+    tzdata/leap-seconds.list \
+    tzdata/leapseconds \
+    tzdata/LICENSE \
+    tzdata/NEWS \
+    tzdata/northamerica \
+    tzdata/pacificnew \
+    tzdata/southamerica \
+    tzdata/systemv \
+    tzdata/Theory \
+    tzdata/version \
+    tzdata/zone.tab \
+    tzdata/zone1970.tab \
+    tzdata/README
 RESOURCES += \
     thjdb.qrc \
     icons/icons.qrc
+
+OBJECTIVE_SOURCES +=

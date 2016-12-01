@@ -1,5 +1,5 @@
-#ifndef DATABASECHAR_H
-#define DATABASECHAR_H
+#ifndef DATABASEDATE_H
+#define DATABASEDATE_H
 #include "databasetype.h"
 #include <bitset>
 #include <cstdio>
@@ -7,10 +7,10 @@
 #include <cstring>
 using namespace std;
 #define MAX_CHAR_SIZE 255
-class DatabaseChar : public DataBaseType {
+class DatabaseDate : public DataBaseType {
 public:
-    DatabaseChar(int size);
-    DatabaseChar(int size, bool cannull);
+    DatabaseDate();
+    DatabaseDate(bool cannull);
     bool read(char* input,int inputlen, int& position);
     bool write(char* output, int& position);
     bool checkRight(string input);
@@ -28,7 +28,7 @@ public:
     int getMaxSize();
     string getType();
     string output();
-    ~DatabaseChar();
+    ~DatabaseDate();
 
 private:
     void change(string input);
@@ -36,4 +36,4 @@ private:
     void changetoNull();
 };
 
-#endif // DATABASECHAR_H
+#endif // DATABASEDATE_H
