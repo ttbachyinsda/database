@@ -78,6 +78,9 @@ void testdate::begintest()
     auto datetype = UIC::reconvert("Date",8,true);
 
     auto thisdate = system_clock::now();
+
+    cout<<"now date = "<<thisdate<<endl;
+
     char s[8];
     memcpy(s,&thisdate,8);
 

@@ -6,7 +6,7 @@
 #include "tester/testiterator.h"
 #include "tester/testdate.h"
 #include "layer/qmlif.h"
-#include "layer/pythonif.h"
+//#include "layer/pythonif.h"
 #include <QQmlApplicationEngine>
 #include <QGuiApplication>
 using namespace std;
@@ -27,8 +27,8 @@ int main(int argc, char* argv[])
 //    testiterator w;
 //    w.begintest();
 
-//    testflexible x;
-//    x.begintest();
+    testflexible x;
+    x.begintest();
 
 //    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
 //    QGuiApplication app(argc, argv);
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 //    cout << execSQL(a) << endl;;
 //    close();
 
-    testdate x;
-    x.begintest();
+    testdate xx;
+    xx.begintest();
     return 0;
 }
