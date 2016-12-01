@@ -19,9 +19,9 @@ public:
     static bool equal(char* s1, const char* s2, int len);
     static bool equal(const char* s1, char* s2, int len);
     static void convert(DataBaseType* t1, char* s1, char *s2);
-    static DataBaseType* reconvert(char* s1, int size, bool cannull);
+    static DataBaseType* reconvertc(char* s1, int size, bool cannull);
     static DataBaseType* reconvert(string s1, int size,bool cannull);
-    static DataBaseType* realreconvert(char* s1, int size, bool cannull);
+    static DataBaseType* realreconvertc(char* s1, int size, bool cannull);
     static DataBaseType* realreconvert(string s1, int size,bool cannull);
     static void convertmulti(bool can, char* s1);
     static int chartoint(char* s1); //length = 4

@@ -77,7 +77,7 @@ void UIC::convert(DataBaseType* t1, char* s1,char* s2)
         *(s2 + 3) = 'B';
     }
 }
-DataBaseType* UIC::reconvert(char* s1, int size,bool cannull)
+DataBaseType* UIC::reconvertc(char* s1, int size,bool cannull)
 {
     if (*(s1) == 'C') {
         DataBaseType* temp = new DatabaseChar(size,cannull);
@@ -136,7 +136,7 @@ DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
     }
     return NULL;
 }
-DataBaseType* UIC::realreconvert(char* s1, int size,bool cannull)
+DataBaseType* UIC::realreconvertc(char* s1, int size,bool cannull)
 {
     if (*(s1) == 'C') {
         DataBaseType* temp = new DatabaseChar(size-1,cannull);

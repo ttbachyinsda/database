@@ -2,7 +2,6 @@
 #define TESTDATE_H
 
 #include "../typehandler/date.h"
-#include "../typehandler/tz.h"
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>

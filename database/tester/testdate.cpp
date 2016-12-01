@@ -7,19 +7,8 @@ testdate::testdate()
 void testdate::beginpretest()
 {
     auto s = system_clock::now();
-    std::cout<<sizeof(s)<<std::endl;
-    std::cout<<s<<std::endl;
-    for (int i=0;i<1000000;i++)
-        auto temp = make_zoned(current_zone(), system_clock::now());
-    auto t = make_zoned(current_zone(), system_clock::now());
-    std::cout<<sizeof(t)<<std::endl;
-    auto tt = t.get_local_time();
-    std::cout<<tt<<' '<<sizeof(tt)<<'\n';
-    std::cout<<t<<std::endl;
 
-    std::cout<<t.get_sys_time()<<std::endl;
-
-    auto nowt = t.get_sys_time();
+    auto nowt = s;
     auto dp = floor<days>(nowt);
     std::cout<<dp<<'\n';
     auto ymd = year_month_day{dp};

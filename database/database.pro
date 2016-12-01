@@ -12,7 +12,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = database
 TEMPLATE = app
 
-LIBS += -lcurl
 QMAKE_CXXFLAGS += --std=c++14
 
 DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
@@ -56,8 +55,7 @@ SOURCES += main.cpp\
     typehandler/databasereal.cpp \
     typehandler/databaselint.cpp \
     typehandler/databasedate.cpp \
-    tester/testdate.cpp \
-    typehandler/tz.cpp
+    tester/testdate.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -115,11 +113,8 @@ HEADERS  += mainwindow.h \
     layer/qmlif.h \
     typehandler/date.h \
     typehandler/databasedate.h \
-    typehandler/tz.h \
     typehandler/chrono_io.h \
-    tester/testdate.h \
-    typehandler/tz_private.h \
-    typehandler/ios.h
+    tester/testdate.h
 
 
 DISTFILES += \
@@ -157,36 +152,7 @@ DISTFILES += \
     bin/data/local.mk \
     bin/data/README \
     bin/win_bison \
-    bin/win_flex \
-    tzdata/checklinks.awk \
-    tzdata/checktab.awk \
-    tzdata/leapseconds.awk \
-    tzdata/zoneinfo2tdf.pl \
-    tzdata/yearistype.sh \
-    tzdata/africa \
-    tzdata/antarctica \
-    tzdata/asia \
-    tzdata/australasia \
-    tzdata/backward \
-    tzdata/backzone \
-    tzdata/CONTRIBUTING \
-    tzdata/etcetera \
-    tzdata/europe \
-    tzdata/factory \
-    tzdata/iso3166.tab \
-    tzdata/leap-seconds.list \
-    tzdata/leapseconds \
-    tzdata/LICENSE \
-    tzdata/NEWS \
-    tzdata/northamerica \
-    tzdata/pacificnew \
-    tzdata/southamerica \
-    tzdata/systemv \
-    tzdata/Theory \
-    tzdata/version \
-    tzdata/zone.tab \
-    tzdata/zone1970.tab \
-    tzdata/README
+    bin/win_flex
 RESOURCES += \
     thjdb.qrc \
     icons/icons.qrc
