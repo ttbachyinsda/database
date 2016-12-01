@@ -57,6 +57,12 @@ void UIC::convert(DataBaseType* t1, char* s1,char* s2)
         *(s1 + 2) = 'N';
         *(s1 + 3) = 'T';
     }
+    if (temp[6]=='D'){
+        *(s1) = 'D';
+        *(s1 + 1) = 'A';
+        *(s1 + 2) = 'T';
+        *(s1 + 3) = 'E';
+    }
     if (t1->getNullable()==true)
     {
         *(s2) = 'A';
@@ -93,6 +99,10 @@ DataBaseType* UIC::reconvert(char* s1, int size,bool cannull)
         DataBaseType* temp = new DatabaseLint(cannull);
         return temp;
     }
+    if (*(s1) == 'D'){
+        DataBaseType* temp = new DatabaseDate(cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
@@ -119,6 +129,11 @@ DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
         DataBaseType* temp = new DatabaseLint(cannull);
         return temp;
     }
+    if (s1[0]=='D')
+    {
+        DataBaseType* temp = new DatabaseDate(cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::realreconvert(char* s1, int size,bool cannull)
@@ -143,6 +158,10 @@ DataBaseType* UIC::realreconvert(char* s1, int size,bool cannull)
         DataBaseType* temp = new DatabaseLint(cannull);
         return temp;
     }
+    if (*(s1) == 'D') {
+        DataBaseType* temp = new DatabaseDate(cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::realreconvert(string s1, int size, bool cannull)
@@ -165,6 +184,10 @@ DataBaseType* UIC::realreconvert(string s1, int size, bool cannull)
     }
     if (s1[0] == 'L') {
         DataBaseType* temp = new DatabaseLint(cannull);
+        return temp;
+    }
+    if (s1[0] == 'D') {
+        DataBaseType* temp = new DatabaseDate(cannull);
         return temp;
     }
     return NULL;
@@ -248,6 +271,9 @@ DataBaseType** UIC::copytype(DataBaseType** input, int inputlen)
         } else if (temptype[6]=='L')
         {
             temp[i]=new DatabaseLint();
+        } else if (temptype[6]=='D')
+        {
+            temp[i]=new DatabaseDate();
         }
         else
         {

@@ -7,6 +7,7 @@
 #include "../typehandler/databasetype.h"
 #include "../typehandler/databasereal.h"
 #include "../typehandler/databaselint.h"
+#include "../typehandler/databasedate.h"
 #include <sstream>
 
 typedef int FileIterator;

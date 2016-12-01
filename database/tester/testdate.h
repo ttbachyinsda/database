@@ -9,12 +9,15 @@
 #include <cstring>
 #include <chrono>
 #include "../typehandler/chrono_io.h"
+#include "../typehandler/databasedate.h"
+#include "../managementhandler/uic.h"
 using namespace date;
 using namespace std::chrono;
 class testdate
 {
 public:
     testdate();
+    void beginpretest();
     void begintest();
 };
 
