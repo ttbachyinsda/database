@@ -16,6 +16,7 @@
 有几个关键的部分：
 
 1.如何输入年月日时分秒？
+    
     time_point<system_clock,chrono::nanoseconds> temp1=static_cast<sys_days>(year_month_day{year{2013}/6/8})+make_time(hours{5},minutes{7},seconds{9},nanoseconds{22},0).to_duration();
 
 看起来好长的样子……另外注意有日必须有月和年，有秒必须有分和时，依次类推。
