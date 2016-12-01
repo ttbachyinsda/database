@@ -4,8 +4,7 @@
 
 添加了对于日期date类型的支持，使用chrono和date库。但在使用前须注意：
 
-1.确认-lcurl这个编译选项能够使用，即安装了curl库
-2.c++支持到c++14
+c++支持到c++11
 
 在testdate中有对应的测试程序，分成了两部分：
 
@@ -29,11 +28,10 @@
 
 输进来的时间。
 
-然后如果以后需要区分的话可以参照beginpretest里面的内容。
-
 4.UIC是不是应该有一些过程来支持一下？
 
 是的，比如说time_point<system_clock,chrono::nanoseconds>转字符串，以后会加上的。
+
 
 
 2.0.9变化：
