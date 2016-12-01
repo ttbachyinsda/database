@@ -1,5 +1,40 @@
 使用说明：
 
+2.0.9.8改动：
+
+添加了对于日期date类型的支持，使用chrono和date库。但在使用前须注意：
+
+1.确认-lcurl这个编译选项能够使用，即安装了curl库
+2.c++支持到c++14
+
+在testdate中有对应的测试程序，分成了两部分：
+
+第一部分：如何获取时间并对时间进行一定的处理（beginpretest）
+
+第二部分：对date类型进行操作（begintest）
+
+有几个关键的部分：
+
+1.如何输入年月日时分秒？
+    time_point<system_clock,chrono::nanoseconds> temp1=static_cast<sys_days>(year_month_day{year{2013}/6/8})+make_time(hours{5},minutes{7},seconds{9},nanoseconds{22},0).to_duration();
+
+看起来好长的样子……另外注意有日必须有月和年，有秒必须有分和时，依次类推。
+
+2.大小是多少？
+
+8个字节。
+
+3.本地时间和系统时间存哪个？
+
+输进来的时间。
+
+然后如果以后需要区分的话可以参照beginpretest里面的内容。
+
+4.UIC是不是应该有一些过程来支持一下？
+
+是的，比如说time_point<system_clock,chrono::nanoseconds>转字符串，以后会加上的。
+
+
 2.0.9变化：
 
 使windows、linux和mac平台均可编译运行所有文件，且不会污染其他平台。注意sqlengine文件夹下的makefile.win是专为windows系统编译使用的，在windows系统下使用make -f makefile.wim 就可以生成windows的版本，在linux和mac系统下使用make 可以生成linux和mac的版本。
