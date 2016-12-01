@@ -57,7 +57,7 @@ SOURCES += main.cpp\
     typehandler/databaselint.cpp \
     typehandler/databasedate.cpp \
     tester/testdate.cpp \
-    typehandler/tz.cpp \
+    typehandler/tz.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -119,9 +119,8 @@ HEADERS  += mainwindow.h \
     typehandler/chrono_io.h \
     tester/testdate.h \
     typehandler/tz_private.h \
-    typehandler/ios.h \
+    typehandler/ios.h
 
-FORMS    += mainwindow.ui
 
 DISTFILES += \
     ../README.md \
