@@ -22,21 +22,21 @@ string testflexible::InttoString(int num)
 }
 void testflexible::testindex(Table* onetable,string input)
 {
-//    cout<<"test index begin"<<endl;
-//    Iterator* it = IteratorFactory::getiterator(onetable);
-//    string temp=it->compile(input,0);
-//    cout<<"try to search "<<temp<<endl;
-//    index_key k(temp.c_str(),temp.length());
-//    index_value v;
-//    int answer=onetable->getindexes()[0]->search(k,&v);
-//    if (answer==0)
-//    {
-//        cout<<"has found"<<endl;
-//        cout<<v.pagenum<<' '<<v.pageposition<<endl;
-//    } else
-//        cout<<"has not found"<<endl;
-//    cout<<"test index end"<<endl;
-//    delete it;
+    cout<<"test index begin"<<endl;
+    Iterator* it = IteratorFactory::getiterator(onetable);
+    string temp=it->compile(input,0);
+    cout<<"try to search "<<temp<<endl;
+    index_key k(temp.c_str(),temp.length());
+    index_value v;
+    int answer=onetable->getindexes()[0]->search(k,&v);
+    if (answer==0)
+    {
+        cout<<"has found"<<endl;
+        cout<<v.pagenum<<' '<<v.pageposition<<endl;
+    } else
+        cout<<"has not found"<<endl;
+    cout<<"test index end"<<endl;
+    delete it;
 }
 
 void testflexible::begintest()
@@ -70,7 +70,7 @@ void testflexible::begintest()
     delete[] conditions;
     onetable->setmajornum(0);
     onetable->setmultivalue(0,false);
-    //onetable->createemptyindex(0);
+    onetable->createemptyindex(0);
     auto aaa = new string[3];
     int pagenum, rownum;
     auto t = RecordFactory::getrecord(onetable);

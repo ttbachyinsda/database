@@ -49,10 +49,20 @@ inline typename T::child_t end(T& node) {
 
 /* helper searching function */
 inline index_t* find(internal_node_t& node, const index_key& key) {
-    return upper_bound(begin(node), end(node), key);
+    index_t* temp = lower_bound(begin(node), end(node), key);
+    if (temp - begin(node) >= node.n)
+        temp = end(node) - 1;
+    if ( key < *temp && temp > begin(node))
+        temp = temp - 1;
+    return temp;
 }
 inline record_t* find(leaf_node_t& node, const index_key& key) {
-    return lower_bound(begin(node), end(node), key);
+    record_t* temp = lower_bound(begin(node), end(node), key);
+    if (temp - begin(node) >= node.n)
+        temp = end(node) - 1;
+    if ( key < *temp && temp > begin(node))
+        temp = temp - 1;
+    return temp;
 }
 
 bplus_tree::bplus_tree(const char* p, bool force_empty /*false*/,
@@ -164,55 +174,62 @@ int bplus_tree::remove(const index_key& key) {
     leaf.n--;
 
     // merge or borrow
-    if (leaf.n < min_n) {
-        // first borrow from left
-        bool borrowed = false;
-        if (leaf.prev != 0) borrowed = borrow_key(false, leaf);
+    if (leaf.n == 0) {
+        remove_from_index(parent_off, parent, key);
+//        // first borrow from left
+//        bool borrowed = false;
+//        if (leaf.prev != 0) borrowed = borrow_key(false, leaf);
 
-        // then borrow from right
-        if (!borrowed && leaf.next != 0) borrowed = borrow_key(true, leaf);
+//        // then borrow from right
+//        if (!borrowed && leaf.next != 0) borrowed = borrow_key(true, leaf);
 
-        // finally we merge
-        if (!borrowed) {
-            assert(leaf.next != 0 || leaf.prev != 0);
+//        // finally we merge
+//        if (!borrowed) {
+//            assert(leaf.next != 0 || leaf.prev != 0);
 
-            index_key index_key;
+//            index_key index_key;
 
-            if (where == end(parent) - 1) {
-                // if leaf is last element then merge | prev | leaf |
-                assert(leaf.prev != 0);
-                leaf_node_t prev;
-                block_read(&prev, leaf.prev);
-                index_key = begin(prev)->key;
+//            if (where == end(parent) - 1) {
+//                // if leaf is last element then merge | prev | leaf |
+//                assert(leaf.prev != 0);
+//                leaf_node_t prev;
+//                block_read(&prev, leaf.prev);
+//                index_key = begin(prev)->key;
 
-                merge_leafs(&prev, &leaf);
-                node_remove(&prev, &leaf);
-                block_write(&prev, leaf.prev);
-            } else {
-                // else merge | leaf | next |
-                assert(leaf.next != 0);
-                leaf_node_t next;
-                block_read(&next, leaf.next);
-                index_key = begin(leaf)->key;
+//                merge_leafs(&prev, &leaf);
+//                node_remove(&prev, &leaf);
+//                block_write(&prev, leaf.prev);
+//            } else {
+//                // else merge | leaf | next |
+//                assert(leaf.next != 0);
+//                leaf_node_t next;
+//                block_read(&next, leaf.next);
+//                index_key = begin(leaf)->key;
 
-                merge_leafs(&leaf, &next);
-                node_remove(&leaf, &next);
-                block_write(&leaf, offset);
-            }
+//                merge_leafs(&leaf, &next);
+//                node_remove(&leaf, &next);
+//                block_write(&leaf, offset);
+//            }
 
-            // remove parent's key
-            remove_from_index(parent_off, parent, index_key);
-        } else {
-            block_write(&leaf, offset);
-        }
+//            // remove parent's key
+//            remove_from_index(parent_off, parent, index_key);
+//        } else {
+//            block_write(&leaf, offset);
+//            update_parent_node(parent_off, offset, leaf.children[0].key);
+//        }
     } else {
         block_write(&leaf, offset);
+        update_parent_node(parent_off, offset, leaf.children[0].key);
     }
 
     return 0;
 }
 
+int counter = 0;
+
 int bplus_tree::insert(const index_key& key, index_value value) {
+    if (counter++ == 26299)
+        int i = 0;
     int parent = search_index(key);
     int offset = search_leaf(parent, key);
     leaf_node_t leaf;
@@ -249,6 +266,8 @@ int bplus_tree::insert(const index_key& key, index_value value) {
         // save leafs
         block_write(&leaf, offset);
         block_write(&new_leaf, leaf.next);
+//        block_write(&leaf, offset);
+//        block_read(&new_leaf, leaf.next);
 
         // insert new index key
         insert_index_keyo_index(parent, new_leaf.children[0].key, offset,
@@ -256,9 +275,23 @@ int bplus_tree::insert(const index_key& key, index_value value) {
     } else {
         insert_record_no_split(&leaf, key, value);
         block_write(&leaf, offset);
+        update_parent_node(parent, offset, leaf.children[0].key);
     }
 
     return 0;
+}
+
+void bplus_tree::update_parent_node(int parent, int offset, const index_key &key) {
+    internal_node_t node;
+    block_read(&node, parent);
+
+    for (int i = 0; i < node.n; i++)
+        if (node.children[i].child == offset) {
+            node.children[i].key = key;
+            break;
+        }
+    block_write(&node, parent);
+    return;
 }
 
 int bplus_tree::update(const index_key& key, index_value value) {
@@ -283,7 +316,7 @@ int bplus_tree::update(const index_key& key, index_value value) {
 void bplus_tree::remove_from_index(int offset, internal_node_t& node,
                                    const index_key& key) {
     int min_n = head.root_offset == offset ? 1 : head.order / 2;
-    assert(node.n >= min_n && node.n <= head.order);
+//    assert(node.n >= min_n && node.n <= head.order);
 
     // remove key
     index_key index_key = begin(node)->key;
@@ -305,54 +338,55 @@ void bplus_tree::remove_from_index(int offset, internal_node_t& node,
     }
 
     // merge or borrow
-    if (node.n < min_n) {
+    if (node.n == 0) {
         internal_node_t parent;
         block_read(&parent, node.parent);
+        remove_from_index(node.parent, parent, index_key);
+//        // first borrow from left
+//        bool borrowed = false;
+//        if (offset != begin(parent)->child)
+//            borrowed = borrow_key(false, node, offset);
 
-        // first borrow from left
-        bool borrowed = false;
-        if (offset != begin(parent)->child)
-            borrowed = borrow_key(false, node, offset);
+//        // then borrow from right
+//        if (!borrowed && offset != (end(parent) - 1)->child)
+//            borrowed = borrow_key(true, node, offset);
 
-        // then borrow from right
-        if (!borrowed && offset != (end(parent) - 1)->child)
-            borrowed = borrow_key(true, node, offset);
+//        // finally we merge
+//        if (!borrowed) {
+//            assert(node.next != 0 || node.prev != 0);
 
-        // finally we merge
-        if (!borrowed) {
-            assert(node.next != 0 || node.prev != 0);
+//            if (offset == (end(parent) - 1)->child) {
+//                // if leaf is last element then merge | prev | leaf |
+//                assert(node.prev != 0);
+//                internal_node_t prev;
+//                block_read(&prev, node.prev);
 
-            if (offset == (end(parent) - 1)->child) {
-                // if leaf is last element then merge | prev | leaf |
-                assert(node.prev != 0);
-                internal_node_t prev;
-                block_read(&prev, node.prev);
+//                // merge
+//                index_t* where = find(parent, begin(prev)->key);
+//                reset_index_children_parent(begin(node), end(node), node.prev);
+//                merge_keys(where, prev, node);
+//                block_write(&prev, node.prev);
+//            } else {
+//                // else merge | leaf | next |
+//                assert(node.next != 0);
+//                internal_node_t next;
+//                block_read(&next, node.next);
 
-                // merge
-                index_t* where = find(parent, begin(prev)->key);
-                reset_index_children_parent(begin(node), end(node), node.prev);
-                merge_keys(where, prev, node);
-                block_write(&prev, node.prev);
-            } else {
-                // else merge | leaf | next |
-                assert(node.next != 0);
-                internal_node_t next;
-                block_read(&next, node.next);
+//                // merge
+//                index_t* where = find(parent, index_key);
+//                reset_index_children_parent(begin(next), end(next), offset);
+//                merge_keys(where, node, next);
+//                block_write(&node, offset);
+//            }
 
-                // merge
-                index_t* where = find(parent, index_key);
-                reset_index_children_parent(begin(next), end(next), offset);
-                merge_keys(where, node, next);
-                block_write(&node, offset);
-            }
-
-            // remove parent's key
-            remove_from_index(node.parent, parent, index_key);
-        } else {
-            block_write(&node, offset);
-        }
+//            // remove parent's key
+//            remove_from_index(node.parent, parent, index_key);
+//        } else {
+//            block_write(&node, offset);
+//        }
     } else {
         block_write(&node, offset);
+        update_parent_node(node.parent, offset, node.children[0].key);
     }
 }
 
@@ -475,7 +509,7 @@ void bplus_tree::merge_keys(index_t* where, internal_node_t& node,
 
 void bplus_tree::insert_record_no_split(leaf_node_t* leaf, const index_key& key,
                                         const index_value& value) {
-    record_t* where = upper_bound(begin(*leaf), end(*leaf), key);
+    record_t* where = lower_bound(begin(*leaf), end(*leaf), key);
     std::copy_backward(where, end(*leaf), end(*leaf) + 1);
 
     where->key = key;
@@ -485,27 +519,6 @@ void bplus_tree::insert_record_no_split(leaf_node_t* leaf, const index_key& key,
 
 void bplus_tree::insert_index_keyo_index(int offset, const index_key& key, int old,
                                      int after) {
-    if (offset == 0) {
-        // create new root node
-        internal_node_t root;
-        root.next = root.prev = root.parent = 0;
-        head.root_offset = alloc(&root);
-        head.height++;
-
-        // insert `old` and `after`
-        root.n = 2;
-        root.children[0].key = key;
-        root.children[0].child = old;
-        root.children[1].child = after;
-
-        block_write(&head, OFFSET_META);
-        block_write(&root, head.root_offset);
-
-        // update children's parent
-        reset_index_children_parent(begin(root), end(root), head.root_offset);
-        return;
-    }
-
     internal_node_t node;
     block_read(&node, offset);
     assert(node.n <= head.order);
@@ -525,8 +538,6 @@ void bplus_tree::insert_index_keyo_index(int offset, const index_key& key, int o
         // example: insert 48 into |42|45| 6|    |
         if (place_right && keycmp(key, node.children[point].key) < 0) point--;
 
-        index_key middle_key = node.children[point].key;
-
         // split
         std::copy(begin(node) + point + 1, end(node), begin(new_node));
         new_node.n = node.n - point - 1;
@@ -538,11 +549,34 @@ void bplus_tree::insert_index_keyo_index(int offset, const index_key& key, int o
         else
             insert_index_keyo_index_no_split(node, key, after);
 
+        index_key middle_key = new_node.children[0].key;
         block_write(&node, offset);
         block_write(&new_node, node.next);
 
         // update children's parent
         reset_index_children_parent(begin(new_node), end(new_node), node.next);
+
+        if (offset == head.root_offset) {
+            // create new root node
+            internal_node_t root;
+            root.next = root.prev = root.parent = 0;
+            head.root_offset = alloc(&root);
+            head.height++;
+
+            // insert `old` and `after`
+            root.n = 2;
+            root.children[0].key = node.children[0].key;
+            root.children[0].child = offset;
+            root.children[1].child = node.next;
+            root.children[1].key = new_node.children[0].key;
+
+            block_write(&head, OFFSET_META);
+            block_write(&root, head.root_offset);
+
+            // update children's parent
+            reset_index_children_parent(begin(root), end(root), head.root_offset);
+            return;
+        }
 
         // give the middle key to the parent
         // note: middle key's child is reserved
@@ -555,15 +589,14 @@ void bplus_tree::insert_index_keyo_index(int offset, const index_key& key, int o
 
 void bplus_tree::insert_index_keyo_index_no_split(internal_node_t& node,
                                               const index_key& key, int value) {
-    index_t* where = upper_bound(begin(node), end(node), key);
+    index_t* where = lower_bound(begin(node), end(node), key);
 
     // move later index forward
     std::copy_backward(where, end(node), end(node) + 1);
 
     // insert this key
     where->key = key;
-    where->child = (where + 1)->child;
-    (where + 1)->child = value;
+    where->child = value;
 
     node.n++;
 }
@@ -578,7 +611,7 @@ void bplus_tree::reset_index_children_parent(index_t* begin, index_t* end,
     while (begin != end) {
         block_read(&node, begin->child);
         node.parent = parent;
-        block_write(&node, begin->child, SIZE_NO_CHILDREN);
+        block_write(&node, begin->child);
         ++begin;
     }
 }
@@ -590,7 +623,11 @@ int bplus_tree::search_index(const index_key& key) const {
         internal_node_t node;
         block_read(&node, org);
 
-        index_t* i = upper_bound(begin(node), end(node), key);
+        index_t* i = lower_bound(begin(node), end(node), key);
+        if (i - begin(node) >= node.n)
+            i = end(node) - 1;
+        if ( key < *i && i > begin(node))
+            i = i - 1;
         org = i->child;
         --height;
     }
@@ -616,7 +653,11 @@ int bplus_tree::search_index_l(const index_key& key) const {
 int bplus_tree::search_leaf(int index, const index_key& key) const {
     internal_node_t node;
     block_read(&node, index);
-    index_t* i = upper_bound(begin(node), end(node), key);
+    index_t* i = lower_bound(begin(node), end(node), key);
+    if (i - begin(node) >= node.n)
+        i = end(node) - 1;
+    if ( key < *i && i > begin(node) )
+        i--;
     return i->child;
 }
 
@@ -638,9 +679,9 @@ void bplus_tree::node_create(int offset, T* node, T* next) {
     // update next node's prev
     if (next->next != 0) {
         T old_next;
-        block_read(&old_next, next->next, SIZE_NO_CHILDREN);
+        block_read(&old_next, next->next);
         old_next.prev = node->next;
-        block_write(&old_next, next->next, SIZE_NO_CHILDREN);
+        block_write(&old_next, next->next);
     }
     block_write(&head, OFFSET_META);
 }
@@ -651,9 +692,9 @@ void bplus_tree::node_remove(T* prev, T* node) {
     prev->next = node->next;
     if (node->next != 0) {
         T next;
-        block_read(&next, node->next, SIZE_NO_CHILDREN);
+        block_read(&next, node->next);
         next.prev = node->prev;
-        block_write(&next, node->next, SIZE_NO_CHILDREN);
+        block_write(&next, node->next);
     }
     block_write(&head, OFFSET_META);
 }
@@ -671,8 +712,8 @@ void bplus_tree::init_from_empty(int keySize) {
     internal_node_t root;
     root.next = root.prev = root.parent = 0;
     head.root_offset = alloc(&root);
-    cout << root.n << endl;
-    
+//    cout << root.n << endl;
+
     // init empty leaf
     leaf_node_t leaf;
     leaf.next = leaf.prev = 0;
