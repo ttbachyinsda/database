@@ -9,7 +9,7 @@ struct SelectorPair
     int columnIndex;
 };
 
-struct QueryCondition
+struct ObseleteCondition
 {
     SQLOperand operand;
     char lValueType;
@@ -28,6 +28,17 @@ struct QueryCondition
     int integerCompare(const std::string& left, const std::string& right) const;
 private:
     int integerConditionCompare(const char* s, int ls,
+                                const char* l, int ll) const;
+};
+
+struct QueryCondition {
+    static bool match(SQLOperand op, char type,
+                      const std::string& left, bool leftIsNull,
+                      const std::string& right, bool rightIsNull);
+private:
+    static int matchString(const std::string& left, const std::string& right) const;
+    static int matchInteger(const std::string& left, const std::string& right) const;
+    static int matchIntegerCond(const char* s, int ls,
                                 const char* l, int ll) const;
 };
 

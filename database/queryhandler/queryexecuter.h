@@ -25,7 +25,7 @@ class QueryExecuter
     std::vector<Iterator*> iterators;
 
     std::vector<SelectorPair> selectors;
-    std::vector<QueryCondition> conditions;
+    std::vector<ObseleteCondition> conditions;
 
     char** tempLinkedRowData;
 

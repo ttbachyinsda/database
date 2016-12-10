@@ -13,7 +13,7 @@ public:
     string getAt(int num);
     bool set(string* input);
     bool set(char** input, int* inputlen);
-    bool setAt(int wz,string input,bool isnull);
+    bool setAt(int wz, string input, bool isnull);
     void update();
     int getMaxSize();
 };

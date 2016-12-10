@@ -110,6 +110,8 @@ bool SQLCreateTableAction::execute()
 
     vector<string> clname;
     vector<DataBaseType*> cltype;
+    int primaryIndex = -1;
+    int currentIndex = 0;
 
     for (SQLType* type : *fieldList) {
         // TODO: CREATE INDEX FOR PRIMARY TYPE
@@ -120,6 +122,7 @@ bool SQLCreateTableAction::execute()
         // TODO: WHAT IS CONDITION?
         DataBaseType* dbType = UIC::reconvert(type->type, type->length, type->canNull);
         cltype.push_back(dbType);
+        ++ currentIndex;
     }
 
     newTable->createTable(clname, cltype);
@@ -152,24 +155,59 @@ bool SQLDropTableAction::execute()
 
 bool SQLDescAction::execute()
 {
-    cout << "DESC" << endl;
+    Database* handler = driver->getCurrentDatabase();
+    if (handler == 0) {
+        driver->addErrorMessage("No database is selected when showing schema of table "
+                                + this->tableName);
+        return false;
+    }
+    Table* myTable = handler->getTableByName(tableName);
+    if (myTable == 0) {
+        driver->addErrorMessage("Table " + tableName + " does not exist.");
+        return false;
+    }
+    // Field, Type, Null, Key, Default, Extra
+    SQLResult* result = new SQLResult(6);
+    result->addTitleField("Field");
+    result->addTitleField("Type");
+    result->addTitleField("Null");
+    result->addTitleField("Key");
+    result->addTitleField("Default");
+    result->addTitleField("Extra");
+
+    for (int i = 0; i < myTable->getcolumncount(); ++ i) {
+        result->addNew();
+        DataBaseType* thisColType = myTable->getcolumn(i);
+        result->setData(0, myTable->getcolumnname(i));
+        result->setData(1, thisColType->getType());
+        result->setData(2, (thisColType->getisNull()) ? "YES" : "NO");
+        result->setData(3, myTable->getmultivalue(i) ? "" : "PRI");
+        result->setData(4, "NULL");
+        result->setData(5, "");
+    }
+
     return true;
 }
 
 bool SQLShowTablesAction::execute()
 {
-    // TODO: implemented only for fun.
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when showing tables.");
         return false;
     }
-    cout << "==========ALL tbs in " << handler->getname() << "===========" << endl;
+    SQLResult* result = new SQLResult(3);
+    result->addTitleField("Table ID");
+    result->addTitleField("Name");
+    result->addTitleField("File Location");
     int idx = 0;
     while (true) {
         Table* now = handler->getTable(idx);
         if (!now) break;
-        cout << idx << ". " << now->getname() << " (stored in) " << now->getfilename() << endl;
+        result->addNew();
+        result->setData(0, UIC::inttostring(idx + 1));
+        result->setData(1, now->getname());
+        result->setData(2, now->getfilename());
         ++ idx;
     }
     return true;
@@ -190,7 +228,7 @@ bool SQLInsertAction::execute()
         return false;
     }
 
-    // TODO: efficiency condiderations of getrecord.
+    // TODO: efficiency considerations of getrecord.
     Record* record = RecordFactory::getrecord(myTable);
     for (int i = 0; i < valueGroupList->size(); ++ i) {
         int thisSize = valueGroupList->at(i)->size();
@@ -229,6 +267,7 @@ bool SQLDeleteAction::execute()
         driver->addErrorMessage("Table " + identifier + " does not exist.");
         return false;
     }
+    // TODO: only actions in one single table is allowed.
     cout << "============================" << endl;
     cout << "Delete from table: " << identifier << " where ";
     for (SQLCondition* condition : *conditionGroup) {

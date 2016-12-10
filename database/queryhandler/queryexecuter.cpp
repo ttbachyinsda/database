@@ -38,14 +38,6 @@ bool QueryExecuter::getTableColumnIndex(int &tid, int &cid, SQLSelector *s,
             return false;
         }
     }
-    // Decide Column ID
-//    cid = -1;
-//    for (int j = 0; j < records[tid]->getcolumncount(); ++ j) {
-//        if (s->tableName == tables[tid]->getcolumnname(j)) {
-//            cid = j;
-//            break;
-//        }
-//    }
     cid = tables[tid]->getColumnIndexByName(s->tableName);
     if (cid == -1) {
         driver->addErrorMessage("No such column (" + s->tableName + ") in table " + s->databaseName);
@@ -84,7 +76,7 @@ void QueryExecuter::addToResultIfMatch(SQLResult *result)
         iterators[i]->getdata(tempLinkedRowData[i], dummy);
         records[i]->Input(tempLinkedRowData[i]);
     }
-    for (QueryCondition& con : conditions) {
+    for (ObseleteCondition& con : conditions) {
 
         bool bresult;
         if (con.rightIsValue)
@@ -146,7 +138,7 @@ bool QueryExecuter::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
     }
 
     for (SQLCondition* c : *cgrp) {
-        QueryCondition thisCondition;
+        ObseleteCondition thisCondition;
         if (!getTableColumnIndex(thisCondition.left.tableIndex, thisCondition.left.columnIndex,
                                  &(c->lValue), tableDict, tableDictIterator))
             return false;
@@ -198,7 +190,7 @@ bool QueryExecuter::executeQuery()
     }
     tempLinkedRowData = new char*[tables.size()];
     for (int i = 0; i < tables.size(); ++ i)
-        tempLinkedRowData[i] = new char[iterators[i]->getcurrentsize()];
+        tempLinkedRowData[i] = new char[records[i]->getMaxSize()];
 
     traverseTable(0, currentResult);
 
