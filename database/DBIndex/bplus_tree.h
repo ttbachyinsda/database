@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <unistd.h>
 using std::cout;
 using std::endl;
 #include "bplus_node.h"
