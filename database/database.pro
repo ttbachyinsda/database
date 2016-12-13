@@ -61,7 +61,8 @@ SOURCES += main.cpp\
     tester/testvirtual.cpp \
     groupalgorithm/group.cpp \
     tester/testgroup.cpp \
-    groupalgorithm/rawgroup.cpp
+    groupalgorithm/rawgroup.cpp \
+    tester/testregex.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -126,7 +127,8 @@ HEADERS  += mainwindow.h \
     tester/testvirtual.h \
     groupalgorithm/group.h \
     tester/testgroup.h \
-    groupalgorithm/rawgroup.h
+    groupalgorithm/rawgroup.h \
+    tester/testregex.h
 
 
 DISTFILES += \
