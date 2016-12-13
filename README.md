@@ -1,4 +1,4 @@
-使用说明：
+﻿使用说明：
 
 2.1.0.0改动：
 
@@ -12,8 +12,7 @@ RawGroup类需要自己输入数据
 
 注意：输出的为有理数，所以可能带分号
 
-另外，需要确认自己的编译器支持gmp这个库，windows下请将bin下的gmpformingw32.rar中
-的文件复制到对应的qt mingw目录下即可，linux下应该可以直接装的吧。
+另外，需要确认自己的编译器支持gmp这个库，windows下请将bin下的gmpformingw32.rar中的文件复制到对应的qt mingw目录下即可，linux下应该可以直接装的吧。
 
 2.0.9.9改动：
 
