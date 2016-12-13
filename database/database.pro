@@ -12,7 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = database
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += --std=c++14
+LIBS += -lgmpxx -lgmp
 
 DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
 
@@ -58,7 +58,11 @@ SOURCES += main.cpp\
     tester/testdate.cpp \
     databasehandler/virtualtable.cpp \
     managementhandler/virtualiterator.cpp \
-    tester/testvirtual.cpp
+    tester/testvirtual.cpp \
+    groupalgorithm/group.cpp \
+    tester/testgroup.cpp \
+    groupalgorithm/databasetypeoperator.cpp \
+    groupalgorithm/rawgroup.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -120,7 +124,11 @@ HEADERS  += mainwindow.h \
     tester/testdate.h \
     databasehandler/virtualtable.h \
     managementhandler/virtualiterator.h \
-    tester/testvirtual.h
+    tester/testvirtual.h \
+    groupalgorithm/group.h \
+    tester/testgroup.h \
+    groupalgorithm/databasetypeoperator.h \
+    groupalgorithm/rawgroup.h
 
 
 DISTFILES += \
@@ -158,7 +166,8 @@ DISTFILES += \
     bin/data/local.mk \
     bin/data/README \
     bin/win_bison \
-    bin/win_flex
+    bin/win_flex \
+    bin/gmpformingw32.rar
 RESOURCES += \
     thjdb.qrc \
     icons/icons.qrc

@@ -9,14 +9,23 @@ void FlexibleRecord::Initialize(DataBaseType** inidata, int datasize)
     this->columns = inidata;
     this->columncount = datasize;
     this->columnsize = NULL;
-    this->data = NULL;
-    cout << "initial" << this->size << endl;
+    this->size = 0;
+    this->maxsize = getMaxSize();
+    this->data = new char[maxsize];
+    cout << "initial" << this->size <<' '<<maxsize<< endl;
 }
 void FlexibleRecord::Input(char* input)
 {
     this->size = UIC::chartoint(input);
-    if (this->data!=NULL) delete[] this->data;
-    this->data = new char[this->size];
+
+    if (this->size > this->maxsize)
+    {
+        cout<<"ERROR"<<' '<<this->size<<' '<<this->maxsize<<endl;
+    }
+    assert(this->size <= this->maxsize);
+
+    memset(this->data,0,this->size);
+
     int index=4;
     for (int i = 0; i < this->columncount; i++) {
         int inputlen=UIC::chartoint(input+index);

@@ -424,6 +424,7 @@ bool FlexibleTable::FastOutput(int pagenum, int rownum, Record *rec)
     BufType b = BPM->getPage(fileid, pagenum, index);
     //cout<<"position at "<<__position(rownum)<<endl;
     int pageposition = UIC::chartoint(b+__position(rownum));
+    if (pageposition == 0) return false;
     rec->Input(b + pageposition);
     return true;
 }
@@ -432,6 +433,11 @@ void FlexibleTable::FastOutput(int pagenum, int rownum, char* output, int& outpu
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
     int pageposition = UIC::chartoint(b+__position(rownum));
+    if (pageposition == 0)
+    {
+        output=NULL;
+        outputsize = 0;
+    }
     outputsize = UIC::chartoint(b+pageposition);
     memcpy(output, b + pageposition, outputsize);
 }

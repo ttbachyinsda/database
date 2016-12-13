@@ -2,6 +2,7 @@
 #define FLEXIBLERECORD_H
 
 #include "record.h"
+#include "assert.h"
 #include "../managementhandler/uic.h"
 class FlexibleRecord : public Record
 {
@@ -16,6 +17,8 @@ public:
     bool setAt(int wz,string input,bool isnull);
     void update();
     int getMaxSize();
+private:
+    int maxsize;
 };
 
 #endif // FLEXIBLERECORD_H
