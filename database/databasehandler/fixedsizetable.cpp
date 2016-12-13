@@ -10,7 +10,7 @@ FixedSizeTable::FixedSizeTable()
 }
 int FixedSizeTable::getPageNum() { return PageNum; }
 int FixedSizeTable::getMaxRowNum() { return MaxRowNum; }
-int FixedSizeTable::getRowSize() { return RowSize; }
+int FixedSizeTable::getRowSize(int rownum) { return RowSize; }
 
 bool FixedSizeTable::Initialize()
 {
@@ -371,7 +371,7 @@ void FixedSizeTable::modifyall(char *data, int datasize, int prepagenum, int pre
 {
     int index=0;
     for (int i=0;i<columncount;i++)
-        if (DBindex[i]!=NULL)
+        if (DBindex != NULL && DBindex[i]!=NULL)
         {
             int nowdatasize=column[i]->getSize();
             ModifyindexAt(i,data+index,nowdatasize-1,prepagenum,prerownum,newpagenum,newrownum);
@@ -382,7 +382,7 @@ void FixedSizeTable::deleteall(char *data, int datasize, int pagenum, int rownum
 {
     int index=0;
     for (int i=0;i<columncount;i++)
-        if (DBindex[i]!=NULL)
+        if (DBindex != NULL && DBindex[i]!=NULL)
         {
             int nowdatasize=column[i]->getSize();
             string t(data+index,nowdatasize-1);
@@ -395,7 +395,7 @@ void FixedSizeTable::insertall(char *data, int datasize, int pagenum, int rownum
 {
     int index=0;
     for (int i=0;i<columncount;i++)
-        if (DBindex[i]!=NULL)
+        if (DBindex != NULL && DBindex[i]!=NULL)
         {
             int nowdatasize=column[i]->getSize();
             //string t(data+index,nowdatasize-1);

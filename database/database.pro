@@ -55,7 +55,10 @@ SOURCES += main.cpp\
     typehandler/databasereal.cpp \
     typehandler/databaselint.cpp \
     typehandler/databasedate.cpp \
-    tester/testdate.cpp
+    tester/testdate.cpp \
+    databasehandler/virtualtable.cpp \
+    managementhandler/virtualiterator.cpp \
+    tester/testvirtual.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -114,7 +117,10 @@ HEADERS  += mainwindow.h \
     typehandler/date.h \
     typehandler/databasedate.h \
     typehandler/chrono_io.h \
-    tester/testdate.h
+    tester/testdate.h \
+    databasehandler/virtualtable.h \
+    managementhandler/virtualiterator.h \
+    tester/testvirtual.h
 
 
 DISTFILES += \

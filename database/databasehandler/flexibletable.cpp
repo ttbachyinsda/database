@@ -8,7 +8,7 @@ FlexibleTable::FlexibleTable()
 }
 int FlexibleTable::getPageNum() { return PageNum; }
 int FlexibleTable::getMaxRowNum() { return 0; }
-int FlexibleTable::getRowSize() { return 0; }
+int FlexibleTable::getRowSize(int rownum) { return 0; }
 
 bool FlexibleTable::Initialize()
 {
@@ -439,7 +439,7 @@ void FlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prer
 {
     int index=4;
     for (int i=0;i<columncount;i++)
-        if (DBindex[i]!=NULL)
+        if (DBindex != NULL && DBindex[i]!=NULL)
         {
             int nowdatasize=UIC::chartoint(data+index);
             index += 4;
@@ -452,7 +452,7 @@ void FlexibleTable::deleteall(char *data, int datasize, int pagenum, int rownum)
     int index=4;
 
     for (int i=0;i<columncount;i++)
-        if (DBindex[i]!=NULL)
+        if (DBindex != NULL && DBindex[i]!=NULL)
         {
 
             int nowdatasize=UIC::chartoint(data+index);
@@ -468,7 +468,7 @@ void FlexibleTable::insertall(char *data, int datasize, int pagenum, int rownum)
 
     int index=4;
     for (int i=0;i<columncount;i++)
-        if (DBindex[i]!=NULL)
+        if (DBindex != NULL && DBindex[i]!=NULL)
         {
             int nowdatasize=UIC::chartoint(data+index);
             index += 4;

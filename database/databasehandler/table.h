@@ -46,7 +46,7 @@ public:
     bool haveinitialize = false;
     virtual int getPageNum() = 0;
     virtual int getPageRowNum(int pagenum) = 0;
-    virtual int getRowSize() = 0;
+    virtual int getRowSize(int rownum) = 0;
     virtual int getMaxRowNum() = 0;
     virtual bool DeleteAt(int pagenum, int rownum) = 0;
     virtual void createTable(vector<string> clname, vector<DataBaseType*> cltype) = 0;

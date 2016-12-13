@@ -5,6 +5,7 @@
 #include "tester/testflexible.h"
 #include "tester/testiterator.h"
 #include "tester/testdate.h"
+#include "tester/testvirtual.h"
 #include "layer/qmlif.h"
 //#include "layer/pythonif.h"
 #include <QQmlApplicationEngine>
@@ -27,7 +28,7 @@ int main(int argc, char* argv[])
 //    testiterator w;
 //    w.begintest();
 
-    testflexible x;
+    testvirtual x;
     x.begintest();
 
 //    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
