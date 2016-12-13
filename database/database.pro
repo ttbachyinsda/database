@@ -61,7 +61,6 @@ SOURCES += main.cpp\
     tester/testvirtual.cpp \
     groupalgorithm/group.cpp \
     tester/testgroup.cpp \
-    groupalgorithm/databasetypeoperator.cpp \
     groupalgorithm/rawgroup.cpp
 
 
@@ -127,7 +126,6 @@ HEADERS  += mainwindow.h \
     tester/testvirtual.h \
     groupalgorithm/group.h \
     tester/testgroup.h \
-    groupalgorithm/databasetypeoperator.h \
     groupalgorithm/rawgroup.h
 
 
