@@ -14,6 +14,8 @@ RawGroup类需要自己输入数据
 
 另外，需要确认自己的编译器支持gmp这个库，windows下请将bin下的gmpformingw32.rar中的文件复制到对应的qt mingw目录下即可，linux下应该可以直接装的吧。
 
+另外修复了flexibletable下的一个严重bug，这个bug不能发现已经删除的记录
+
 2.0.9.9改动：
 
 添加了virtual table，一个只存在于内存的虚拟表。
