@@ -6,10 +6,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <unistd.h>
 using std::cout;
 using std::endl;
 #include "bplus_node.h"
 #include "predefined.h"
+#include <fcntl.h>
+#ifdef __linux
+#define PARA O_RDWR
+#elif __APPLE__
+#define PARA O_RDWR
+#else
+#define PARA O_RDWR|O_BINARY
+#endif
 
 /* offsets */
 #define OFFSET_META 0
@@ -106,6 +115,7 @@ class bplus_tree {
                              int after);
     void insert_index_keyo_index_no_split(internal_node_t &node, const index_key &key,
                                       int value);
+    void update_parent_node(int parent, int offset, const index_key &key);
 
     /* change children's parent */
     void reset_index_children_parent(index_t *begin, index_t *end,
@@ -119,18 +129,22 @@ class bplus_tree {
 
     /* multi-level file open/close */
     mutable FILE * fp = 0;
+    mutable int fp_desc;
     mutable int fp_level;
     void open_file(const char *mode = "rb+") const {
         // `rb+` will make sure we can write everywhere without truncating
         // file
-        if (fp_level == 0) fp = fopen(path, mode);
-
+        if (fp_level == 0) {
+            fp = fopen(path, mode);
+            fclose(fp);
+        }
+        fp_desc = open(path, PARA);
         ++fp_level;
     }
 
     void close_file() const {
-        if (fp_level == 1) fclose(fp);
-
+//        if (fp_level == 1) fclose(fp);
+        close(fp_desc);
         --fp_level;
     }
 
@@ -161,10 +175,10 @@ class bplus_tree {
 
     /* read block from disk */
     int block_read(void *block, int offset, int size) const {
-        fseek(fp, offset, SEEK_SET);
-        int rd = fread(block, size, 1, fp);
+        lseek(fp_desc, offset, SEEK_SET);
+        read(fp_desc, block, size);
 
-        return rd - 1;
+        return 0;
     }
 
     template <class T>
@@ -174,9 +188,9 @@ class bplus_tree {
 
     /* write block to disk */
     int block_write(void *block, int offset, int size) const {
-        fseek(fp, offset, SEEK_SET);
-        int wd = fwrite(block, size, 1, fp);
-        return wd - 1;
+        lseek(fp_desc, offset, SEEK_SET);
+        write(fp_desc, block, size);
+        return 0;
     }
 
     template <class T>

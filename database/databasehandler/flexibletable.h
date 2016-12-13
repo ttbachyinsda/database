@@ -23,7 +23,7 @@ public:
     string gettabletype();
     int getPageRowNum(int pagenum);
     int getPageNum();
-    int getRowSize();
+    int getRowSize(int rownum);
     int getMaxRowNum();
 
 private:

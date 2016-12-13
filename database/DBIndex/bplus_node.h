@@ -44,7 +44,7 @@ struct internal_node_t {
 
     index_t children[CHILDREN_NUM];
 
-    static int getSize() {return 4 * sizeof(int) + CHILDREN_NUM*sizeof(index_t);}
+    static int getSize() {return 4 * sizeof(int) + CHILDREN_NUM*index_t::getSize();}
 };
 
 struct leaf_node_t {
@@ -61,7 +61,7 @@ struct leaf_node_t {
 
     record_t children[CHILDREN_NUM];
 
-    static int getSize() {return 4 * sizeof(int) + CHILDREN_NUM*sizeof(record_t);}
+    static int getSize() {return 4 * sizeof(int) + CHILDREN_NUM*record_t::getSize();}
 };
 
 #endif  // DBINDEX_BPLUS_NODE_H

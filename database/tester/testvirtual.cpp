@@ -1,10 +1,10 @@
-#include "testflexible.h"
+#include "testvirtual.h"
 
-testflexible::testflexible()
+testvirtual::testvirtual()
 {
 
 }
-string testflexible::RandomString()
+string testvirtual::RandomString()
 {
     int aa = rand();
     stringstream ss;
@@ -12,7 +12,7 @@ string testflexible::RandomString()
     string s1 = ss.str();
     return s1;
 }
-string testflexible::InttoString(int num)
+string testvirtual::InttoString(int num)
 {
     int aa = num;
     stringstream ss;
@@ -20,8 +20,10 @@ string testflexible::InttoString(int num)
     string s1 = ss.str();
     return s1;
 }
-void testflexible::testindex(Table* onetable,string input)
+void testvirtual::testindex(Table* onetable,string input)
 {
+    if (onetable->getindexes()!=NULL)
+    {
     cout<<"test index begin"<<endl;
     Iterator* it = IteratorFactory::getiterator(onetable);
     string temp=it->compile(input,0);
@@ -37,13 +39,14 @@ void testflexible::testindex(Table* onetable,string input)
         cout<<"has not found"<<endl;
     cout<<"test index end"<<endl;
     delete it;
+    }
 }
 
-void testflexible::begintest()
+void testvirtual::begintest()
 {
-    string filename = "oneflexibletable.tb";
-    cout << "test iterator table begin..." << endl;
-    Table* onetable = new FlexibleTable();
+    string filename = "onevirtualtable.tb";
+    cout << "test virtual table begin..." << endl;
+    Table* onetable = new VirtualTable();
     onetable->setfilename(filename);
     onetable->setname("testiterator");
     vector<string> clname;
@@ -74,8 +77,8 @@ void testflexible::begintest()
     auto aaa = new string[3];
     int pagenum, rownum;
     auto t = RecordFactory::getrecord(onetable);
-//    QTime time;
-//    time.start();
+    QTime time;
+    time.start();
     for (int i = 0; i < 200000; i++) {
         aaa[0] = InttoString(i);
         aaa[1] = "a"+InttoString(i);
@@ -86,18 +89,21 @@ void testflexible::begintest()
             can=t->setAt(1,"",true);
             t->update();
         }
+//        for (int i = 0; i < 3; i++) {
+//            cout << "record: " << i << ' ' << t->getAt(i) << endl;
+//        }
         if (can)
             onetable->FastAllInsert(pagenum, rownum, t);
         //if (i<3) cout<<pagenum<<' '<<rownum<<endl;
     }
     delete t;
     delete[] aaa;
-    testindex(onetable,"5");
+    testindex(onetable,"0");
     cout << onetable->getPageNum() << endl;
     cout << onetable->getPageRowNum(1030) << endl;
-//    int time_Diff = time.elapsed();
-//    float f = time_Diff / 1000.0;
-//    cout << "Time table: " << f << endl;
+    int time_Diff = time.elapsed();
+    float f = time_Diff / 1000.0;
+    cout << "Time table: " << f << endl;
 
     cout << "test table end" << endl;
     cout << "test iterator begin" << endl;
@@ -113,13 +119,6 @@ void testflexible::begintest()
 
 
     ++(*iterator);
-    if (iterator->available()) {
-       iterator->getdata(record);
-        for (int i = 0; i < 3; i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
-    iterator->access(300, 1);
     if (iterator->available()) {
        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
@@ -142,43 +141,5 @@ void testflexible::begintest()
     delete iterator;
     delete record;
     delete onetable;
-
-    cout << "Open again" << endl;
-    onetable = new FlexibleTable();
-    onetable->setfilename(filename);
-    onetable->Initialize();
-    cout<<onetable->getmajornum();
-    for (int i=0;i<onetable->getcolumncount();i++)
-    {
-        cout<<"MULTIPLY: "<<onetable->getmultivalue(i)<<endl;
-    }
-    iterator = IteratorFactory::getiterator(onetable);
-    record = RecordFactory::getrecord(onetable);
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < 3; i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
-    ++(*iterator);
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < 3; i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
-    iterator->access(300, 1);
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < 3; i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
-    delete onetable;
-    delete iterator;
-    delete record;
-    cout << onetable->getname() << endl;
-    cout << "test table end" << endl;
-
 
 }

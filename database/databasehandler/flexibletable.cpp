@@ -8,7 +8,7 @@ FlexibleTable::FlexibleTable()
 }
 int FlexibleTable::getPageNum() { return PageNum; }
 int FlexibleTable::getMaxRowNum() { return 0; }
-int FlexibleTable::getRowSize() { return 0; }
+int FlexibleTable::getRowSize(int rownum) { return 0; }
 
 bool FlexibleTable::Initialize()
 {
@@ -424,6 +424,7 @@ bool FlexibleTable::FastOutput(int pagenum, int rownum, Record *rec)
     BufType b = BPM->getPage(fileid, pagenum, index);
     //cout<<"position at "<<__position(rownum)<<endl;
     int pageposition = UIC::chartoint(b+__position(rownum));
+    if (pageposition == 0) return false;
     rec->Input(b + pageposition);
     return true;
 }
@@ -432,6 +433,11 @@ void FlexibleTable::FastOutput(int pagenum, int rownum, char* output, int& outpu
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
     int pageposition = UIC::chartoint(b+__position(rownum));
+    if (pageposition == 0)
+    {
+        output=NULL;
+        outputsize = 0;
+    }
     outputsize = UIC::chartoint(b+pageposition);
     memcpy(output, b + pageposition, outputsize);
 }
@@ -439,7 +445,7 @@ void FlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prer
 {
     int index=4;
     for (int i=0;i<columncount;i++)
-        if (DBindex[i]!=NULL)
+        if (DBindex != NULL && DBindex[i]!=NULL)
         {
             int nowdatasize=UIC::chartoint(data+index);
             index += 4;
@@ -452,7 +458,7 @@ void FlexibleTable::deleteall(char *data, int datasize, int pagenum, int rownum)
     int index=4;
 
     for (int i=0;i<columncount;i++)
-        if (DBindex[i]!=NULL)
+        if (DBindex != NULL && DBindex[i]!=NULL)
         {
 
             int nowdatasize=UIC::chartoint(data+index);
@@ -468,7 +474,7 @@ void FlexibleTable::insertall(char *data, int datasize, int pagenum, int rownum)
 
     int index=4;
     for (int i=0;i<columncount;i++)
-        if (DBindex[i]!=NULL)
+        if (DBindex != NULL && DBindex[i]!=NULL)
         {
             int nowdatasize=UIC::chartoint(data+index);
             index += 4;

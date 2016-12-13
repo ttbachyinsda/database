@@ -156,11 +156,12 @@ string DatabaseLint::output()
 {
     if (isNull)
         return "NULL__DATA";
-    char* temp = (char*)malloc(this->size);
-    memcpy(temp,data,this->size);
-    string s(temp, this->size);
-    free(temp);
-    return s;
+    long long temp;
+    memcpy(&temp,data,8);
+    stringstream ss;
+    ss << temp;
+    string s1 = ss.str();
+    return s1;
 }
 
 /* Don't delete that

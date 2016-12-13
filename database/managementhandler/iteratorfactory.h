@@ -3,6 +3,7 @@
 
 #include "fixedsizediterator.h"
 #include "flexibleiterator.h"
+#include "virtualiterator.h"
 #include "iterator.h"
 class IteratorFactory {
 public:
