@@ -8,14 +8,14 @@
 #include <iostream>
 using namespace std;
 
-void QueryExecuter::clearUp()
+void QueryExecutor::clearUp()
 {
     tables.clear();
     selectors.clear();
     conditions.clear();
 }
 
-bool QueryExecuter::getTableColumnIndex(int &tid, int &cid, SQLSelector *s,
+bool QueryExecutor::getTableColumnIndex(int &tid, int &cid, SQLSelector *s,
                                         std::map<string, int> &dict,
                                         std::map<string, int>::iterator &dictIter)
 {
@@ -43,7 +43,7 @@ bool QueryExecuter::getTableColumnIndex(int &tid, int &cid, SQLSelector *s,
     return true;
 }
 
-bool QueryExecuter::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLConditionGroup *cgrp)
+bool QueryExecutor::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLConditionGroup *cgrp)
 {
     clearUp();
 
@@ -115,7 +115,7 @@ bool QueryExecuter::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
     return true;
 }
 
-bool QueryExecuter::executeQuery()
+bool QueryExecutor::executeQuery()
 {
     // ASSERT: All types are fit.
     /*
@@ -245,12 +245,12 @@ bool QueryExecuter::executeQuery()
     return true;
 }
 
-QueryExecuter::QueryExecuter(SQLDriver *d)
+QueryExecutor::QueryExecutor(SQLDriver *d)
 {
     driver = d;
 }
 
-QueryExecuter::~QueryExecuter()
+QueryExecutor::~QueryExecutor()
 {
     clearUp(); // needed.
 }

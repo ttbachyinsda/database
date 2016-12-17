@@ -15,3 +15,9 @@ Table *SortMergeJoin::join() {
     return resultTable;
 }
 
+SortMergeJoin::SortMergeJoin(const vector<ConditionPair> &cond) : JoinStrategy(cond) {}
+
+float SortMergeJoin::estimateCost(int dSize, int pSize, int dIndex, int pIndex, SQLOperand opCode) {
+    return 1e40;
+}
+

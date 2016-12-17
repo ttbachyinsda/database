@@ -267,12 +267,42 @@ bool SQLDeleteAction::execute()
         driver->addErrorMessage("Table " + identifier + " does not exist.");
         return false;
     }
-    // TODO: only actions in one single table is allowed.
-    cout << "============================" << endl;
-    cout << "Delete from table: " << identifier << " where ";
-    for (SQLCondition* condition : *conditionGroup) {
-        condition->dump();
+    /**
+     * Support only following conditions:
+     *      1. in one table
+     *      2. one condition
+     *      3. right value is numerical.
+     */
+    SQLCondition* sqlCondition = conditionGroup->at(0);
+    if (conditionGroup->size() != 1) {
+        driver->addErrorMessage("Too many conditions in where clauses.");
+        return false;
     }
+    if (sqlCondition->type != SQLCondition::VALUE) {
+        driver->addErrorMessage("Right value in a condition must be literal.");
+        return false;
+    }
+    int whereColumnID = myTable->getColumnIndexByName(sqlCondition->lValue.tableName);
+    if (whereColumnID == -1) {
+        driver->addErrorMessage("No such column in where clause.");
+        return false;
+    }
+    // TODO: Check type match.
+    Iterator* currentIterator = IteratorFactory::getiterator(myTable);
+    Record* currentRecord = RecordFactory::getrecord(myTable);
+    while (currentIterator->available()) {
+        currentIterator->getdata(currentRecord);
+        if (QueryCondition::match(sqlCondition->operand,
+                                  'c',
+                                  currentRecord->getAt(whereColumnID),
+                                  currentRecord->getIsNull(whereColumnID),
+                                  sqlCondition->rValue.content,
+                                  sqlCondition->rValue.type == SQLValue::LiteralType::NUL)) {
+            currentIterator->deletedata();
+        }
+        ++ (*currentIterator);
+    }
+
     return true;
 }
 

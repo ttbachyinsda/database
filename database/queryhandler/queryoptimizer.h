@@ -15,6 +15,18 @@ class QueryOptimizer {
     int driverTableID;
     int passengerTableID;
     JoinStrategy* joinStrategy;
+    std::vector<ConditionPair> transformedConditions;
+
+    struct ConditionPack {
+        bool reverse;
+        char selectedStrategy;
+        int conditionID;
+        float estimatedCost;
+    };
+
+    float getCost(const ConditionPair& cp, bool reverse,
+                  const std::vector<Table *> &tables, char& strat);
+
 public:
     QueryOptimizer() { joinStrategy = 0; };
     ~QueryOptimizer() { if (joinStrategy) delete joinStrategy; };

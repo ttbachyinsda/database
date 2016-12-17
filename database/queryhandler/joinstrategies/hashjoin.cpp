@@ -9,3 +9,9 @@ Table *HashJoin::join() {
 
     return resultTable;
 }
+
+HashJoin::HashJoin(const vector<ConditionPair> &cond) : JoinStrategy(cond) {}
+
+float HashJoin::estimateCost(int dSize, int pSize, int dIndex, int pIndex, SQLOperand opCode) {
+    return 1e40;
+}

@@ -29,7 +29,8 @@ enum SQLOperand
     GREATER,
     LESS,
     GREATER_EQUAL,
-    LESS_EQUAL
+    LESS_EQUAL,
+    LIKE
 };
 
 struct SQLCheck

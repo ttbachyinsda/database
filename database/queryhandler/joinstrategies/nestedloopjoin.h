@@ -17,9 +17,14 @@ class NestedLoopJoin : public JoinStrategy {
     //   - Indexed (utilized when <, <=, =, >=, >)
     //   - Big
 public:
+    NestedLoopJoin(const vector<ConditionPair> &cond);
+
     virtual Table *join();
 
     virtual string getType() { return "NST"; }
+
+    static float estimateCost(int dSize, int pSize,
+                              int dIndex, int pIndex, SQLOperand opCode);
 };
 
 

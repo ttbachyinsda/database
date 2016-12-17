@@ -7,39 +7,40 @@
 Table *NestedLoopJoin::join() {
 
     db_index* passengerIndex = passengerTable->getindexes()[passengerTableConditionColumnID];
-    bool canUseIndex = (passengerIndex != NULL) && (operand == SQLOperand::EQUAL ||
-                                                    operand == SQLOperand::GREATER ||
-                                                    operand == SQLOperand::GREATER_EQUAL ||
-                                                    operand == SQLOperand::LESS ||
-                                                    operand == SQLOperand::LESS_EQUAL);
+    bool canUseIndex = (passengerIndex != NULL) && QueryCondition::indexOperatable(this->operand);
 
     while (driverIterator->available()) {
         driverIterator->getdata(driverRecord);
         if (canUseIndex) {
-            switch (operand) {
-                case SQLOperand::EQUAL:
-                    passengerIndex->search();
-            }
+            string driverMainValue = driverRecord->getAt(driverTableConditionColumnID);
+            vector< pair<int,int> > searchIndexRes;
+            passengerIndex->findAll(QueryCondition::getInverseOperand(this->operand),
+                                    driverMainValue, &searchIndexRes);
+            for (const pair<int, int>& p : searchIndexRes) {
+                passengerIterator->access(p.first, p.second);
+                passengerIterator->getdata(passengerRecord);
 
-            passengerIndex->search_range()
-            // passenger table has index. use index to do this.
-//            passengerIndex->search_range();
-            /*
-             * passengerIterator->access();
-             * passengerIterator->getdata(passengerRecord);
-             * addToResultIfMatch();
-             */
+                // Main condition is sure to be satisfied.
+                addToResultIfMatch(false);
+            }
         } else {
             // without index. traverse.
             passengerIterator->getbegin();
             while (passengerIterator->available()) {
                 passengerIterator->getdata(passengerRecord);
-                addToResultIfMatch();
+                addToResultIfMatch(true);
             }
         }
         ++ (*driverIterator);
     }
 
     return resultTable;
+}
+
+NestedLoopJoin::NestedLoopJoin(const vector<ConditionPair> &cond) : JoinStrategy(cond) {}
+
+float NestedLoopJoin::estimateCost(int dSize, int pSize, int dIndex, int pIndex, SQLOperand opCode) {
+    if (!pIndex || !QueryCondition::indexOperatable(opCode)) return dSize * pSize;
+    else return (float) (dSize * log(pSize));
 }
 

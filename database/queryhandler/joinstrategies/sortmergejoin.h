@@ -12,9 +12,14 @@ class SortMergeJoin : public JoinStrategy {
     // Driver and Passenger are the same.
     // They all have to have index.
 public:
+    SortMergeJoin(const vector<ConditionPair> &cond);
+
     virtual Table *join();
 
     virtual string getType() { return "MRG"; }
+
+    static float estimateCost(int dSize, int pSize,
+                              int dIndex, int pIndex, SQLOperand opCode);
 };
 
 

@@ -13,6 +13,9 @@ class HashJoin : public JoinStrategy {
     // Driver Table: Small -> Distribute in bucket.
     // Passenger Table: Big -> to be traversed and hashed into bucket.
 public:
+    HashJoin(const vector<ConditionPair> &cond);
+    static float estimateCost(int dSize, int pSize,
+                              int dIndex, int pIndex, SQLOperand opCode);
     virtual Table *join();
     std::string getType() { return "HASH"; };
 };

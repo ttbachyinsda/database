@@ -38,6 +38,7 @@ public:
     static DataBaseType** copytype(DataBaseType** input, int inputlen);
     static int stringtoint(string text);
     static string inttostring(int text);
+    static DataBaseType *copyType(DataBaseType *oriType);
 };
 
 #endif // UIC_H

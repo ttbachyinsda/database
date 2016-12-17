@@ -15,7 +15,7 @@ class SQLResult;
 #include "../recordhandler/recordfactory.h"
 #include "../managementhandler/iteratorfactory.h"
 
-class QueryExecuter
+class QueryExecutor
 {
     SQLDriver* driver;
     std::vector<Table*> tables;
@@ -36,8 +36,8 @@ public:
     bool setQuery(SQLTableGroup* tgrp, SQLSelectorGroup* sgrp, SQLConditionGroup* cgrp);
     bool executeQuery();
 
-    QueryExecuter(SQLDriver* d);
-    ~QueryExecuter();
+    QueryExecutor(SQLDriver* d);
+    ~QueryExecutor();
 };
 
 #endif // QUERYEXECUTER_H

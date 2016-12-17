@@ -8,7 +8,7 @@
 #include "../../databasehandler/virtualtable.h"
 #include "../querycondition.h"
 
-void JoinStrategy::setCondition(int did, int pid, SQLOperand op) {
+void JoinStrategy::setMainCondition(int did, int pid, SQLOperand op) {
     this->driverTableConditionColumnID = did;
     this->passengerTableConditionColumnID = pid;
     this->operand = op;
@@ -28,12 +28,12 @@ void JoinStrategy::prepareTable(Table *dTable, Table *pTable) {
 
     for (int i = 0; i < driverTable->getcolumncount(); ++ i) {
         clname.push_back(driverTable->getname() + "." + driverTable->getcolumnname(i));
-        cltype.push_back(copyType(driverTable->getcolumn(i)));
+        cltype.push_back(UIC::copyType(driverTable->getcolumn(i)));
     }
 
     for (int i = 0; i < passengerTable->getcolumncount(); ++ i) {
         clname.push_back(passengerTable->getname() + "." + passengerTable->getcolumnname(i));
-        cltype.push_back(copyType(passengerTable->getcolumn(i)));
+        cltype.push_back(UIC::copyType(passengerTable->getcolumn(i)));
     }
 
     resultTable->createTable(clname, cltype);
@@ -49,14 +49,9 @@ void JoinStrategy::prepareTable(Table *dTable, Table *pTable) {
     resultRecord = RecordFactory::getrecord(resultTable);
 }
 
-DataBaseType *JoinStrategy::copyType(DataBaseType *oriType) {
-    string type = oriType->getType();
-    int size = oriType->getSize();
-    bool canNull = oriType->getNullable();
-    return UIC::reconvert(type, size, canNull);
-}
-
-JoinStrategy::JoinStrategy() {
+JoinStrategy::JoinStrategy(const std::vector<ConditionPair> &cond)
+    : allConditions(cond)
+{
     driverTable = 0;
     passengerTable = 0;
     resultTable = 0;
@@ -80,21 +75,34 @@ JoinStrategy::~JoinStrategy() {
     if (resultRecord) delete resultRecord;
 }
 
-void JoinStrategy::addToResultIfMatch() {
-    char cmpType = driverRecord->getcolumns()[driverTableConditionColumnID]->getType()[6];
+void JoinStrategy::addToResultIfMatch(bool checkAll) {
 
-    std::string driverValue = driverRecord->getAt(driverTableConditionColumnID);
-    bool driverValueIsNull = driverRecord->getIsNull(driverTableConditionColumnID);
-
-    std::string passengerValue = passengerRecord->getAt(passengerTableConditionColumnID);
-    bool passengerValueIsNull = passengerRecord->getIsNull(passengerTableConditionColumnID);
-
-    bool matchResult = QueryCondition::match(this->operand, cmpType, driverValue, driverValueIsNull,
-                                             passengerValue, passengerValueIsNull);
-
-    if (matchResult) {
+    if (!checkAll && allConditions.size() == 1) {
         forceAddToResult();
+        return;
     }
+
+    for (const ConditionPair& c : allConditions) {
+        if (!checkAll && driverTableConditionColumnID == c.left.columnIndex &&
+                passengerTableConditionColumnID == c.right.columnIndex &&
+                operand == c.operand)
+            continue;
+
+        char cmpType = driverRecord->getcolumns()[c.left.columnIndex]->getType()[6];
+
+        std::string driverValue = driverRecord->getAt(c.left.columnIndex);
+        bool driverValueIsNull = driverRecord->getIsNull(c.left.columnIndex);
+
+        std::string passengerValue = passengerRecord->getAt(c.right.columnIndex);
+        bool passengerValueIsNull = passengerRecord->getIsNull(c.right.columnIndex);
+
+        bool matchResult = QueryCondition::match(c.operand, cmpType, driverValue, driverValueIsNull,
+                                                 passengerValue, passengerValueIsNull);
+
+        if (!matchResult) return;
+    }
+
+    forceAddToResult();
 
 }
 

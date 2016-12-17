@@ -1,5 +1,10 @@
 #include "bplus_tree.h"
 
+#include <string>
+#include <vector>
+#include "../sqlengine/sqlstruct.h"
+using namespace std;
+
 class db_index {
    public:
     db_index(char *path, bool forceNewIndex = false, bool multi_value = false, int keySize = 20);
@@ -21,6 +26,8 @@ class db_index {
 
     bool isMulti_value() const;
     void setMulti_value(bool multi_value);
+
+    void findAll(SQLOperand operand, string targetValue, vector<pair<int,int>> *res) {}
 
    private:
     bplus_tree b_tree;

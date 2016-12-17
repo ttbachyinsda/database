@@ -315,3 +315,10 @@ void UIC::convertmulti(bool can,char *s1)
         *(s1 + 3) = 'B';
     }
 }
+
+DataBaseType *UIC::copyType(DataBaseType *oriType) {
+    string type = oriType->getType();
+    int size = oriType->getSize();
+    bool canNull = oriType->getNullable();
+    return UIC::reconvert(type, size, canNull);
+}

@@ -10,8 +10,11 @@
 #include "querycondition.h"
 
 class IntelligentFilter {
+    // defined in a single table (different from join strategies.)
+    static void addToResultIfMatch(Record* record, Table* resultTable, Record* resultRecord,
+                                   const std::vector<ConditionPair>& conds);
 public:
-    static VirtualTable* apply(Table* target, const std::vector<ConditionPair>& conditions);
+    static Table* apply(Table* target, const std::vector<ConditionPair>& conditions);
 };
 
 

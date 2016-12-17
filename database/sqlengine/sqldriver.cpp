@@ -24,7 +24,7 @@ SQLDriver::SQLDriver() {
     // If file not exist, new file will be created.
     databaseManager->Initialize();
 
-    queryExecuter = new QueryExecuter(this);
+    queryExecuter = new QueryExecutor(this);
 }
 
 SQLDriver::~SQLDriver() {
