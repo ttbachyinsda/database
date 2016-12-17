@@ -5,7 +5,7 @@
 #include "joinstrategy.h"
 #include "../../recordhandler/recordfactory.h"
 #include "../../managementhandler/iteratorfactory.h"
-#include "../../databasehandler/ramtable.h"
+#include "../../databasehandler/virtualtable.h"
 #include "../querycondition.h"
 
 void JoinStrategy::setCondition(int did, int pid, SQLOperand op) {
@@ -18,7 +18,7 @@ void JoinStrategy::prepareTable(Table *dTable, Table *pTable) {
     this->driverTable = dTable;
     this->passengerTable = pTable;
 
-    resultTable = new RamTable();
+    resultTable = new VirtualTable();
     resultTable->setname(this->getType() + "_JOIN_TEMP");
 
     // Create Target Table.
@@ -93,16 +93,20 @@ void JoinStrategy::addToResultIfMatch() {
                                              passengerValue, passengerValueIsNull);
 
     if (matchResult) {
-        for (int i = 0; i < driverRecord->getcolumncount(); ++ i) {
-            resultRecord->setAt(i, driverRecord->getAt(i), driverRecord->getIsNull(i));
-        }
-        int base = driverRecord->getcolumncount();
-        for (int j = 0; j < passengerRecord->getcolumncount(); ++ j) {
-            resultRecord->setAt(base + j, passengerRecord->getAt(j), passengerRecord->getIsNull(j));
-        }
-        resultRecord->update();
-        int dum;
-        resultTable->FastAllInsert(dum, dum, resultRecord);
+        forceAddToResult();
     }
 
+}
+
+void JoinStrategy::forceAddToResult() {
+    for (int i = 0; i < driverRecord->getcolumncount(); ++ i) {
+        resultRecord->setAt(i, driverRecord->getAt(i), driverRecord->getIsNull(i));
+    }
+    int base = driverRecord->getcolumncount();
+    for (int j = 0; j < passengerRecord->getcolumncount(); ++ j) {
+        resultRecord->setAt(base + j, passengerRecord->getAt(j), passengerRecord->getIsNull(j));
+    }
+    resultRecord->update();
+    int dum;
+    resultTable->FastAllInsert(dum, dum, resultRecord);
 }

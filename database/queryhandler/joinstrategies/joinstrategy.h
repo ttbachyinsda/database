@@ -31,6 +31,7 @@ protected:
 
     DataBaseType* copyType(DataBaseType* oriType);
     void addToResultIfMatch();
+    void forceAddToResult();
 public:
     JoinStrategy();
     virtual ~JoinStrategy();

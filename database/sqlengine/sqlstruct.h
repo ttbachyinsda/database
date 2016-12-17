@@ -7,7 +7,7 @@
 
 struct SQLValue
 {
-    enum {
+    enum LiteralType {
         ENUMERATE, STRING, NUL
     } type;
 
@@ -15,16 +15,6 @@ struct SQLValue
 
     SQLValue() {
         type = SQLValue::STRING;
-    }
-
-    bool typeFitChar(char c) {
-        if (c == 'I' && type == ENUMERATE)
-            return true;
-        if ((c == 'V' || c == 'C') && type == STRING)
-            return true;
-        // Insert or where clause (NULL is always acceptable)
-        // But NULL is not comparable (< > <= >= ...)
-        return (type == NUL);
     }
 
     void dump() const;
@@ -150,13 +140,13 @@ public:
     ~SQLResult() {}
 
     void addNew() {
-        data.push_back(std::vector<std::string>(columns));
+        data.push_back(std::vector<std::string>((unsigned long) columns));
     }
 
     void setData(int idx, const std::string& str) {
         if (idx >= columns) return;
         if (data.size() == 0) return;
-        data.back().at(idx) = str;
+        data.back().at((unsigned long) idx) = str;
     }
     void addTitleField(const std::string& str) {
         title.push_back(str);
