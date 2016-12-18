@@ -1,21 +1,25 @@
-#ifndef FLEXIBLETABLE_H
-#define FLEXIBLETABLE_H
-
+#ifndef HASHFLEXIBLETABLE_H
+#define HASHFLEXIBLETABLE_H
 
 #include "../databasehandler/table.h"
 #include "../managementhandler/uic.h"
+#include "../managementhandler/md5.h"
 #include "../recordhandler/record.h"
 #include "../recordhandler/flexiblerecord.h"
 #include <sstream>
+#include <fstream>
+#include <gmp.h>
+#include <gmpxx.h>
 
 #define __position(x) (PAGE_SIZE-((x)+1)*4)
-class FlexibleTable : public Table {
+class HashFlexibleTable : public Table {
 public:
-    FlexibleTable();
-    ~FlexibleTable();
+    HashFlexibleTable();
+    ~HashFlexibleTable();
     bool Initialize();
     void createTable(vector<string> clname, vector<DataBaseType*> cltype);
     bool DeleteAt(int pagenum, int rownum);
+    bool FastInsert(int& pagenum, int& rownum, Record* rec);
     bool FastAllInsert(int& pagenum, int& rownum, Record* rec);
     bool FastOutput(int pagenum, int rownum, Record *rec);
     void FastOutput(int pagenum, int rownum, char* output, int& outputsize);
@@ -24,14 +28,14 @@ public:
     int getPageNum();
     int getRowSize(int rownum);
     int getMaxRowNum();
-
     int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec);
 
 private:
-    void PackageFromHeadFile(BufType temp);
-    void PackageHeadFile(BufType temp);
-    bool FastInsert(int& pagenum, int& rownum, Record* rec);
-    bool InsertAt(int pagenum, char* insertdata, int& rownum);
+    void PackageFromHeadFile(BufType b);
+    void PackageHeadFile(BufType b);
+    void Packagebeginend(BufType b);
+    void Packagefrombeginend(BufType b);
+    bool InsertAt(int datahash, int pagenum, char* insertdata, int& rownum);
     char* Packager(int totalsize);
     bool modifypd(int pagenum, int rownum, BufType& ct, int& newindex, int& pagenewnum);
     void Reconstruct(int pagenum, BufType b);
@@ -41,7 +45,16 @@ private:
     void insertall(char* data,int datasize,int pagenum,int rownum);
     void deleteall(char* data,int datasize,int pagenum,int rownum);
     int PageNum;
-    int MaxRecordSize;
-    int* reservedSizeInPage;
+    int *HBeginPageNum;
+    int *HEndPageNum;
+
+//Hash Method
+    int getHashNumc(char* data,int datasize);
+    int getHashNum(string data);
+    int getHashNumIn(char* data,int reqcolumn);
+    void updateHashpagenum(int hashnum,int beginpagenum,int endpagenum);
+    void getHashpagenum(int hashnum,int &beginpagenum,int &endpagenum);
+    Record * atemprecord;
 };
-#endif // FLEXIBLETABLE_H
+
+#endif // HASHFLEXIBLETABLE_H

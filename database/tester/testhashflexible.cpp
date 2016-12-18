@@ -1,10 +1,10 @@
-#include "testgroup.h"
+#include "testhashflexible.h"
 
-testgroup::testgroup()
+testhashflexible::testhashflexible()
 {
 
 }
-string testgroup::RandomString()
+string testhashflexible::RandomString()
 {
     int aa = rand();
     stringstream ss;
@@ -12,7 +12,7 @@ string testgroup::RandomString()
     string s1 = ss.str();
     return s1;
 }
-string testgroup::InttoString(int num)
+string testhashflexible::InttoString(int num)
 {
     int aa = num;
     stringstream ss;
@@ -20,14 +20,14 @@ string testgroup::InttoString(int num)
     string s1 = ss.str();
     return s1;
 }
-string testgroup::signedlongtostring(long long num)
+string testhashflexible::signedlongtostring(long long num)
 {
     char s[8];
     memcpy(s,&num,8);
     string t(s,8);
     return t;
 }
-string testgroup::doubletostring(double num)
+string testhashflexible::doubletostring(double num)
 {
     char s[8];
     memcpy(s,&num,8);
@@ -35,9 +35,9 @@ string testgroup::doubletostring(double num)
     return t;
 }
 
-void testgroup::testindex(Table* onetable,string input)
+void testhashflexible::testindex(Table* onetable,string input)
 {
-    cout<<"test group index begin"<<endl;
+    cout<<"test hashflexible index begin"<<endl;
     Iterator* it = IteratorFactory::getiterator(onetable);
     string temp=it->compile(input,0);
     cout<<"try to search "<<temp<<endl;
@@ -54,13 +54,13 @@ void testgroup::testindex(Table* onetable,string input)
     delete it;
 }
 
-void testgroup::begintest()
+void testhashflexible::begintest()
 {
-    string filename = "testgrouptable.tb";
-    cout << "test group begin..." << endl;
-    Table* onetable = new FlexibleTable();
+    string filename = "onehashflexibletable.tb";
+    cout << "test hash flexible table begin..." << endl;
+    Table* onetable = new HashFlexibleTable();
     onetable->setfilename(filename);
-    onetable->setname("testgroup");
+    onetable->setname("hashflexible");
     vector<string> clname;
     vector<DataBaseType*> cltype;
     clname.push_back("userid");
@@ -71,8 +71,8 @@ void testgroup::begintest()
     string t1 = "INTE";
     string t2 = "VARC";
     string t3 = "INTE";
-    string t4 = "REAL";
-    string t5 = "LINT";
+    string t4 = "LINT";
+    string t5 = "REAL";
     auto *conditions = new string[5];
     conditions[0]="FRTO";
     conditions[1]="0";
@@ -91,7 +91,9 @@ void testgroup::begintest()
     onetable->createTable(clname, cltype);
     onetable->Initialize();
     delete[] conditions;
-    onetable->setmajornum(0);
+
+    onetable->setmajornum(-1);
+
     onetable->setmultivalue(0,false);
     onetable->createemptyindex(0);
     auto aaa = new string[5];
@@ -104,23 +106,25 @@ void testgroup::begintest()
         aaa[0] = InttoString(i);
         aaa[1] = "a"+InttoString(i);
         aaa[2] = "58";
-        aaa[3] = doubletostring(i);
-        aaa[4] = signedlongtostring(i);
+        aaa[3] = signedlongtostring(i);
+        aaa[4] = doubletostring(i);
         bool can = t->set(aaa);
         if (can && i%3)
         {
             can=t->setAt(1,"",true);
             t->update();
         }
-        //cout<<t->getAt(3)<<endl;
         if (can)
             onetable->FastAllInsert(pagenum, rownum, t);
         if (i%3==0)
             group.add(pagenum,rownum);
-        //if (i<3) cout<<pagenum<<' '<<rownum<<endl;
+        //cout<<pagenum<<' '<<rownum<<endl;
+        //assert(pagenum <= onetable->getPageNum());
+        //cout<<e<<endl;
     }
     delete t;
     delete[] aaa;
+
     cout<<"group begin"<<endl;
     group.getmax(onetable,0);
     group.getmin(onetable,0);
@@ -135,6 +139,7 @@ void testgroup::begintest()
     group.getsum(onetable,4);
     group.getaverage(onetable,4);
     cout<<"group end"<<endl;
+
     testindex(onetable,"5");
     cout << onetable->getPageNum() << endl;
     cout << onetable->getPageRowNum(1030) << endl;
@@ -148,19 +153,20 @@ void testgroup::begintest()
     auto iterator = IteratorFactory::getiterator(onetable);
     auto record = RecordFactory::getrecord(onetable);
 
-    int js=0;
-    while (iterator->available())
-    {
-        js++;
-        cout<<js<<endl;
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << ' ';
-        }
-        cout<<endl;
-        ++(*iterator);
-    }
-    iterator->getbegin();
+//    int js=0;
+//    while (iterator->available())
+//    {
+//        js++;
+//        cout<<js<<endl;
+//        cout<<iterator->gethashnum() << ' '<<iterator->getpagenum()<<' '<<iterator->getrownum()<<' '<<iterator->getpagerownum()<<endl;
+//        iterator->getdata(record);
+
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << i << ' ' << record->getAt(i) << ' ';
+//        }
+//        cout<<endl;
+//        ++(*iterator);
+//    }
 
     if (iterator->available()) {
         iterator->getdata(record);
@@ -185,7 +191,7 @@ void testgroup::begintest()
         }
     }
 
-    iterator->access(1, 0);
+    iterator->access(2, 0);
     cout << "try to delete" << endl;
     iterator->deletedata();
     if (iterator->available()) {
@@ -202,7 +208,7 @@ void testgroup::begintest()
     delete onetable;
 
     cout << "Open again" << endl;
-    onetable = new FlexibleTable();
+    onetable = new HashFlexibleTable();
     onetable->setfilename(filename);
     onetable->Initialize();
 
@@ -250,7 +256,6 @@ void testgroup::begintest()
     delete iterator;
     delete record;
     cout << onetable->getname() << endl;
-    cout << "test table end" << endl;
-
+    cout<<"test hash flexible table end"<<endl;
 
 }

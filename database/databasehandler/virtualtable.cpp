@@ -154,3 +154,8 @@ string VirtualTable::gettabletype()
 {
     return "Virtual";
 }
+int VirtualTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec)
+{
+    //Don't need to write that
+    return 0;
+}

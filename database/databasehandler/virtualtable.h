@@ -22,6 +22,7 @@ public:
     int getPageNum();
     int getRowSize(int rownum);
     int getMaxRowNum();
+    int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec);
 
 private:
     void modifyall(char* data,int datasize,int prepagenum,int prerownum,int newpagenum,int newrownum);

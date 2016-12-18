@@ -8,7 +8,10 @@
 #include "tester/testvirtual.h"
 #include "tester/testgroup.h"
 #include "tester/testregex.h"
+#include "tester/testmd5.h"
+#include "tester/testhashflexible.h"
 #include "layer/qmlif.h"
+
 //#include "layer/pythonif.h"
 #include <QQmlApplicationEngine>
 #include <QGuiApplication>
@@ -34,8 +37,8 @@ int main(int argc, char* argv[])
 //    x.begintest();
 
 
-    testgroup xyz;
-    xyz.begintest();
+//    testgroup xyz;
+//    xyz.begintest();
 
 //    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
 //    QGuiApplication app(argc, argv);
@@ -58,8 +61,14 @@ int main(int argc, char* argv[])
 //    testdate xx;
 //    xx.begintest();
 
-    testregex yza;
-    yza.begintest();
+//    testregex yza;
+//    yza.begintest();
+
+//    testmd5 zab;
+//    zab.begintest();
+
+    testhashflexible ace;
+    ace.begintest();
 
     return 0;
 }
