@@ -54,6 +54,12 @@ public:
 
     virtual int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec) = 0;
 
+    virtual bool FastFind(Record* rec)
+    {
+        cout<<"Please don't use it in non-hashflexible table"<<endl;
+        return false;
+    }
+
 protected:
     void clearcolumn();
     void clearindex();

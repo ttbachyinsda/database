@@ -452,10 +452,9 @@ bool HashFlexibleTable::FastInsert(int& pagenum, int& rownum, Record* rec)
 }
 bool HashFlexibleTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
 {
-    if (majornum == -1)
-    {
+    int snum = (majornum==-1?0:majornum);
 
-        int hashnum = getHashNum(rec->getAt(0));
+        int hashnum = getHashNum(rec->getAt(snum));
 
         if (HBeginPageNum[hashnum] == 0)
         {
@@ -483,7 +482,6 @@ bool HashFlexibleTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
             }
             assert(i<=1);
         }
-    }
     return true;
 }
 
@@ -604,7 +602,6 @@ int HashFlexibleTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<i
     {
         int index;
         BufType b = BPM->getPage(fileid, pagenum, index);
-
         int pagerownum = UIC::chartoint(b + 4);
         infovec->push_back(pagerownum);
         int jumppagenum = UIC::chartoint(b+16);
@@ -645,4 +642,40 @@ int HashFlexibleTable::getHashNumIn(char *data, int reqcolumn)
     }
     atemprecord->Input(data);
     return getHashNum(atemprecord->getAt(reqcolumn));
+}
+bool HashFlexibleTable::FastFind(Record *rec)
+{
+    bool can=false;
+    int snum = (majornum==-1?0:majornum);
+    int hashnum = getHashNum(rec->getAt(snum));
+    int nowpagenum = HBeginPageNum[hashnum];
+    if (atemprecord == 0)
+    {
+        atemprecord = new FlexibleRecord();
+        DataBaseType** col = UIC::copytype(getcolumns(), getcolumncount());
+        atemprecord->Initialize(col, getcolumncount());
+    }
+    string temp = rec->getAt(snum);
+    while (nowpagenum>=2)
+    {
+        int index;
+        BufType b = BPM->getPage(fileid, nowpagenum, index);
+        int pagerownum = UIC::chartoint(b+4);
+        int jumppagenum = UIC::chartoint(b+16);
+        for (int i=0;i<pagerownum;i++)
+        {
+            int position = UIC::chartoint(b+__position(i));
+            if (position)
+            {
+                atemprecord->Input(b+position);
+                if (atemprecord->getAt(snum) == temp)
+                {
+                    can=true;
+                    return true;
+                }
+            }
+        }
+        nowpagenum = jumppagenum;
+    }
+    return can;
 }

@@ -29,6 +29,7 @@ public:
     int getRowSize(int rownum);
     int getMaxRowNum();
     int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec);
+    bool FastFind(Record *rec);
 
 private:
     void PackageFromHeadFile(BufType b);
