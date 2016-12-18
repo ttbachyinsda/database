@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include <unistd.h>
 using std::cout;
 using std::endl;
 #include "bplus_node.h"
@@ -90,21 +89,6 @@ class bplus_tree {
     /* remove internal node */
     void remove_from_index(int offset, internal_node_t &node,
                            const index_key &key);
-
-    /* borrow one key from other internal node */
-    bool borrow_key(bool from_right, internal_node_t &borrower, int offset);
-
-    /* borrow one record from other leaf */
-    bool borrow_key(bool from_right, leaf_node_t &borrower);
-
-    /* change one's parent key to another key */
-    void change_parent_child(int parent, const index_key &o, const index_key &n);
-
-    /* merge right leaf to left leaf */
-    void merge_leafs(leaf_node_t *left, leaf_node_t *right);
-
-    void merge_keys(index_t *where, internal_node_t &left,
-                    internal_node_t &right);
 
     /* insert into leaf without split */
     void insert_record_no_split(leaf_node_t *leaf, const index_key &key,
