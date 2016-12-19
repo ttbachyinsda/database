@@ -10,6 +10,7 @@
 #include "tester/testregex.h"
 #include "tester/testmd5.h"
 #include "tester/testhashflexible.h"
+#include "tester/testbulbfile.h"
 #include "layer/qmlif.h"
 
 //#include "layer/pythonif.h"
@@ -69,6 +70,9 @@ int main(int argc, char* argv[])
 
     testhashflexible ace;
     ace.begintest();
+
+//    testbulbfile ceo;
+//    ceo.begintest();
 
     return 0;
 }

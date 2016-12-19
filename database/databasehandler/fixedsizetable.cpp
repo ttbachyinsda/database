@@ -38,6 +38,7 @@ for (int i=0;i<PAGE_INT_NUM;i++)
 }
 cout<<"Now end "<<"testment"<<endl;
 */
+
     char* temp = (char*)malloc(4);
     memcpy(temp, b, 4);
     string ob1 = "HEAD";
@@ -143,6 +144,7 @@ void FixedSizeTable::PackageHeadFile(BufType b)
 void FixedSizeTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
 {
     remove(this->filename.c_str());
+
     int totalheadsize = 4 * 5 + 4 * 3 + name.length();
     this->clearcolumn();
     this->RowSize = 0;

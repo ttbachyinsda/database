@@ -36,6 +36,7 @@ for (int i=0;i<PAGE_INT_NUM;i++)
 }
 cout<<"Now end "<<"testment"<<endl;
 */
+
     char* temp = (char*)malloc(4);
     memcpy(temp, b, 4);
     string ob1 = "HEAD";
@@ -137,6 +138,7 @@ void FlexibleTable::PackageHeadFile(BufType b)
 void FlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
 {
     remove(this->filename.c_str());
+
     int totalheadsize = 4 * 3 + 4 * 3 + name.length();
     this->clearcolumn();
     this->columncount = clname.size();

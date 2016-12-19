@@ -67,7 +67,9 @@ SOURCES += main.cpp\
     tester/testmd5.cpp \
     databasehandler/hashflexibletable.cpp \
     tester/testhashflexible.cpp \
-    managementhandler/hashflexibleiterator.cpp
+    managementhandler/hashflexibleiterator.cpp \
+    databasehandler/bulbfile.cpp \
+    tester/testbulbfile.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -138,7 +140,9 @@ HEADERS  += mainwindow.h \
     tester/testmd5.h \
     databasehandler/hashflexibletable.h \
     tester/testhashflexible.h \
-    managementhandler/hashflexibleiterator.h
+    managementhandler/hashflexibleiterator.h \
+    databasehandler/bulbfile.h \
+    tester/testbulbfile.h
 
 
 DISTFILES += \

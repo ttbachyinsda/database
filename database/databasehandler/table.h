@@ -7,6 +7,7 @@
 #include "../typehandler/databasetype.h"
 #include "../DBIndex/db_index.h"
 #include "../managementhandler/uic.h"
+#include "bulbfile.h"
 #include <string>
 #include <vector>
 using namespace std;
