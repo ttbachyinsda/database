@@ -31,10 +31,10 @@ struct QueryCondition {
     static bool indexOperatable(SQLOperand operand);
     static SQLOperand getInverseOperand(SQLOperand operand);
 private:
-    static int matchString(const std::string& left, const std::string& right) const;
-    static int matchInteger(const std::string& left, const std::string& right) const;
+    static int matchString(const std::string& left, const std::string& right);
+    static int matchInteger(const std::string& left, const std::string& right);
     static int matchIntegerCond(const char* s, int ls,
-                                const char* l, int ll) const;
+                                const char* l, int ll);
 };
 
 

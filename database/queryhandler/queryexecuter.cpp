@@ -139,15 +139,19 @@ bool QueryExecutor::executeQuery()
         operatingSelectors.push_back(pair);
     }
 
+    for (ConditionPair& c : conditions) {
+        currentConditions.push_back(c);
+    }
+
     for (unsigned tid = 0; tid < tables.size(); ++ tid) {
         operatingTables.push_back(tables[tid]);
         std::vector<ConditionPair> thisTableInnerConditions;
-        for (ConditionPair& c : conditions) {
-            if (c.left.tableIndex == tid &&
-                    (c.rightIsValue || (!c.rightIsValue && c.right.tableIndex == tid))) {
-                thisTableInnerConditions.push_back(c);
-            } else {
-                currentConditions.push_back(c);
+        std::vector<ConditionPair>::iterator cIter = currentConditions.begin();
+        while (cIter != currentConditions.end()) {
+            if (cIter->left.tableIndex == tid &&
+                (cIter->rightIsValue || (!cIter->rightIsValue && cIter->right.tableIndex == tid))) {
+                thisTableInnerConditions.push_back(*cIter);
+                cIter = currentConditions.erase(cIter);
             }
         }
         if (thisTableInnerConditions.size() != 0) {
@@ -158,7 +162,7 @@ bool QueryExecutor::executeQuery()
 
     QueryOptimizer* optimizer = new QueryOptimizer();
 
-    for (unsigned reduceID = 2; reduceID < tables.size(); ++ reduceID) {
+    for (unsigned reduceID = 1; reduceID < tables.size(); ++ reduceID) {
         // notice: following codes are based on transformed index.
         optimizer->generatePlan(currentConditions, operatingTables);
         unsigned int mergedID1 = (unsigned int) optimizer->getJoinIDPlan().first,

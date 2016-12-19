@@ -249,11 +249,11 @@ void bplus_tree::search_greater_equal(const index_key &key, vector<pair<int, int
 
         // start point
         if (off_left == off)
-            b = find(leaf, left);
+            b = find(leaf, key);
         else
             b = begin(leaf);
 
-        if (keycmp(b->key, left) != 0)
+        if (keycmp(b->key, key) != 0)
             b++;
 
         // copy

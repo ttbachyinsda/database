@@ -253,6 +253,7 @@ string UIC::readstringandjump(BufType b, FileIterator& iterator, int size_t, int
 DataBaseType** UIC::copytype(DataBaseType** input, int inputlen)
 {
     cout<<"inputlen="<<inputlen<<endl;
+    cout << input[0] << endl;
     DataBaseType** temp = new DataBaseType*[inputlen];
     for (int i = 0; i < inputlen; i++) {
         string temptype=input[i]->getType();
@@ -317,7 +318,7 @@ void UIC::convertmulti(bool can,char *s1)
 }
 
 DataBaseType *UIC::copyType(DataBaseType *oriType) {
-    string type = oriType->getType();
+    string type = oriType->getType().substr(6);
     int size = oriType->getSize();
     bool canNull = oriType->getNullable();
     return UIC::reconvert(type, size, canNull);

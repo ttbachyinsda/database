@@ -21,8 +21,12 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 
-//    TestSQL t;
-//    t.startTestFile("a.sql");
+    TestSQL t;
+    string sql = "use orderDB;";
+    sql += "SELECT book.title,book.id,orders.book_id,orders.quantity FROM book,orders WHERE book.id=orders.book_id AND orders.quantity>8;";
+    t.startTestString(sql);
+
+    t.startTestFile("book.sql");
 //    t.startTestInteractive();
 /*
     testtype t;
@@ -68,8 +72,8 @@ int main(int argc, char* argv[])
 //    testmd5 zab;
 //    zab.begintest();
 
-    testhashflexible ace;
-    ace.begintest();
+//    testhashflexible ace;
+//    ace.begintest();
 
 //    testbulbfile ceo;
 //    ceo.begintest();

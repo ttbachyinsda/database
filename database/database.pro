@@ -68,8 +68,12 @@ SOURCES += main.cpp\
     databasehandler/hashflexibletable.cpp \
     tester/testhashflexible.cpp \
     managementhandler/hashflexibleiterator.cpp \
-    databasehandler/bulbfile.cpp \
-    tester/testbulbfile.cpp
+    queryhandler/joinstrategies/hashjoin.cpp \
+    queryhandler/joinstrategies/joinstrategy.cpp \
+    queryhandler/joinstrategies/nestedloopjoin.cpp \
+    queryhandler/joinstrategies/sortmergejoin.cpp \
+    queryhandler/intelligentfilter.cpp \
+    queryhandler/queryoptimizer.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -141,8 +145,12 @@ HEADERS  += mainwindow.h \
     databasehandler/hashflexibletable.h \
     tester/testhashflexible.h \
     managementhandler/hashflexibleiterator.h \
-    databasehandler/bulbfile.h \
-    tester/testbulbfile.h
+    queryhandler/joinstrategies/hashjoin.h \
+    queryhandler/joinstrategies/joinstrategy.h \
+    queryhandler/joinstrategies/nestedloopjoin.h \
+    queryhandler/joinstrategies/sortmergejoin.h \
+    queryhandler/intelligentfilter.h \
+    queryhandler/queryoptimizer.h
 
 
 DISTFILES += \

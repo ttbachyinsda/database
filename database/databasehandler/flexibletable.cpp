@@ -396,7 +396,7 @@ bool FlexibleTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
 {
     bool can = false;
     for (int i = min(this->MaxRecordSize-1,this->PageNum); i > 0; i--)
-        if (this->reservedSizeInPage[i] >= rec->getSize()) {
+        if (this->reservedSizeInPage[i] >= rec->getSize()+4) {
             pagenum = i;
             can = FastInsert(pagenum, rownum, rec);
             if (!can) {

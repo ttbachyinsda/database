@@ -46,7 +46,7 @@ Table *IntelligentFilter::apply(Table *target, const std::vector<ConditionPair> 
     if (indexedCol != -1) {
         db_index* bTreeIndex = target->getindexes()[indexedCol];
         vector< pair<int,int> > searchIndexRes;
-        string targetContent = conditions[indexedConditionID].rightValue.content;
+        string targetContent = targetIterator->compile(conditions[indexedConditionID].rightValue.content, indexedCol);
         bTreeIndex->findAll(conditions[indexedConditionID].operand, targetContent, &searchIndexRes);
 
         std::vector<ConditionPair> extractedCondPair;

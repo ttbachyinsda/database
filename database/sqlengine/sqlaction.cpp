@@ -72,6 +72,7 @@ bool SQLShowDatabasesAction::execute()
         result->setData(2, now->getfilename());
         ++ idx;
     }
+    driver->setResult(result);
     return true;
 }
 
@@ -185,7 +186,7 @@ bool SQLDescAction::execute()
         result->setData(4, "NULL");
         result->setData(5, "");
     }
-
+    driver->setResult(result);
     return true;
 }
 
@@ -210,6 +211,7 @@ bool SQLShowTablesAction::execute()
         result->setData(2, now->getfilename());
         ++ idx;
     }
+    driver->setResult(result);
     return true;
 }
 
@@ -238,8 +240,8 @@ bool SQLInsertAction::execute()
         }
         for (int j = 0; j < thisSize; ++ j) {
             SQLValue* sigValue = valueGroupList->at(i)->at(j);
-            if (!sigValue->typeFitChar(record->getcolumns()[j]->getType()[6]) ||
-                    !record->setAt(j, sigValue->content, sigValue->type == SQLValue::NUL)) {
+            if (!QueryCondition::typeComparable(sigValue->type, record->getcolumns()[j]->getType()[6])
+                || !record->setAt(j, sigValue->content, sigValue->type == SQLValue::NUL)) {
                 driver->addErrorMessage("Type mismatch when inserting value " +
                                         sigValue->content + " into table " + identifier);
                 return false;

@@ -38,7 +38,7 @@ bool QueryCondition::match(SQLOperand op, char type, const std::string &left,
     return false;
 }
 
-int QueryCondition::matchInteger(const std::string &left, const std::string &right) const {
+int QueryCondition::matchInteger(const std::string &left, const std::string &right) {
     if (left.size() < right.size())
         return matchIntegerCond(left.c_str(), (int) left.size(),
                                 right.c_str(), (int) right.size());
@@ -47,7 +47,7 @@ int QueryCondition::matchInteger(const std::string &left, const std::string &rig
                                   left.c_str(), (int) left.size());
 }
 
-int QueryCondition::matchIntegerCond(const char *s, int ls, const char *l, int ll) const {
+int QueryCondition::matchIntegerCond(const char *s, int ls, const char *l, int ll) {
     int margin = ll - ls;
     for (int i = 0; i < margin; ++ i)
         if (l[i] != '0') return -1;
@@ -58,7 +58,7 @@ int QueryCondition::matchIntegerCond(const char *s, int ls, const char *l, int l
     return 0;
 }
 
-int QueryCondition::matchString(const std::string &left, const std::string &right) const {
+int QueryCondition::matchString(const std::string &left, const std::string &right) {
     return strcmp(left.c_str(), right.c_str());
 }
 

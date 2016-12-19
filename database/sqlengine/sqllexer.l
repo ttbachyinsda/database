@@ -79,7 +79,9 @@ using token = yy::SQLParser::token;
                         }
 
 '[^']*'                 {
-                            yylval->build<std::string>(yytext);
+                            std::string strtxt = yytext;
+                            strtxt = strtxt.substr(1, strtxt.size() - 2);
+                            yylval->build<std::string>(strtxt);
                             return token::VALUE_STRING;
                         }
 

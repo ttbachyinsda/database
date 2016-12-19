@@ -18,7 +18,9 @@ Record* RecordFactory::getrecord(Table* table)
         return temp;
     } else if (tabletype[0] == 'V' && tabletype[1]=='i') {
         Record* temp = new FlexibleRecord();
+        cout << "Test:" << table->getcolumns() << endl;
         DataBaseType** col = UIC::copytype(table->getcolumns(), table->getcolumncount());
+        cout << "Over!" << endl;
         temp->Initialize(col, table->getcolumncount());
         return temp;
     } else if (tabletype[0] == 'H' && tabletype[1]=='a') {

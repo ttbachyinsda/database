@@ -55,3 +55,22 @@ void TestSQL::startTestFile(const char* filename)
             sqlDriver.getResult()->dumpToConsole();
     }
 }
+
+void TestSQL::startTestString(const std::string &str)
+{
+    cout << "Query:" << endl;
+    cout << str << endl;
+    cout << "========================" << endl;
+    SQLDriver sqlDriver;
+    sqlDriver.execute(str);
+    if (sqlDriver.getLastSucceeded() == false) {
+        cout << "\033[31m ERROR: \033[0m" << sqlDriver.getErrorMessages()[0] << endl;
+    } else {
+        if (sqlDriver.getWarningMessages().size() != 0)
+            cout << "\033[33m WARNING: \033[0m" << sqlDriver.getWarningMessages()[0] << endl;
+        else
+            cout << "Succeeded!" << endl;
+        if (sqlDriver.hasResult())
+            sqlDriver.getResult()->dumpToConsole();
+    }
+}
