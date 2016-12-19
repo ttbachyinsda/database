@@ -17,16 +17,16 @@ void db_index::setMulti_value(bool multi_value) {
 }
 
 int db_index::search(const index_key &key, index_value *value,
-                     int max_num /*= 1000*/) const {
-    if (!multi_value)
+                     vector<pair<int, int>> *result) const {
+    if (!multi_value || result == NULL)
         return b_tree.search(key, value);
     else
-        return b_tree.search_range(key, key, value, max_num);
+        return b_tree.search_range(key, key, result);
 }
 
 int db_index::search_range(const index_key &left, const index_key &right,
-                           index_value *values, size_t max /*= 1000*/) const {
-    return b_tree.search_range(left, right, values, max);
+                           vector<pair<int, int>> *result) const {
+    return b_tree.search_range(left, right, result);
 }
 
 int db_index::remove(const index_key &key) {
@@ -34,7 +34,7 @@ int db_index::remove(const index_key &key) {
         return b_tree.remove(key);
     else {
         index_value value;
-        while (search(key, &value, 1)) b_tree.remove(key);
+        while (search(key, &value)) b_tree.remove(key);
         return 0;
     }
 }
@@ -57,7 +57,9 @@ db_index::update(char *insertData, int dataLen, int prepagenum, int prepageposit
     if (!multi_value) {
         return update(index_key(key, dataLen), index_value(pagenum, pageposition));
     } else {
-        return -1;
+        if (b_tree.search_and_remove_multi(index_key(key, dataLen), prepagenum, prepageposition) == 0)
+            return b_tree.insert(index_key(insertData, dataLen), index_value(pagenum, pageposition));
+        else return -1;
     }
 }
 
@@ -67,7 +69,13 @@ int db_index::remove(char *insertData, int dataLen, int pagenum, int pagepositio
     if (!multi_value)
         return b_tree.remove(index_key(key, dataLen));
     else {
-        return -1;
+        return b_tree.search_and_remove_multi(index_key(key, dataLen), pagenum, pageposition);
     }
+}
+
+int db_index::search_all(vector<pair<int, int> > *result) {
+    if (multi_value)
+        return b_tree.search_all(result);
+    else return -1;
 }
 

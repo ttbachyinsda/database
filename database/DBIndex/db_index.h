@@ -1,13 +1,20 @@
 #include "bplus_tree.h"
+#include <vector>
+#include <cstdlib>
+#include <utility>
+
+using std::pair;
+using std::vector;
 
 class db_index {
    public:
     db_index(char *path, bool forceNewIndex = false, bool multi_value = false, int keySize = 20);
 
     int search(const index_key &key, index_value *value,
-               int max_num = 1000) const;
+               vector<pair<int, int>> *result = NULL) const;
     int search_range(const index_key &left, const index_key &right,
-                     index_value *values, size_t max = 1000) const;
+                     vector<pair<int, int>> *result) const;
+    int search_all(vector<pair<int, int>> *result);
     int remove(const index_key &key);
     int remove(char* insertData, int dataLen, int pagenum, int pageposition);
     int insert(const index_key &key, index_value value);
