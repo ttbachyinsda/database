@@ -404,6 +404,12 @@ void FixedSizeTable::insertall(char *data, int datasize, int pagenum, int rownum
             index += nowdatasize;
         }
 }
+int FixedSizeTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec)
+{
+    //Don't need to write that
+    return 0;
+}
+
 string FixedSizeTable::gettabletype()
 {
     return "Fixed";

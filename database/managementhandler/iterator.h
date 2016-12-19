@@ -18,8 +18,25 @@ public:
     virtual bool deletedata() = 0;
     virtual bool insertdata(Record* rec) = 0;
     virtual void getbegin() = 0;
+    virtual int gethashnum()
+    {
+        return 0;
+    }
+
     bool find(string input,int columnnum);
     string compile(string input,int columnnum);
+    int getpagenum()
+    {
+        return this->nowpagenum;
+    }
+    int getrownum()
+    {
+        return this->nowrownum;
+    }
+    int getpagerownum()
+    {
+        return this->nowpagerownum;
+    }
 
 protected:
     int nowpagenum;

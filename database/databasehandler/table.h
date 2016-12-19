@@ -36,7 +36,6 @@ public:
     void createemptyindex(int i);
     int getColumnIndexByName(const std::string& name);
     vector<string> checkOutput();
-    virtual bool FastInsert(int& pagenum, int& rownum, Record* rec) = 0;
     virtual bool FastAllInsert(int& pagenum, int& rownum, Record* rec) = 0;
     virtual bool FastOutput(int pagenum, int rownum, Record* rec) = 0;
     virtual void FastOutput(int pagenum, int rownum, char* output, int& outputsize) = 0;
@@ -52,6 +51,14 @@ public:
     virtual void createTable(vector<string> clname, vector<DataBaseType*> cltype) = 0;
     vector<string> gettype();
     virtual ~Table();
+
+    virtual int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec) = 0;
+
+    virtual bool FastFind(Record* rec)
+    {
+        cout<<"Please don't use it in non-hashflexible table"<<endl;
+        return false;
+    }
 
 protected:
     void clearcolumn();

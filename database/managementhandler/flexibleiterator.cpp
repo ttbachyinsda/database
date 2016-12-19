@@ -18,6 +18,7 @@ int FlexibleIterator::getThisRowSize()
 }
 bool FlexibleIterator::access(int pagenum, int rownum)
 {
+    if (pagenum<1) return false;
     this->nowpagenum = pagenum;
     this->nowrownum = rownum;
     if (this->nowpagenum > this->nowtable->getPageNum())

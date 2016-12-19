@@ -1,16 +1,19 @@
-#include "flexibletable.h"
+#include "hashflexibletable.h"
 
-FlexibleTable::FlexibleTable()
+HashFlexibleTable::HashFlexibleTable()
 {
     this->PageNum = 0;
-    this->MaxRecordSize = 0;
-    this->reservedSizeInPage = NULL;
+    this->HBeginPageNum = new int[1024];
+    this->HEndPageNum = new int[1024];
+    memset(this->HBeginPageNum,0,4096);
+    memset(this->HEndPageNum,0,4096);
+    atemprecord = 0;
 }
-int FlexibleTable::getPageNum() { return PageNum; }
-int FlexibleTable::getMaxRowNum() { return 0; }
-int FlexibleTable::getRowSize(int rownum) { return 0; }
+int HashFlexibleTable::getPageNum() { return PageNum; }
+int HashFlexibleTable::getMaxRowNum() { return 0; }
+int HashFlexibleTable::getRowSize(int rownum) { return 0; }
 
-bool FlexibleTable::Initialize()
+bool HashFlexibleTable::Initialize()
 {
     FM = new FileManager;
     bool canopen = FM->openFile(filename.data(), fileid);
@@ -26,117 +29,173 @@ bool FlexibleTable::Initialize()
     }
     BPM = new BufPageManager(FM);
     int index;
-    BufType b = BPM->allocPage(fileid, 0, index, true);
-    /*
-cout<<"Now begin "<<"testment"<<endl;
-for (int i=0;i<PAGE_INT_NUM;i++)
-{
-    int k=b[i];
-    cout<<"No."<<i<<" is: "<<k<<endl;
-}
-cout<<"Now end "<<"testment"<<endl;
-*/
+    BufType b = BPM->getPage(fileid, 0, index);
+
+
     char* temp = (char*)malloc(4);
     memcpy(temp, b, 4);
     string ob1 = "HEAD";
     if (!UIC::equal(temp, ob1.data(), 4) || havecreatetable) {
         PackageHeadFile(b);
         BPM->markDirty(index);
+        b = BPM->getPage(fileid, 1, index);
+        Packagebeginend(b);
+        BPM->markDirty(index);
         Nullindex();
     } else {
         PackageFromHeadFile(b);
         BPM->access(index);
+        b = BPM->getPage(fileid, 1, index);
+        Packagefrombeginend(b);
+        BPM->markDirty(index);
         readindex();
     }
     free(temp);
     haveinitialize = true;
     return true;
 }
-
-void FlexibleTable::PackageFromHeadFile(BufType b)
+void HashFlexibleTable::Packagefrombeginend(BufType b)
 {
-    FileIterator position = 4;
-    int namelen = UIC::readint(b, position);
-    name = UIC::readstring(b, position, namelen);
-    PageNum = UIC::readint(b, position);
-    majornum = UIC::readint(b,position);
+    FileIterator position = 0;
+    for (int i=0;i<1024;i++)
+    {
+        HBeginPageNum[i] = UIC::readint(b,position);
+        HEndPageNum[i] = UIC::readint(b,position);
+    }
+}
+void HashFlexibleTable::Packagebeginend(BufType b)
+{
+    FileIterator position = 0;
+    for (int i=0;i<1024;i++)
+    {
+        UIC::writeint(b,position,HBeginPageNum[i]);
+        UIC::writeint(b,position,HEndPageNum[i]);
+    }
+}
+
+void HashFlexibleTable::PackageFromHeadFile(BufType b)
+{
+    ifstream headfile(filename+".tableinfo",ios::binary);
+    int namelen;
+    headfile.read((char*)&namelen,4);
+    char* namechar = (char*)malloc(namelen);
+    headfile.read(namechar,namelen);
+    string namestr(namechar,namelen);
+    free(namechar);
+    name = namestr;
+
+    headfile.read((char*)&PageNum,4);
+    headfile.read((char*)&majornum,4);
+
     clearcolumn();
-    columncount = UIC::readint(b, position);
+    headfile.read((char*)&columncount,4);
+
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
     multivalue = new bool[this->columncount];
     for (int i = 0; i < this->columncount; i++) {
-        int namelen = UIC::readint(b, position);
-        columnname[i] = UIC::readstring(b, position, namelen);
+
+        int namelen;
+        headfile.read((char*)&namelen,4);
+        char* namechar = (char*)malloc(namelen);
+        headfile.read(namechar,namelen);
+        string namestr(namechar,namelen);
+        free(namechar);
+        columnname[i] = namestr;
+
         char* temptype = (char*)malloc(4);
-        UIC::readchar(b, position, temptype, 4);
-        int tempsize = UIC::readint(b, position);
+        headfile.read(temptype,4);
+
+        int tempsize;
+        headfile.read((char*)&tempsize,4);
+
         char* nullable = (char*)malloc(4);
-        UIC::readchar(b, position, nullable, 4);
+        headfile.read(nullable,4);
+
         bool cannull;
         if (nullable[0] == 'A')
             cannull = true;
         else
             cannull = false;
         char* canmulti = (char*)malloc(4);
-        UIC::readchar(b, position, canmulti, 4);
+        headfile.read(canmulti,4);
         if (canmulti[0] == 'A')
             multivalue[i]=true;
         else
             multivalue[i]=false;
         DataBaseType* t = UIC::realreconvert(temptype, tempsize, cannull);
-        int conditionsize=UIC::readint(b,position);
-        t->readcondition(b + position,conditionsize, position);
+
+        int conditionsize;
+        headfile.read((char*)&conditionsize,4);
+
+        char* tempcondition = (char*)malloc(conditionsize);
+        headfile.read(tempcondition,conditionsize);
+
+        int position = 0;
+        t->readcondition(tempcondition,conditionsize, position);
+
         column[i] = t;
         free(temptype);
         free(nullable);
         free(canmulti);
+        free(tempcondition);
     }
-    MaxRecordSize = UIC::readint(b, position);
-    if (reservedSizeInPage != NULL)
-        delete[] reservedSizeInPage;
-    reservedSizeInPage = new int[MaxRecordSize];
-    for (int i = 0; i < MaxRecordSize; i++)
-        reservedSizeInPage[i] = UIC::readint(b, position);
+    headfile.close();
 }
-void FlexibleTable::PackageHeadFile(BufType b)
+void HashFlexibleTable::PackageHeadFile(BufType b)
 {
-    FileIterator position = 0;
-    string temp = "HEAD";
-    UIC::writechar(b, position, temp.data(), 4);
+    ofstream headfile(filename+".tableinfo",ios::binary);
+
+    string headstr = "HEAD";
+    memcpy(b,headstr.data(),4);
+
     int namelen = name.length();
-    UIC::writeint(b, position, namelen);
-    UIC::writechar(b, position, name.data(), namelen);
-    UIC::writeint(b, position, PageNum);
-    UIC::writeint(b,position,majornum);
-    UIC::writeint(b, position, columncount);
+    headfile.write((char*)&namelen,4);
+    headfile.write(name.data(),namelen);
+    headfile.write((char*)&PageNum,4);
+    headfile.write((char*)&majornum,4);
+    headfile.write((char*)&columncount,4);
+
     for (int i = 0; i < columncount; i++) {
         int namelen = columnname[i].length();
-        UIC::writeint(b, position, namelen);
-        UIC::writechar(b, position, columnname[i].data(), namelen);
+
+        headfile.write((char*)&namelen,4);
+        headfile.write(columnname[i].data(),namelen);
+
         char* temptype = (char*)malloc(4);
         char* nullable = (char*)malloc(4);
         char* canmulti = (char*)malloc(4);
         UIC::convert(column[i], temptype, nullable);
         UIC::convertmulti(multivalue[i],canmulti);
-        UIC::writechar(b, position, temptype, 4);
-        UIC::writeint(b, position, column[i]->getMaxSize());
-        UIC::writechar(b, position, nullable, 4);
-        UIC::writechar(b, position, canmulti, 4);
+
+        headfile.write(temptype,4);
+        int tempsize = column[i]->getMaxSize();
+        headfile.write((char*)&tempsize,4);
+        headfile.write(nullable,4);
+        headfile.write(canmulti,4);
+
         free(temptype);
         free(nullable);
         free(canmulti);
-        UIC::writeint(b,position,column[i]->getconditionsize());
-        column[i]->writecondition(b + position, position);
+
+        int conditionsize = column[i]->getconditionsize();
+        headfile.write((char*)&conditionsize,4);
+
+        char* tempcondition = (char*)malloc(conditionsize);
+        int position = 0;
+        column[i]->writecondition(tempcondition, position);
+        headfile.write(tempcondition,conditionsize);
+
+        free(tempcondition);
     }
-    UIC::writeint(b, position, MaxRecordSize);
-    for (int i = 0; i < MaxRecordSize; i++)
-        UIC::writeint(b, position, reservedSizeInPage[i]);
 }
 
-void FlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
+void HashFlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
 {
     remove(this->filename.c_str());
+    string infoname = this->filename + ".tableinfo";
+    remove(infoname.c_str());
+
     int totalheadsize = 4 * 3 + 4 * 3 + name.length();
     this->clearcolumn();
     this->columncount = clname.size();
@@ -149,16 +208,12 @@ void FlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> clt
         column[i] = cltype[i];
         multivalue[i]=true;
     }
-    this->PageNum = 0;
-    this->MaxRecordSize = max((PAGE_SIZE - totalheadsize - 16) / 4, 0);
-    if (this->reservedSizeInPage != NULL)
-        delete[] reservedSizeInPage;
-    reservedSizeInPage = new int[MaxRecordSize];
-    for (int i = 0; i < this->MaxRecordSize; i++)
-        this->reservedSizeInPage[i] = PAGE_SIZE-16;
+    memset(this->HBeginPageNum,0,4096);
+    memset(this->HEndPageNum,0,4096);
+    PageNum = 1;
     havecreatetable = true;
 }
-char* FlexibleTable::Packager(int totalsize)
+char* HashFlexibleTable::Packager(int totalsize)
 {
     char* temp = (char*)malloc(totalsize);
     UIC::inttochar(totalsize,temp);
@@ -172,15 +227,17 @@ char* FlexibleTable::Packager(int totalsize)
     }
     return temp;
 }
-void FlexibleTable::Reconstruct(int pagenum, BufType b)
+void HashFlexibleTable::Reconstruct(int pagenum, BufType b)
 {
     cout<<"do a reconstruct"<<endl;
     int pagerownum = 0;
     int reservedsize = 0;
     int reservedpointer = 0;
+    int jumppagenum = 0;
     pagerownum = UIC::chartoint(b + 4);
     reservedsize = UIC::chartoint(b+8);
     reservedpointer = UIC::chartoint(b+12);
+    jumppagenum = UIC::chartoint(b+16);
     char ** temprecord = new char*[pagerownum];
     int *preposition = new int[pagerownum];
     for (int i=0;i<pagerownum;i++)
@@ -188,8 +245,8 @@ void FlexibleTable::Reconstruct(int pagenum, BufType b)
         preposition[i]=UIC::chartoint(b+__position(i));
         temprecord[i]=getat(b,preposition[i]);
     }
-    reservedpointer=16;
-    reservedsize = PAGE_SIZE-16;
+    reservedpointer=20;
+    reservedsize = PAGE_SIZE-20;
     int nowrownum=0;
     for (int i=0;i<pagerownum;i++)
         if (temprecord[i]!=NULL)
@@ -204,15 +261,14 @@ void FlexibleTable::Reconstruct(int pagenum, BufType b)
     UIC::inttochar(pagerownum, b + 4);
     UIC::inttochar(reservedsize,b+8);
     UIC::inttochar(reservedpointer,b+12);
-    if (pagenum < this->MaxRecordSize) {
-        this->reservedSizeInPage[pagenum] = reservedsize;
-    }
+    UIC::inttochar(jumppagenum,b+16);
+
     for (int i=0;i<pagerownum;i++)
         if (temprecord[i]!=NULL)
             free(temprecord[i]);
     delete[] temprecord;
 }
-char* FlexibleTable::getat(BufType b, int pageposition)
+char* HashFlexibleTable::getat(BufType b, int pageposition)
 {
     if (pageposition==0) return NULL;
     int recordsize=UIC::chartoint(b+pageposition);
@@ -220,14 +276,14 @@ char* FlexibleTable::getat(BufType b, int pageposition)
     memcpy(temprecord,b+pageposition,recordsize);
     return temprecord;
 }
-void FlexibleTable::putat(BufType b, int pageposition, int rownum, char *data)
+void HashFlexibleTable::putat(BufType b, int pageposition, int rownum, char *data)
 {
     int datalen=UIC::chartoint(data);
     memcpy(b+pageposition,data,datalen);
     UIC::inttochar(pageposition,b+__position(rownum));
 }
 
-bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rownum)
+bool HashFlexibleTable::InsertAt(int datahash, int pagenum, char* insertdata, int& rownum)
 {
     if (pagenum == 0)
         return false;
@@ -236,6 +292,7 @@ bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rownum)
     int pagerownum = 0;
     int reservedsize = 0;
     int reservedpointer = 0;
+    int jumppagenum = 0;
     char* temp = (char*)malloc(4);
     string option1 = "PAGE";
     char* option2 = (char*)malloc(4);
@@ -245,24 +302,27 @@ bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rownum)
         pagerownum = UIC::chartoint(b + 4);
         reservedsize = UIC::chartoint(b+8);
         reservedpointer = UIC::chartoint(b+12);
+        jumppagenum = UIC::chartoint(b+16);
     } else if (UIC::equal(temp, option2, 4)) {
         memcpy(b, option1.data(), 4);
         pagerownum = 0;
-        reservedsize = PAGE_SIZE-16;
-        reservedpointer = 16;
+        reservedsize = PAGE_SIZE-20;
+        reservedpointer = 20;
         UIC::inttochar(pagerownum, b + 4);
         UIC::inttochar(reservedsize,b+8);
         UIC::inttochar(reservedpointer,b+12);
+        UIC::inttochar(jumppagenum,b+16);
 
     } else {
         // cout<<"ERROR:: ????"<<endl;
         memcpy(b , option1.data(), 4);
         pagerownum = 0;
-        reservedsize = PAGE_SIZE-16;
-        reservedpointer = 16;
+        reservedsize = PAGE_SIZE-20;
+        reservedpointer = 20;
         UIC::inttochar(pagerownum, b  + 4);
         UIC::inttochar(reservedsize,b+8);
         UIC::inttochar(reservedpointer,b+12);
+        UIC::inttochar(jumppagenum,b+16);
     }
     free(temp);
     free(option2);
@@ -278,6 +338,7 @@ bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rownum)
         pagerownum = UIC::chartoint(b + 4);
         reservedsize = UIC::chartoint(b+8);
         reservedpointer = UIC::chartoint(b+12);
+        jumppagenum = UIC::chartoint(b+16);
     }
 
     putat(b,reservedpointer,pagerownum,insertdata);
@@ -294,13 +355,12 @@ bool FlexibleTable::InsertAt(int pagenum, char* insertdata, int& rownum)
     UIC::inttochar(pagerownum, b + 4);
     UIC::inttochar(reservedsize,b+8);
     UIC::inttochar(reservedpointer,b+12);
-    if (pagenum < this->MaxRecordSize) {
-        this->reservedSizeInPage[pagenum] = reservedsize;
-    }
+    UIC::inttochar(jumppagenum,b+16);
+
     BPM->markDirty(nowindex);
     return true;
 }
-bool FlexibleTable::modifypd(int pagenum, int rownum, BufType& ct,
+bool HashFlexibleTable::modifypd(int pagenum, int rownum, BufType& ct,
     int& newindex, int& pagenewnum)
 {
     if (pagenum > this->PageNum || pagenum == 0)
@@ -337,7 +397,7 @@ bool FlexibleTable::modifypd(int pagenum, int rownum, BufType& ct,
     return true;
 }
 
-bool FlexibleTable::DeleteAt(int pagenum, int rownum)
+bool HashFlexibleTable::DeleteAt(int pagenum, int rownum)
 {
     BufType b;
     int nowindex, pagerownum;
@@ -358,67 +418,74 @@ bool FlexibleTable::DeleteAt(int pagenum, int rownum)
     int reservedsize = UIC::chartoint(b+8);
     reservedsize -= currentsize+4;
     UIC::inttochar(reservedsize,b+8);
-    if (pagenum < this->MaxRecordSize) {
-        this->reservedSizeInPage[pagenum]=reservedsize;
-    }
+
     BPM->markDirty(nowindex);
     return true;
 }
-FlexibleTable::~FlexibleTable()
+HashFlexibleTable::~HashFlexibleTable()
 {
     int index = 0;
     BufType b = BPM->getPage(fileid, 0, index);
     PackageHeadFile(b);
     BPM->markDirty(index);
-    if (reservedSizeInPage != NULL)
-        delete[] reservedSizeInPage;
+    b = BPM->getPage(fileid, 1, index);
+    Packagebeginend(b);
+    BPM->markDirty(index);
+    delete[] HBeginPageNum;
+    delete[] HEndPageNum;
+    if (atemprecord != 0) delete atemprecord;
 }
-int FlexibleTable::getPageRowNum(int pagenum)
+int HashFlexibleTable::getPageRowNum(int pagenum)
 {
     //cout << "maxrecordsize=" << this->MaxRecordSize << endl;
-    if (pagenum > this->PageNum || pagenum < 1)
+    if (pagenum > this->PageNum || pagenum < 2)
         return 0;
     int index=0;
     BufType b = BPM->getPage(fileid, pagenum, index);
     int nowrownum = UIC::chartoint(b + 4);
     return nowrownum;
 }
-bool FlexibleTable::FastInsert(int& pagenum, int& rownum, Record* rec)
+bool HashFlexibleTable::FastInsert(int& pagenum, int& rownum, Record* rec)
 {
-    bool can = InsertAt(pagenum, rec->getData(), rownum);
-    if (!can)
-        return false;
+    //cannot insert at every page
+    return false;
+}
+bool HashFlexibleTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
+{
+    int snum = (majornum==-1?0:majornum);
+
+        int hashnum = getHashNum(rec->getAt(snum));
+
+        if (HBeginPageNum[hashnum] == 0)
+        {
+            this->PageNum ++;
+            HBeginPageNum[hashnum] = this->PageNum;
+            HEndPageNum[hashnum] = this->PageNum;
+            pagenum = this->PageNum;
+            InsertAt(hashnum,pagenum,rec->getData(),rownum);
+
+        } else
+        {
+            pagenum = HEndPageNum[hashnum];
+            int i=0;
+            int index=0; BufType b;
+            while (!InsertAt(hashnum,pagenum,rec->getData(),rownum))
+            {
+                i++;
+                this->PageNum++;
+
+                b = BPM->getPage(fileid, HEndPageNum[hashnum], index);
+                UIC::inttochar(this->PageNum,b+16);
+
+                HEndPageNum[hashnum] = this->PageNum;
+                pagenum = HEndPageNum[hashnum];
+            }
+            assert(i<=1);
+        }
     return true;
 }
-bool FlexibleTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
-{
-    bool can = false;
-    for (int i = min(this->MaxRecordSize-1,this->PageNum); i > 0; i--)
-        if (this->reservedSizeInPage[i] >= rec->getSize()) {
-            pagenum = i;
-            can = FastInsert(pagenum, rownum, rec);
-            if (!can) {
-                cout << "ERROR:: ?????" <<' '<<i<<' '<<this->reservedSizeInPage[i]<<' '<<rec->getSize()<< endl;
-            }
-            if (can) {
-                if (this->PageNum < i)
-                    this->PageNum = i;
-                return true;
-            }
-        }
-    for (int i = this->MaxRecordSize; i <= this->PageNum; i++) {
-        pagenum = i;
-        can = FastInsert(pagenum, rownum, rec);
-        if (can)
-            return true;
-    }
-    this->PageNum++;
-    pagenum = this->PageNum;
-    can = FastInsert(pagenum, rownum, rec);
-    return can;
-}
 
-bool FlexibleTable::FastOutput(int pagenum, int rownum, Record *rec)
+bool HashFlexibleTable::FastOutput(int pagenum, int rownum, Record *rec)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
@@ -428,7 +495,7 @@ bool FlexibleTable::FastOutput(int pagenum, int rownum, Record *rec)
     rec->Input(b + pageposition);
     return true;
 }
-void FlexibleTable::FastOutput(int pagenum, int rownum, char* output, int& outputsize)
+void HashFlexibleTable::FastOutput(int pagenum, int rownum, char* output, int& outputsize)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
@@ -441,7 +508,7 @@ void FlexibleTable::FastOutput(int pagenum, int rownum, char* output, int& outpu
     outputsize = UIC::chartoint(b+pageposition);
     memcpy(output, b + pageposition, outputsize);
 }
-void FlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prerownum, int newpagenum, int newrownum)
+void HashFlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prerownum, int newpagenum, int newrownum)
 {
     int index=4;
     for (int i=0;i<columncount;i++)
@@ -453,7 +520,7 @@ void FlexibleTable::modifyall(char *data, int datasize, int prepagenum, int prer
             index += nowdatasize;
         }
 }
-void FlexibleTable::deleteall(char *data, int datasize, int pagenum, int rownum)
+void HashFlexibleTable::deleteall(char *data, int datasize, int pagenum, int rownum)
 {
     int index=4;
 
@@ -469,7 +536,7 @@ void FlexibleTable::deleteall(char *data, int datasize, int pagenum, int rownum)
             index += nowdatasize;
         }
 }
-void FlexibleTable::insertall(char *data, int datasize, int pagenum, int rownum)
+void HashFlexibleTable::insertall(char *data, int datasize, int pagenum, int rownum)
 {
 
     int index=4;
@@ -484,13 +551,131 @@ void FlexibleTable::insertall(char *data, int datasize, int pagenum, int rownum)
             index += nowdatasize;
         }
 }
-int FlexibleTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec)
+
+string HashFlexibleTable::gettabletype()
 {
-    //Don't need to write that
-    return 0;
+    return "HashFlexible";
 }
 
-string FlexibleTable::gettabletype()
+//Hash Method
+int HashFlexibleTable::getHashNum(string data)
 {
-    return "Flexible";
+    mpz_class thisint;
+    string md5string = MD5(data).toStr();
+    thisint.set_str(md5string.c_str(),16);
+    thisint = thisint % 1024;
+    int comk = thisint.get_si();
+    return comk;
+}
+int HashFlexibleTable::getHashNumc(char *data, int datasize)
+{
+    string ss(data,datasize);
+
+    mpz_class thisint;
+    string md5string = MD5(ss).toStr();
+    thisint.set_str(md5string.c_str(),16);
+    thisint = thisint % 1024;
+    int comk = thisint.get_si();
+    return comk;
+}
+void HashFlexibleTable::updateHashpagenum(int hashnum, int beginpagenum, int endpagenum)
+{
+    HBeginPageNum[hashnum] = beginpagenum;
+    HEndPageNum[hashnum] = endpagenum;
+}
+void HashFlexibleTable::getHashpagenum(int hashnum, int &beginpagenum, int &endpagenum)
+{
+    beginpagenum = HBeginPageNum[hashnum];
+    endpagenum = HEndPageNum[hashnum];
+}
+int HashFlexibleTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec)
+{
+    bool can=true;
+   if (reqhashnum == -1)
+   {
+    if (pagenum > this->PageNum || pagenum < 2)
+    {
+        infovec->push_back(-1);
+        can=false;
+    }
+    else
+    {
+        int index;
+        BufType b = BPM->getPage(fileid, pagenum, index);
+        int pagerownum = UIC::chartoint(b + 4);
+        infovec->push_back(pagerownum);
+        int jumppagenum = UIC::chartoint(b+16);
+        infovec->push_back(jumppagenum);
+
+        int pageposition = UIC::chartoint(b+__position(rownum));
+
+        if (pageposition == 0 || rownum>=pagerownum)
+        {
+            can=false;
+            infovec->push_back(0);
+        }
+        else
+        {
+            infovec->push_back(UIC::chartoint(b+pageposition));  //rowsize
+            infovec->push_back(getHashNumIn(b+pageposition,(majornum==-1)?0:majornum));
+        }
+    }
+    if (can) return 1; else return 0;
+   }
+   else
+   {
+       assert(reqhashnum>=0);
+       assert(reqhashnum<=1023);
+       return HBeginPageNum[reqhashnum];
+   }
+
+}
+int HashFlexibleTable::getHashNumIn(char *data, int reqcolumn)
+{
+    assert(reqcolumn<columncount);
+    assert(reqcolumn>=0);
+    if (atemprecord == 0)
+    {
+        atemprecord = new FlexibleRecord();
+        DataBaseType** col = UIC::copytype(getcolumns(), getcolumncount());
+        atemprecord->Initialize(col, getcolumncount());
+    }
+    atemprecord->Input(data);
+    return getHashNum(atemprecord->getAt(reqcolumn));
+}
+bool HashFlexibleTable::FastFind(Record *rec)
+{
+    bool can=false;
+    int snum = (majornum==-1?0:majornum);
+    int hashnum = getHashNum(rec->getAt(snum));
+    int nowpagenum = HBeginPageNum[hashnum];
+    if (atemprecord == 0)
+    {
+        atemprecord = new FlexibleRecord();
+        DataBaseType** col = UIC::copytype(getcolumns(), getcolumncount());
+        atemprecord->Initialize(col, getcolumncount());
+    }
+    string temp = rec->getAt(snum);
+    while (nowpagenum>=2)
+    {
+        int index;
+        BufType b = BPM->getPage(fileid, nowpagenum, index);
+        int pagerownum = UIC::chartoint(b+4);
+        int jumppagenum = UIC::chartoint(b+16);
+        for (int i=0;i<pagerownum;i++)
+        {
+            int position = UIC::chartoint(b+__position(i));
+            if (position)
+            {
+                atemprecord->Input(b+position);
+                if (atemprecord->getAt(snum) == temp)
+                {
+                    can=true;
+                    return true;
+                }
+            }
+        }
+        nowpagenum = jumppagenum;
+    }
+    return can;
 }

@@ -15,6 +15,9 @@ Iterator* IteratorFactory::getiterator(Table* table)
     } else if (tabletype[0] == 'V' && tabletype[1] == 'i') {
         Iterator* temp = new VirtualIterator(table);
         return temp;
+    } else if (tabletype[0] == 'H' && tabletype[1] == 'a') {
+        Iterator* temp = new HashFlexibleIterator(table);
+        return temp;
     }
     return NULL;
 }

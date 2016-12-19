@@ -1,5 +1,15 @@
 ﻿使用说明：
 
+2.1.0.2改动：
+
+添加了HashFlexibleTable，一种基于hash桶的表
+
+注意：
+
+HashFlexibleTable有一个FastFind函数可以调用，可以用hash的方法判断是否存在（注意即使非聚集索引存在时也会使用hash方法）
+
+“高IO优化”算法之后会实现，暂时没有必要实现
+
 2.1.0.0改动：
 
 添加了两种group算法，
