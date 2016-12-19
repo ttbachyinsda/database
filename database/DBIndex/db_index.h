@@ -1,4 +1,5 @@
 #include "bplus_tree.h"
+#include "../sqlengine/sqlstruct.h"
 #include <vector>
 #include <cstdlib>
 #include <utility>
@@ -14,6 +15,7 @@ class db_index {
                vector<pair<int, int>> *result = NULL) const;
     int search_range(const index_key &left, const index_key &right,
                      vector<pair<int, int>> *result) const;
+    void findAll(SQLOperand operand, string key, int dataLen, vector<pair<int, int>> *result );
     int search_all(vector<pair<int, int>> *result);
     int remove(const index_key &key);
     int remove(char* insertData, int dataLen, int pagenum, int pageposition);
@@ -35,4 +37,5 @@ class db_index {
     char path[512];
     bool multi_value;
     int insertTime;
+    int keySize;
 };

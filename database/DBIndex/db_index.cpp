@@ -6,6 +6,7 @@ db_index::db_index(char *path, bool forceNewIndex, bool multi_value, int keySize
     : b_tree(path, forceNewIndex, multi_value, keySize) {
     strcpy(this->path, path);
     this->multi_value = multi_value;
+    this->keySize = keySize;
     insertTime = 0;
 }
 
@@ -70,6 +71,34 @@ int db_index::remove(char *insertData, int dataLen, int pagenum, int pagepositio
         return b_tree.remove(index_key(key, dataLen));
     else {
         return b_tree.search_and_remove_multi(index_key(key, dataLen), pagenum, pageposition);
+    }
+}
+
+void db_index::findAll(SQLOperand operand, string key, int dataLen, vector<pair<int, int> > *result) {
+    index_key temp_key(key.c_str(), dataLen);
+    switch (operand) {
+        case SQLOperand::GREATER: {
+            temp_key.k[temp_key.len-1] ++;
+            b_tree.search_greater_equal(temp_key, result);
+            break;
+        }
+        case SQLOperand::GREATER_EQUAL: {
+            b_tree.search_greater_equal(temp_key, result);
+            break;
+        }
+        case SQLOperand::LESS: {
+            temp_key.k[temp_key.len-1] --;
+            b_tree.search_less_equal(temp_key, result);
+            break;
+        }
+        case SQLOperand::LESS_EQUAL: {
+            b_tree.search_less_equal(temp_key, result);
+            break;
+        }
+        case SQLOperand::EQUAL: {
+            search_range(temp_key, temp_key, result);
+            break;
+        }
     }
 }
 
