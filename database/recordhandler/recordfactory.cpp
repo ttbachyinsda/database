@@ -21,6 +21,11 @@ Record* RecordFactory::getrecord(Table* table)
         DataBaseType** col = UIC::copytype(table->getcolumns(), table->getcolumncount());
         temp->Initialize(col, table->getcolumncount());
         return temp;
+    } else if (tabletype[0] == 'H' && tabletype[1]=='a') {
+        Record* temp = new FlexibleRecord();
+        DataBaseType** col = UIC::copytype(table->getcolumns(), table->getcolumncount());
+        temp->Initialize(col, table->getcolumncount());
+        return temp;
     }
     return NULL;
 }

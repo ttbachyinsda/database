@@ -4,7 +4,7 @@
 #include <string.h>
 
 /* predefined B+ info */
-#define CHILDREN_NUM 20
+#define CHILDREN_NUM 200
 
 /* key/value type */
 struct index_value {

@@ -62,7 +62,14 @@ SOURCES += main.cpp\
     groupalgorithm/group.cpp \
     tester/testgroup.cpp \
     groupalgorithm/rawgroup.cpp \
-    tester/testregex.cpp
+    tester/testregex.cpp \
+    managementhandler/md5.cpp \
+    tester/testmd5.cpp \
+    databasehandler/hashflexibletable.cpp \
+    tester/testhashflexible.cpp \
+    managementhandler/hashflexibleiterator.cpp \
+    databasehandler/bulbfile.cpp \
+    tester/testbulbfile.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -128,7 +135,14 @@ HEADERS  += mainwindow.h \
     groupalgorithm/group.h \
     tester/testgroup.h \
     groupalgorithm/rawgroup.h \
-    tester/testregex.h
+    tester/testregex.h \
+    managementhandler/md5.h \
+    tester/testmd5.h \
+    databasehandler/hashflexibletable.h \
+    tester/testhashflexible.h \
+    managementhandler/hashflexibleiterator.h \
+    databasehandler/bulbfile.h \
+    tester/testbulbfile.h
 
 
 DISTFILES += \

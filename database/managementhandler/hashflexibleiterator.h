@@ -1,14 +1,14 @@
-#ifndef VIRTUALITERATOR_H
-#define VIRTUALITERATOR_H
+#ifndef HASHFLEXIBLEITERATOR_H
+#define HASHFLEXIBLEITERATOR_H
 
 #include "iterator.h"
-#include "../databasehandler/virtualtable.h"
 #include "../recordhandler/flexiblerecord.h"
+#include "../databasehandler/flexibletable.h"
 
-class VirtualIterator : public Iterator
+class HashFlexibleIterator : public Iterator
 {
 public:
-    VirtualIterator(Table *table);
+    HashFlexibleIterator(Table* table);
     bool nextrow();
     bool access(int pagenum, int rownum);
     bool getdata(char* output, int& outputsize);
@@ -18,11 +18,11 @@ public:
     bool available();
     void getbegin();
     int getcurrentsize();
+    int gethashnum();
 
 private:
-    int getThisRowSize();
-    void updaterownum();
-
+    int nowhashnum;
+    int jumppagenum;
 };
 
-#endif // VIRTUALITERATOR_H
+#endif // HASHFLEXIBLEITERATOR_H

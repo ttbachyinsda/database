@@ -13,7 +13,6 @@ public:
     bool Initialize();
     void createTable(vector<string> clname, vector<DataBaseType*> cltype);
     bool DeleteAt(int pagenum, int rownum);
-    bool FastInsert(int& pagenum, int& rownum, Record* rec);
     bool FastAllInsert(int& pagenum, int& rownum, Record* rec);
     bool FastOutput(int pagenum, int rownum, Record *rec);
     void FastOutput(int pagenum, int rownum, char* output, int& outputsize);
@@ -23,10 +22,13 @@ public:
     int getRowSize(int rownum);
     int getMaxRowNum();
 
+    int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec);
+
 private:
     void PackageFromHeadFile(BufType temp);
     void PackageHeadFile(BufType temp);
     bool InsertAt(int pagenum, char* insertdata, int& rownum);
+    bool FastInsert(int& pagenum, int& rownum, Record* rec);
     char* Packager();
     bool modifypd(int pagenum, int rownum, BufType& ct, int& newindex, int& pagenewnum);
     void UnPackager(BufType b, int position);
