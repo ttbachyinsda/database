@@ -270,3 +270,12 @@ string MD5::toStr() {
   }
   return str;
 }
+size_t MD5::BKDRHash(const char *str)
+{
+    register size_t hash = 0;
+    while (size_t ch = (size_t)*str++)
+    {
+        hash = hash * 131 + ch;
+    }
+    return hash%1024;
+}

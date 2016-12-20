@@ -52,6 +52,14 @@ public:
     virtual void createTable(vector<string> clname, vector<DataBaseType*> cltype) = 0;
     vector<string> gettype();
     virtual ~Table();
+    virtual void createindex(vector<int> columnnum)
+    {
+        cout<<"Please don't use it in non-in-file table"<<endl;
+        for (int i :columnnum)
+        {
+            createemptyindex(i);
+        }
+    }
 
     virtual int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec) = 0;
 
