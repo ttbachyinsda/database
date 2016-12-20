@@ -237,6 +237,63 @@ void bplus_tree::remove_from_index_multi(int parent_off, int off, internal_node_
     return;
 }
 
+void bplus_tree::search_greater_equal(const index_key &key, vector<pair<int, int> > *result) {
+    int off_left = search_leaf_l(key);
+
+    int off = off_left;
+    record_t *b, *e;
+
+    leaf_node_t leaf;
+    while (off != 0) {
+        block_read(&leaf, off);
+
+        // start point
+        if (off_left == off)
+            b = find(leaf, left);
+        else
+            b = begin(leaf);
+
+        if (keycmp(b->key, left) != 0)
+            b++;
+
+        // copy
+        e = leaf.children + leaf.n;
+        for (; b != e; ++b)
+            result->push_back(pair<int, int>(b->value.pagenum, b->value.pageposition));
+
+        off = leaf.next;
+    }
+
+    return;
+}
+
+void bplus_tree::search_less_equal(const index_key &key, vector<pair<int, int> > *result) {
+    int off_right = search_leaf(key);
+
+    int off = off_right;
+    record_t *b, *e;
+
+    leaf_node_t leaf;
+    while (off != 0) {
+        block_read(&leaf, off);
+
+        // start point
+        b = begin(leaf);
+        // copy
+        if (off == off_right)
+            e = upper_bound(begin(leaf), end(leaf), key);
+        else
+            e = leaf.children + leaf.n;
+
+        for (; b != e; ++b)
+            result->push_back(pair<int, int>(b->value.pagenum, b->value.pageposition));
+
+        off = leaf.prev;
+    }
+
+    return;
+}
+
 int bplus_tree::search_range(const index_key& left, const index_key& right,
                              vector<pair<int, int>> *result) const {
     if (keycmp(left, right) > 0) return -1;
@@ -332,13 +389,13 @@ int bplus_tree::remove(const index_key& key) {
             block_read(&prev, leaf.prev);
             prev.next = leaf.next;
             block_write(&prev, leaf.prev);
-        } else cout << 12331 << endl;
+        } //else cout << 12331 << endl;
 
         if (leaf.next != 0) {
             block_read(&next, leaf.next);
             next.prev = leaf.prev;
             block_write(&next, leaf.next);
-        } else cout << 12331 << endl;
+        } //else cout << 12331 << endl;
         remove_from_index(parent_off, parent, key);
     } else {
         block_write(&leaf, offset);
@@ -349,11 +406,11 @@ int bplus_tree::remove(const index_key& key) {
 }
 
 int bplus_tree::insert(const index_key& key, index_value value) {
-    if (key.k[0] == 244 && key.k[1] == 1) {
-        cout << counter++ << endl;
-        if (counter == 18)
-            int i = 0;
-    }
+//    if (key.k[0] == 244 && key.k[1] == 1) {
+//        cout << counter++ << endl;
+//        if (counter == 18)
+//            int i = 0;
+//    }
 
     int parent = search_index(key);
     int offset = search_leaf(parent, key);

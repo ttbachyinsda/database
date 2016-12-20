@@ -61,6 +61,8 @@ class bplus_tree {
     /* abstract operations */
     int search(const index_key &key, index_value *value) const;
     int search_range(const index_key &left, const index_key &right, vector<pair<int, int>> *result) const;
+    void search_greater_equal(const index_key &key, vector<pair<int, int>> *result);
+    void search_less_equal(const index_key &key, vector<pair<int, int>> *result);
     int search_and_remove_multi(const index_key &key, int pagenum, int pageposition);
     int remove(const index_key &key);
     int insert(const index_key &key, index_value value);
