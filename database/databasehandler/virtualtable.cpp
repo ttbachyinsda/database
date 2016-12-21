@@ -21,6 +21,7 @@ bool VirtualTable::Initialize()
 
 void VirtualTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
 {
+    this->tablecondition.clear();
     this->columncount = clname.size();
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];

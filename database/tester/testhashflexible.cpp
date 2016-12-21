@@ -78,11 +78,13 @@ void testhashflexible::begintest()
     clname.push_back("age");
     clname.push_back("lucky");
     clname.push_back("primary");
+    clname.push_back("somebulb");
     string t1 = "INTE";
     string t2 = "VARC";
     string t3 = "INTE";
     string t4 = "LINT";
     string t5 = "REAL";
+    string t6 = "BULB";
     auto *conditions = new string[5];
     conditions[0]="FRTO";
     conditions[1]="0";
@@ -93,11 +95,13 @@ void testhashflexible::begintest()
     auto type3 = UIC::reconvert(t3, 2, true);
     auto type4 = UIC::reconvert(t4, 8, true);
     auto type5 = UIC::reconvert(t5, 8, true);
+    auto type6 = UIC::reconvert(t6, 8, true);
     cltype.push_back(type1);
     cltype.push_back(type2);
     cltype.push_back(type3);
     cltype.push_back(type4);
     cltype.push_back(type5);
+    cltype.push_back(type6);
     onetable->createTable(clname, cltype);
     onetable->Initialize();
     delete[] conditions;
@@ -106,7 +110,7 @@ void testhashflexible::begintest()
 
     onetable->setmultivalue(0,false);
     //onetable->createemptyindex(0);
-    auto aaa = new string[5];
+    auto aaa = new string[6];
     int pagenum, rownum;
     auto t = RecordFactory::getrecord(onetable);
     QTime time;
@@ -118,6 +122,7 @@ void testhashflexible::begintest()
         aaa[2] = "58";
         aaa[3] = signedlongtostring(i);
         aaa[4] = doubletostring(i);
+        aaa[5] = InttoString(i);
         bool can = t->set(aaa);
         if (can && i%3)
         {

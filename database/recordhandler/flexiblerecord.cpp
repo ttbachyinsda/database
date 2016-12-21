@@ -12,7 +12,6 @@ void FlexibleRecord::Initialize(DataBaseType** inidata, int datasize)
     this->size = 0;
     this->maxsize = getMaxSize();
     this->data = new char[maxsize];
-    cout << "initial" << this->size <<' '<<maxsize<< endl;
 }
 void FlexibleRecord::Input(char* input)
 {

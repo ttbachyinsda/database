@@ -12,6 +12,7 @@
 #include <vector>
 using namespace std;
 #define MAX_NAME_SIZE 256
+#define make_triple(x,y,z) make_pair(x,make_pair(y,z))
 class Table {
 public:
     Table();
@@ -68,6 +69,7 @@ public:
         cout<<"Please don't use it in non-hashflexible table"<<endl;
         return false;
     }
+    vector<pair<int,pair<int,string>>>* gettablecondition();
 
 protected:
     void clearcolumn();
@@ -86,6 +88,7 @@ protected:
     FileManager* FM;
     db_index ** DBindex;
     bool* multivalue;
+    vector<pair<int,pair<int,string>>> tablecondition;
 };
 
 #endif // TABLE_H

@@ -12,11 +12,14 @@
 #include "tester/testhashflexible.h"
 #include "tester/testbulbfile.h"
 #include "layer/qmlif.h"
-
+#include "databasehandler/bulbfile.h"
 //#include "layer/pythonif.h"
 #include <QQmlApplicationEngine>
 #include <QGuiApplication>
 using namespace std;
+
+int BulbFile::fm = -1;
+int BulbFile::totalsize = 0;
 
 int main(int argc, char* argv[])
 {
@@ -37,9 +40,11 @@ int main(int argc, char* argv[])
 //    testvirtual x;
 //    x.begintest();
 
+    BulbFile::setfilename("bulbfile.txt",true);
+    //don't let this always be true, That's true only because we are testing.
 
-    testgroup xyz;
-    xyz.begintest();
+//    testgroup xyz;
+//    xyz.begintest();
 
 //    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
 //    QGuiApplication app(argc, argv);

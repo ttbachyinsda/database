@@ -56,103 +56,182 @@ cout<<"Now end "<<"testment"<<endl;
 
 void FlexibleTable::PackageFromHeadFile(BufType b)
 {
-    FileIterator position = 4;
-    int namelen = UIC::readint(b, position);
-    name = UIC::readstring(b, position, namelen);
-    PageNum = UIC::readint(b, position);
-    majornum = UIC::readint(b,position);
+    ifstream headfile(filename+".tableinfo",ios::binary);
+    int namelen;
+    headfile.read((char*)&namelen,4);
+    char* namechar = (char*)malloc(namelen);
+    headfile.read(namechar,namelen);
+    string namestr(namechar,namelen);
+    free(namechar);
+    name = namestr;
+
+    headfile.read((char*)&PageNum,4);
+    headfile.read((char*)&majornum,4);
+
     clearcolumn();
-    columncount = UIC::readint(b, position);
+    headfile.read((char*)&columncount,4);
+
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
     multivalue = new bool[this->columncount];
     for (int i = 0; i < this->columncount; i++) {
-        int namelen = UIC::readint(b, position);
-        columnname[i] = UIC::readstring(b, position, namelen);
+
+        int namelen;
+        headfile.read((char*)&namelen,4);
+        char* namechar = (char*)malloc(namelen);
+        headfile.read(namechar,namelen);
+        string namestr(namechar,namelen);
+        free(namechar);
+        columnname[i] = namestr;
+
         char* temptype = (char*)malloc(4);
-        UIC::readchar(b, position, temptype, 4);
-        int tempsize = UIC::readint(b, position);
+        headfile.read(temptype,4);
+
+        int tempsize;
+        headfile.read((char*)&tempsize,4);
+
         char* nullable = (char*)malloc(4);
-        UIC::readchar(b, position, nullable, 4);
+        headfile.read(nullable,4);
+
         bool cannull;
         if (nullable[0] == 'A')
             cannull = true;
         else
             cannull = false;
         char* canmulti = (char*)malloc(4);
-        UIC::readchar(b, position, canmulti, 4);
+        headfile.read(canmulti,4);
         if (canmulti[0] == 'A')
             multivalue[i]=true;
         else
             multivalue[i]=false;
         DataBaseType* t = UIC::realreconvert(temptype, tempsize, cannull);
-        int conditionsize=UIC::readint(b,position);
-        t->readcondition(b + position,conditionsize, position);
+
+        int conditionsize;
+        headfile.read((char*)&conditionsize,4);
+
+        char* tempcondition = (char*)malloc(conditionsize);
+        headfile.read(tempcondition,conditionsize);
+
+        int position = 0;
+        t->readcondition(tempcondition,conditionsize, position);
+
         column[i] = t;
         free(temptype);
         free(nullable);
         free(canmulti);
+        free(tempcondition);
     }
-    MaxRecordSize = UIC::readint(b, position);
+
+    headfile.read((char*)&MaxRecordSize,4);
     if (reservedSizeInPage != NULL)
         delete[] reservedSizeInPage;
     reservedSizeInPage = new int[MaxRecordSize];
     for (int i = 0; i < MaxRecordSize; i++)
-        reservedSizeInPage[i] = UIC::readint(b, position);
+        headfile.read((char*)&reservedSizeInPage[i],4);
+
+    tablecondition.clear();
+    int vecsize,strsize,first,second;
+    headfile.read((char*)&vecsize,4);
+    for (int i=0;i<vecsize;i++)
+    {
+        headfile.read((char*)&first,4);
+        headfile.read((char*)&second,4);
+        headfile.read((char*)&strsize,4);
+        char* tmp = (char*)malloc(strsize);
+        headfile.read(tmp,strsize);
+        string third(tmp,strsize);
+        tablecondition.push_back(make_triple(first,second,third));
+        free(tmp);
+    }
+
+
+    headfile.close();
 }
 void FlexibleTable::PackageHeadFile(BufType b)
 {
-    FileIterator position = 0;
-    string temp = "HEAD";
-    UIC::writechar(b, position, temp.data(), 4);
+    ofstream headfile(filename+".tableinfo",ios::binary);
+
+    string headstr = "HEAD";
+    memcpy(b,headstr.data(),4);
+
     int namelen = name.length();
-    UIC::writeint(b, position, namelen);
-    UIC::writechar(b, position, name.data(), namelen);
-    UIC::writeint(b, position, PageNum);
-    UIC::writeint(b,position,majornum);
-    UIC::writeint(b, position, columncount);
+    headfile.write((char*)&namelen,4);
+    headfile.write(name.data(),namelen);
+    headfile.write((char*)&PageNum,4);
+    headfile.write((char*)&majornum,4);
+    headfile.write((char*)&columncount,4);
+
     for (int i = 0; i < columncount; i++) {
         int namelen = columnname[i].length();
-        UIC::writeint(b, position, namelen);
-        UIC::writechar(b, position, columnname[i].data(), namelen);
+
+        headfile.write((char*)&namelen,4);
+        headfile.write(columnname[i].data(),namelen);
+
         char* temptype = (char*)malloc(4);
         char* nullable = (char*)malloc(4);
         char* canmulti = (char*)malloc(4);
         UIC::convert(column[i], temptype, nullable);
         UIC::convertmulti(multivalue[i],canmulti);
-        UIC::writechar(b, position, temptype, 4);
-        UIC::writeint(b, position, column[i]->getMaxSize());
-        UIC::writechar(b, position, nullable, 4);
-        UIC::writechar(b, position, canmulti, 4);
+
+        headfile.write(temptype,4);
+        int tempsize = column[i]->getMaxSize();
+        headfile.write((char*)&tempsize,4);
+        headfile.write(nullable,4);
+        headfile.write(canmulti,4);
+
         free(temptype);
         free(nullable);
         free(canmulti);
-        UIC::writeint(b,position,column[i]->getconditionsize());
-        column[i]->writecondition(b + position, position);
+
+        int conditionsize = column[i]->getconditionsize();
+        headfile.write((char*)&conditionsize,4);
+
+        char* tempcondition = (char*)malloc(conditionsize);
+        int position = 0;
+        column[i]->writecondition(tempcondition, position);
+        headfile.write(tempcondition,conditionsize);
+
+        free(tempcondition);
     }
-    UIC::writeint(b, position, MaxRecordSize);
+    headfile.write((char*)&MaxRecordSize,4);
     for (int i = 0; i < MaxRecordSize; i++)
-        UIC::writeint(b, position, reservedSizeInPage[i]);
+        headfile.write((char*)&reservedSizeInPage[i],4);
+
+    int vecsize=this->tablecondition.size(),strsize;
+    headfile.write((char*)&vecsize,4);
+    for (int i=0;i<vecsize;i++)
+    {
+        int first = tablecondition[i].first;
+        int second = tablecondition[i].second.first;
+        string third = tablecondition[i].second.second;
+        strsize = third.length();
+        headfile.write((char*)&first,4);
+        headfile.write((char*)&second,4);
+        headfile.write((char*)&strsize,4);
+        headfile.write(third.data(),strsize);
+    }
+
+    headfile.close();
 }
 
 void FlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
 {
     remove(this->filename.c_str());
-
-    int totalheadsize = 4 * 3 + 4 * 3 + name.length();
+    string infoname = this->filename + ".tableinfo";
+    remove(infoname.c_str());
+    this->tablecondition.clear();
     this->clearcolumn();
     this->columncount = clname.size();
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
     multivalue = new bool[this->columncount];
     for (int i = 0; i < columncount; i++) {
-        totalheadsize += clname[i].length() + 4 * 6 + cltype[i]->getconditionsize();
         columnname[i] = clname[i];
         column[i] = cltype[i];
         multivalue[i]=true;
     }
     this->PageNum = 0;
-    this->MaxRecordSize = max((PAGE_SIZE - totalheadsize - 16) / 4, 0);
+    this->MaxRecordSize = 5000;
     if (this->reservedSizeInPage != NULL)
         delete[] reservedSizeInPage;
     reservedSizeInPage = new int[MaxRecordSize];

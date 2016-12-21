@@ -24,19 +24,16 @@ using namespace std;
 class BulbFile
 {
 public:
-    BulbFile();
-    BulbFile(string filename);
-    int put(char* input,int size);
-    int put(const char* input,int size);
-    string get(int offset,int size);
-    char* getc(int offset,int size);
-    void setfilename(string filename,bool reconstruct = false);
-    unsigned long get_file_size(const char *path);
-    ~BulbFile();
+    static int put(char* input,int size);
+    static int put(const char* input,int size);
+    static string get(int offset,int size);
+    static char* getc(int offset,int size);
+    static void setfilename(string filename,bool reconstruct = false);
+    static unsigned long get_file_size(const char *path);
 private:
-    string filename;
-    int fm;
-    int totalsize;
+    static string filename;
+    static int fm;
+    static int totalsize;
 };
 
 #endif // BULBFILE_H

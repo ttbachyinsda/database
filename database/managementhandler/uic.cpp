@@ -63,6 +63,18 @@ void UIC::convert(DataBaseType* t1, char* s1,char* s2)
         *(s1 + 2) = 'T';
         *(s1 + 3) = 'E';
     }
+    if (temp[6]=='B'){
+        *(s1) = 'B';
+        *(s1 + 1) = 'U';
+        *(s1 + 2) = 'L';
+        *(s1 + 3) = 'B';
+    }
+    if (temp[6]=='T'){
+        *(s1) = 'T';
+        *(s1 + 1) = 'E';
+        *(s1 + 2) = 'X';
+        *(s1 + 3) = 'T';
+    }
     if (t1->getNullable()==true)
     {
         *(s2) = 'A';
@@ -103,6 +115,14 @@ DataBaseType* UIC::reconvertc(char* s1, int size,bool cannull)
         DataBaseType* temp = new DatabaseDate(cannull);
         return temp;
     }
+    if (*(s1) == 'B'){
+        DataBaseType* temp = new DatabaseBulb(cannull);
+        return temp;
+    }
+    if (*(s1) == 'T'){
+        DataBaseType* temp = new DatabaseText(cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
@@ -134,6 +154,16 @@ DataBaseType* UIC::reconvert(string s1, int size, bool cannull)
         DataBaseType* temp = new DatabaseDate(cannull);
         return temp;
     }
+    if (s1[0]=='B')
+    {
+        DataBaseType* temp = new DatabaseBulb(cannull);
+        return temp;
+    }
+    if (s1[0]=='T')
+    {
+        DataBaseType* temp = new DatabaseText(cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::realreconvertc(char* s1, int size,bool cannull)
@@ -162,6 +192,14 @@ DataBaseType* UIC::realreconvertc(char* s1, int size,bool cannull)
         DataBaseType* temp = new DatabaseDate(cannull);
         return temp;
     }
+    if (*(s1) == 'B') {
+        DataBaseType* temp = new DatabaseBulb(cannull);
+        return temp;
+    }
+    if (*(s1) == 'T') {
+        DataBaseType* temp = new DatabaseText(cannull);
+        return temp;
+    }
     return NULL;
 }
 DataBaseType* UIC::realreconvert(string s1, int size, bool cannull)
@@ -188,6 +226,14 @@ DataBaseType* UIC::realreconvert(string s1, int size, bool cannull)
     }
     if (s1[0] == 'D') {
         DataBaseType* temp = new DatabaseDate(cannull);
+        return temp;
+    }
+    if (s1[0] == 'B') {
+        DataBaseType* temp = new DatabaseBulb(cannull);
+        return temp;
+    }
+    if (s1[0] == 'T') {
+        DataBaseType* temp = new DatabaseText(cannull);
         return temp;
     }
     return NULL;
@@ -252,7 +298,6 @@ string UIC::readstringandjump(BufType b, FileIterator& iterator, int size_t, int
 }
 DataBaseType** UIC::copytype(DataBaseType** input, int inputlen)
 {
-    cout<<"inputlen="<<inputlen<<endl;
     DataBaseType** temp = new DataBaseType*[inputlen];
     for (int i = 0; i < inputlen; i++) {
         string temptype=input[i]->getType();
@@ -274,6 +319,12 @@ DataBaseType** UIC::copytype(DataBaseType** input, int inputlen)
         } else if (temptype[6]=='D')
         {
             temp[i]=new DatabaseDate();
+        } else if (temptype[6]=='B')
+        {
+            temp[i]=new DatabaseBulb();
+        } else if (temptype[6]=='T')
+        {
+            temp[i]=new DatabaseText();
         }
         else
         {

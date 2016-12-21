@@ -13,6 +13,7 @@ Table::Table()
     this->BPM = NULL;
     this->DBindex=NULL;
     this->multivalue=NULL;
+    this->tablecondition.clear();
 }
 Table::Table(string name, string filename)
 {
@@ -27,6 +28,7 @@ Table::Table(string name, string filename)
     this->name = name;
     this->multivalue = NULL;
     this->filename = filename;
+    this->tablecondition.clear();
     if (BPM != NULL) {
         BPM->close();
     }
@@ -205,6 +207,11 @@ void Table::Nullindex()
         this->DBindex[i]=NULL;
     }
 }
+vector<pair<int,pair<int,string>>>* Table::gettablecondition()
+{
+    return (&(this->tablecondition));
+}
+
 void Table::InsertindexAt(int num, char *insertdata, int datalen, int pagenum, int rownum)
 {
     this->DBindex[num]->insert(insertdata,datalen,pagenum,rownum);

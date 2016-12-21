@@ -69,7 +69,10 @@ SOURCES += main.cpp\
     tester/testhashflexible.cpp \
     managementhandler/hashflexibleiterator.cpp \
     databasehandler/bulbfile.cpp \
-    tester/testbulbfile.cpp
+    tester/testbulbfile.cpp \
+    typehandler/databasebulb.cpp \
+    typehandler/databasetext.cpp \
+    DBIndex/comparealgo.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -142,7 +145,10 @@ HEADERS  += mainwindow.h \
     tester/testhashflexible.h \
     managementhandler/hashflexibleiterator.h \
     databasehandler/bulbfile.h \
-    tester/testbulbfile.h
+    tester/testbulbfile.h \
+    typehandler/databasebulb.h \
+    typehandler/databasetext.h \
+    DBIndex/comparealgo.h
 
 
 DISTFILES += \

@@ -140,6 +140,21 @@ void HashFlexibleTable::PackageFromHeadFile(BufType b)
         free(canmulti);
         free(tempcondition);
     }
+
+    tablecondition.clear();
+    int vecsize,strsize,first,second;
+    headfile.read((char*)&vecsize,4);
+    for (int i=0;i<vecsize;i++)
+    {
+        headfile.read((char*)&first,4);
+        headfile.read((char*)&second,4);
+        headfile.read((char*)&strsize,4);
+        char* tmp = (char*)malloc(strsize);
+        headfile.read(tmp,strsize);
+        string third(tmp,strsize);
+        tablecondition.push_back(make_triple(first,second,third));
+        free(tmp);
+    }
     headfile.close();
 }
 void HashFlexibleTable::PackageHeadFile(BufType b)
@@ -188,6 +203,20 @@ void HashFlexibleTable::PackageHeadFile(BufType b)
 
         free(tempcondition);
     }
+    int vecsize=this->tablecondition.size(),strsize;
+    headfile.write((char*)&vecsize,4);
+    for (int i=0;i<vecsize;i++)
+    {
+        int first = tablecondition[i].first;
+        int second = tablecondition[i].second.first;
+        string third = tablecondition[i].second.second;
+        strsize = third.length();
+        headfile.write((char*)&first,4);
+        headfile.write((char*)&second,4);
+        headfile.write((char*)&strsize,4);
+        headfile.write(third.data(),strsize);
+    }
+    headfile.close();
 }
 
 void HashFlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)
@@ -195,15 +224,13 @@ void HashFlexibleTable::createTable(vector<string> clname, vector<DataBaseType*>
     remove(this->filename.c_str());
     string infoname = this->filename + ".tableinfo";
     remove(infoname.c_str());
-
-    int totalheadsize = 4 * 3 + 4 * 3 + name.length();
+    this->tablecondition.clear();
     this->clearcolumn();
     this->columncount = clname.size();
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
     multivalue = new bool[this->columncount];
     for (int i = 0; i < columncount; i++) {
-        totalheadsize += clname[i].length() + 4 * 6 + cltype[i]->getconditionsize();
         columnname[i] = clname[i];
         column[i] = cltype[i];
         multivalue[i]=true;

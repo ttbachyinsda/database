@@ -1,15 +1,8 @@
 #include "bulbfile.h"
 
-BulbFile::BulbFile()
-{
-    fm = -1;
-}
-BulbFile::BulbFile(string filename)
-{
-    setfilename(filename);
-}
 void BulbFile::setfilename(string filename, bool reconstruct)
 {
+    if (fm != -1) close(fm);
     if (reconstruct == true)
     {
         remove(filename.c_str());
@@ -78,9 +71,4 @@ char* BulbFile::getc(int offset, int size)
     char* temp = (char*)malloc(size);
     oft = read(f,(void*)temp,size);
     return temp;
-}
-BulbFile::~BulbFile()
-{
-    if (fm != -1)
-        close(fm);
 }

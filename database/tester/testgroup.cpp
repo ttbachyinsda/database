@@ -204,6 +204,10 @@ void testgroup::begintest()
     testindex(onetable,"0");
     testindex(onetable,"1");
     testindex(onetable,"19");
+
+    onetable->gettablecondition()->push_back(make_triple(2,3,"5"));
+    onetable->gettablecondition()->push_back(make_triple(3,5,"7"));
+
     delete iterator;
     delete record;
     delete onetable;
@@ -212,6 +216,11 @@ void testgroup::begintest()
     onetable = new FlexibleTable();
     onetable->setfilename(filename);
     onetable->Initialize();
+
+    for (auto s = onetable->gettablecondition()->begin(); s != onetable->gettablecondition()->end();s++)
+    {
+        cout<<(*s).first<<' '<<(*s).second.first<<' '<<(*s).second.second<<endl;
+    }
 
     for (int i=0;i<onetable->getcolumncount();i++)
     {
