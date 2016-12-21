@@ -17,7 +17,7 @@ void FixedSizeRecord::Initialize(DataBaseType** inidata, int datasize)
         this->columnsize[i] = this->size;
     }
     this->data = new char[this->size];
-    cout << "initial" << this->size << endl;
+    //cout << "initial" << this->size << endl;
 }
 void FixedSizeRecord::Input(char* input)
 {

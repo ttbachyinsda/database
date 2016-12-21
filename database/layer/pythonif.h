@@ -1,9 +1,13 @@
 #include "../tester/testflexible.h"
 #include "../sqlengine/sqldriver.h"
+#include "../databasehandler/bulbfile.h"
 #include "json.hpp"
 
 using json = nlohmann::json;
 SQLDriver* driver = NULL;
+
+int BulbFile::fm = -1;
+int BulbFile::totalsize = 0;
 
 void beginpythontest()
 {
