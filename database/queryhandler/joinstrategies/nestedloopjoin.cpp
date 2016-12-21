@@ -29,6 +29,7 @@ Table *NestedLoopJoin::join() {
             while (passengerIterator->available()) {
                 passengerIterator->getdata(passengerRecord);
                 addToResultIfMatch(true);
+                ++ (*passengerIterator);
             }
         }
         ++ (*driverIterator);

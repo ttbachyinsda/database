@@ -92,3 +92,12 @@ SQLOperand QueryCondition::getInverseOperand(SQLOperand operand) {
     if (operand == GREATER_EQUAL) return LESS_EQUAL;
     return operand;
 }
+
+std::string QueryCondition::convertRegex(const std::string &pattern) {
+    std::string retVal = pattern;
+    unsigned long pos;
+    while ((pos = retVal.find("%")) < retVal.size()) {
+        retVal = retVal.replace(pos, 1, ".*");
+    }
+    return retVal;
+}

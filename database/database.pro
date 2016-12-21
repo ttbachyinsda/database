@@ -73,7 +73,8 @@ SOURCES += main.cpp\
     queryhandler/joinstrategies/nestedloopjoin.cpp \
     queryhandler/joinstrategies/sortmergejoin.cpp \
     queryhandler/intelligentfilter.cpp \
-    queryhandler/queryoptimizer.cpp
+    queryhandler/queryoptimizer.cpp \
+    groupalgorithm/grouphandler.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -150,7 +151,8 @@ HEADERS  += mainwindow.h \
     queryhandler/joinstrategies/nestedloopjoin.h \
     queryhandler/joinstrategies/sortmergejoin.h \
     queryhandler/intelligentfilter.h \
-    queryhandler/queryoptimizer.h
+    queryhandler/queryoptimizer.h \
+    groupalgorithm/grouphandler.h
 
 
 DISTFILES += \

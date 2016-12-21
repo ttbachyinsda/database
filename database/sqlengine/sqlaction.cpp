@@ -8,6 +8,7 @@
 #include "../databasehandler/fixedsizetable.h"
 #include "../recordhandler/record.h"
 #include "../recordhandler/recordfactory.h"
+#include "../groupalgorithm/grouphandler.h"
 #include <iostream>
 using namespace std;
 
@@ -118,9 +119,60 @@ bool SQLCreateTableAction::execute()
         // TODO: CREATE INDEX FOR PRIMARY TYPE
         // TODO: PRIMARY KEY NOT UNIQUE.
         if (type->primaryType) continue;
-        if (type->isCheck) continue;
+        if (type->isCheck) {
+            // Add constraints (conditions) to table
+            for (SQLCheck* c : *type->checkGroup) {
+                DataBaseType* foundDBType = 0;
+                for (unsigned dbi = 0; dbi < clname.size(); ++ dbi) {
+                    if (clname[dbi] == c->selector->tableName) {
+                        foundDBType = cltype[dbi];
+                        break;
+                    }
+                }
+                if (foundDBType == 0) {
+                    driver->addWarningMessage("Check target not in previous fields.");
+                    continue;
+                }
+                char foundDBTypeStr = foundDBType->getType()[6];
+                if (c->isChoice) {
+                    unsigned long choiceListSize = c->choiceList->size();
+                    string* conds = new string[choiceListSize + 1];
+                    conds[0] = "CHOI";
+                    int conds_id = 1;
+                    for (SQLValue* sqc : *c->choiceList) {
+                        if (!QueryCondition::typeComparable(sqc->type, foundDBTypeStr)) {
+                            driver->addErrorMessage("Type mismatch in check choice clause.");
+                            return false;
+                        }
+                        conds[conds_id++] = sqc->content;
+                    }
+                    foundDBType->readcondition(conds);
+                    delete conds;
+                    continue;
+                }
+                // Judge Literal values.
+                if (c->operand == SQLOperand::LIKE) {
+                    driver->addErrorMessage("LIKE comparator is not supported in check clause.");
+                    return false;
+                }
+                if (!QueryCondition::typeComparable(c->value.type, foundDBTypeStr)) {
+                    driver->addErrorMessage("Type mismatch in check clause.");
+                    return false;
+                }
+                if (c->operand == SQLOperand::NOT_EQUAL) {
+                    string* conds = new string[2];
+                    conds[0] = "NTEQ";
+                    conds[1] = c->value.content;
+                    foundDBType->readcondition(conds);
+                    delete conds;
+                    continue;
+                } else {
+                    // TODO: obtain a literal type max and min.
+                }
+            }
+            continue;
+        }
         clname.push_back(type->identifier);
-        // TODO: WHAT IS CONDITION?
         DataBaseType* dbType = UIC::reconvert(type->type, type->length, type->canNull);
         cltype.push_back(dbType);
         ++ currentIndex;
@@ -324,7 +376,6 @@ bool SQLUpdateAction::execute()
 
 bool SQLSelectAction::execute()
 {
-    // TODO: For where clause: needing type judge.
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when querying data.");
@@ -333,6 +384,24 @@ bool SQLSelectAction::execute()
     bool prepareSucceeded = driver->getQueryExecuter()->setQuery(fromGroup, selectorGroup, conditionGroup);
     if (!prepareSucceeded) return false;
     return driver->getQueryExecuter()->executeQuery();
+}
+
+bool SQLGroupSelectAction::execute() {
+    Database* handler = driver->getCurrentDatabase();
+    if (handler == 0) {
+        driver->addErrorMessage("No database is selected when doing group selections.");
+        return false;
+    }
+    Table* myTable = handler->getTableByName(tableName);
+    if (myTable == 0) {
+        driver->addErrorMessage("Table " + tableName + " does not exist.");
+        return false;
+    }
+    GroupHandler* groupHandler = new GroupHandler(driver);
+    bool prepareSucceeded = groupHandler->prepareQuery(myTable, selectorGroup, groupByGroup);
+    if (prepareSucceeded) driver->setResult(groupHandler->executeQuery());
+    delete groupHandler;
+    return prepareSucceeded;
 }
 
 bool SQLIndexAction::execute()
@@ -433,4 +502,9 @@ SQLDeleteAction::~SQLDeleteAction()
         delete condition;
     }
     delete conditionGroup;
+}
+
+SQLGroupSelectAction::~SQLGroupSelectAction() {
+    delete selectorGroup;
+    if (groupByGroup) delete groupByGroup;
 }

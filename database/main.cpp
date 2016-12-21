@@ -23,10 +23,13 @@ int main(int argc, char* argv[])
 
     TestSQL t;
     string sql = "use orderDB;";
-    sql += "SELECT book.title,book.id,orders.book_id,orders.quantity FROM book,orders WHERE book.id=orders.book_id AND orders.quantity>8;";
+//    sql += " select customer_id, quantity from orders where customer_id=304403;";
+    sql += "SELECT customer_id,SUM(quantity),AVG(quantity) FROM orders GROUP BY customer_id;";
+//    sql += "SELECT book.title,book.id,orders.book_id,orders.quantity FROM book,orders WHERE book.id=orders.book_id AND orders.quantity>8;";
+//    sql += "SELECT orders.quantity, orders.customer_id, customer.name, customer.id FROM orders, customer WHERE orders.customer_id = customer.id AND orders.quantity > 8;";
     t.startTestString(sql);
 
-    t.startTestFile("book.sql");
+//    t.startTestFile("book.sql");
 //    t.startTestInteractive();
 /*
     testtype t;

@@ -30,6 +30,7 @@
    #include <iostream>
    #include <cstdlib>
    #include <fstream>
+   #include <sstream>
 
    /* include for all driver functions */
    #include "sqldriver.h"
@@ -45,10 +46,13 @@
 %token DATABASE DATABASES TABLE TABLES
 %token INT VARCHAR CHAR
 %token IS NOT NUL PRIMARY KEY
-%token CHECK IN
+%token CHECK IN LIKE
 
 %token INSERT INTO VALUES DELETE FROM
 %token UPDATE SET WHERE SELECT AND INDEX
+
+%token GROUP BY
+%token MAX MIN AVG SUM
 
 %token NOT_EQUAL GREATER_EQUAL LESS_EQUAL
 
@@ -63,10 +67,10 @@
 %type <std::vector<SQLValueGroup*>*> ValueLists
 %type <SQLCondition*> WhereClause
 %type <SQLConditionGroup*> WhereClauseList
-%type <SQLSelector*> Column
+%type <SQLSelector*> Column GroupColumn
 %type <SQLSelectorGroup*> Selector SelectorList
 %type <SQLSetGroup*> SetClause
-%type <SQLTableGroup*> TableList
+%type <SQLTableGroup*> TableList GroupByClause
 %type <SQLOperand> Operand
 %type <SQLCheck*> CheckClause
 %type <SQLCheckGroup*> CheckClauseList
@@ -209,6 +213,20 @@ QueryStmt       : INSERT INTO IDENTIFIER VALUES ValueLists
                 {
                     $$ = new SQLSelectAction($4, $2, $6);
                 }
+                | SELECT Selector FROM IDENTIFIER GroupByClause
+                {
+                    $$ = new SQLGroupSelectAction($2, $5, $4);
+                }
+                ;
+
+GroupByClause   : /* empty */
+                {
+                    $$ = 0;
+                }
+                | GROUP BY TableList
+                {
+                    $$ = $3;
+                }
                 ;
 
 ValueLists      : '(' ValueList ')'
@@ -311,6 +329,7 @@ CheckClause     : Column IN '(' ValueList ')'
                     $$ = new SQLCheck();
                     $$->isChoice = true;
                     $$->choiceList = $4;
+                    $$->selector = $1;
                 }
                 | Column Operand Value
                 {
@@ -319,6 +338,7 @@ CheckClause     : Column IN '(' ValueList ')'
                     $$->operand = $2;
                     $$->value = *($3);
                     delete $3;
+                    $$->selector = $1;
                 }
                 ;
 
@@ -365,6 +385,36 @@ Column          : IDENTIFIER '.' IDENTIFIER
                     $$ = new SQLSelector();
                     $$->tableName = $1;
                 }
+                | GroupColumn
+                {
+                    $$ = $1;
+                }
+                ;
+
+GroupColumn     : SUM '(' IDENTIFIER ')'
+                {
+                    $$ = new SQLSelector();
+                    $$->tableName = $3;
+                    $$->groupMethod = SUM;
+                }
+                | AVG '(' IDENTIFIER ')'
+                {
+                    $$ = new SQLSelector();
+                    $$->tableName = $3;
+                    $$->groupMethod = AVG;
+                }
+                | MAX '(' IDENTIFIER ')'
+                {
+                    $$ = new SQLSelector();
+                    $$->tableName = $3;
+                    $$->groupMethod = MAX;
+                }
+                | MIN '(' IDENTIFIER ')'
+                {
+                    $$ = new SQLSelector();
+                    $$->tableName = $3;
+                    $$->groupMethod = MIN;
+                }
                 ;
 
 Selector        : '*'
@@ -397,6 +447,7 @@ Operand         : '='           { $$ = SQLOperand::EQUAL;         }
                 | '>'           { $$ = SQLOperand::GREATER;       }
                 | LESS_EQUAL    { $$ = SQLOperand::LESS_EQUAL;    }
                 | GREATER_EQUAL { $$ = SQLOperand::GREATER_EQUAL; }
+                | LIKE          { $$ = SQLOperand::LIKE;          }
                 ;
 
 TableList       : IDENTIFIER
@@ -416,5 +467,7 @@ TableList       : IDENTIFIER
 
 void yy::SQLParser::error( const location_type &l, const std::string &err_message )
 {
-   driver.addErrorMessage("数据库提醒您语法错误！");
+    std::stringstream sstr;
+    sstr << "Syntax error at line " << l.begin.line << ", column " << l.begin.column << ".";
+    driver.addErrorMessage(sstr.str());
 }

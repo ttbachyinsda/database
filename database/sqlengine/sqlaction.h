@@ -198,6 +198,21 @@ public:
     bool execute();
 };
 
+class SQLGroupSelectAction : public SQLAction
+{
+    SQLSelectorGroup* selectorGroup;
+    SQLTableGroup* groupByGroup;
+    std::string tableName;
+public:
+    SQLGroupSelectAction(SQLSelectorGroup *selectorGroup, SQLTableGroup *groupByGroup,
+                         const std::string &tableName) : selectorGroup(selectorGroup),
+                                                         groupByGroup(groupByGroup),
+                                                         tableName(tableName) {}
+
+    ~SQLGroupSelectAction();
+    bool execute();
+};
+
 /**
  * @brief The SQLIndexAction class
  */

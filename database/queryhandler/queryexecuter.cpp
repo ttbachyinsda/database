@@ -91,6 +91,10 @@ bool QueryExecutor::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
         if (c->type == SQLCondition::VALUE) {
             thisCondition.rightIsValue = true;
             thisCondition.rightValue = c->rValue;
+            if (c->operand == SQLOperand::LIKE) {
+                thisCondition.rightValue.content = QueryCondition::convertRegex(
+                        thisCondition.rightValue.content);
+            }
             if (!QueryCondition::typeComparable(c->rValue.type, lValueType)) {
                 driver->addErrorMessage("Invalid Comparison between " +
                                         c->lValue.tableName + " and " + c->rValue.content);
@@ -98,6 +102,10 @@ bool QueryExecutor::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
             }
         } else {
             thisCondition.rightIsValue = false;
+            if (c->operand == SQLOperand::LIKE) {
+                driver->addErrorMessage("Like conditions cannot match a column in table.");
+                return false;
+            }
             if (!getTableColumnIndex(thisCondition.right.tableIndex, thisCondition.right.columnIndex,
                                      &(c->rValueColumn), tableDict, tableDictIterator))
                 return false;
@@ -152,7 +160,7 @@ bool QueryExecutor::executeQuery()
                 (cIter->rightIsValue || (!cIter->rightIsValue && cIter->right.tableIndex == tid))) {
                 thisTableInnerConditions.push_back(*cIter);
                 cIter = currentConditions.erase(cIter);
-            }
+            } else ++ cIter;
         }
         if (thisTableInnerConditions.size() != 0) {
             // Directly discard old one because this is maintained in database manager.
@@ -173,14 +181,14 @@ bool QueryExecutor::executeQuery()
         // The mergedID1 is at front.
         // Return new table and selected 2 IDs. But the old table is not deleted.
 
+        int mergedID1ColumnCount = operatingTables[mergedID1]->getcolumncount();
+
         if (operatingTables[mergedID1]->gettabletype() == "Virtual")
             delete operatingTables[mergedID1];
         if (operatingTables[mergedID2]->gettabletype() == "Virtual")
             delete operatingTables[mergedID2];
 
         operatingTables[mergedID1] = jointTable;
-
-        int mergedID1ColumnCount = operatingTables[mergedID1]->getcolumncount();
 
         std::vector<ConditionPair>::iterator iter = currentConditions.begin();
         while (iter != currentConditions.end()) {

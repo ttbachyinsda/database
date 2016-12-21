@@ -30,6 +30,7 @@ struct QueryCondition {
     static bool typeComparable(SQLValue::LiteralType literal, char type);
     static bool indexOperatable(SQLOperand operand);
     static SQLOperand getInverseOperand(SQLOperand operand);
+    static std::string convertRegex(const std::string&);
 private:
     static int matchString(const std::string& left, const std::string& right);
     static int matchInteger(const std::string& left, const std::string& right);

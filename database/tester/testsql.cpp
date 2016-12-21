@@ -70,7 +70,8 @@ void TestSQL::startTestString(const std::string &str)
             cout << "\033[33m WARNING: \033[0m" << sqlDriver.getWarningMessages()[0] << endl;
         else
             cout << "Succeeded!" << endl;
-        if (sqlDriver.hasResult())
+        if (sqlDriver.hasResult()) {
             sqlDriver.getResult()->dumpToConsole();
+        }
     }
 }
