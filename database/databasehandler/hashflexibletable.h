@@ -30,6 +30,7 @@ public:
     int getMaxRowNum();
     int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec);
     bool FastFind(Record *rec);
+    void createindex(vector<int> columnnum);
 
 private:
     void PackageFromHeadFile(BufType b);

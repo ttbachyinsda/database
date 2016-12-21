@@ -93,7 +93,7 @@ void testgroup::begintest()
     delete[] conditions;
     onetable->setmajornum(0);
     onetable->setmultivalue(0,false);
-    onetable->createemptyindex(0);
+    //onetable->createemptyindex(0);
     auto aaa = new string[5];
     int pagenum, rownum;
     auto t = RecordFactory::getrecord(onetable);
@@ -121,6 +121,10 @@ void testgroup::begintest()
     }
     delete t;
     delete[] aaa;
+
+    vector<int> colnum; colnum.push_back(0);
+    onetable->createindex(colnum);
+
     cout<<"group begin"<<endl;
     group.getmax(onetable,0);
     group.getmin(onetable,0);
@@ -135,12 +139,15 @@ void testgroup::begintest()
     group.getsum(onetable,4);
     group.getaverage(onetable,4);
     cout<<"group end"<<endl;
-    testindex(onetable,"5");
-    cout << onetable->getPageNum() << endl;
-    cout << onetable->getPageRowNum(1030) << endl;
+
     int time_Diff = time.elapsed();
     float f = time_Diff / 1000.0;
     cout << "Time table: " << f << endl;
+
+    testindex(onetable,"5");
+    cout << onetable->getPageNum() << endl;
+    cout << onetable->getPageRowNum(1030) << endl;
+
 
     cout << "test table end" << endl;
     cout << "test iterator begin" << endl;
@@ -148,19 +155,19 @@ void testgroup::begintest()
     auto iterator = IteratorFactory::getiterator(onetable);
     auto record = RecordFactory::getrecord(onetable);
 
-    int js=0;
-    while (iterator->available())
-    {
-        js++;
-        cout<<js<<endl;
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << ' ';
-        }
-        cout<<endl;
-        ++(*iterator);
-    }
-    iterator->getbegin();
+//    int js=0;
+//    while (iterator->available())
+//    {
+//        js++;
+//        cout<<js<<endl;
+//        iterator->getdata(record);
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << "yes: " << i << ' ' << record->getAt(i) << ' ';
+//        }
+//        cout<<endl;
+//        ++(*iterator);
+//    }
+//    iterator->getbegin();
 
     if (iterator->available()) {
         iterator->getdata(record);

@@ -411,6 +411,11 @@ int FixedSizeTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<int>
     //Don't need to write that
     return 0;
 }
+void FixedSizeTable::createindex(vector<int> columnnum)
+{
+    cout<<"don't need to use that in fixedsizetable, if needed, please tell ttbachyinsda."<<endl;
+    return;
+}
 
 string FixedSizeTable::gettabletype()
 {

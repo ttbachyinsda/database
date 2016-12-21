@@ -551,7 +551,41 @@ void HashFlexibleTable::insertall(char *data, int datasize, int pagenum, int row
             index += nowdatasize;
         }
 }
-
+void HashFlexibleTable::createindex(vector<int> columnnum)
+{
+    bool* v = new bool[columncount];
+    memset(v,0,columncount);
+    for (int bj : columnnum)
+    {
+        v[bj] = 1;
+        createemptyindex(bj);
+    }
+    for (int pg=2;pg<=PageNum;pg++)
+    {
+        int pageindex = 0;
+        BufType b = BPM->getPage(fileid,pg,pageindex);
+        int pagerownum = UIC::chartoint(b + 4);
+        for (int i=0;i<pagerownum;i++)
+        {
+            int pageposition = UIC::chartoint(b+__position(i));
+            if (pageposition != 0)
+            {
+                int index=4;
+                for (int j=0;j<this->columncount;j++)
+                {
+                    int nowdatasize=UIC::chartoint(b+pageposition+index);
+                    index += 4;
+                    //string t(data+index,nowdatasize);
+                    //cout<<"insert"<<' '<<t<<' '<<nowdatasize<<endl;
+                    if (v[j])
+                        InsertindexAt(j,b+pageposition+index,nowdatasize-1,pg,i);
+                    index += nowdatasize;
+                }
+            }
+        }
+    }
+    delete[] v;
+}
 string HashFlexibleTable::gettabletype()
 {
     return "HashFlexible";
@@ -560,23 +594,12 @@ string HashFlexibleTable::gettabletype()
 //Hash Method
 int HashFlexibleTable::getHashNum(string data)
 {
-    mpz_class thisint;
-    string md5string = MD5(data).toStr();
-    thisint.set_str(md5string.c_str(),16);
-    thisint = thisint % 1024;
-    int comk = thisint.get_si();
-    return comk;
+    return MD5::BKDRHash(data.c_str());
 }
 int HashFlexibleTable::getHashNumc(char *data, int datasize)
 {
     string ss(data,datasize);
-
-    mpz_class thisint;
-    string md5string = MD5(ss).toStr();
-    thisint.set_str(md5string.c_str(),16);
-    thisint = thisint % 1024;
-    int comk = thisint.get_si();
-    return comk;
+    return MD5::BKDRHash(ss.c_str());
 }
 void HashFlexibleTable::updateHashpagenum(int hashnum, int beginpagenum, int endpagenum)
 {

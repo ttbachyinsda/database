@@ -37,6 +37,16 @@ string testhashflexible::doubletostring(double num)
 
 void testhashflexible::testindex(Table* onetable,string input)
 {
+    if (onetable->getindexes() == NULL)
+    {
+        cout<<"MERROR"<<endl;
+        return;
+    }
+    if (onetable->getindexes()[0]==NULL)
+    {
+        cout<<"no error"<<endl;
+        return;
+    }
     cout<<"test hashflexible index begin"<<endl;
     Iterator* it = IteratorFactory::getiterator(onetable);
     string temp=it->compile(input,0);
@@ -92,10 +102,10 @@ void testhashflexible::begintest()
     onetable->Initialize();
     delete[] conditions;
 
-    onetable->setmajornum(-1);
+    onetable->setmajornum(0);
 
     onetable->setmultivalue(0,false);
-    onetable->createemptyindex(0);
+    //onetable->createemptyindex(0);
     auto aaa = new string[5];
     int pagenum, rownum;
     auto t = RecordFactory::getrecord(onetable);
@@ -125,6 +135,10 @@ void testhashflexible::begintest()
     delete t;
     delete[] aaa;
 
+    vector<int> colnum; colnum.push_back(0);
+    onetable->createindex(colnum);
+
+
     cout<<"group begin"<<endl;
     group.getmax(onetable,0);
     group.getmin(onetable,0);
@@ -140,15 +154,17 @@ void testhashflexible::begintest()
     group.getaverage(onetable,4);
     cout<<"group end"<<endl;
 
-    testindex(onetable,"5");
-    cout << onetable->getPageNum() << endl;
-    cout << onetable->getPageRowNum(1030) << endl;
     int time_Diff = time.elapsed();
     float f = time_Diff / 1000.0;
     cout << "Time table: " << f << endl;
 
     cout << "test table end" << endl;
     cout << "test iterator begin" << endl;
+
+    testindex(onetable,"5");
+    cout << onetable->getPageNum() << endl;
+    cout << onetable->getPageRowNum(1030) << endl;
+
 
     auto iterator = IteratorFactory::getiterator(onetable);
     auto record = RecordFactory::getrecord(onetable);
@@ -157,8 +173,9 @@ void testhashflexible::begintest()
 //    while (iterator->available())
 //    {
 //        js++;
-//        cout<<js<<endl;
-//        cout<<iterator->gethashnum() << ' '<<iterator->getpagenum()<<' '<<iterator->getrownum()<<' '<<iterator->getpagerownum()<<endl;
+//        int k = iterator->gethashnum();
+//        if (k<1024)
+//        cout<<iterator->gethashnum()<<endl;
 //        iterator->getdata(record);
 
 //        for (int i = 0; i < cltype.size(); i++) {
@@ -167,6 +184,8 @@ void testhashflexible::begintest()
 //        cout<<endl;
 //        ++(*iterator);
 //    }
+
+//    iterator->getbegin();
 
     if (iterator->available()) {
         iterator->getdata(record);

@@ -97,6 +97,8 @@ public:
   /* Convert digest to string value */
   string toStr();
 
+  static size_t BKDRHash(const char *str);
+
 private:
   /* Initialization the md5 object, processing another message block,
    * and updating the context.*/

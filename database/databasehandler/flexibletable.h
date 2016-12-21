@@ -24,7 +24,7 @@ public:
     int getPageNum();
     int getRowSize(int rownum);
     int getMaxRowNum();
-
+    void createindex(vector<int> columnnum);
     int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec);
 
 private:
