@@ -174,6 +174,8 @@ public:
     std::string toJSON();
 
     void dumpToConsole();
+
+    void dumpToFile(const std::string& filename);
 };
 
 #endif // SQLSTRUCT_H

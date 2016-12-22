@@ -56,7 +56,7 @@ void TestSQL::startTestFile(const char* filename)
     }
 }
 
-void TestSQL::startTestString(const std::string &str)
+void TestSQL::startTestString(const std::string &str, const string &filename)
 {
     cout << "Query:" << endl;
     cout << str << endl;
@@ -72,6 +72,7 @@ void TestSQL::startTestString(const std::string &str)
             cout << "Succeeded!" << endl;
         if (sqlDriver.hasResult()) {
             sqlDriver.getResult()->dumpToConsole();
+            sqlDriver.getResult()->dumpToFile(filename);
         }
     }
 }

@@ -8,7 +8,7 @@ class TestSQL
 public:
     TestSQL();
     void startTestFile(const char*);
-    void startTestString(const std::string& str);
+    void startTestString(const std::string& str, const std::string& filename);
     void startTestInteractive();
 };
 

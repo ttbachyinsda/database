@@ -430,12 +430,12 @@ bool SQLCreateIndexAction::execute()
     if (!SQLIndexAction::execute())
         return false;
     if (currentTable->getindexes()[columnID] != 0) {
-        driver->addErrorMessage("Index for " + columnName + " already exists.");
-        return false;
+        driver->addWarningMessage("Index for " + columnName + " already exists.");
+        return true;
     }
-    currentTable->createemptyindex(columnID);
-    // TODO: Insert everything into this new index.
-    //currentTable->getindexes()[columnID]->insert();
+    std::vector<int> targetCol;
+    targetCol.push_back(columnID);
+    currentTable->createindex(targetCol);
     return true;
 }
 
