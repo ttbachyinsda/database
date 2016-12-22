@@ -36,6 +36,7 @@ public:
     void readindex();
     void Nullindex();
     void createemptyindex(int i);
+    void deleteindex(int i);
     int getColumnIndexByName(const std::string& name);
     vector<string> checkOutput();
     virtual bool FastAllInsert(int& pagenum, int& rownum, Record* rec) = 0;

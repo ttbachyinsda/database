@@ -138,6 +138,7 @@ void testhashflexible::begintest()
     vector<int> colnum;
     colnum.push_back(0);
     onetable->createindex(colnum);
+    //onetable->deleteindex(0);
 
     int time_Diff = time.elapsed();
     float f = time_Diff / 1000.0;
@@ -228,6 +229,9 @@ void testhashflexible::begintest()
     onetable = new HashFlexibleTable();
     onetable->setfilename(filename);
     onetable->Initialize();
+    testindex(onetable, "0");
+    testindex(onetable, "1");
+    testindex(onetable, "19");
 
     for (int i = 0; i < onetable->getcolumncount(); i++) {
         cout << "MULTIPLY: " << onetable->getmultivalue(i) << endl;

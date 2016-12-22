@@ -182,6 +182,15 @@ void Table::createemptyindex(int i)
     free(tst);
 }
 
+void Table::deleteindex(int i)
+{
+    string t = UIC::inttostring(i);
+    string temp = filename + t;
+    delete this->DBindex[i];
+    this->DBindex[i] = NULL;
+    remove(temp.c_str());
+}
+
 int Table::getColumnIndexByName(const string& name)
 {
     for (int i = 0; i < columncount; ++i) {
