@@ -5,12 +5,11 @@
 #include "../databasehandler/fixedsizetable.h"
 #include "../databasehandler/flexibletable.h"
 #include "../databasehandler/hashflexibletable.h"
+#include "../groupalgorithm/group.h"
 #include "../managementhandler/iteratorfactory.h"
 #include "../recordhandler/recordfactory.h"
-#include "../groupalgorithm/group.h"
 #include <QTime>
-class testgroup
-{
+class testgroup {
 public:
     testgroup();
     string RandomString();
@@ -18,7 +17,7 @@ public:
     string signedlongtostring(long long num);
     string doubletostring(double num);
     void begintest();
-    void testindex(Table *onetable, string input);
+    void testindex(Table* onetable, string input);
 };
 
 #endif // TESTGROUP_H

@@ -4,26 +4,26 @@ Table::Table()
 {
     this->havecreatetable = false;
     this->haveinitialize = false;
-    this->majornum=0;
+    this->majornum = 0;
     this->columncount = 0;
     this->column = NULL;
     this->columnname = NULL;
     this->fileid = 0;
     this->FM = NULL;
     this->BPM = NULL;
-    this->DBindex=NULL;
-    this->multivalue=NULL;
+    this->DBindex = NULL;
+    this->multivalue = NULL;
     this->tablecondition.clear();
 }
 Table::Table(string name, string filename)
 {
     this->havecreatetable = false;
     this->haveinitialize = false;
-    this->majornum=0;
+    this->majornum = 0;
     this->columncount = 0;
     this->column = NULL;
     this->columnname = NULL;
-    this->DBindex=NULL;
+    this->DBindex = NULL;
     this->fileid = 0;
     this->name = name;
     this->multivalue = NULL;
@@ -73,7 +73,8 @@ bool Table::setname(string name)
 void Table::setfilename(string filename) { this->filename = filename; }
 void Table::clearcolumn()
 {
-    if (column==NULL) return;
+    if (column == NULL)
+        return;
     for (int i = 0; i < columncount; i++)
         if (column[i] != NULL)
             delete column[i];
@@ -85,17 +86,18 @@ void Table::clearcolumn()
     columnname = NULL;
     if (multivalue != NULL)
         delete[] multivalue;
-    multivalue=NULL;
+    multivalue = NULL;
 }
 void Table::clearindex()
 {
-    if (DBindex==NULL) return;
+    if (DBindex == NULL)
+        return;
     for (int i = 0; i < columncount; i++)
         if (DBindex[i] != NULL)
             delete DBindex[i];
     if (DBindex != NULL)
         delete[] DBindex;
-    DBindex=NULL;
+    DBindex = NULL;
 }
 
 DataBaseType* Table::getcolumn(int i) { return column[i]; }
@@ -142,7 +144,7 @@ int Table::getmajornum()
 }
 void Table::setmajornum(int nownum)
 {
-    this->majornum=nownum;
+    this->majornum = nownum;
 }
 db_index** Table::getindexes()
 {
@@ -152,47 +154,46 @@ db_index** Table::getindexes()
 void Table::readindex()
 {
     clearindex();
-    this->DBindex=new db_index*[this->columncount];
-    for (int i=0;i<columncount;i++)
-    {
-        string t=UIC::inttostring(i);
-        string temp=filename+t;
-        char* tst=(char*)malloc(temp.length()+1);
-        memcpy(tst,temp.data(),temp.length());
-        tst[temp.length()]='\0';
-        int can=access(temp.c_str(),0);
-        if (can!=-1)
-        {
-            this->DBindex[i]=new db_index(tst,false,multivalue[i]);
+    this->DBindex = new db_index*[this->columncount];
+    for (int i = 0; i < columncount; i++) {
+        string t = UIC::inttostring(i);
+        string temp = filename + t;
+        char* tst = (char*)malloc(temp.length() + 1);
+        memcpy(tst, temp.data(), temp.length());
+        tst[temp.length()] = '\0';
+        int can = access(temp.c_str(), 0);
+        if (can != -1) {
+            this->DBindex[i] = new db_index(tst, false, multivalue[i]);
         } else
-            this->DBindex[i]=NULL;
+            this->DBindex[i] = NULL;
         free(tst);
     }
 }
 void Table::createemptyindex(int i)
 {
-    string t=UIC::inttostring(i);
-    string temp=filename+t;
-    char* tst=(char*)malloc(temp.length()+1);
-    memcpy(tst,temp.data(),temp.length());
-    tst[temp.length()]='\0';
-    if (this->DBindex==NULL) readindex();
-    this->DBindex[i]=new db_index(tst,true,multivalue[i]);
+    string t = UIC::inttostring(i);
+    string temp = filename + t;
+    char* tst = (char*)malloc(temp.length() + 1);
+    memcpy(tst, temp.data(), temp.length());
+    tst[temp.length()] = '\0';
+    if (this->DBindex == NULL)
+        readindex();
+    this->DBindex[i] = new db_index(tst, true, multivalue[i]);
     free(tst);
 }
 
-int Table::getColumnIndexByName(const string &name)
+int Table::getColumnIndexByName(const string& name)
 {
-    for (int i = 0; i < columncount; ++ i) {
+    for (int i = 0; i < columncount; ++i) {
         if (columnname[i] == name)
             return i;
     }
     return -1;
 }
 
-void Table::setmultivalue(int i,bool istrue)
+void Table::setmultivalue(int i, bool istrue)
 {
-    multivalue[i]=istrue;
+    multivalue[i] = istrue;
 }
 bool Table::getmultivalue(int i)
 {
@@ -201,26 +202,25 @@ bool Table::getmultivalue(int i)
 void Table::Nullindex()
 {
     clearindex();
-    this->DBindex=new db_index*[this->columncount];
-    for (int i=0;i<columncount;i++)
-    {
-        this->DBindex[i]=NULL;
+    this->DBindex = new db_index*[this->columncount];
+    for (int i = 0; i < columncount; i++) {
+        this->DBindex[i] = NULL;
     }
 }
-vector<pair<int,pair<int,string>>>* Table::gettablecondition()
+vector<pair<int, pair<int, string> > >* Table::gettablecondition()
 {
     return (&(this->tablecondition));
 }
 
-void Table::InsertindexAt(int num, char *insertdata, int datalen, int pagenum, int rownum)
+void Table::InsertindexAt(int num, char* insertdata, int datalen, int pagenum, int rownum)
 {
-    this->DBindex[num]->insert(insertdata,datalen,pagenum,rownum);
+    this->DBindex[num]->insert(insertdata, datalen, pagenum, rownum);
 }
-void Table::ModifyindexAt(int num, char *modifydata, int datalen, int prepagenum, int prerownum, int newpagenum, int newrownum)
+void Table::ModifyindexAt(int num, char* modifydata, int datalen, int prepagenum, int prerownum, int newpagenum, int newrownum)
 {
-    this->DBindex[num]->update(modifydata,datalen,prepagenum,prerownum,newpagenum,newrownum);
+    this->DBindex[num]->update(modifydata, datalen, prepagenum, prerownum, newpagenum, newrownum);
 }
-void Table::DeleteindexAt(int num, char *deletedata, int datalen, int pagenum, int rownum)
+void Table::DeleteindexAt(int num, char* deletedata, int datalen, int pagenum, int rownum)
 {
-    this->DBindex[num]->remove(deletedata,datalen,pagenum,rownum);
+    this->DBindex[num]->remove(deletedata, datalen, pagenum, rownum);
 }

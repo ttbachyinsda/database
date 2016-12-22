@@ -2,7 +2,6 @@
 
 FlexibleRecord::FlexibleRecord()
 {
-
 }
 void FlexibleRecord::Initialize(DataBaseType** inidata, int datasize)
 {
@@ -17,19 +16,18 @@ void FlexibleRecord::Input(char* input)
 {
     this->size = UIC::chartoint(input);
 
-    if (this->size > this->maxsize)
-    {
-        cout<<"ERROR"<<' '<<this->size<<' '<<this->maxsize<<endl;
+    if (this->size > this->maxsize) {
+        cout << "ERROR" << ' ' << this->size << ' ' << this->maxsize << endl;
     }
     assert(this->size <= this->maxsize);
 
-    memset(this->data,0,this->size);
+    memset(this->data, 0, this->size);
 
-    int index=4;
+    int index = 4;
     for (int i = 0; i < this->columncount; i++) {
-        int inputlen=UIC::chartoint(input+index);
+        int inputlen = UIC::chartoint(input + index);
         index += 4;
-        columns[i]->read(input + index, inputlen,index);
+        columns[i]->read(input + index, inputlen, index);
     }
     memcpy(this->data, input, this->size);
 }
@@ -37,9 +35,9 @@ bool FlexibleRecord::getAt(int num, char* returndata, int& returndatasize)
 {
     if (num >= this->columncount)
         return false;
-    string temp=columns[num]->output();
-    returndatasize=temp.length();
-    memcpy(returndata,temp.data(),returndatasize);
+    string temp = columns[num]->output();
+    returndatasize = temp.length();
+    memcpy(returndata, temp.data(), returndatasize);
     return true;
 }
 string FlexibleRecord::getAt(int num)
@@ -74,41 +72,44 @@ bool FlexibleRecord::set(char** input, int* inputlen)
     update();
     return true;
 }
-bool FlexibleRecord::setAt(int wz,string input,bool isnull)
+bool FlexibleRecord::setAt(int wz, string input, bool isnull)
 {
-    if (wz>=this->columncount) return false;
-    bool can=columns[wz]->checkRight(input,isnull);
+    if (wz >= this->columncount)
+        return false;
+    bool can = columns[wz]->checkRight(input, isnull);
     if (!can)
         return false;
-    columns[wz]->checkRightAndChange(input,isnull);
+    columns[wz]->checkRightAndChange(input, isnull);
     return true;
 }
 
 void FlexibleRecord::update()
 {
-    int index=4; int totallen=4;
+    int index = 4;
+    int totallen = 4;
     for (int i = 0; i < this->columncount; i++) {
-        totallen += 4+columns[i]->getSize();
+        totallen += 4 + columns[i]->getSize();
     }
-    this->size=totallen;
-    if (this->data!=NULL) delete[] this->data;
+    this->size = totallen;
+    if (this->data != NULL)
+        delete[] this->data;
     this->data = new char[this->size];
-    UIC::inttochar(totallen,this->data);
-    for (int i=0;i<this->columncount;i++)
-    {
-        int nowsize=columns[i]->getSize();
-        UIC::inttochar(nowsize,this->data+index);
+    UIC::inttochar(totallen, this->data);
+    for (int i = 0; i < this->columncount; i++) {
+        int nowsize = columns[i]->getSize();
+        UIC::inttochar(nowsize, this->data + index);
         index += 4;
-        memcpy(this->data+index,columns[i]->getdata(),nowsize);
+        memcpy(this->data + index, columns[i]->getdata(), nowsize);
         index += nowsize;
     }
-    if (index!=totallen) cout<<"ERROR LEN"<<endl;
+    if (index != totallen)
+        cout << "ERROR LEN" << endl;
 }
 int FlexibleRecord::getMaxSize()
 {
-    int totallen=4;
+    int totallen = 4;
     for (int i = 0; i < this->columncount; i++) {
-        totallen += 4+columns[i]->getMaxSize();
+        totallen += 4 + columns[i]->getMaxSize();
     }
     return totallen;
 }

@@ -1,18 +1,18 @@
 #ifndef TABLE_H
 #define TABLE_H
+#include "../DBIndex/db_index.h"
+#include "../managementhandler/uic.h"
 #include "../pagefilesystem/BufPageManager.h"
 #include "../recordhandler/record.h"
 #include "../typehandler/databasechar.h"
 #include "../typehandler/databaseint.h"
 #include "../typehandler/databasetype.h"
-#include "../DBIndex/db_index.h"
-#include "../managementhandler/uic.h"
 #include "bulbfile.h"
 #include <string>
 #include <vector>
 using namespace std;
 #define MAX_NAME_SIZE 256
-#define make_triple(x,y,z) make_pair(x,make_pair(y,z))
+#define make_triple(x, y, z) make_pair(x, make_pair(y, z))
 class Table {
 public:
     Table();
@@ -55,28 +55,27 @@ public:
     virtual ~Table();
     virtual void createindex(vector<int> columnnum)
     {
-        cout<<"Please don't use it in non-in-file table"<<endl;
-        for (int i :columnnum)
-        {
+        cout << "Please don't use it in non-in-file table" << endl;
+        for (int i : columnnum) {
             createemptyindex(i);
         }
     }
 
-    virtual int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec) = 0;
+    virtual int getinfo(int reqhashnum, int pagenum, int rownum, vector<int>* infovec) = 0;
 
     virtual bool FastFind(Record* rec)
     {
-        cout<<"Please don't use it in non-hashflexible table"<<endl;
+        cout << "Please don't use it in non-hashflexible table" << endl;
         return false;
     }
-    vector<pair<int,pair<int,string>>>* gettablecondition();
+    vector<pair<int, pair<int, string> > >* gettablecondition();
 
 protected:
     void clearcolumn();
     void clearindex();
-    void InsertindexAt(int num,char* insertdata,int datalen,int pagenum,int rownum);
-    void ModifyindexAt(int num,char* modifydata,int datalen,int prepagenum,int prerownum,int newpagenum,int newrownum);
-    void DeleteindexAt(int num,char* deletedata,int datalen,int pagenum,int rownum);
+    void InsertindexAt(int num, char* insertdata, int datalen, int pagenum, int rownum);
+    void ModifyindexAt(int num, char* modifydata, int datalen, int prepagenum, int prerownum, int newpagenum, int newrownum);
+    void DeleteindexAt(int num, char* deletedata, int datalen, int pagenum, int rownum);
     string name;
     string filename;
     int fileid;
@@ -86,9 +85,9 @@ protected:
     int majornum;
     BufPageManager* BPM;
     FileManager* FM;
-    db_index ** DBindex;
+    db_index** DBindex;
     bool* multivalue;
-    vector<pair<int,pair<int,string>>> tablecondition;
+    vector<pair<int, pair<int, string> > > tablecondition;
 };
 
 #endif // TABLE_H

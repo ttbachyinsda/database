@@ -6,7 +6,7 @@ DatabaseDate::DatabaseDate()
     this->size = 8;
     data = (char*)malloc(size + 1);
     memset(data, 0, size + 1);
-    data[size]=IS_NOT_NULL;
+    data[size] = IS_NOT_NULL;
     this->Nullable = true;
     this->isNull = false;
 }
@@ -16,7 +16,7 @@ DatabaseDate::DatabaseDate(bool cannull)
     this->size = 8;
     data = (char*)malloc(size + 1);
     memset(data, 0, size + 1);
-    data[size]=IS_NOT_NULL;
+    data[size] = IS_NOT_NULL;
     this->Nullable = cannull;
     this->isNull = false;
 }
@@ -45,7 +45,7 @@ void DatabaseDate::change(string input)
 void DatabaseDate::change(char* input, int size)
 {
     isNull = false;
-    memcpy(data , input, this->size);
+    memcpy(data, input, this->size);
     data[this->size] = IS_NOT_NULL;
     this->isNull = false;
 }
@@ -157,7 +157,7 @@ string DatabaseDate::output()
     if (isNull)
         return "NULL__DATA";
     char* temp = (char*)malloc(this->size);
-    memcpy(temp,data,this->size);
+    memcpy(temp, data, this->size);
     string s(temp, this->size);
     free(temp);
     return s;
@@ -168,7 +168,7 @@ string DatabaseDate::output()
 DatabaseDate::~DatabaseDate()
 {
 }
-bool DatabaseDate::read(char* input, int inputlen,int& position)
+bool DatabaseDate::read(char* input, int inputlen, int& position)
 {
     memcpy(data, input, this->size + 1);
     position += this->size + 1;
@@ -190,127 +190,136 @@ bool DatabaseDate::analysis(string input)
     if (analysistype == "NULL")
         return true;
     if (analysistype == "FRTO") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input.data(),8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
 
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
 
-        time_point<system_clock,chrono::nanoseconds> par2tp;
-        memcpy(&par2tp,par2,8);
+        time_point<system_clock, chrono::nanoseconds> par2tp;
+        memcpy(&par2tp, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>=par1tp && parinput<=par2tp) return true;
-        else return false;
-
+        if (parinput >= par1tp && parinput <= par2tp)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "frTO") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input.data(),8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
-        time_point<system_clock,chrono::nanoseconds> par2tp;
-        memcpy(&par2tp,par2,8);
+        time_point<system_clock, chrono::nanoseconds> par2tp;
+        memcpy(&par2tp, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>par1tp && parinput<=par2tp) return true;
-        else return false;
+        if (parinput > par1tp && parinput <= par2tp)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "FRto") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input.data(),8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
-        time_point<system_clock,chrono::nanoseconds> par2tp;
-        memcpy(&par2tp,par2,8);
+        time_point<system_clock, chrono::nanoseconds> par2tp;
+        memcpy(&par2tp, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>=par1tp && parinput<par2tp) return true;
-        else return false;
+        if (parinput >= par1tp && parinput < par2tp)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "frto") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input.data(),8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
-        time_point<system_clock,chrono::nanoseconds> par2tp;
-        memcpy(&par2tp,par2,8);
+        time_point<system_clock, chrono::nanoseconds> par2tp;
+        memcpy(&par2tp, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>par1tp && parinput<par2tp) return true;
-        else return false;
+        if (parinput > par1tp && parinput < par2tp)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "NTEQ") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input.data(),8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
         free(par1);
 
-        if (par1tp!=parinput) return true; else return false;
+        if (par1tp != parinput)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "CHOI") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input.data(),8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input.data(), 8);
 
-        int paranum = chartoint(condition+4);
-        char* par =(char*)malloc(size);
-        int index=8;
+        int paranum = chartoint(condition + 4);
+        char* par = (char*)malloc(size);
+        int index = 8;
         for (int i = 0; i < paranum; i++) {
-            int sizei=chartoint(condition+index);
+            int sizei = chartoint(condition + index);
             index += 4;
-            memcpy(par, condition +index, sizei);
+            memcpy(par, condition + index, sizei);
             index += sizei;
 
-            time_point<system_clock,chrono::nanoseconds> pariLint;
-            memcpy(&pariLint,par,8);
-            if (pariLint==parinput)
-            {
+            time_point<system_clock, chrono::nanoseconds> pariLint;
+            memcpy(&pariLint, par, 8);
+            if (pariLint == parinput) {
                 free(par);
                 return true;
             }
@@ -328,125 +337,134 @@ bool DatabaseDate::analysisc(char* input, int inputsize)
     if (analysistype == "NULL")
         return true;
     if (analysistype == "FRTO") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input,8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
-        time_point<system_clock,chrono::nanoseconds> par2tp;
-        memcpy(&par2tp,par2,8);
+        time_point<system_clock, chrono::nanoseconds> par2tp;
+        memcpy(&par2tp, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>=par1tp && parinput<=par2tp) return true;
-        else return false;
-
+        if (parinput >= par1tp && parinput <= par2tp)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "frTO") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input,8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
-        time_point<system_clock,chrono::nanoseconds> par2tp;
-        memcpy(&par2tp,par2,8);
+        time_point<system_clock, chrono::nanoseconds> par2tp;
+        memcpy(&par2tp, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>par1tp && parinput<=par2tp) return true;
-        else return false;
+        if (parinput > par1tp && parinput <= par2tp)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "FRto") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input,8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
-        time_point<system_clock,chrono::nanoseconds> par2tp;
-        memcpy(&par2tp,par2,8);
+        time_point<system_clock, chrono::nanoseconds> par2tp;
+        memcpy(&par2tp, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>=par1tp && parinput<par2tp) return true;
-        else return false;
+        if (parinput >= par1tp && parinput < par2tp)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "frto") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input,8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
-        time_point<system_clock,chrono::nanoseconds> par2tp;
-        memcpy(&par2tp,par2,8);
+        time_point<system_clock, chrono::nanoseconds> par2tp;
+        memcpy(&par2tp, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>par1tp && parinput<par2tp) return true;
-        else return false;
+        if (parinput > par1tp && parinput < par2tp)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "NTEQ") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input,8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
-        time_point<system_clock,chrono::nanoseconds> par1tp;
-        memcpy(&par1tp,par1,8);
+        time_point<system_clock, chrono::nanoseconds> par1tp;
+        memcpy(&par1tp, par1, 8);
 
         free(par1);
 
-        if (parinput != par1tp) return true; else return false;
+        if (parinput != par1tp)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "CHOI") {
-        time_point<system_clock,chrono::nanoseconds> parinput;
-        memcpy(&parinput,input,8);
+        time_point<system_clock, chrono::nanoseconds> parinput;
+        memcpy(&parinput, input, 8);
 
-        int paranum = chartoint(condition+4);
-        char* par =(char*)malloc(size);
-        int index=8;
+        int paranum = chartoint(condition + 4);
+        char* par = (char*)malloc(size);
+        int index = 8;
         for (int i = 0; i < paranum; i++) {
-            int sizei=chartoint(condition+index);
+            int sizei = chartoint(condition + index);
             index += 4;
-            memcpy(par, condition +index, sizei);
+            memcpy(par, condition + index, sizei);
             index += sizei;
 
-            time_point<system_clock,chrono::nanoseconds> pariLint;
-            memcpy(&pariLint,par,8);
-            if (pariLint == parinput)
-            {
+            time_point<system_clock, chrono::nanoseconds> pariLint;
+            memcpy(&pariLint, par, 8);
+            if (pariLint == parinput) {
                 free(par);
                 return true;
             }

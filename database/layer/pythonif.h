@@ -1,6 +1,6 @@
-#include "../tester/testflexible.h"
-#include "../sqlengine/sqldriver.h"
 #include "../databasehandler/bulbfile.h"
+#include "../sqlengine/sqldriver.h"
+#include "../tester/testflexible.h"
 #include "json.hpp"
 
 using json = nlohmann::json;
@@ -17,14 +17,16 @@ void beginpythontest()
 
 bool open()
 {
-    if (driver != NULL) return false;
+    if (driver != NULL)
+        return false;
     driver = new SQLDriver();
     return true;
 }
 
 bool close()
 {
-    if (driver) delete driver;
+    if (driver)
+        delete driver;
     driver = NULL;
     return true;
 }

@@ -2,7 +2,6 @@
 
 testhashflexible::testhashflexible()
 {
-
 }
 string testhashflexible::RandomString()
 {
@@ -23,44 +22,41 @@ string testhashflexible::InttoString(int num)
 string testhashflexible::signedlongtostring(long long num)
 {
     char s[8];
-    memcpy(s,&num,8);
-    string t(s,8);
+    memcpy(s, &num, 8);
+    string t(s, 8);
     return t;
 }
 string testhashflexible::doubletostring(double num)
 {
     char s[8];
-    memcpy(s,&num,8);
-    string t(s,8);
+    memcpy(s, &num, 8);
+    string t(s, 8);
     return t;
 }
 
-void testhashflexible::testindex(Table* onetable,string input)
+void testhashflexible::testindex(Table* onetable, string input)
 {
-    if (onetable->getindexes() == NULL)
-    {
-        cout<<"MERROR"<<endl;
+    if (onetable->getindexes() == NULL) {
+        cout << "MERROR" << endl;
         return;
     }
-    if (onetable->getindexes()[0]==NULL)
-    {
-        cout<<"no error"<<endl;
+    if (onetable->getindexes()[0] == NULL) {
+        cout << "no error" << endl;
         return;
     }
-    cout<<"test hashflexible index begin"<<endl;
+    cout << "test hashflexible index begin" << endl;
     Iterator* it = IteratorFactory::getiterator(onetable);
-    string temp=it->compile(input,0);
-    cout<<"try to search "<<temp<<endl;
-    index_key k(temp.c_str(),temp.length());
+    string temp = it->compile(input, 0);
+    cout << "try to search " << temp << endl;
+    index_key k(temp.c_str(), temp.length());
     index_value v;
-    int answer=onetable->getindexes()[0]->search(k,&v);
-    if (answer==0)
-    {
-        cout<<"has found"<<endl;
-        cout<<v.pagenum<<' '<<v.pageposition<<endl;
+    int answer = onetable->getindexes()[0]->search(k, &v);
+    if (answer == 0) {
+        cout << "has found" << endl;
+        cout << v.pagenum << ' ' << v.pageposition << endl;
     } else
-        cout<<"has not found"<<endl;
-    cout<<"test index end"<<endl;
+        cout << "has not found" << endl;
+    cout << "test index end" << endl;
     delete it;
 }
 
@@ -85,10 +81,10 @@ void testhashflexible::begintest()
     string t4 = "LINT";
     string t5 = "REAL";
     string t6 = "BULB";
-    auto *conditions = new string[5];
-    conditions[0]="FRTO";
-    conditions[1]="0";
-    conditions[2]="20000000";
+    auto* conditions = new string[5];
+    conditions[0] = "FRTO";
+    conditions[1] = "0";
+    conditions[2] = "20000000";
     auto type1 = UIC::reconvert(t1, 10, true);
     type1->readcondition(conditions);
     auto type2 = UIC::reconvert(t2, 20, true);
@@ -108,7 +104,7 @@ void testhashflexible::begintest()
 
     onetable->setmajornum(0);
 
-    onetable->setmultivalue(0,false);
+    onetable->setmultivalue(0, false);
     //onetable->createemptyindex(0);
     auto aaa = new string[6];
     int pagenum, rownum;
@@ -118,21 +114,20 @@ void testhashflexible::begintest()
     Group group;
     for (int i = 0; i < 200000; i++) {
         aaa[0] = InttoString(i);
-        aaa[1] = "a"+InttoString(i);
+        aaa[1] = "a" + InttoString(i);
         aaa[2] = "58";
         aaa[3] = signedlongtostring(i);
         aaa[4] = doubletostring(i);
         aaa[5] = InttoString(i);
         bool can = t->set(aaa);
-        if (can && i%3)
-        {
-            can=t->setAt(1,"",true);
+        if (can && i % 3) {
+            can = t->setAt(1, "", true);
             t->update();
         }
         if (can)
             onetable->FastAllInsert(pagenum, rownum, t);
-        if (i%3==0)
-            group.add(pagenum,rownum);
+        if (i % 3 == 0)
+            group.add(pagenum, rownum);
         //cout<<pagenum<<' '<<rownum<<endl;
         //assert(pagenum <= onetable->getPageNum());
         //cout<<e<<endl;
@@ -140,57 +135,56 @@ void testhashflexible::begintest()
     delete t;
     delete[] aaa;
 
-    vector<int> colnum; colnum.push_back(0);
+    vector<int> colnum;
+    colnum.push_back(0);
     onetable->createindex(colnum);
-
-
-    cout<<"group begin"<<endl;
-    group.getmax(onetable,0);
-    group.getmin(onetable,0);
-    group.getsum(onetable,0);
-    group.getaverage(onetable,0);
-    group.getmax(onetable,3);
-    group.getmin(onetable,3);
-    group.getsum(onetable,3);
-    group.getaverage(onetable,3);
-    group.getmax(onetable,4);
-    group.getmin(onetable,4);
-    group.getsum(onetable,4);
-    group.getaverage(onetable,4);
-    cout<<"group end"<<endl;
 
     int time_Diff = time.elapsed();
     float f = time_Diff / 1000.0;
     cout << "Time table: " << f << endl;
 
+    cout << "group begin" << endl;
+    group.getmax(onetable, 0);
+    group.getmin(onetable, 0);
+    group.getsum(onetable, 0);
+    group.getaverage(onetable, 0);
+    group.getmax(onetable, 3);
+    group.getmin(onetable, 3);
+    group.getsum(onetable, 3);
+    group.getaverage(onetable, 3);
+    group.getmax(onetable, 4);
+    group.getmin(onetable, 4);
+    group.getsum(onetable, 4);
+    group.getaverage(onetable, 4);
+    cout << "group end" << endl;
+
     cout << "test table end" << endl;
     cout << "test iterator begin" << endl;
 
-    testindex(onetable,"5");
+    testindex(onetable, "5");
     cout << onetable->getPageNum() << endl;
     cout << onetable->getPageRowNum(1030) << endl;
-
 
     auto iterator = IteratorFactory::getiterator(onetable);
     auto record = RecordFactory::getrecord(onetable);
 
-//    int js=0;
-//    while (iterator->available())
-//    {
-//        js++;
-//        int k = iterator->gethashnum();
-//        if (k<1024)
-//        cout<<iterator->gethashnum()<<endl;
-//        iterator->getdata(record);
+    //    int js=0;
+    //    while (iterator->available())
+    //    {
+    //        js++;
+    //        int k = iterator->gethashnum();
+    //        if (k<1024)
+    //        cout<<iterator->gethashnum()<<endl;
+    //        iterator->getdata(record);
 
-//        for (int i = 0; i < cltype.size(); i++) {
-//            cout << i << ' ' << record->getAt(i) << ' ';
-//        }
-//        cout<<endl;
-//        ++(*iterator);
-//    }
+    //        for (int i = 0; i < cltype.size(); i++) {
+    //            cout << i << ' ' << record->getAt(i) << ' ';
+    //        }
+    //        cout<<endl;
+    //        ++(*iterator);
+    //    }
 
-//    iterator->getbegin();
+    //    iterator->getbegin();
 
     if (iterator->available()) {
         iterator->getdata(record);
@@ -199,17 +193,16 @@ void testhashflexible::begintest()
         }
     }
 
-
     ++(*iterator);
     if (iterator->available()) {
-       iterator->getdata(record);
+        iterator->getdata(record);
         for (int i = 0; i < cltype.size(); i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
     iterator->access(300, 1);
     if (iterator->available()) {
-       iterator->getdata(record);
+        iterator->getdata(record);
         for (int i = 0; i < cltype.size(); i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
@@ -224,9 +217,9 @@ void testhashflexible::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-    testindex(onetable,"0");
-    testindex(onetable,"1");
-    testindex(onetable,"19");
+    testindex(onetable, "0");
+    testindex(onetable, "1");
+    testindex(onetable, "19");
     delete iterator;
     delete record;
     delete onetable;
@@ -236,9 +229,8 @@ void testhashflexible::begintest()
     onetable->setfilename(filename);
     onetable->Initialize();
 
-    for (int i=0;i<onetable->getcolumncount();i++)
-    {
-        cout<<"MULTIPLY: "<<onetable->getmultivalue(i)<<endl;
+    for (int i = 0; i < onetable->getcolumncount(); i++) {
+        cout << "MULTIPLY: " << onetable->getmultivalue(i) << endl;
     }
     iterator = IteratorFactory::getiterator(onetable);
     record = RecordFactory::getrecord(onetable);
@@ -262,24 +254,23 @@ void testhashflexible::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-    cout<<"group begin"<<endl;
-    group.getmax(onetable,0);
-    group.getmin(onetable,0);
-    group.getsum(onetable,0);
-    group.getaverage(onetable,0);
-    group.getmax(onetable,3);
-    group.getmin(onetable,3);
-    group.getsum(onetable,3);
-    group.getaverage(onetable,3);
-    group.getmax(onetable,4);
-    group.getmin(onetable,4);
-    group.getsum(onetable,4);
-    group.getaverage(onetable,4);
-    cout<<"group end"<<endl;
+    cout << "group begin" << endl;
+    group.getmax(onetable, 0);
+    group.getmin(onetable, 0);
+    group.getsum(onetable, 0);
+    group.getaverage(onetable, 0);
+    group.getmax(onetable, 3);
+    group.getmin(onetable, 3);
+    group.getsum(onetable, 3);
+    group.getaverage(onetable, 3);
+    group.getmax(onetable, 4);
+    group.getmin(onetable, 4);
+    group.getsum(onetable, 4);
+    group.getaverage(onetable, 4);
+    cout << "group end" << endl;
     delete onetable;
     delete iterator;
     delete record;
     cout << onetable->getname() << endl;
-    cout<<"test hash flexible table end"<<endl;
-
+    cout << "test hash flexible table end" << endl;
 }

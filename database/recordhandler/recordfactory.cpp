@@ -6,22 +6,22 @@ RecordFactory::RecordFactory()
 Record* RecordFactory::getrecord(Table* table)
 {
     string tabletype = table->gettabletype();
-    if (tabletype[0] == 'F' && tabletype[1]=='i') {
+    if (tabletype[0] == 'F' && tabletype[1] == 'i') {
         Record* temp = new FixedSizeRecord();
         DataBaseType** col = UIC::copytype(table->getcolumns(), table->getcolumncount());
         temp->Initialize(col, table->getcolumncount());
         return temp;
-    } else if (tabletype[0] == 'F' && tabletype[1]=='l') {
+    } else if (tabletype[0] == 'F' && tabletype[1] == 'l') {
         Record* temp = new FlexibleRecord();
         DataBaseType** col = UIC::copytype(table->getcolumns(), table->getcolumncount());
         temp->Initialize(col, table->getcolumncount());
         return temp;
-    } else if (tabletype[0] == 'V' && tabletype[1]=='i') {
+    } else if (tabletype[0] == 'V' && tabletype[1] == 'i') {
         Record* temp = new FlexibleRecord();
         DataBaseType** col = UIC::copytype(table->getcolumns(), table->getcolumncount());
         temp->Initialize(col, table->getcolumncount());
         return temp;
-    } else if (tabletype[0] == 'H' && tabletype[1]=='a') {
+    } else if (tabletype[0] == 'H' && tabletype[1] == 'a') {
         Record* temp = new FlexibleRecord();
         DataBaseType** col = UIC::copytype(table->getcolumns(), table->getcolumncount());
         temp->Initialize(col, table->getcolumncount());

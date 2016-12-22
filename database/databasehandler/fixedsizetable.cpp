@@ -64,7 +64,7 @@ void FixedSizeTable::PackageFromHeadFile(BufType b)
     int namelen = UIC::readint(b, position);
     name = UIC::readstring(b, position, namelen);
     PageNum = UIC::readint(b, position);
-    majornum = UIC::readint(b,position);
+    majornum = UIC::readint(b, position);
     clearcolumn();
     columncount = UIC::readint(b, position);
     columnname = new string[this->columncount];
@@ -86,12 +86,12 @@ void FixedSizeTable::PackageFromHeadFile(BufType b)
         char* canmulti = (char*)malloc(4);
         UIC::readchar(b, position, canmulti, 4);
         if (canmulti[0] == 'A')
-            multivalue[i]=true;
+            multivalue[i] = true;
         else
-            multivalue[i]=false;
-        int conditionsize=UIC::readint(b,position);
+            multivalue[i] = false;
+        int conditionsize = UIC::readint(b, position);
         DataBaseType* t = UIC::realreconvert(temptype, tempsize, cannull);
-        t->readcondition(b + position,conditionsize, position);
+        t->readcondition(b + position, conditionsize, position);
         column[i] = t;
         free(temptype);
         free(nullable);
@@ -125,7 +125,7 @@ void FixedSizeTable::PackageHeadFile(BufType b)
         char* nullable = (char*)malloc(4);
         char* canmulti = (char*)malloc(4);
         UIC::convert(column[i], temptype, nullable);
-        UIC::convertmulti(multivalue[i],canmulti);
+        UIC::convertmulti(multivalue[i], canmulti);
         UIC::writechar(b, position, temptype, 4);
         UIC::writeint(b, position, column[i]->getSize());
         UIC::writechar(b, position, nullable, 4);
@@ -133,7 +133,7 @@ void FixedSizeTable::PackageHeadFile(BufType b)
         free(temptype);
         free(nullable);
         free(canmulti);
-        UIC::writeint(b,position,column[i]->getconditionsize());
+        UIC::writeint(b, position, column[i]->getconditionsize());
         column[i]->writecondition(b + position, position);
     }
     UIC::writeint(b, position, MaxRecordSize);
@@ -156,7 +156,7 @@ void FixedSizeTable::createTable(vector<string> clname, vector<DataBaseType*> cl
         totalheadsize += clname[i].length() + 4 * 6 + cltype[i]->getconditionsize();
         columnname[i] = clname[i];
         column[i] = cltype[i];
-        multivalue[i]=true;
+        multivalue[i] = true;
         this->RowSize += cltype[i]->getSize();
     }
     this->MaxRowNum = (PAGE_SIZE - 8) / this->RowSize;
@@ -211,7 +211,7 @@ bool FixedSizeTable::InsertAt(int pagenum, char* insertdata, int& rownum)
     position += 8 + this->RowSize * pagerownum;
     rownum = pagerownum;
 
-    insertall(insertdata,this->RowSize,pagenum,rownum);
+    insertall(insertdata, this->RowSize, pagenum, rownum);
 
     memcpy(b + position, insertdata, this->RowSize);
     pagerownum++;
@@ -270,10 +270,10 @@ bool FixedSizeTable::DeleteAt(int pagenum, int rownum)
     int position2 = 8 + this->RowSize * rownum;
     char* temp = (char*)malloc(this->RowSize);
 
-    deleteall(b+position2,this->RowSize,pagenum,rownum);
+    deleteall(b + position2, this->RowSize, pagenum, rownum);
 
-    if (position1!=position2)
-        modifyall(b+position1,this->RowSize,pagenum,position1,pagenum,position2);
+    if (position1 != position2)
+        modifyall(b + position1, this->RowSize, pagenum, position1, pagenum, position2);
 
     memcpy(temp, b + position1, this->RowSize);
     memcpy(b + position2, temp, this->RowSize);
@@ -295,7 +295,7 @@ void FixedSizeTable::UnPackager(BufType b, int position)
     int totalsize = 0;
     for (int i = 0; i < columncount; i++) {
         // cout<<"unpacker at:"<<totalsize<<endl;
-        column[i]->read(temp + totalsize,column[i]->getSize(),totalsize);
+        column[i]->read(temp + totalsize, column[i]->getSize(), totalsize);
     }
     free(temp);
 }
@@ -330,7 +330,7 @@ bool FixedSizeTable::FastInsert(int& pagenum, int& rownum, Record* rec)
 bool FixedSizeTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
 {
     bool can = false;
-    for (int i = min(this->MaxRecordSize-1,this->PageNum); i > 0; i--)
+    for (int i = min(this->MaxRecordSize - 1, this->PageNum); i > 0; i--)
         if (this->RowNumInPage[i] < this->MaxRowNum) {
             pagenum = i;
             can = FastInsert(pagenum, rownum, rec);
@@ -355,7 +355,7 @@ bool FixedSizeTable::FastAllInsert(int& pagenum, int& rownum, Record* rec)
     return can;
 }
 
-bool FixedSizeTable::FastOutput(int pagenum, int rownum,Record* rec)
+bool FixedSizeTable::FastOutput(int pagenum, int rownum, Record* rec)
 {
     int index;
     BufType b = BPM->getPage(fileid, pagenum, index);
@@ -369,51 +369,48 @@ void FixedSizeTable::FastOutput(int pagenum, int rownum, char* output, int& outp
     outputsize = this->RowSize;
     memcpy(output, b + __FIXPOSITION(rownum), outputsize);
 }
-void FixedSizeTable::modifyall(char *data, int datasize, int prepagenum, int prerownum, int newpagenum, int newrownum)
+void FixedSizeTable::modifyall(char* data, int datasize, int prepagenum, int prerownum, int newpagenum, int newrownum)
 {
-    int index=0;
-    for (int i=0;i<columncount;i++)
-        if (DBindex != NULL && DBindex[i]!=NULL)
-        {
-            int nowdatasize=column[i]->getSize();
-            ModifyindexAt(i,data+index,nowdatasize-1,prepagenum,prerownum,newpagenum,newrownum);
+    int index = 0;
+    for (int i = 0; i < columncount; i++)
+        if (DBindex != NULL && DBindex[i] != NULL) {
+            int nowdatasize = column[i]->getSize();
+            ModifyindexAt(i, data + index, nowdatasize - 1, prepagenum, prerownum, newpagenum, newrownum);
             index += nowdatasize;
         }
 }
-void FixedSizeTable::deleteall(char *data, int datasize, int pagenum, int rownum)
+void FixedSizeTable::deleteall(char* data, int datasize, int pagenum, int rownum)
 {
-    int index=0;
-    for (int i=0;i<columncount;i++)
-        if (DBindex != NULL && DBindex[i]!=NULL)
-        {
-            int nowdatasize=column[i]->getSize();
-            string t(data+index,nowdatasize-1);
-            cout<<"delete data at "<<t<<' '<<pagenum<<' '<<rownum<<endl;
-            DeleteindexAt(i,data+index,nowdatasize-1,pagenum,rownum);
+    int index = 0;
+    for (int i = 0; i < columncount; i++)
+        if (DBindex != NULL && DBindex[i] != NULL) {
+            int nowdatasize = column[i]->getSize();
+            string t(data + index, nowdatasize - 1);
+            cout << "delete data at " << t << ' ' << pagenum << ' ' << rownum << endl;
+            DeleteindexAt(i, data + index, nowdatasize - 1, pagenum, rownum);
             index += nowdatasize;
         }
 }
-void FixedSizeTable::insertall(char *data, int datasize, int pagenum, int rownum)
+void FixedSizeTable::insertall(char* data, int datasize, int pagenum, int rownum)
 {
-    int index=0;
-    for (int i=0;i<columncount;i++)
-        if (DBindex != NULL && DBindex[i]!=NULL)
-        {
-            int nowdatasize=column[i]->getSize();
+    int index = 0;
+    for (int i = 0; i < columncount; i++)
+        if (DBindex != NULL && DBindex[i] != NULL) {
+            int nowdatasize = column[i]->getSize();
             //string t(data+index,nowdatasize-1);
             //cout<<"insert at "<<t<<' '<<pagenum<<' '<<rownum<<endl;
-            InsertindexAt(i,data+index,nowdatasize-1,pagenum,rownum);
+            InsertindexAt(i, data + index, nowdatasize - 1, pagenum, rownum);
             index += nowdatasize;
         }
 }
-int FixedSizeTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec)
+int FixedSizeTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<int>* infovec)
 {
     //Don't need to write that
     return 0;
 }
 void FixedSizeTable::createindex(vector<int> columnnum)
 {
-    cout<<"don't need to use that in fixedsizetable, if needed, please tell ttbachyinsda."<<endl;
+    cout << "don't need to use that in fixedsizetable, if needed, please tell ttbachyinsda." << endl;
     return;
 }
 

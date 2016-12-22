@@ -10,7 +10,7 @@ DatabaseInt::DatabaseInt(int size)
     this->size = size;
     data = (char*)malloc(size + 1);
     memset(data, '0', size + 1);
-    data[size]=IS_NOT_NULL;
+    data[size] = IS_NOT_NULL;
     this->Nullable = true;
     this->isNull = false;
 }
@@ -22,97 +22,10 @@ DatabaseInt::DatabaseInt(int size, bool cannull)
     this->size = size;
     data = (char*)malloc(size + 1);
     memset(data, '0', size + 1);
-    data[size]=IS_NOT_NULL;
+    data[size] = IS_NOT_NULL;
     this->Nullable = cannull;
     this->isNull = false;
 }
-/* Remember that if you input a string more than 255 characters or illegal, data will be
- * empty.
- * */
-/*
-DatabaseInt::DatabaseInt(string input)
-{
-    NullCondition();
-    this->size = MAX_INT_SIZE;
-    bool can = checkRight(input);
-    if (can) {
-        this->size = input.length();
-        data = (char*)malloc(this->size + 1);
-        memcpy(data, input.data(), this->size);
-        data[size] = IS_NOT_NULL;
-    } else {
-        int size = input.length();
-        if (size > MAX_INT_SIZE)
-            size = MAX_INT_SIZE;
-        this->size = size;
-        data = (char*)malloc(size + 1);
-        memset(data, 0, size + 1);
-    }
-    this->Nullable = true;
-    this->isNull = false;
-}
-DatabaseInt::DatabaseInt(string input, bool cannull)
-{
-    NullCondition();
-    this->size = MAX_INT_SIZE;
-    bool can = checkRight(input);
-    if (can) {
-        this->size = input.length();
-        data = (char*)malloc(this->size + 1);
-        memcpy(data, input.data(), this->size);
-        data[size] = IS_NOT_NULL;
-    } else {
-        int size = input.length();
-        if (size > MAX_INT_SIZE)
-            size = MAX_INT_SIZE;
-        this->size = size;
-        data = (char*)malloc(size + 1);
-        memset(data, 0, size + 1);
-    }
-    this->Nullable = cannull;
-    this->isNull = false;
-}
-DatabaseInt::DatabaseInt(char* input, int size)
-{
-    NullCondition();
-    this->size = MAX_INT_SIZE;
-    bool can = checkRight(input, size);
-    if (can) {
-        this->size = size;
-        data = (char*)malloc(size + 1);
-        memcpy(data, input, size);
-        data[size] = IS_NOT_NULL;
-    } else {
-        if (size > MAX_INT_SIZE)
-            size = MAX_INT_SIZE;
-        this->size = size;
-        this->data = (char*)malloc(size + 1);
-        memset(data, 0, size + 1);
-    }
-    this->Nullable = true;
-    this->isNull = false;
-}
-DatabaseInt::DatabaseInt(char* input, int size, bool cannull)
-{
-    NullCondition();
-    this->size = MAX_INT_SIZE;
-    bool can = checkRight(input, size);
-    if (can) {
-        this->size = size;
-        data = (char*)malloc(size + 1);
-        memcpy(data, input, size);
-        data[size] = IS_NOT_NULL;
-    } else {
-        if (size > MAX_INT_SIZE)
-            size = MAX_INT_SIZE;
-        this->size = size;
-        this->data = (char*)malloc(size + 1);
-        memset(data, 0, size + 1);
-    }
-    this->Nullable = cannull;
-    this->isNull = false;
-}
-*/
 //Return length of type(Int)
 int DatabaseInt::getSize()
 {
@@ -136,9 +49,9 @@ void DatabaseInt::change(string input)
     memset(data, 0, this->size);
     memcpy(data + (this->size - size), input.data(), size);
     data[this->size] = IS_NOT_NULL;
-    for (int i=0;i<this->size;i++)
-        if (data[i]==0 || data[i]==32)
-            data[i]='0';
+    for (int i = 0; i < this->size; i++)
+        if (data[i] == 0 || data[i] == 32)
+            data[i] = '0';
     this->isNull = false;
 }
 void DatabaseInt::change(char* input, int size)
@@ -147,9 +60,9 @@ void DatabaseInt::change(char* input, int size)
     memset(data, 0, this->size);
     memcpy(data + (this->size - size), input, size);
     data[this->size] = IS_NOT_NULL;
-    for (int i=0;i<this->size;i++)
-        if (data[i]==0 || data[i]==32)
-            data[i]='0';
+    for (int i = 0; i < this->size; i++)
+        if (data[i] == 0 || data[i] == 32)
+            data[i] = '0';
     this->isNull = false;
 }
 void DatabaseInt::changetoNull()
@@ -274,17 +187,18 @@ string DatabaseInt::output()
     if (isNull)
         return "NULL__DATA";
     int i;
-    for (i=0;i<this->size;i++)
-        if (data[i]==0 || data[i]==32)
-            data[i]='0';
+    for (i = 0; i < this->size; i++)
+        if (data[i] == 0 || data[i] == 32)
+            data[i] = '0';
     for (i = 0; i < size; i++)
         if (data[i] != '0')
             break;
     char* temp = (char*)malloc(this->size);
-    memset(temp,0,size);
-    memcpy(temp+i,data+i,size-i);
-    if (i==size) temp[size-1]='0',i--;
-    string s(temp+i, size-i);
+    memset(temp, 0, size);
+    memcpy(temp + i, data + i, size - i);
+    if (i == size)
+        temp[size - 1] = '0', i--;
+    string s(temp + i, size - i);
     free(temp);
     return s;
 }
@@ -294,7 +208,7 @@ string DatabaseInt::output()
 DatabaseInt::~DatabaseInt()
 {
 }
-bool DatabaseInt::read(char* input, int inputlen,int& position)
+bool DatabaseInt::read(char* input, int inputlen, int& position)
 {
     memcpy(data, input, this->size + 1);
     position += this->size + 1;
@@ -317,16 +231,16 @@ bool DatabaseInt::analysis(string input)
         return true;
     if (analysistype == "FRTO") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-input.length(), input.data(), input.length());
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - input.length(), input.data(), input.length());
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
-        int size2=chartoint(condition+8+size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size);
-        memset(par2,'0',size);
-        memcpy(par2+size-size2, condition + 12 + size1, size2);
+        memset(par2, '0', size);
+        memcpy(par2 + size - size2, condition + 12 + size1, size2);
         int res1 = compare(temp, size, par1, size);
         int res2 = compare(temp, size, par2, size);
         free(temp);
@@ -339,16 +253,16 @@ bool DatabaseInt::analysis(string input)
     }
     if (analysistype == "frTO") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-input.length(), input.data(), input.length());
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - input.length(), input.data(), input.length());
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
-        int size2=chartoint(condition+8+size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size);
-        memset(par2,'0',size);
-        memcpy(par2+size-size2, condition + 12 + size1, size2);
+        memset(par2, '0', size);
+        memcpy(par2 + size - size2, condition + 12 + size1, size2);
         int res1 = compare(temp, size, par1, size);
         int res2 = compare(temp, size, par2, size);
         free(temp);
@@ -361,16 +275,16 @@ bool DatabaseInt::analysis(string input)
     }
     if (analysistype == "FRto") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-input.length(), input.data(), input.length());
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - input.length(), input.data(), input.length());
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
-        int size2=chartoint(condition+8+size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size);
-        memset(par2,'0',size);
-        memcpy(par2+size-size2, condition + 12 + size1, size2);
+        memset(par2, '0', size);
+        memcpy(par2 + size - size2, condition + 12 + size1, size2);
         int res1 = compare(temp, size, par1, size);
         int res2 = compare(temp, size, par2, size);
         free(temp);
@@ -383,16 +297,16 @@ bool DatabaseInt::analysis(string input)
     }
     if (analysistype == "frto") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-input.length(), input.data(), input.length());
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - input.length(), input.data(), input.length());
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
-        int size2=chartoint(condition+8+size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size);
-        memset(par2,'0',size);
-        memcpy(par2+size-size2, condition + 12 + size1, size2);
+        memset(par2, '0', size);
+        memcpy(par2 + size - size2, condition + 12 + size1, size2);
         int res1 = compare(temp, size, par1, size);
         int res2 = compare(temp, size, par2, size);
         free(temp);
@@ -405,12 +319,12 @@ bool DatabaseInt::analysis(string input)
     }
     if (analysistype == "NTEQ") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-input.length(), input.data(), input.length());
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - input.length(), input.data(), input.length());
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
         int res1 = compare(temp, size, par1, size);
         free(temp);
         free(par1);
@@ -422,15 +336,15 @@ bool DatabaseInt::analysis(string input)
     if (analysistype == "CHOI") {
         char* temp = (char*)malloc(size);
         memset(temp, '0', size);
-        memcpy(temp+size-input.length(), input.data(), input.length());
-        int paranum = chartoint(condition+4);
-        char* par =(char*)malloc(size);
-        int index=8;
+        memcpy(temp + size - input.length(), input.data(), input.length());
+        int paranum = chartoint(condition + 4);
+        char* par = (char*)malloc(size);
+        int index = 8;
         for (int i = 0; i < paranum; i++) {
-            memset(par,'0',size);
-            int sizei=chartoint(condition+index);
+            memset(par, '0', size);
+            int sizei = chartoint(condition + index);
             index += 4;
-            memcpy(par+size-sizei, condition +index, sizei);
+            memcpy(par + size - sizei, condition + index, sizei);
             index += sizei;
             int res = compare(temp, size, par, size);
             if (res == 0) {
@@ -454,16 +368,16 @@ bool DatabaseInt::analysisc(char* input, int inputsize)
         return true;
     if (analysistype == "FRTO") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-inputsize, input, inputsize);
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - inputsize, input, inputsize);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
-        int size2=chartoint(condition+8+size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size);
-        memset(par2,'0',size);
-        memcpy(par2+size-size2, condition + 12 + size1, size2);
+        memset(par2, '0', size);
+        memcpy(par2 + size - size2, condition + 12 + size1, size2);
         int res1 = compare(temp, size, par1, size);
         int res2 = compare(temp, size, par2, size);
         free(temp);
@@ -476,16 +390,16 @@ bool DatabaseInt::analysisc(char* input, int inputsize)
     }
     if (analysistype == "frTO") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-inputsize, input, inputsize);
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - inputsize, input, inputsize);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
-        int size2=chartoint(condition+8+size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size);
-        memset(par2,'0',size);
-        memcpy(par2+size-size2, condition + 12 + size1, size2);
+        memset(par2, '0', size);
+        memcpy(par2 + size - size2, condition + 12 + size1, size2);
         int res1 = compare(temp, size, par1, size);
         int res2 = compare(temp, size, par2, size);
         free(temp);
@@ -498,16 +412,16 @@ bool DatabaseInt::analysisc(char* input, int inputsize)
     }
     if (analysistype == "FRto") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-inputsize, input, inputsize);
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - inputsize, input, inputsize);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
-        int size2=chartoint(condition+8+size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size);
-        memset(par2,'0',size);
-        memcpy(par2+size-size2, condition + 12 + size1, size2);
+        memset(par2, '0', size);
+        memcpy(par2 + size - size2, condition + 12 + size1, size2);
         int res1 = compare(temp, size, par1, size);
         int res2 = compare(temp, size, par2, size);
         free(temp);
@@ -520,16 +434,16 @@ bool DatabaseInt::analysisc(char* input, int inputsize)
     }
     if (analysistype == "frto") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-inputsize, input, inputsize);
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - inputsize, input, inputsize);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
-        int size2=chartoint(condition+8+size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size);
-        memset(par2,'0',size);
-        memcpy(par2+size-size2, condition + 12 + size1, size2);
+        memset(par2, '0', size);
+        memcpy(par2 + size - size2, condition + 12 + size1, size2);
         int res1 = compare(temp, size, par1, size);
         int res2 = compare(temp, size, par2, size);
         free(temp);
@@ -542,12 +456,12 @@ bool DatabaseInt::analysisc(char* input, int inputsize)
     }
     if (analysistype == "NTEQ") {
         char* temp = (char*)malloc(size);
-        memset(temp,'0',size);
-        memcpy(temp+size-inputsize, input, inputsize);
-        int size1=chartoint(condition+4);
+        memset(temp, '0', size);
+        memcpy(temp + size - inputsize, input, inputsize);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size);
-        memset(par1,'0',size);
-        memcpy(par1+size-size1, condition + 8, size1);
+        memset(par1, '0', size);
+        memcpy(par1 + size - size1, condition + 8, size1);
         int res1 = compare(temp, size, par1, size);
         free(temp);
         free(par1);
@@ -559,15 +473,15 @@ bool DatabaseInt::analysisc(char* input, int inputsize)
     if (analysistype == "CHOI") {
         char* temp = (char*)malloc(size);
         memset(temp, '0', size);
-        memcpy(temp+size-inputsize, input, inputsize);
-        int paranum = chartoint(condition+4);
-        char* par =(char*)malloc(size);
-        int index=8;
+        memcpy(temp + size - inputsize, input, inputsize);
+        int paranum = chartoint(condition + 4);
+        char* par = (char*)malloc(size);
+        int index = 8;
         for (int i = 0; i < paranum; i++) {
-            memset(par,'0',size);
-            int sizei=chartoint(condition+index);
+            memset(par, '0', size);
+            int sizei = chartoint(condition + index);
             index += 4;
-            memcpy(par+size-sizei, condition +index, sizei);
+            memcpy(par + size - sizei, condition + index, sizei);
             index += sizei;
             int res = compare(temp, size, par, size);
             if (res == 0) {

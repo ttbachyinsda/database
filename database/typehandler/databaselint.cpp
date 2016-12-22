@@ -6,7 +6,7 @@ DatabaseLint::DatabaseLint()
     this->size = 8;
     data = (char*)malloc(size + 1);
     memset(data, 0, size + 1);
-    data[size]=IS_NOT_NULL;
+    data[size] = IS_NOT_NULL;
     this->Nullable = true;
     this->isNull = false;
 }
@@ -16,7 +16,7 @@ DatabaseLint::DatabaseLint(bool cannull)
     this->size = 8;
     data = (char*)malloc(size + 1);
     memset(data, 0, size + 1);
-    data[size]=IS_NOT_NULL;
+    data[size] = IS_NOT_NULL;
     this->Nullable = cannull;
     this->isNull = false;
 }
@@ -45,7 +45,7 @@ void DatabaseLint::change(string input)
 void DatabaseLint::change(char* input, int size)
 {
     isNull = false;
-    memcpy(data , input, this->size);
+    memcpy(data, input, this->size);
     data[this->size] = IS_NOT_NULL;
     this->isNull = false;
 }
@@ -157,7 +157,7 @@ string DatabaseLint::output()
     if (isNull)
         return "NULL__DATA";
     long long temp;
-    memcpy(&temp,data,8);
+    memcpy(&temp, data, 8);
     stringstream ss;
     ss << temp;
     string s1 = ss.str();
@@ -169,7 +169,7 @@ string DatabaseLint::output()
 DatabaseLint::~DatabaseLint()
 {
 }
-bool DatabaseLint::read(char* input, int inputlen,int& position)
+bool DatabaseLint::read(char* input, int inputlen, int& position)
 {
     memcpy(data, input, this->size + 1);
     position += this->size + 1;
@@ -192,124 +192,133 @@ bool DatabaseLint::analysis(string input)
         return true;
     if (analysistype == "FRTO") {
         long long parinput;
-        memcpy(&parinput,input.data(),8);
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
         long long par2Lint;
-        memcpy(&par2Lint,par2,8);
+        memcpy(&par2Lint, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>=par1Lint && parinput<=par2Lint) return true;
-        else return false;
-
+        if (parinput >= par1Lint && parinput <= par2Lint)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "frTO") {
         long long parinput;
-        memcpy(&parinput,input.data(),8);
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
         long long par2Lint;
-        memcpy(&par2Lint,par2,8);
+        memcpy(&par2Lint, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>par1Lint && parinput<=par2Lint) return true;
-        else return false;
+        if (parinput > par1Lint && parinput <= par2Lint)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "FRto") {
         long long parinput;
-        memcpy(&parinput,input.data(),8);
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
         long long par2Lint;
-        memcpy(&par2Lint,par2,8);
+        memcpy(&par2Lint, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>=par1Lint && parinput<par2Lint) return true;
-        else return false;
+        if (parinput >= par1Lint && parinput < par2Lint)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "frto") {
         long long parinput;
-        memcpy(&parinput,input.data(),8);
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
         long long par2Lint;
-        memcpy(&par2Lint,par2,8);
+        memcpy(&par2Lint, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>par1Lint && parinput<par2Lint) return true;
-        else return false;
+        if (parinput > par1Lint && parinput < par2Lint)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "NTEQ") {
         long long parinput;
-        memcpy(&parinput,input.data(),8);
+        memcpy(&parinput, input.data(), 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
         free(par1);
 
-        if (par1Lint!=parinput) return true; else return false;
+        if (par1Lint != parinput)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "CHOI") {
         long long parinput;
-        memcpy(&parinput,input.data(),8);
+        memcpy(&parinput, input.data(), 8);
 
-        int paranum = chartoint(condition+4);
-        char* par =(char*)malloc(size);
-        int index=8;
+        int paranum = chartoint(condition + 4);
+        char* par = (char*)malloc(size);
+        int index = 8;
         for (int i = 0; i < paranum; i++) {
-            int sizei=chartoint(condition+index);
+            int sizei = chartoint(condition + index);
             index += 4;
-            memcpy(par, condition +index, sizei);
+            memcpy(par, condition + index, sizei);
             index += sizei;
 
             long long pariLint;
-            memcpy(&pariLint,par,8);
-            if (pariLint==parinput)
-            {
+            memcpy(&pariLint, par, 8);
+            if (pariLint == parinput) {
                 free(par);
                 return true;
             }
@@ -328,124 +337,133 @@ bool DatabaseLint::analysisc(char* input, int inputsize)
         return true;
     if (analysistype == "FRTO") {
         long long parinput;
-        memcpy(&parinput,input,8);
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
         long long par2Lint;
-        memcpy(&par2Lint,par2,8);
+        memcpy(&par2Lint, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>=par1Lint && parinput<=par2Lint) return true;
-        else return false;
-
+        if (parinput >= par1Lint && parinput <= par2Lint)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "frTO") {
         long long parinput;
-        memcpy(&parinput,input,8);
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
         long long par2Lint;
-        memcpy(&par2Lint,par2,8);
+        memcpy(&par2Lint, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>par1Lint && parinput<=par2Lint) return true;
-        else return false;
+        if (parinput > par1Lint && parinput <= par2Lint)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "FRto") {
         long long parinput;
-        memcpy(&parinput,input,8);
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
         long long par2Lint;
-        memcpy(&par2Lint,par2,8);
+        memcpy(&par2Lint, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>=par1Lint && parinput<par2Lint) return true;
-        else return false;
+        if (parinput >= par1Lint && parinput < par2Lint)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "frto") {
         long long parinput;
-        memcpy(&parinput,input,8);
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
-        int size2=chartoint(condition+8+size1);
+        int size2 = chartoint(condition + 8 + size1);
         char* par2 = (char*)malloc(size2);
         memcpy(par2, condition + 12 + size1, size2);
         long long par2Lint;
-        memcpy(&par2Lint,par2,8);
+        memcpy(&par2Lint, par2, 8);
 
         free(par1);
         free(par2);
 
-        if (parinput>par1Lint && parinput<par2Lint) return true;
-        else return false;
+        if (parinput > par1Lint && parinput < par2Lint)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "NTEQ") {
         long long parinput;
-        memcpy(&parinput,input,8);
+        memcpy(&parinput, input, 8);
 
-        int size1=chartoint(condition+4);
+        int size1 = chartoint(condition + 4);
         char* par1 = (char*)malloc(size1);
         memcpy(par1, condition + 8, size1);
         long long par1Lint;
-        memcpy(&par1Lint,par1,8);
+        memcpy(&par1Lint, par1, 8);
 
         free(par1);
 
-        if (parinput != par1Lint) return true; else return false;
+        if (parinput != par1Lint)
+            return true;
+        else
+            return false;
     }
     if (analysistype == "CHOI") {
         long long parinput;
-        memcpy(&parinput,input,8);
+        memcpy(&parinput, input, 8);
 
-        int paranum = chartoint(condition+4);
-        char* par =(char*)malloc(size);
-        int index=8;
+        int paranum = chartoint(condition + 4);
+        char* par = (char*)malloc(size);
+        int index = 8;
         for (int i = 0; i < paranum; i++) {
-            int sizei=chartoint(condition+index);
+            int sizei = chartoint(condition + index);
             index += 4;
-            memcpy(par, condition +index, sizei);
+            memcpy(par, condition + index, sizei);
             index += sizei;
 
             long long pariLint;
-            memcpy(&pariLint,par,8);
-            if (pariLint == parinput)
-            {
+            memcpy(&pariLint, par, 8);
+            if (pariLint == parinput) {
                 free(par);
                 return true;
             }

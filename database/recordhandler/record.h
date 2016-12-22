@@ -13,11 +13,11 @@ public:
     virtual string getAt(int num) = 0;
     virtual bool set(string* input) = 0;
     virtual bool set(char** input, int* inputlen) = 0;
-    virtual bool setAt(int wz,string input,bool isnull)=0;
+    virtual bool setAt(int wz, string input, bool isnull) = 0;
     virtual void update() = 0;
     char* getData();
     int getSize();
-    virtual int getMaxSize()=0;
+    virtual int getMaxSize() = 0;
     DataBaseType** getcolumns();
     int getcolumncount();
     int* getcolumnsize();

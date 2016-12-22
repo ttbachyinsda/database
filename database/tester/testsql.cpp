@@ -1,13 +1,12 @@
 #include "testsql.h"
 #include "../sqlengine/sqldriver.h"
 #include "../sqlengine/sqlstruct.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 using namespace std;
 
 TestSQL::TestSQL()
 {
-
 }
 
 void TestSQL::startTestInteractive()
@@ -20,7 +19,8 @@ void TestSQL::startTestInteractive()
         cout << "\033[32mGSQL>\033[0m ";
         std::string input;
         getline(cin, input);
-        if (input == "quit") break;
+        if (input == "quit")
+            break;
         sqlDriver.execute(input);
         if (sqlDriver.getLastSucceeded() == false) {
             cout << "\033[31m ERROR: \033[0m" << sqlDriver.getErrorMessages()[0] << endl;

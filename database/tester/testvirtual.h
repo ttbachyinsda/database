@@ -4,18 +4,17 @@
 #include "../databasehandler/database.h"
 #include "../databasehandler/fixedsizetable.h"
 #include "../databasehandler/flexibletable.h"
+#include "../databasehandler/virtualtable.h"
 #include "../managementhandler/iteratorfactory.h"
 #include "../recordhandler/recordfactory.h"
-#include "../databasehandler/virtualtable.h"
 #include <QTime>
-class testvirtual
-{
+class testvirtual {
 public:
     testvirtual();
     string RandomString();
     string InttoString(int num);
     void begintest();
-    void testindex(Table *onetable, string input);
+    void testindex(Table* onetable, string input);
 };
 
 #endif // TESTVIRTUAL_H

@@ -1,19 +1,19 @@
 #ifndef DATABASEBULB_H
 #define DATABASEBULB_H
 
+#include "../databasehandler/bulbfile.h"
 #include "databasetype.h"
 #include <bitset>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include "../databasehandler/bulbfile.h"
 using namespace std;
 #define MAX_CHAR_SIZE 255
 class DatabaseBulb : public DataBaseType {
 public:
     DatabaseBulb();
     DatabaseBulb(bool cannull);
-    bool read(char* input,int inputlen, int& position);
+    bool read(char* input, int inputlen, int& position);
     bool write(char* output, int& position);
     bool checkRight(string input);
     bool checkRight(string input, bool inputisnull);

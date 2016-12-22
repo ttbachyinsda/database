@@ -1,18 +1,17 @@
 #ifndef HASHFLEXIBLEITERATOR_H
 #define HASHFLEXIBLEITERATOR_H
 
-#include "iterator.h"
-#include "../recordhandler/flexiblerecord.h"
 #include "../databasehandler/flexibletable.h"
+#include "../recordhandler/flexiblerecord.h"
+#include "iterator.h"
 
-class HashFlexibleIterator : public Iterator
-{
+class HashFlexibleIterator : public Iterator {
 public:
     HashFlexibleIterator(Table* table);
     bool nextrow();
     bool access(int pagenum, int rownum);
     bool getdata(char* output, int& outputsize);
-    bool getdata(Record *rec);
+    bool getdata(Record* rec);
     bool deletedata();
     bool insertdata(Record* rec);
     bool available();

@@ -10,7 +10,7 @@ class testiterator {
 public:
     testiterator();
     string RandomString();
-    void testindex(Table* onetable,string input);
+    void testindex(Table* onetable, string input);
     string InttoString(int num);
     void begintest();
 };

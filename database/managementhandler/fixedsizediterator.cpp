@@ -27,7 +27,8 @@ bool FixedSizedIterator::access(int pagenum, int rownum)
 }
 bool FixedSizedIterator::available()
 {
-    if (this->nowpagenum > this->nowtable->getPageNum()) return false;
+    if (this->nowpagenum > this->nowtable->getPageNum())
+        return false;
     if (this->nowrownum >= this->nowpagerownum)
         return false;
     else
@@ -59,7 +60,7 @@ bool FixedSizedIterator::getdata(Record* rec)
 {
     if (!available())
         return false;
-    this->nowtable->FastOutput(this->nowpagenum, this->nowrownum,rec);
+    this->nowtable->FastOutput(this->nowpagenum, this->nowrownum, rec);
     return true;
 }
 bool FixedSizedIterator::insertdata(Record* rec)
@@ -67,7 +68,7 @@ bool FixedSizedIterator::insertdata(Record* rec)
     int temppagenum, temprownum;
     bool can = this->nowtable->FastAllInsert(temppagenum, temprownum, rec);
     if (can) {
-        nowpagenum=temppagenum;
+        nowpagenum = temppagenum;
         nowrownum = temprownum;
         this->nowpagerownum = this->nowtable->getPageRowNum(nowpagenum);
         return true;

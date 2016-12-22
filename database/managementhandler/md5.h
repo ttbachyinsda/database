@@ -50,34 +50,38 @@
  *
  * @return the number after rotated left.
  */
-#define ROTATELEFT(num, n) (((num) << (n)) | ((num) >> (32-(n))))
+#define ROTATELEFT(num, n) (((num) << (n)) | ((num) >> (32 - (n))))
 
 /**
  * @Transformations for rounds 1, 2, 3, and 4.
  */
-#define FF(a, b, c, d, x, s, ac) { \
-  (a) += F ((b), (c), (d)) + (x) + ac; \
-  (a) = ROTATELEFT ((a), (s)); \
-  (a) += (b); \
-}
-#define GG(a, b, c, d, x, s, ac) { \
-  (a) += G ((b), (c), (d)) + (x) + ac; \
-  (a) = ROTATELEFT ((a), (s)); \
-  (a) += (b); \
-}
-#define HH(a, b, c, d, x, s, ac) { \
-  (a) += H ((b), (c), (d)) + (x) + ac; \
-  (a) = ROTATELEFT ((a), (s)); \
-  (a) += (b); \
-}
-#define II(a, b, c, d, x, s, ac) { \
-  (a) += I ((b), (c), (d)) + (x) + ac; \
-  (a) = ROTATELEFT ((a), (s)); \
-  (a) += (b); \
-}
+#define FF(a, b, c, d, x, s, ac)            \
+    {                                       \
+        (a) += F((b), (c), (d)) + (x) + ac; \
+        (a) = ROTATELEFT((a), (s));         \
+        (a) += (b);                         \
+    }
+#define GG(a, b, c, d, x, s, ac)            \
+    {                                       \
+        (a) += G((b), (c), (d)) + (x) + ac; \
+        (a) = ROTATELEFT((a), (s));         \
+        (a) += (b);                         \
+    }
+#define HH(a, b, c, d, x, s, ac)            \
+    {                                       \
+        (a) += H((b), (c), (d)) + (x) + ac; \
+        (a) = ROTATELEFT((a), (s));         \
+        (a) += (b);                         \
+    }
+#define II(a, b, c, d, x, s, ac)            \
+    {                                       \
+        (a) += I((b), (c), (d)) + (x) + ac; \
+        (a) = ROTATELEFT((a), (s));         \
+        (a) += (b);                         \
+    }
 
-#include <string>
 #include <cstring>
+#include <string>
 
 using std::string;
 
@@ -88,52 +92,52 @@ typedef unsigned int bit32;
 
 class MD5 {
 public:
-  /* Construct a MD5 object with a string. */
-  MD5(const string& message);
+    /* Construct a MD5 object with a string. */
+    MD5(const string& message);
 
-  /* Generate md5 digest. */
-  const byte* getDigest();
+    /* Generate md5 digest. */
+    const byte* getDigest();
 
-  /* Convert digest to string value */
-  string toStr();
+    /* Convert digest to string value */
+    string toStr();
 
-  static size_t BKDRHash(const char *str);
+    static size_t BKDRHash(const char* str);
 
 private:
-  /* Initialization the md5 object, processing another message block,
+    /* Initialization the md5 object, processing another message block,
    * and updating the context.*/
-  void init(const byte* input, size_t len);
+    void init(const byte* input, size_t len);
 
-  /* MD5 basic transformation. Transforms state based on block. */
-  void transform(const byte block[64]);
+    /* MD5 basic transformation. Transforms state based on block. */
+    void transform(const byte block[64]);
 
-  /* Encodes input (usigned long) into output (byte). */
-  void encode(const bit32* input, byte* output, size_t length);
+    /* Encodes input (usigned long) into output (byte). */
+    void encode(const bit32* input, byte* output, size_t length);
 
-  /* Decodes input (byte) into output (usigned long). */
-  void decode(const byte* input, bit32* output, size_t length);
+    /* Decodes input (byte) into output (usigned long). */
+    void decode(const byte* input, bit32* output, size_t length);
 
 private:
-  /* Flag for mark whether calculate finished. */
-  bool finished;
+    /* Flag for mark whether calculate finished. */
+    bool finished;
 
-	/* state (ABCD). */
-  bit32 state[4];
+    /* state (ABCD). */
+    bit32 state[4];
 
-  /* number of bits, low-order word first. */
-  bit32 count[2];
+    /* number of bits, low-order word first. */
+    bit32 count[2];
 
-  /* input buffer. */
-  byte buffer[64];
+    /* input buffer. */
+    byte buffer[64];
 
-  /* message digest. */
-  byte digest[16];
+    /* message digest. */
+    byte digest[16];
 
-	/* padding for calculate. */
-  static const byte PADDING[64];
+    /* padding for calculate. */
+    static const byte PADDING[64];
 
-  /* Hex numbers. */
-  static const char HEX_NUMBERS[16];
+    /* Hex numbers. */
+    static const char HEX_NUMBERS[16];
 };
 
 #endif // MD5_H

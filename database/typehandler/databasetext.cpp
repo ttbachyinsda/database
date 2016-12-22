@@ -6,10 +6,10 @@ DatabaseText::DatabaseText()
     this->size = 8;
     data = (char*)malloc(size + 1);
     memset(data, 0, size + 1);
-    data[size]=IS_NOT_NULL;
+    data[size] = IS_NOT_NULL;
 
     this->nowoffset = -1;
-    memcpy(data,&this->nowoffset,4);
+    memcpy(data, &this->nowoffset, 4);
 
     this->Nullable = true;
     this->isNull = false;
@@ -20,15 +20,14 @@ DatabaseText::DatabaseText(bool cannull)
     this->size = 8;
     data = (char*)malloc(size + 1);
     memset(data, 0, size + 1);
-    data[size]=IS_NOT_NULL;
+    data[size] = IS_NOT_NULL;
 
     this->nowoffset = -1;
-    memcpy(data,&this->nowoffset,4);
+    memcpy(data, &this->nowoffset, 4);
 
     this->Nullable = cannull;
     this->isNull = false;
 }
-
 
 int DatabaseText::getSize()
 {
@@ -48,25 +47,24 @@ int DatabaseText::getMaxSize()
 void DatabaseText::change(string input)
 {
     isNull = false;
-    this->nowoffset = BulbFile::put(input.data(),input.length());
+    this->nowoffset = BulbFile::put(input.data(), input.length());
 
-    memcpy(data,&this->nowoffset,4);
+    memcpy(data, &this->nowoffset, 4);
     int strsize = input.length();
-    memcpy(data+4,&strsize,4);
+    memcpy(data + 4, &strsize, 4);
 
     data[this->size] = IS_NOT_NULL;
     this->isNull = false;
-
 }
 void DatabaseText::change(char* input, int size)
 {
     isNull = false;
 
-    this->nowoffset = BulbFile::put(input,size);
+    this->nowoffset = BulbFile::put(input, size);
 
-    memcpy(data,&this->nowoffset,4);
+    memcpy(data, &this->nowoffset, 4);
     int strsize = size;
-    memcpy(data+4,&strsize,4);
+    memcpy(data + 4, &strsize, 4);
 
     data[this->size] = IS_NOT_NULL;
     this->isNull = false;
@@ -149,10 +147,11 @@ string DatabaseText::output()
 {
     if (isNull)
         return "NULL__DATA";
-    if (this->nowoffset == -1) return "";
+    if (this->nowoffset == -1)
+        return "";
     int strsize;
-    memcpy(&strsize,data+4,4);
-    return BulbFile::get(this->nowoffset,strsize);
+    memcpy(&strsize, data + 4, 4);
+    return BulbFile::get(this->nowoffset, strsize);
 }
 
 /* Don't delete that
@@ -160,7 +159,7 @@ string DatabaseText::output()
 DatabaseText::~DatabaseText()
 {
 }
-bool DatabaseText::read(char* input, int inputlen,int& position)
+bool DatabaseText::read(char* input, int inputlen, int& position)
 {
     memcpy(data, input, this->size + 1);
     position += this->size + 1;
@@ -168,7 +167,7 @@ bool DatabaseText::read(char* input, int inputlen,int& position)
         this->isNull = true;
     else
         this->isNull = false;
-    memcpy(&this->nowoffset,data,4);
+    memcpy(&this->nowoffset, data, 4);
 
     return true;
 }

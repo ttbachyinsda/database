@@ -5,7 +5,7 @@
 #include "../managementhandler/uic.h"
 #include "../recordhandler/fixedsizerecord.h"
 #include <sstream>
-#define __FIXPOSITION(x) (8+(x)*this->RowSize)
+#define __FIXPOSITION(x) (8 + (x) * this->RowSize)
 class FixedSizeTable : public Table {
 public:
     FixedSizeTable();
@@ -14,7 +14,7 @@ public:
     void createTable(vector<string> clname, vector<DataBaseType*> cltype);
     bool DeleteAt(int pagenum, int rownum);
     bool FastAllInsert(int& pagenum, int& rownum, Record* rec);
-    bool FastOutput(int pagenum, int rownum, Record *rec);
+    bool FastOutput(int pagenum, int rownum, Record* rec);
     void FastOutput(int pagenum, int rownum, char* output, int& outputsize);
     string gettabletype();
     int getPageRowNum(int pagenum);
@@ -22,7 +22,7 @@ public:
     int getRowSize(int rownum);
     int getMaxRowNum();
     void createindex(vector<int> columnnum);
-    int getinfo(int reqhashnum, int pagenum, int rownum, vector<int> *infovec);
+    int getinfo(int reqhashnum, int pagenum, int rownum, vector<int>* infovec);
 
 private:
     void PackageFromHeadFile(BufType temp);
@@ -32,9 +32,9 @@ private:
     char* Packager();
     bool modifypd(int pagenum, int rownum, BufType& ct, int& newindex, int& pagenewnum);
     void UnPackager(BufType b, int position);
-    void modifyall(char* data,int datasize,int prepagenum,int prerownum,int newpagenum,int newrownum);
-    void insertall(char* data,int datasize,int pagenum,int rownum);
-    void deleteall(char* data,int datasize,int pagenum,int rownum);
+    void modifyall(char* data, int datasize, int prepagenum, int prerownum, int newpagenum, int newrownum);
+    void insertall(char* data, int datasize, int pagenum, int rownum);
+    void deleteall(char* data, int datasize, int pagenum, int rownum);
     int PageNum;
     int RowSize;
     int MaxRowNum;

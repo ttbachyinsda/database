@@ -1,17 +1,16 @@
 #ifndef RAWGROUP_H
 #define RAWGROUP_H
 
-#include <map>
-#include <iostream>
 #include "../databasehandler/table.h"
-#include "../recordhandler/recordfactory.h"
 #include "../managementhandler/iteratorfactory.h"
+#include "../recordhandler/recordfactory.h"
 #include <gmp.h>
 #include <gmpxx.h>
+#include <iostream>
+#include <map>
 using namespace std;
 
-class RawGroup
-{
+class RawGroup {
 public:
     RawGroup();
     void clear();
@@ -21,6 +20,7 @@ public:
     string getsum();
     string getaverage();
     int getnum();
+
 private:
     mpq_class maxn;
     mpq_class minn;

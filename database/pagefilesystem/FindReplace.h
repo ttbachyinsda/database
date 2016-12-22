@@ -58,7 +58,8 @@ public:
     }
     ~FindReplace()
     {
-        if (list!=0) delete list;
+        if (list != 0)
+            delete list;
     }
 };
 #endif

@@ -2,8 +2,7 @@
 #define TESTBULBFILE_H
 
 #include "../databasehandler/bulbfile.h"
-class testbulbfile
-{
+class testbulbfile {
 public:
     testbulbfile();
     void begintest();

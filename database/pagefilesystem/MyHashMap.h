@@ -113,8 +113,10 @@ public:
     }
     ~MyHashMap()
     {
-        if (a!=NULL) delete[] a;
-        if (list!=NULL) delete list;
+        if (a != NULL)
+            delete[] a;
+        if (list != NULL)
+            delete list;
     }
 };
 #endif

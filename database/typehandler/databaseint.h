@@ -11,7 +11,7 @@ class DatabaseInt : public DataBaseType {
 public:
     DatabaseInt(int size);
     DatabaseInt(int size, bool cannull);
-    bool read(char* input,int inputlen, int& position);
+    bool read(char* input, int inputlen, int& position);
     bool write(char* output, int& position);
     bool checkRight(string input);
     bool checkRight(string input, bool inputisnull);

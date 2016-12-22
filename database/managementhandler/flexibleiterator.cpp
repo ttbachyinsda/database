@@ -10,7 +10,8 @@ FlexibleIterator::FlexibleIterator(Table* table)
 }
 int FlexibleIterator::getThisRowSize()
 {
-    if (!available()) return 0;
+    if (!available())
+        return 0;
     int index = 0;
     BufType b = BPM->getPage(fileid, this->nowpagenum, index);
     BPM->access(index);
@@ -18,15 +19,15 @@ int FlexibleIterator::getThisRowSize()
 }
 bool FlexibleIterator::access(int pagenum, int rownum)
 {
-    if (pagenum<1) return false;
+    if (pagenum < 1)
+        return false;
     this->nowpagenum = pagenum;
     this->nowrownum = rownum;
-    if (this->nowpagenum > this->nowtable->getPageNum())
-    {
+    if (this->nowpagenum > this->nowtable->getPageNum()) {
         return false;
     }
-    int index=0;
-    BufType b= BPM->getPage(fileid,this->nowpagenum,index);
+    int index = 0;
+    BufType b = BPM->getPage(fileid, this->nowpagenum, index);
     BPM->access(index);
     int pagerownum = UIC::chartoint(b + 4);
     this->nowpagerownum = pagerownum;
@@ -37,47 +38,52 @@ bool FlexibleIterator::access(int pagenum, int rownum)
 }
 bool FlexibleIterator::available()
 {
-    if (this->nowpagenum > this->nowtable->getPageNum()) return false;
-    int maxpagenum=this->nowtable->getPageNum();
-    if (this->nowpagenum>maxpagenum) return false;
-    int index=0;
-    BufType b= BPM->getPage(fileid,this->nowpagenum,index);
+    if (this->nowpagenum > this->nowtable->getPageNum())
+        return false;
+    int maxpagenum = this->nowtable->getPageNum();
+    if (this->nowpagenum > maxpagenum)
+        return false;
+    int index = 0;
+    BufType b = BPM->getPage(fileid, this->nowpagenum, index);
     BPM->access(index);
     int rownum = this->nowrownum;
     int pagerownum = UIC::chartoint(b + 4);
-    if (rownum>=pagerownum) return false;
+    if (rownum >= pagerownum)
+        return false;
     this->nowpagerownum = pagerownum;
 
     int pageposition = UIC::chartoint(b + __position(rownum));
     //cout<<"pageposition at "<<this->nowpagenum<<' '<<this->nowrownum<<' '<<__position(rownum)<<' '<<pageposition<<endl;
-    if (pageposition!=0) return true; else return false;
+    if (pageposition != 0)
+        return true;
+    else
+        return false;
 }
 bool FlexibleIterator::nextrow()
 {
-    int maxpagenum=this->nowtable->getPageNum();
+    int maxpagenum = this->nowtable->getPageNum();
     this->nowrownum++;
-    bool can=available();
+    bool can = available();
     if (!can)
-    while (this->nowpagenum<=maxpagenum)
-    {
-        this->nowpagenum++;
-        int index=0;
-        BufType b= BPM->getPage(fileid,this->nowpagenum,index);
-        int pagerownum = UIC::chartoint(b+4);
-        for (int i=0;i<pagerownum;i++)
-        {
-            this->nowrownum=i;
-            int pageposition = UIC::chartoint(b + __position(i));
-            if (pageposition!=0)
-            {
-                can=true;
-                break;
+        while (this->nowpagenum <= maxpagenum) {
+            this->nowpagenum++;
+            int index = 0;
+            BufType b = BPM->getPage(fileid, this->nowpagenum, index);
+            int pagerownum = UIC::chartoint(b + 4);
+            for (int i = 0; i < pagerownum; i++) {
+                this->nowrownum = i;
+                int pageposition = UIC::chartoint(b + __position(i));
+                if (pageposition != 0) {
+                    can = true;
+                    break;
+                }
             }
+            if (can)
+                break;
         }
-        if (can) break;
-    }
-    if (this->nowpagenum>maxpagenum) return false;
-     return true;
+    if (this->nowpagenum > maxpagenum)
+        return false;
+    return true;
 }
 
 bool FlexibleIterator::getdata(char* output, int& outputsize)
@@ -91,7 +97,7 @@ bool FlexibleIterator::getdata(Record* rec)
 {
     if (!available())
         return false;
-    this->nowtable->FastOutput(this->nowpagenum, this->nowrownum,rec);
+    this->nowtable->FastOutput(this->nowpagenum, this->nowrownum, rec);
     return true;
 }
 bool FlexibleIterator::insertdata(Record* rec)
@@ -99,8 +105,8 @@ bool FlexibleIterator::insertdata(Record* rec)
     int temppagenum, temprownum;
     bool can = this->nowtable->FastAllInsert(temppagenum, temprownum, rec);
     if (can) {
-        this->nowpagenum=temppagenum;
-        this->nowrownum=temprownum;
+        this->nowpagenum = temppagenum;
+        this->nowrownum = temprownum;
         return true;
     } else
         return false;
@@ -114,8 +120,8 @@ bool FlexibleIterator::deletedata()
 }
 void FlexibleIterator::getbegin()
 {
-    this->nowrownum=0;
-    this->nowpagenum=1;
+    this->nowrownum = 0;
+    this->nowpagenum = 1;
     if (!available())
         nextrow();
 }
@@ -125,8 +131,8 @@ int FlexibleIterator::getcurrentsize()
 }
 void FlexibleIterator::updaterownum()
 {
-    int index=0;
-    BufType b= BPM->getPage(fileid,this->nowpagenum,index);
+    int index = 0;
+    BufType b = BPM->getPage(fileid, this->nowpagenum, index);
     BPM->access(index);
     int pagerownum = UIC::chartoint(b + 4);
     this->nowpagerownum = pagerownum;
