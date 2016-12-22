@@ -15,6 +15,7 @@ using std::endl;
 #include "bplus_node.h"
 #include "predefined.h"
 #include <fcntl.h>
+#include <unistd.h>
 #ifdef __linux
 #define PARA O_RDWR
 #elif __APPLE__

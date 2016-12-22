@@ -20,7 +20,7 @@ void BulbFile::setfilename(string filename, bool reconstruct)
         return;
     }
 
-    totalsize = filelength(fm);
+    totalsize = get_file_size(filename.c_str());
 }
 unsigned long BulbFile::get_file_size(const char *path)
 {

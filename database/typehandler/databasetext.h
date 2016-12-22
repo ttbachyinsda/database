@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include "../databasehandler/Bulbfile.h"
+#include "../databasehandler/bulbfile.h"
 using namespace std;
 #define MAX_CHAR_SIZE 255
 class DatabaseText : public DataBaseType {
