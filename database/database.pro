@@ -73,7 +73,8 @@ SOURCES += main.cpp\
     typehandler/databasebulb.cpp \
     typehandler/databasetext.cpp \
     DBIndex/comparealgo.cpp \
-    tester/testaes.cpp
+    tester/testaes.cpp \
+    aesalgorithm/aes.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -150,7 +151,8 @@ HEADERS  += mainwindow.h \
     typehandler/databasebulb.h \
     typehandler/databasetext.h \
     DBIndex/comparealgo.h \
-    tester/testaes.h
+    tester/testaes.h \
+    aesalgorithm/aes.h
 
 
 DISTFILES += \

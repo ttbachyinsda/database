@@ -82,6 +82,8 @@ int main(int argc, char* argv[])
 
     testaes aess;
     aess.begintest();
+    aess.encryptafile("/home/ttbachyinsda/test.cpp","ttbachyinsda");
+    aess.decryptafile("/home/ttbachyinsda/test.cpp","ttbachyinsda");
 
     return 0;
 }
