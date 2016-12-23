@@ -12,7 +12,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = database
 TEMPLATE = app
 QMAKE_CXXFLAGS += -Wall -Wextra -Wno-unused
-LIBS += -lgmpxx -lgmp -lcryptopp
+LIBS += -lgmpxx -lgmp
 
 DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
 

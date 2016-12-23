@@ -142,7 +142,17 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
         tablecondition.push_back(make_triple(first, second, third));
         free(tmp);
     }
-
+    headfile.read((char*)&vecsize, 4);
+    for (int i = 0; i < vecsize; i++) {
+        headfile.read((char*)&first, 4);
+        headfile.read((char*)&second, 4);
+        headfile.read((char*)&strsize, 4);
+        char* tmp = (char*)malloc(strsize);
+        headfile.read(tmp, strsize);
+        string third(tmp, strsize);
+        linkedcolumn.push_back(make_triple(first, third, second));
+        free(tmp);
+    }
     headfile.close();
 }
 void FlexibleTable::PackageHeadFile(BufType b)
@@ -207,7 +217,18 @@ void FlexibleTable::PackageHeadFile(BufType b)
         headfile.write((char*)&strsize, 4);
         headfile.write(third.data(), strsize);
     }
-
+    vecsize = this->linkedcolumn.size();
+    headfile.write((char*)&vecsize, 4);
+    for (int i = 0; i < vecsize; i++) {
+        int first = linkedcolumn[i].first;
+        int second = linkedcolumn[i].second.second;
+        string third = linkedcolumn[i].second.first;
+        strsize = third.length();
+        headfile.write((char*)&first, 4);
+        headfile.write((char*)&second, 4);
+        headfile.write((char*)&strsize, 4);
+        headfile.write(third.data(), strsize);
+    }
     headfile.close();
 }
 

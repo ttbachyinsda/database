@@ -14,6 +14,7 @@ Table::Table()
     this->DBindex = NULL;
     this->multivalue = NULL;
     this->tablecondition.clear();
+    this->linkedcolumn.clear();
 }
 Table::Table(string name, string filename)
 {
@@ -29,6 +30,7 @@ Table::Table(string name, string filename)
     this->multivalue = NULL;
     this->filename = filename;
     this->tablecondition.clear();
+    this->linkedcolumn.clear();
     if (BPM != NULL) {
         BPM->close();
     }
@@ -219,6 +221,10 @@ void Table::Nullindex()
 vector<pair<int, pair<int, string> > >* Table::gettablecondition()
 {
     return (&(this->tablecondition));
+}
+vector<pair<int, pair<string, int> > >* Table::getlinkedcolumn()
+{
+    return (&(this->linkedcolumn));
 }
 
 void Table::InsertindexAt(int num, char* insertdata, int datalen, int pagenum, int rownum)

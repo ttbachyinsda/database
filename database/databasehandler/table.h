@@ -70,6 +70,7 @@ public:
         return false;
     }
     vector<pair<int, pair<int, string> > >* gettablecondition();
+    vector<pair<int, pair<string, int> > >* getlinkedcolumn();
 
 protected:
     void clearcolumn();
@@ -89,6 +90,7 @@ protected:
     db_index** DBindex;
     bool* multivalue;
     vector<pair<int, pair<int, string> > > tablecondition;
+    vector<pair<int, pair<string, int> > > linkedcolumn;
 };
 
 #endif // TABLE_H
