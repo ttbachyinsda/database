@@ -41,6 +41,7 @@ int db_index::remove(const index_key &key) {
 }
 
 int db_index::insert(const index_key &key, index_value value) {
+    insertTime++;
     return b_tree.insert(key, value);
 }
 

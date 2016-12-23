@@ -74,7 +74,8 @@ public:
     }
     ~MyLinkList()
     {
-        if (a!=0) delete[] a;
+        if (a != 0)
+            delete[] a;
     }
 };
 #endif

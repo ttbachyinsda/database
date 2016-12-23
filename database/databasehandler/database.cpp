@@ -73,9 +73,9 @@ bool Database::Initialize()
         if (can == -1)
             return false;
         Table* t = NULL;
-        if (tp[1] == 'i') {   // F[i]xed Size
+        if (tp[1] == 'i') { // F[i]xed Size
             t = new FixedSizeTable();
-        } else {  // F[l]exible
+        } else { // F[l]exible
             t = new FlexibleTable();
         }
         string temp = s;
@@ -95,7 +95,7 @@ Table* Database::getTable(int num)
         return NULL;
 }
 
-Table *Database::getTableByName(const string &name)
+Table* Database::getTableByName(const string& name)
 {
     for (Table* tb : tablelist) {
         if (tb->getname() == name)
@@ -121,17 +121,17 @@ void Database::removeTable(int num)
     tablenum--;
 }
 
-bool Database::removeTableByName(const string &name)
+bool Database::removeTableByName(const string& name)
 {
     for (vector<Table*>::iterator it = tablelist.begin();
-         it != tablelist.end(); ++ it) {
+         it != tablelist.end(); ++it) {
         if ((*it)->getname() == name) {
             Table* temp = *it;
             string tempFilename = temp->getfilename();
             delete temp;
             remove(tempFilename.c_str());
             tablelist.erase(it);
-            -- tablenum;
+            --tablenum;
             return true;
         }
     }

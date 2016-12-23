@@ -52,7 +52,7 @@ int counter = 0;
 /* helper searching function */
 inline index_t* find(internal_node_t& node, const index_key& key) {
     index_t* temp = lower_bound(begin(node), end(node), key);
-    if (temp - begin(node) >= node.n)
+    if (temp - begin(node) >= node.n && node.n > 0)
         temp = end(node) - 1;
     if ( key < *temp && temp > begin(node))
         temp = temp - 1;
@@ -60,7 +60,7 @@ inline index_t* find(internal_node_t& node, const index_key& key) {
 }
 inline record_t* find(leaf_node_t& node, const index_key& key) {
     record_t* temp = lower_bound(begin(node), end(node), key);
-    if (temp - begin(node) >= node.n)
+    if (temp - begin(node) >= node.n && node.n > 0)
         temp = end(node) - 1;
     if ( key < *temp && temp > begin(node))
         temp = temp - 1;
@@ -330,9 +330,11 @@ int bplus_tree::search_range(const index_key& left, const index_key& right,
     b = find(leaf, left);
     if (keycmp(b->key, left) != 0)
         b++;
+    if (b < leaf.children)
+        b = leaf.children;
     e = upper_bound(begin(leaf), end(leaf), right);
 
-    for (; b != e; ++b)
+    for (; b < e; ++b)
         result->push_back(pair<int, int>(b->value.pagenum, b->value.pageposition));
 
     return result->size()==0?-1:0;

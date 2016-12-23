@@ -6,6 +6,7 @@
 class TestSQL
 {
 public:
+    std::string workingDir;
     TestSQL();
     void startTestFile(const char*);
     void startTestString(const std::string& str, const std::string& filename);

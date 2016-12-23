@@ -13,7 +13,7 @@ public:
     string RandomString();
     string InttoString(int num);
     void begintest();
-    void testindex(Table *onetable, string input);
+    void testindex(Table* onetable, string input);
 };
 
 #endif // TESTFLEXIBLE_H

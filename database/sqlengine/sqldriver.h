@@ -38,6 +38,8 @@ class SQLDriver {
 
     void clearPreviousSession();
 
+    void initialize();
+
 public:
 
     bool execute(const std::string& sqlStr);
@@ -71,7 +73,10 @@ public:
 
     SQLResult* getResult() const { return result; }
 
+    void setWorkingDir(const std::string&);
+
     SQLDriver();
+    SQLDriver(const std::string& workingDir);
     ~SQLDriver();
 
 };

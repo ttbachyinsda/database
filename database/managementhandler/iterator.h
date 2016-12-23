@@ -23,8 +23,8 @@ public:
         return 0;
     }
 
-    bool find(string input,int columnnum);
-    string compile(string input,int columnnum);
+    bool find(string input, int columnnum);
+    string compile(string input, int columnnum);
     int getpagenum()
     {
         return this->nowpagenum;
@@ -44,7 +44,6 @@ protected:
     int nowrowsize;
     int nowpagerownum;
     Table* nowtable;
-
 };
 
 #endif // ITERATOR_H

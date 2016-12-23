@@ -17,7 +17,7 @@ public:
     DatabaseVarchar(char* input, int size,int maxsize);
     DatabaseVarchar(char* input, int size, bool cannull,int maxsize);
     */
-    bool read(char* input,int inputlen, int& position);
+    bool read(char* input, int inputlen, int& position);
     bool write(char* output, int& position);
     bool checkRight(string input);
     bool checkRight(string input, bool inputisnull);

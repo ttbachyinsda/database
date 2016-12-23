@@ -16,32 +16,36 @@ bool VirtualIterator::access(int pagenum, int rownum)
     this->nowpagenum = pagenum;
     this->nowrownum = rownum;
     this->nowpagerownum = this->nowtable->getPageRowNum(pagenum);
-    if (this->nowrownum<this->nowpagerownum) return true;
-     else return false;
+    if (this->nowrownum < this->nowpagerownum)
+        return true;
+    else
+        return false;
 }
 bool VirtualIterator::available()
 {
     getThisRowSize();
     char* temp = (char*)malloc(this->nowrowsize);
     int tempsize;
-    this->nowtable->FastOutput(this->nowpagenum,this->nowrownum,temp,tempsize);
-    if (temp != NULL) free(temp);
-    if (tempsize == 0) return false; else return true;
+    this->nowtable->FastOutput(this->nowpagenum, this->nowrownum, temp, tempsize);
+    if (temp != NULL)
+        free(temp);
+    if (tempsize == 0)
+        return false;
+    else
+        return true;
 }
 bool VirtualIterator::nextrow()
 {
     this->nowrownum++;
-    bool can=available();
+    bool can = available();
     if (!can)
-    while (this->nowrownum<this->nowtable->getPageRowNum(0))
-    {
-        this->nowrownum++;
-        if (available())
-        {
-            can=true;
-            break;
+        while (this->nowrownum < this->nowtable->getPageRowNum(0)) {
+            this->nowrownum++;
+            if (available()) {
+                can = true;
+                break;
+            }
         }
-    }
     return can;
 }
 
@@ -56,7 +60,7 @@ bool VirtualIterator::getdata(Record* rec)
 {
     if (!available())
         return false;
-    this->nowtable->FastOutput(this->nowpagenum, this->nowrownum,rec);
+    this->nowtable->FastOutput(this->nowpagenum, this->nowrownum, rec);
     return true;
 }
 bool VirtualIterator::insertdata(Record* rec)
@@ -64,8 +68,8 @@ bool VirtualIterator::insertdata(Record* rec)
     int temppagenum, temprownum;
     bool can = this->nowtable->FastAllInsert(temppagenum, temprownum, rec);
     if (can) {
-        this->nowpagenum=temppagenum;
-        this->nowrownum=temprownum;
+        this->nowpagenum = temppagenum;
+        this->nowrownum = temprownum;
         return true;
     } else
         return false;
@@ -79,8 +83,8 @@ bool VirtualIterator::deletedata()
 }
 void VirtualIterator::getbegin()
 {
-    this->nowrownum=0;
-    this->nowpagenum=0;
+    this->nowrownum = 0;
+    this->nowpagenum = 0;
     if (!available())
         nextrow();
 }

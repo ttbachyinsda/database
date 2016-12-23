@@ -2,7 +2,6 @@
 
 testflexible::testflexible()
 {
-
 }
 string testflexible::RandomString()
 {
@@ -20,22 +19,21 @@ string testflexible::InttoString(int num)
     string s1 = ss.str();
     return s1;
 }
-void testflexible::testindex(Table* onetable,string input)
+void testflexible::testindex(Table* onetable, string input)
 {
-    cout<<"test index begin"<<endl;
+    cout << "test index begin" << endl;
     Iterator* it = IteratorFactory::getiterator(onetable);
-    string temp=it->compile(input,0);
-    cout<<"try to search "<<temp<<endl;
-    index_key k(temp.c_str(),temp.length());
+    string temp = it->compile(input, 0);
+    cout << "try to search " << temp << endl;
+    index_key k(temp.c_str(), temp.length());
     index_value v;
-    int answer=onetable->getindexes()[0]->search(k,&v);
-    if (answer==0)
-    {
-        cout<<"has found"<<endl;
-        cout<<v.pagenum<<' '<<v.pageposition<<endl;
+    int answer = onetable->getindexes()[0]->search(k, &v);
+    if (answer == 0) {
+        cout << "has found" << endl;
+        cout << v.pagenum << ' ' << v.pageposition << endl;
     } else
-        cout<<"has not found"<<endl;
-    cout<<"test index end"<<endl;
+        cout << "has not found" << endl;
+    cout << "test index end" << endl;
     delete it;
 }
 
@@ -54,10 +52,10 @@ void testflexible::begintest()
     string t1 = "INTE";
     string t2 = "VARC";
     string t3 = "INTE";
-    auto *conditions = new string[3];
-    conditions[0]="FRTO";
-    conditions[1]="0";
-    conditions[2]="20000000";
+    auto* conditions = new string[3];
+    conditions[0] = "FRTO";
+    conditions[1] = "0";
+    conditions[2] = "20000000";
     auto type1 = UIC::reconvert(t1, 10, true);
     type1->readcondition(conditions);
     auto type2 = UIC::reconvert(t2, 20, true);
@@ -69,21 +67,20 @@ void testflexible::begintest()
     onetable->Initialize();
     delete[] conditions;
     onetable->setmajornum(0);
-    onetable->setmultivalue(0,false);
+    onetable->setmultivalue(0, false);
     onetable->createemptyindex(0);
     auto aaa = new string[3];
     int pagenum, rownum;
     auto t = RecordFactory::getrecord(onetable);
-//    QTime time;
-//    time.start();
+    //    QTime time;
+    //    time.start();
     for (int i = 0; i < 200000; i++) {
         aaa[0] = InttoString(i);
-        aaa[1] = "a"+InttoString(i);
+        aaa[1] = "a" + InttoString(i);
         aaa[2] = "58";
         bool can = t->set(aaa);
-        if (can && i%3)
-        {
-            can=t->setAt(1,"",true);
+        if (can && i % 3) {
+            can = t->setAt(1, "", true);
             t->update();
         }
         if (can)
@@ -92,12 +89,12 @@ void testflexible::begintest()
     }
     delete t;
     delete[] aaa;
-    testindex(onetable,"5");
+    testindex(onetable, "5");
     cout << onetable->getPageNum() << endl;
     cout << onetable->getPageRowNum(1030) << endl;
-//    int time_Diff = time.elapsed();
-//    float f = time_Diff / 1000.0;
-//    cout << "Time table: " << f << endl;
+    //    int time_Diff = time.elapsed();
+    //    float f = time_Diff / 1000.0;
+    //    cout << "Time table: " << f << endl;
 
     cout << "test table end" << endl;
     cout << "test iterator begin" << endl;
@@ -111,17 +108,16 @@ void testflexible::begintest()
         }
     }
 
-
     ++(*iterator);
     if (iterator->available()) {
-       iterator->getdata(record);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
     iterator->access(300, 1);
     if (iterator->available()) {
-       iterator->getdata(record);
+        iterator->getdata(record);
         for (int i = 0; i < 3; i++) {
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
@@ -136,9 +132,9 @@ void testflexible::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-    testindex(onetable,"0");
-    testindex(onetable,"1");
-    testindex(onetable,"19");
+    testindex(onetable, "0");
+    testindex(onetable, "1");
+    testindex(onetable, "19");
     delete iterator;
     delete record;
     delete onetable;
@@ -147,10 +143,8 @@ void testflexible::begintest()
     onetable = new FlexibleTable();
     onetable->setfilename(filename);
     onetable->Initialize();
-    cout<<onetable->getmajornum();
-    for (int i=0;i<onetable->getcolumncount();i++)
-    {
-        cout<<"MULTIPLY: "<<onetable->getmultivalue(i)<<endl;
+    for (int i = 0; i < onetable->getcolumncount(); i++) {
+        cout << "MULTIPLY: " << onetable->getmultivalue(i) << endl;
     }
     iterator = IteratorFactory::getiterator(onetable);
     record = RecordFactory::getrecord(onetable);
@@ -179,6 +173,4 @@ void testflexible::begintest()
     delete record;
     cout << onetable->getname() << endl;
     cout << "test table end" << endl;
-
-
 }

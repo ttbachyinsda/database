@@ -32,7 +32,24 @@ enum SQLOperand
     LESS_EQUAL,
     LIKE
 };
-struct SQLSelector;
+enum SQLGroupMethod {
+    MAX, MIN, SUM, AVG, BLANK
+};
+
+struct SQLSelector
+{
+    std::string databaseName;
+    std::string tableName;
+
+    SQLGroupMethod groupMethod;
+
+    bool hasPrefix() const { return databaseName.size() != 0; }
+
+    void dump() const;
+
+    SQLSelector() { groupMethod = BLANK; }
+};
+
 struct SQLCheck
 {
     SQLSelector* selector;
@@ -68,10 +85,15 @@ struct SQLType
     bool isCheck;
     SQLCheckGroup* checkGroup;
 
+    bool hasForeignKey;
+    SQLSelector* foreignKey;
+
     SQLType() {
         isCheck = false;
         checkGroup = NULL;
         primaryType = false;
+        hasForeignKey = false;
+        foreignKey = NULL;
         type = SQLType::CHAR;
         canNull = true;
     }
@@ -82,27 +104,12 @@ struct SQLType
                 delete c;
             delete checkGroup;
         }
+        if (hasForeignKey && foreignKey) {
+            delete foreignKey;
+        }
     }
 
     void dump() const;
-};
-
-enum SQLGroupMethod {
-    MAX, MIN, SUM, AVG, BLANK
-};
-
-struct SQLSelector
-{
-    std::string databaseName;
-    std::string tableName;
-
-    SQLGroupMethod groupMethod;
-
-    bool hasPrefix() const { return databaseName.size() != 0; }
-
-    void dump() const;
-
-    SQLSelector() { groupMethod = BLANK; }
 };
 
 struct SQLSelectorGroup

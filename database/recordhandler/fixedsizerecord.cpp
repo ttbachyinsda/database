@@ -17,7 +17,7 @@ void FixedSizeRecord::Initialize(DataBaseType** inidata, int datasize)
         this->columnsize[i] = this->size;
     }
     this->data = new char[this->size];
-    cout << "initial" << this->size << endl;
+    //cout << "initial" << this->size << endl;
 }
 void FixedSizeRecord::Input(char* input)
 {
@@ -25,7 +25,7 @@ void FixedSizeRecord::Input(char* input)
         int position = ((i == 0) ? 0 : columnsize[i - 1]);
         //int nowsize = ((i == 0) ? columnsize[0] : columnsize[i] - columnsize[i - 1]);
         int index = 0;
-        columns[i]->read(input + position,columns[i]->getSize(), index);
+        columns[i]->read(input + position, columns[i]->getSize(), index);
     }
     memcpy(this->data, input, this->size);
 }
@@ -71,13 +71,14 @@ bool FixedSizeRecord::set(char** input, int* inputlen)
     update();
     return true;
 }
-bool FixedSizeRecord::setAt(int wz,string input,bool isnull)
+bool FixedSizeRecord::setAt(int wz, string input, bool isnull)
 {
-    if (wz>=this->columncount) return false;
-    bool can=columns[wz]->checkRight(input,isnull);
+    if (wz >= this->columncount)
+        return false;
+    bool can = columns[wz]->checkRight(input, isnull);
     if (!can)
         return false;
-    columns[wz]->checkRightAndChange(input,isnull);
+    columns[wz]->checkRightAndChange(input, isnull);
     return true;
 }
 

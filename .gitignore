@@ -14,3 +14,4 @@ location.hh
 position.hh
 stack.hh
 database/layer/pythonif_wrap.cxx
+pythonif_wrap.cxx

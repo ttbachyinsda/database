@@ -1,17 +1,17 @@
 #ifndef BULBFILE_H
 #define BULBFILE_H
 
-#include <iostream>
+#include <algorithm>
+#include <assert.h>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <cmath>
-#include <algorithm>
+#include <fcntl.h>
+#include <iostream>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <assert.h>
 typedef char* BufType;
 using namespace std;
 #ifdef __linux
@@ -19,24 +19,21 @@ using namespace std;
 #elif __APPLE__
 #define PARA O_RDWR
 #else
-#define PARA O_RDWR|O_BINARY
+#define PARA O_RDWR | O_BINARY
 #endif
-class BulbFile
-{
+class BulbFile {
 public:
-    BulbFile();
-    BulbFile(string filename);
-    int put(char* input,int size);
-    int put(const char* input,int size);
-    string get(int offset,int size);
-    char* getc(int offset,int size);
-    void setfilename(string filename,bool reconstruct = false);
-    unsigned long get_file_size(const char *path);
-    ~BulbFile();
+    static int put(char* input, int size);
+    static int put(const char* input, int size);
+    static string get(int offset, int size);
+    static char* getc(int offset, int size);
+    static void setfilename(string filename, bool reconstruct = false);
+    static unsigned long get_file_size(const char* path);
+
 private:
-    string filename;
-    int fm;
-    int totalsize;
+    static string filename;
+    static int fm;
+    static int totalsize;
 };
 
 #endif // BULBFILE_H

@@ -13,7 +13,6 @@ DatabaseManager::DatabaseManager(string filename)
     this->databasenum = 0;
     this->databaselist.clear();
     this->f = NULL;
-    writeToFile();
 }
 DatabaseManager::~DatabaseManager()
 {
@@ -91,7 +90,7 @@ Database* DatabaseManager::getDatabase(int num)
         return NULL;
 }
 
-Database *DatabaseManager::getDatabaseByName(const string &name)
+Database* DatabaseManager::getDatabaseByName(const string& name)
 {
     for (Database* db : databaselist) {
         if (db->getname() == name)
@@ -117,17 +116,17 @@ void DatabaseManager::removeDatabase(int num)
     databasenum--;
 }
 
-bool DatabaseManager::removeDatabaseByName(const string &name)
+bool DatabaseManager::removeDatabaseByName(const string& name)
 {
     for (vector<Database*>::iterator it = databaselist.begin();
-         it != databaselist.end(); ++ it) {
+         it != databaselist.end(); ++it) {
         if ((*it)->getname() == name) {
             Database* temp = *it;
             string tempFilename = temp->getfilename();
             delete temp;
             remove(tempFilename.c_str());
             databaselist.erase(it);
-            -- databasenum;
+            --databasenum;
             return true;
         }
     }

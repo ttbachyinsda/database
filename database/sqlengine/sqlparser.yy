@@ -47,6 +47,7 @@
 %token INT VARCHAR CHAR
 %token IS NOT NUL PRIMARY KEY
 %token CHECK IN LIKE
+%token FOREIGN REFERENCES
 
 %token INSERT INTO VALUES DELETE FROM
 %token UPDATE SET WHERE SELECT AND INDEX
@@ -162,6 +163,15 @@ Field           : IDENTIFIER Type
                     $$ = $2;
                     $$->identifier = $1;
                     $$->canNull = false;
+                }
+                | IDENTIFIER Type FOREIGN KEY REFERENCES IDENTIFIER '(' IDENTIFIER ')'
+                {
+                    $$ = $2;
+                    $$->identifier = $1;
+                    $$->hasForeignKey = true;
+                    $$->foreignKey = new SQLSelector();
+                    $$->foreignKey->databaseName = $6;
+                    $$->foreignKey->tableName = $8;
                 }
                 | PRIMARY KEY '(' IDENTIFIER ')'
                 {

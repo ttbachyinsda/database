@@ -15,7 +15,8 @@ Table *NestedLoopJoin::join() {
             string driverMainValue = driverRecord->getAt(driverTableConditionColumnID);
             vector< pair<int,int> > searchIndexRes;
             passengerIndex->findAll(QueryCondition::getInverseOperand(this->operand),
-                                    driverMainValue, &searchIndexRes);
+                                    passengerIterator->compile(driverMainValue, passengerTableConditionColumnID),
+                                    &searchIndexRes);
             for (const pair<int, int>& p : searchIndexRes) {
                 passengerIterator->access(p.first, p.second);
                 passengerIterator->getdata(passengerRecord);

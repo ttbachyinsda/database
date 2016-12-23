@@ -23,7 +23,7 @@ public:
     BufType allocMem()
     {
         char* s = new char[PAGE_SIZE];
-        memset(s,0,PAGE_SIZE);
+        memset(s, 0, PAGE_SIZE);
         return s;
     }
     BufType fetchPage(int typeID, int pageID, int& index)
@@ -41,7 +41,7 @@ public:
                 fileManager->writePage(k1, k2, b, 0);
                 dirty[index] = false;
             }
-            memset(b,0,PAGE_SIZE);
+            memset(b, 0, PAGE_SIZE);
         }
         hash->replace(index, typeID, pageID);
         return b;
@@ -187,13 +187,17 @@ public:
     }
     ~BufPageManager()
     {
-        if (dirty!=NULL) delete[] dirty;
+        if (dirty != NULL)
+            delete[] dirty;
         for (int i = 0; i < CAP; ++i) {
-            if (addr[i]!=NULL) delete[] addr[i];
+            if (addr[i] != NULL)
+                delete[] addr[i];
         }
         delete[] addr;
-        if (hash!=NULL) delete hash;
-        if (replace!=NULL) delete replace;
+        if (hash != NULL)
+            delete hash;
+        if (replace != NULL)
+            delete replace;
     }
 };
 #endif

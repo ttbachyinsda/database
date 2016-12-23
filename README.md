@@ -1,5 +1,25 @@
 ﻿使用说明：
 
+2.1.0.5改动：
+
+添加了新的类型：Bulb和Text，具体示例请见testhashflexible。特点是在表中只占8个字节，用checkrightandchange输入实际内容，用output获得实际内容，用read和write只能获取链接（8个字节）。
+
+添加了comparealgo（各种类型的比较算法），注意返回值请通过小于0，大于0或者等于0来判断，不要==-1这么写
+
+添加了tablecondition，使用方法为：
+
+    onetable->gettablecondition()->push_back(make_triple(2,3,"5"));
+    onetable->gettablecondition()->push_back(make_triple(3,5,"7"));
+
+    for (auto s = onetable->gettablecondition()->begin(); s != onetable->gettablecondition()->end();s++)
+    {
+        cout<<(*s).first<<' '<<(*s).second.first<<' '<<(*s).second.second<<endl;
+    }
+
+其中make_triple是一个宏。由于mingw的限制，暂不支持c++17的语法，所以只能这么做了/(ㄒoㄒ)/~~
+
+修改flexibletable的数据页上限为5000
+
 2.1.0.2改动：
 
 添加了HashFlexibleTable，一种基于hash桶的表

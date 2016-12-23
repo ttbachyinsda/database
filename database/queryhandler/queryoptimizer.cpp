@@ -91,8 +91,8 @@ void QueryOptimizer::generatePlan(const std::vector<ConditionPair> &conditions,
 
 float QueryOptimizer::getCost(const ConditionPair &cp, bool reverse,
                               const std::vector<Table *> &tables, char &strat) {
-    int leftSize = tables[cp.left.tableIndex]->getPageNum();
-    int rightSize = tables[cp.right.tableIndex]->getPageNum();
+    int leftSize = tables[cp.left.tableIndex]->getTraverseCost();
+    int rightSize = tables[cp.right.tableIndex]->getTraverseCost();
     bool leftIndexed = (tables[cp.left.tableIndex]->getindexes()[cp.left.columnIndex] != NULL);
     bool rightIndexed = (tables[cp.right.tableIndex]->getindexes()[cp.right.columnIndex] != NULL);
     SQLOperand op = cp.operand;

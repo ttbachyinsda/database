@@ -124,7 +124,7 @@ int DatabaseVarchar::getRealSize()
 }
 int DatabaseVarchar::getMaxSize()
 {
-    return this->maxsize+1;
+    return this->maxsize + 1;
 }
 /* Don't try to use them in a public method. Try to use checkRight or
  * checkRightAndChange instead.
@@ -133,7 +133,7 @@ void DatabaseVarchar::change(string input)
 {
     isNull = false;
     int size = input.length();
-    this->size=size;
+    this->size = size;
     memset(data, 0, this->size);
     memcpy(data, input.data(), size);
     data[this->size] = IS_NOT_NULL;
@@ -141,7 +141,7 @@ void DatabaseVarchar::change(string input)
 void DatabaseVarchar::change(char* input, int size)
 {
     isNull = false;
-    this->size=size;
+    this->size = size;
     memset(data, 0, this->size);
     memcpy(data, input, size);
     data[this->size] = IS_NOT_NULL;
@@ -149,7 +149,7 @@ void DatabaseVarchar::change(char* input, int size)
 void DatabaseVarchar::changetoNull()
 {
     isNull = true;
-    this->size=0;
+    this->size = 0;
     data[this->size] = IS_NULL;
 }
 
@@ -252,10 +252,11 @@ string DatabaseVarchar::output()
 DatabaseVarchar::~DatabaseVarchar()
 {
 }
-bool DatabaseVarchar::read(char* input, int inputlen,int& position)
+bool DatabaseVarchar::read(char* input, int inputlen, int& position)
 {
-    this->size=inputlen-1;
-    if (this->size>this->maxsize) this->size=this->maxsize;
+    this->size = inputlen - 1;
+    if (this->size > this->maxsize)
+        this->size = this->maxsize;
     memcpy(data, input, this->size + 1);
     position += this->size + 1;
     if (data[this->size] == IS_NULL)

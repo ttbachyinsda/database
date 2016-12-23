@@ -74,7 +74,14 @@ SOURCES += main.cpp\
     queryhandler/joinstrategies/sortmergejoin.cpp \
     queryhandler/intelligentfilter.cpp \
     queryhandler/queryoptimizer.cpp \
-    groupalgorithm/grouphandler.cpp
+    groupalgorithm/grouphandler.cpp \
+    databasehandler/bulbfile.cpp \
+    tester/testbulbfile.cpp \
+    typehandler/databasebulb.cpp \
+    typehandler/databasetext.cpp \
+    DBIndex/comparealgo.cpp \
+    queryhandler/checkhelper.cpp \
+    queryhandler/modifyhandler.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -152,7 +159,14 @@ HEADERS  += mainwindow.h \
     queryhandler/joinstrategies/sortmergejoin.h \
     queryhandler/intelligentfilter.h \
     queryhandler/queryoptimizer.h \
-    groupalgorithm/grouphandler.h
+    groupalgorithm/grouphandler.h \
+    databasehandler/bulbfile.h \
+    tester/testbulbfile.h \
+    typehandler/databasebulb.h \
+    typehandler/databasetext.h \
+    DBIndex/comparealgo.h \
+    queryhandler/checkhelper.h \
+    queryhandler/modifyhandler.h
 
 
 DISTFILES += \

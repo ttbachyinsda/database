@@ -1,13 +1,15 @@
 #ifndef UIC_H
 #define UIC_H
 
+#include "../typehandler/databasebulb.h"
 #include "../typehandler/databasechar.h"
-#include "../typehandler/databaseint.h"
-#include "../typehandler/databasevarchar.h"
-#include "../typehandler/databasetype.h"
-#include "../typehandler/databasereal.h"
-#include "../typehandler/databaselint.h"
 #include "../typehandler/databasedate.h"
+#include "../typehandler/databaseint.h"
+#include "../typehandler/databaselint.h"
+#include "../typehandler/databasereal.h"
+#include "../typehandler/databasetext.h"
+#include "../typehandler/databasetype.h"
+#include "../typehandler/databasevarchar.h"
 #include <sstream>
 
 typedef int FileIterator;
@@ -18,11 +20,11 @@ public:
     static bool equal(char* s1, char* s2, int len);
     static bool equal(char* s1, const char* s2, int len);
     static bool equal(const char* s1, char* s2, int len);
-    static void convert(DataBaseType* t1, char* s1, char *s2);
+    static void convert(DataBaseType* t1, char* s1, char* s2);
     static DataBaseType* reconvertc(char* s1, int size, bool cannull);
-    static DataBaseType* reconvert(string s1, int size,bool cannull);
+    static DataBaseType* reconvert(string s1, int size, bool cannull);
     static DataBaseType* realreconvertc(char* s1, int size, bool cannull);
-    static DataBaseType* realreconvert(string s1, int size,bool cannull);
+    static DataBaseType* realreconvert(string s1, int size, bool cannull);
     static void convertmulti(bool can, char* s1);
     static int chartoint(char* s1); //length = 4
     static void inttochar(int i1, char* s1); //length = 4
@@ -39,6 +41,8 @@ public:
     static int stringtoint(string text);
     static string inttostring(int text);
     static DataBaseType *copyType(DataBaseType *oriType);
+    static std::vector<std::string> stringSplit(const std::string &s,
+                                              const std::string &delim);
 };
 
 #endif // UIC_H

@@ -6,8 +6,8 @@ bool QueryCondition::match(SQLOperand op, char type, const std::string &left,
                            bool leftIsNull, const std::string &right,
                            bool rightIsNull) {
     // type == 'I', 'C', 'V';
-    if (leftIsNull != rightIsNull) return false;
-    if (leftIsNull) return true;
+    if (leftIsNull != rightIsNull) return (op == SQLOperand::NOT_EQUAL);
+    if (leftIsNull) return (op == SQLOperand::EQUAL);
     // both is not null.
     int cmpResult = 0;
     if (op != SQLOperand::LIKE) {
@@ -98,6 +98,9 @@ std::string QueryCondition::convertRegex(const std::string &pattern) {
     unsigned long pos;
     while ((pos = retVal.find("%")) < retVal.size()) {
         retVal = retVal.replace(pos, 1, ".*");
+    }
+    while ((pos = retVal.find("_")) < retVal.size()) {
+        retVal = retVal.replace(pos, 1, ".");
     }
     return retVal;
 }

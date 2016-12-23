@@ -47,7 +47,7 @@ int DataBaseType::getconditionsize()
 {
     return this->conditionsize;
 }
-bool DataBaseType::readcondition(char* input,int inputsize, int& position)
+bool DataBaseType::readcondition(char* input, int inputsize, int& position)
 {
     if (condition != NULL)
         free(condition);
@@ -96,42 +96,41 @@ bool DataBaseType::readcondition(string* input)
         free(condition);
     conditionsize = 0;
     if (input[0] == "FRTO" || input[0] == "frTO" || input[0] == "FRto" || input[0] == "frto") {
-        int size1=input[1].length();
-        int size2=input[2].length();
-        conditionsize = size1+size2+12;
+        int size1 = input[1].length();
+        int size2 = input[2].length();
+        conditionsize = size1 + size2 + 12;
         condition = (char*)malloc(conditionsize);
         memcpy(condition, input[0].data(), 4);
-        memcpy(condition + 4, &size1,4);
+        memcpy(condition + 4, &size1, 4);
         memcpy(condition + 8, input[1].data(), size1);
-        memcpy(condition + 8 + size1, &size2,4);
+        memcpy(condition + 8 + size1, &size2, 4);
         memcpy(condition + 12 + size1, input[2].data(), size2);
     } else if (input[0] == "NTEQ") {
-        int size1=input[1].length();
+        int size1 = input[1].length();
         conditionsize = size1 + 8;
         condition = (char*)malloc(conditionsize);
         memcpy(condition, input[0].data(), 4);
-        memcpy(condition + 4, &size1,4);
+        memcpy(condition + 4, &size1, 4);
         memcpy(condition + 8, input[1].data(), size1);
     } else if (input[0] == "CHOI") {
         char* tmp = (char*)malloc(4);
         memcpy(tmp, input[1].data(), 4);
         int num = chartoint(tmp);
-        conditionsize=8;
-        for (int i=0;i<num;i++)
-        {
-            conditionsize += input[i+2].length()+4;
+        conditionsize = 8;
+        for (int i = 0; i < num; i++) {
+            conditionsize += input[i + 2].length() + 4;
         }
         condition = (char*)malloc(conditionsize);
         memset(condition, 0, conditionsize);
         memcpy(condition, input[0].data(), 4);
         memcpy(condition + 4, input[1].data(), 4);
-        int index=8;
+        int index = 8;
         for (int i = 0; i < num; i++) {
-            int sizei=input[i+2].length();
-            memcpy(condition+index,&sizei,4);
+            int sizei = input[i + 2].length();
+            memcpy(condition + index, &sizei, 4);
             index += 4;
-            memcpy(condition+index,input[i+2].data(),input[i+2].length());
-            index += input[i+2].length();
+            memcpy(condition + index, input[i + 2].data(), input[i + 2].length());
+            index += input[i + 2].length();
         }
     } else if (input[0] == "NULL") {
         NullCondition();

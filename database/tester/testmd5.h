@@ -1,17 +1,16 @@
 #ifndef TESTMD5_H
 #define TESTMD5_H
 #include "../managementhandler/md5.h"
-#include <iostream>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <cmath>
 #include <gmp.h>
 #include <gmpxx.h>
+#include <iostream>
 using namespace std;
 
-class testmd5
-{
+class testmd5 {
 public:
     testmd5();
     void begintest();

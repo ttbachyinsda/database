@@ -6,26 +6,27 @@ RawGroup::RawGroup()
 }
 void RawGroup::add(string input)
 {
-    if (input == "NULL__DATA") return;
-    if (this->num == 0)
-    {
+    if (input == "NULL__DATA")
+        return;
+    if (this->num == 0) {
         this->num = 1;
         this->maxn = input;
         this->minn = input;
         this->sumn = input;
-    } else
-    {
-        this->num ++;
+    } else {
+        this->num++;
         mpq_class temp(input);
-        if (temp>this->maxn) this->maxn=temp;
-        if (temp<this->minn) this->minn=temp;
+        if (temp > this->maxn)
+            this->maxn = temp;
+        if (temp < this->minn)
+            this->minn = temp;
         this->sumn += temp;
     }
 }
 string RawGroup::getaverage()
 {
     mpq_class numn = num;
-    mpq_class output = sumn/numn;
+    mpq_class output = sumn / numn;
     return output.get_str();
 }
 string RawGroup::getsum()

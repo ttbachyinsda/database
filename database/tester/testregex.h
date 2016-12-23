@@ -1,16 +1,15 @@
 #ifndef TESTREGEX_H
 #define TESTREGEX_H
 
-#include <regex>
-#include <iostream>
+#include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <cmath>
-#include <algorithm>
+#include <iostream>
+#include <regex>
 using namespace std;
-class testregex
-{
+class testregex {
 public:
     testregex();
     void begintest();

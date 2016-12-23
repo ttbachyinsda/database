@@ -62,6 +62,9 @@ using token = yy::SQLParser::token;
 (?i:"in")               { return token::IN;         }
 (?i:"like")             { return token::LIKE;       }
 
+(?i:"foreign")          { return token::FOREIGN;    }
+(?i:"references")       { return token::REFERENCES; }
+
 (?i:"insert")           { return token::INSERT;     }
 (?i:"into")             { return token::INTO;       }
 (?i:"values")           { return token::VALUES;     }

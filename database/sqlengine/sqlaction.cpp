@@ -9,6 +9,8 @@
 #include "../recordhandler/record.h"
 #include "../recordhandler/recordfactory.h"
 #include "../groupalgorithm/grouphandler.h"
+#include "../queryhandler/modifyhandler.h"
+#include "../queryhandler/checkhelper.h"
 #include <iostream>
 using namespace std;
 
@@ -93,14 +95,14 @@ bool SQLCreateTableAction::execute()
     }
 
     // Check Variable Types.
-    bool isVariableTable = false;
-    for (SQLType* type : *fieldList) {
-        if (type->type[0] == 'V') {
-            isVariableTable = true;
-            break;
-        }
-    }
-
+    bool isVariableTable = true;
+//    for (SQLType* type : *fieldList) {
+//        if (type->type[0] == 'V') {
+//            isVariableTable = true;
+//            break;
+//        }
+//    }
+    // TODO: Hash table support: This time must exist primary type.
     Table* newTable = NULL;
     if (isVariableTable)
         newTable = new FlexibleTable();
@@ -114,62 +116,25 @@ bool SQLCreateTableAction::execute()
     vector<DataBaseType*> cltype;
     int primaryIndex = -1;
     int currentIndex = 0;
+    SQLCheckGroup* checkGroup = 0;
 
     for (SQLType* type : *fieldList) {
-        // TODO: CREATE INDEX FOR PRIMARY TYPE
-        // TODO: PRIMARY KEY NOT UNIQUE.
-        if (type->primaryType) continue;
-        if (type->isCheck) {
-            // Add constraints (conditions) to table
-            for (SQLCheck* c : *type->checkGroup) {
-                DataBaseType* foundDBType = 0;
-                for (unsigned dbi = 0; dbi < clname.size(); ++ dbi) {
-                    if (clname[dbi] == c->selector->tableName) {
-                        foundDBType = cltype[dbi];
+        if (type->primaryType) {
+            if (primaryIndex != -1) {
+                driver->addErrorMessage("Multiple primary types when creating table.");
+                return false;
+            } else {
+                for (unsigned int i = 0; i < clname.size(); ++ i) {
+                    if (type->identifier == clname[i]) {
+                        primaryIndex = i;
                         break;
                     }
                 }
-                if (foundDBType == 0) {
-                    driver->addWarningMessage("Check target not in previous fields.");
-                    continue;
-                }
-                char foundDBTypeStr = foundDBType->getType()[6];
-                if (c->isChoice) {
-                    unsigned long choiceListSize = c->choiceList->size();
-                    string* conds = new string[choiceListSize + 1];
-                    conds[0] = "CHOI";
-                    int conds_id = 1;
-                    for (SQLValue* sqc : *c->choiceList) {
-                        if (!QueryCondition::typeComparable(sqc->type, foundDBTypeStr)) {
-                            driver->addErrorMessage("Type mismatch in check choice clause.");
-                            return false;
-                        }
-                        conds[conds_id++] = sqc->content;
-                    }
-                    foundDBType->readcondition(conds);
-                    delete conds;
-                    continue;
-                }
-                // Judge Literal values.
-                if (c->operand == SQLOperand::LIKE) {
-                    driver->addErrorMessage("LIKE comparator is not supported in check clause.");
-                    return false;
-                }
-                if (!QueryCondition::typeComparable(c->value.type, foundDBTypeStr)) {
-                    driver->addErrorMessage("Type mismatch in check clause.");
-                    return false;
-                }
-                if (c->operand == SQLOperand::NOT_EQUAL) {
-                    string* conds = new string[2];
-                    conds[0] = "NTEQ";
-                    conds[1] = c->value.content;
-                    foundDBType->readcondition(conds);
-                    delete conds;
-                    continue;
-                } else {
-                    // TODO: obtain a literal type max and min.
-                }
             }
+            continue;
+        }
+        if (type->isCheck) {
+            checkGroup = type->checkGroup;
             continue;
         }
         clname.push_back(type->identifier);
@@ -184,6 +149,25 @@ bool SQLCreateTableAction::execute()
     if (!initResult) {
         driver->addErrorMessage("Failed to initialize table " + this->tableName);
         return false;
+    }
+
+    if (checkGroup != 0) {
+        if (!CheckHelper::addCheckCondition(clname, cltype, newTable, checkGroup)) {
+            driver->addErrorMessage("Invalid Check conditions.");
+            return false;
+        }
+    }
+
+    if (primaryIndex != -1) {
+        // Create empty index for primary type and disable multivalue.
+        newTable->setmultivalue(primaryIndex, false);
+        newTable->setmajornum(primaryIndex);
+
+        vector<int> idxVec;
+        idxVec.push_back(primaryIndex);
+        newTable->createindex(idxVec);
+    } else {
+        driver->addWarningMessage("Current table does not have a primary key.");
     }
 
     handler->addTable(newTable);
@@ -282,23 +266,60 @@ bool SQLInsertAction::execute()
         return false;
     }
 
-    // TODO: efficiency considerations of getrecord.
     Record* record = RecordFactory::getrecord(myTable);
-    for (int i = 0; i < valueGroupList->size(); ++ i) {
-        int thisSize = valueGroupList->at(i)->size();
+    Iterator* priKeyCompiler = IteratorFactory::getiterator(myTable);
+    // Build Choice Cache for check clause.
+    vector<vector<string> > choiceCache((unsigned long) myTable->getcolumncount());
+    for (auto s = myTable->gettablecondition()->begin(); s != myTable->gettablecondition()->end(); ++ s) {
+        if (s->second.first == CheckHelper::choiceCode) {
+            choiceCache[s->first] = UIC::stringSplit(s->second.second, "\"");
+        }
+    }
+
+    int majorRowNum = myTable->getmajornum();
+    db_index* tablePrimaryIndex = myTable->getindexes()[majorRowNum];
+    if (tablePrimaryIndex == 0) {
+        driver->addWarningMessage("Current table does not have a primary key.");
+    }
+
+    for (unsigned int i = 0; i < valueGroupList->size(); ++ i) {
+        int thisSize = (int) valueGroupList->at(i)->size();
         if (thisSize != record->getcolumncount()) {
             driver->addErrorMessage("Size mismatch in value field of table " + identifier);
             return false;
         }
-        for (int j = 0; j < thisSize; ++ j) {
+        // 1. Type constraint (structural)
+        for (unsigned int j = 0; j < thisSize; ++ j) {
             SQLValue* sigValue = valueGroupList->at(i)->at(j);
             if (!QueryCondition::typeComparable(sigValue->type, record->getcolumns()[j]->getType()[6])
-                || !record->setAt(j, sigValue->content, sigValue->type == SQLValue::NUL)) {
+                || !record->setAt(j, sigValue->content, sigValue->type == SQLValue::LiteralType::NUL)) {
                 driver->addErrorMessage("Type mismatch when inserting value " +
-                                        sigValue->content + " into table " + identifier);
+                    ((sigValue->type == SQLValue::LiteralType::NUL) ? "<NULL>" : sigValue->content) + " into table " + identifier);
                 return false;
             }  
         }
+        // 2. Check clause constraint
+        if (myTable->gettablecondition()->size() != 0 &&
+                !CheckHelper::satisfy(myTable, valueGroupList->at(i), choiceCache)) {
+            driver->addErrorMessage("Value inserted at position " + to_string(i + 1) +
+                                    " does not satisfy check constraint.");
+            return false;
+        }
+        // 3. Primary Key constraint.
+        if (tablePrimaryIndex != 0) {
+            vector<pair<int, int> > priKeyRes;
+            cout << "Search: " << priKeyCompiler->compile(valueGroupList->
+                                                          at(i)->at(majorRowNum)->content, majorRowNum) << endl;
+            tablePrimaryIndex->findAll(SQLOperand::EQUAL,
+                                       priKeyCompiler->compile(valueGroupList->
+                                               at(i)->at(majorRowNum)->content, majorRowNum), &priKeyRes);
+            if (priKeyRes.size() != 0) {
+                driver->addErrorMessage("Duplicated primary key: " +
+                                                valueGroupList->at(i)->at(majorRowNum)->content);
+                return false;
+            }
+        }
+        // 4. TODO: Outer link constraint
         record->update();
         int dummy;
         myTable->FastAllInsert(dummy, dummy, record);
@@ -309,10 +330,9 @@ bool SQLInsertAction::execute()
 
 bool SQLDeleteAction::execute()
 {
-    // TODO: For where clause: needing type judge.
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
-        driver->addErrorMessage("No database is selected when inserting into table "
+        driver->addErrorMessage("No database is selected when deleting from table "
                                 + this->identifier);
         return false;
     }
@@ -321,57 +341,36 @@ bool SQLDeleteAction::execute()
         driver->addErrorMessage("Table " + identifier + " does not exist.");
         return false;
     }
-    /**
-     * Support only following conditions:
-     *      1. in one table
-     *      2. one condition
-     *      3. right value is numerical.
-     */
-    SQLCondition* sqlCondition = conditionGroup->at(0);
-    if (conditionGroup->size() != 1) {
-        driver->addErrorMessage("Too many conditions in where clauses.");
-        return false;
-    }
-    if (sqlCondition->type != SQLCondition::VALUE) {
-        driver->addErrorMessage("Right value in a condition must be literal.");
-        return false;
-    }
-    int whereColumnID = myTable->getColumnIndexByName(sqlCondition->lValue.tableName);
-    if (whereColumnID == -1) {
-        driver->addErrorMessage("No such column in where clause.");
-        return false;
-    }
-    // TODO: Check type match.
-    Iterator* currentIterator = IteratorFactory::getiterator(myTable);
-    Record* currentRecord = RecordFactory::getrecord(myTable);
-    while (currentIterator->available()) {
-        currentIterator->getdata(currentRecord);
-        if (QueryCondition::match(sqlCondition->operand,
-                                  'c',
-                                  currentRecord->getAt(whereColumnID),
-                                  currentRecord->getIsNull(whereColumnID),
-                                  sqlCondition->rValue.content,
-                                  sqlCondition->rValue.type == SQLValue::LiteralType::NUL)) {
-            currentIterator->deletedata();
-        }
-        ++ (*currentIterator);
-    }
-
-    return true;
+    ModifyHandler* modifyHandler = new ModifyHandler(driver);
+    bool prepareSucceeded = modifyHandler->prepareTable(myTable, conditionGroup);
+    if (prepareSucceeded) modifyHandler->executeDeleteQuery();
+    delete modifyHandler;
+    return prepareSucceeded;
 }
 
 bool SQLUpdateAction::execute()
 {
-    cout << "============================" << endl;
-    cout << "Update " << identifier << " where ";
-    for (SQLCondition* condition : *conditionGroup) {
-        condition->dump();
+    Database* handler = driver->getCurrentDatabase();
+    if (handler == 0) {
+        driver->addErrorMessage("No database is selected when updating table "
+                                + this->identifier);
+        return false;
     }
-    cout << " Set " << endl;
-    for (SQLSet* set : *setGroup) {
-        set->dump();
+    Table* myTable = handler->getTableByName(identifier);
+    if (myTable == 0) {
+        driver->addErrorMessage("Table " + identifier + " does not exist.");
+        return false;
     }
-    return true;
+    ModifyHandler* modifyHandler = new ModifyHandler(driver);
+    bool tablePrepareSucceed = modifyHandler->prepareTable(myTable, conditionGroup);
+    if (!tablePrepareSucceed) {
+        delete modifyHandler;
+        return false;
+    }
+    bool setPrepareSucceed = modifyHandler->prepareSetClause(setGroup);
+    if (setPrepareSucceed) modifyHandler->executeUpdateQuery();
+    delete modifyHandler;
+    return setPrepareSucceed;
 }
 
 bool SQLSelectAction::execute()

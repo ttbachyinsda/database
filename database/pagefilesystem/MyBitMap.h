@@ -246,7 +246,8 @@ public:
     }
     ~MyBitMap()
     {
-        if (data!=NULL) delete[] data;
+        if (data != NULL)
+            delete[] data;
     }
 
     void reLoad(uint* da)

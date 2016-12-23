@@ -2,7 +2,6 @@
 
 testregex::testregex()
 {
-
 }
 void testregex::begintest()
 {
@@ -23,10 +22,4 @@ void testregex::begintest()
         pattern = pattern.replace(pos, 1, ".*");
     }
 
-    cout << pattern << endl;
-
-    regex rr(pattern);
-    temp = "CHAUNCEY PLEMMONS";
-    can = regex_match(temp,rr);
-    cout<<(can?"Yes":"No")<<endl;
 }

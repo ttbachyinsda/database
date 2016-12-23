@@ -4,6 +4,9 @@
 #include <vector>
 #include <cstdlib>
 #include <utility>
+#include <string>
+
+using std::string;
 
 using std::pair;
 using std::vector;

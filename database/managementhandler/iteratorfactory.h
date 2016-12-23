@@ -3,9 +3,9 @@
 
 #include "fixedsizediterator.h"
 #include "flexibleiterator.h"
-#include "virtualiterator.h"
 #include "hashflexibleiterator.h"
 #include "iterator.h"
+#include "virtualiterator.h"
 class IteratorFactory {
 public:
     IteratorFactory();

@@ -15,7 +15,7 @@ using namespace std;
 #elif __APPLE__
 #define PARA O_RDWR
 #else
-#define PARA O_RDWR|O_BINARY
+#define PARA O_RDWR | O_BINARY
 #endif
 class FileManager {
 private:
