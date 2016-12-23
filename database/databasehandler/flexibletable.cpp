@@ -541,41 +541,50 @@ void FlexibleTable::modifyall(char* data, int datasize, int prepagenum, int prer
 {
     int index = 4;
     for (int i = 0; i < columncount; i++)
+    {
+        int nowdatasize = UIC::chartoint(data + index);
+        index += 4;
         if (DBindex != NULL && DBindex[i] != NULL) {
-            int nowdatasize = UIC::chartoint(data + index);
-            index += 4;
+
             ModifyindexAt(i, data + index, nowdatasize - 1, prepagenum, prerownum, newpagenum, newrownum);
-            index += nowdatasize;
+
         }
+        index += nowdatasize;
+    }
 }
 void FlexibleTable::deleteall(char* data, int datasize, int pagenum, int rownum)
 {
     int index = 4;
 
     for (int i = 0; i < columncount; i++)
+    {
+        int nowdatasize = UIC::chartoint(data + index);
+        index += 4;
+        //string t(data + index, nowdatasize - 1);
+        //cout << "delete at " << t << ' ' << pagenum << ' ' << rownum << endl;
         if (DBindex != NULL && DBindex[i] != NULL) {
-
-            int nowdatasize = UIC::chartoint(data + index);
-            index += 4;
-            string t(data + index, nowdatasize - 1);
-            cout << "delete at " << t << ' ' << pagenum << ' ' << rownum << endl;
             DeleteindexAt(i, data + index, nowdatasize - 1, pagenum, rownum);
-            index += nowdatasize;
+
         }
+        index += nowdatasize;
+    }
 }
 void FlexibleTable::insertall(char* data, int datasize, int pagenum, int rownum)
 {
 
     int index = 4;
     for (int i = 0; i < columncount; i++)
+    {
+        int nowdatasize = UIC::chartoint(data + index);
+        index += 4;
         if (DBindex != NULL && DBindex[i] != NULL) {
-            int nowdatasize = UIC::chartoint(data + index);
-            index += 4;
+
             //string t(data+index,nowdatasize);
             //cout<<"insert"<<' '<<t<<' '<<nowdatasize<<endl;
             InsertindexAt(i, data + index, nowdatasize - 1, pagenum, rownum);
-            index += nowdatasize;
         }
+        index += nowdatasize;
+    }
 }
 int FlexibleTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<int>* infovec)
 {
