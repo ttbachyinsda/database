@@ -8,7 +8,12 @@ VirtualTable::~VirtualTable()
 }
 int VirtualTable::getPageNum() { return 0; }
 int VirtualTable::getMaxRowNum() { return 2147483647; }
-int VirtualTable::getRowSize(int rownum) { return realdatasize[rownum]; }
+int VirtualTable::getRowSize(int rownum)
+{
+    if (rownum >= realdata.size())
+        return 0;
+    return realdatasize[rownum];
+}
 
 bool VirtualTable::Initialize()
 {

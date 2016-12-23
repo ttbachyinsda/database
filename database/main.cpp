@@ -12,6 +12,7 @@
 #include "tester/testsql.h"
 #include "tester/testtype.h"
 #include "tester/testvirtual.h"
+#include "tester/testaes.h"
 #include <iostream>
 //#include "layer/pythonif.h"
 #include <QGuiApplication>
@@ -73,11 +74,14 @@ int main(int argc, char* argv[])
     //    testmd5 zab;
     //    zab.begintest();
 
-    testhashflexible ace;
-    ace.begintest();
+//    testhashflexible ace;
+//    ace.begintest();
 
     //    testbulbfile ceo;
     //    ceo.begintest();
+
+    testaes aess;
+    aess.begintest();
 
     return 0;
 }

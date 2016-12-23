@@ -11,8 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = database
 TEMPLATE = app
-
-LIBS += -lgmpxx -lgmp
+QMAKE_CXXFLAGS += -Wall -Wextra -Wno-unused
+LIBS += -lgmpxx -lgmp -lcryptopp
 
 DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
 
@@ -72,7 +72,8 @@ SOURCES += main.cpp\
     tester/testbulbfile.cpp \
     typehandler/databasebulb.cpp \
     typehandler/databasetext.cpp \
-    DBIndex/comparealgo.cpp
+    DBIndex/comparealgo.cpp \
+    tester/testaes.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -148,7 +149,8 @@ HEADERS  += mainwindow.h \
     tester/testbulbfile.h \
     typehandler/databasebulb.h \
     typehandler/databasetext.h \
-    DBIndex/comparealgo.h
+    DBIndex/comparealgo.h \
+    tester/testaes.h
 
 
 DISTFILES += \
