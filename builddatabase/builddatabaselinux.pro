@@ -58,7 +58,13 @@ SOURCES += \
     ../database/databasehandler/bulbfile.cpp \
     ../database/databasehandler/hashflexibletable.cpp \
     ../database/DBIndex/comparealgo.cpp \
-    ../database/tester/testflexible.cpp
+    ../database/tester/testflexible.cpp \
+    ../database/queryhandler/joinstrategies/hashjoin.cpp \
+    ../database/queryhandler/joinstrategies/joinstrategy.cpp \
+    ../database/queryhandler/joinstrategies/nestedloopjoin.cpp \
+    ../database/queryhandler/joinstrategies/sortmergejoin.cpp \
+    ../database/queryhandler/intelligentfilter.cpp \
+    ../database/queryhandler/queryoptimizer.cpp
 
 HEADERS += \
     ../database/tester/testflexible.h \
@@ -120,7 +126,13 @@ HEADERS += \
     ../database/managementhandler/md5.h \
     ../database/databasehandler/bulbfile.h \
     ../database/databasehandler/hashflexibletable.h \
-    ../database/DBIndex/comparealgo.h
+    ../database/DBIndex/comparealgo.h \
+    ../database/queryhandler/joinstrategies/hashjoin.h \
+    ../database/queryhandler/joinstrategies/joinstrategy.h \
+    ../database/queryhandler/joinstrategies/nestedloopjoin.h \
+    ../database/queryhandler/joinstrategies/sortmergejoin.h \
+    ../database/queryhandler/intelligentfilter.h \
+    ../database/queryhandler/queryoptimizer.h
 
 unix{
     maemo5 {
