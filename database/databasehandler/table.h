@@ -36,6 +36,7 @@ public:
     void readindex();
     void Nullindex();
     void createemptyindex(int i);
+    void deleteindex(int i);
     int getColumnIndexByName(const std::string& name);
     vector<string> checkOutput();
     virtual bool FastAllInsert(int& pagenum, int& rownum, Record* rec) = 0;
@@ -69,6 +70,7 @@ public:
         return false;
     }
     vector<pair<int, pair<int, string> > >* gettablecondition();
+    vector<pair<int, pair<string, int> > >* getlinkedcolumn();
 
     virtual unsigned long getTraverseCost() = 0;
 
@@ -90,6 +92,7 @@ protected:
     db_index** DBindex;
     bool* multivalue;
     vector<pair<int, pair<int, string> > > tablecondition;
+    vector<pair<int, pair<string, int> > > linkedcolumn;
 };
 
 #endif // TABLE_H

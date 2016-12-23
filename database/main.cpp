@@ -12,6 +12,7 @@
 #include "tester/testsql.h"
 #include "tester/testtype.h"
 #include "tester/testvirtual.h"
+#include "tester/testaes.h"
 #include <iostream>
 //#include "layer/pythonif.h"
 #include <QGuiApplication>
@@ -34,7 +35,7 @@ int main(int argc, char* argv[])
 //    sql += "create index orders(customer_id);";
 //    sql += "SELECT customer.name,book.title,orders.quantity FROM customer,book,orders WHERE orders.customer_id=customer.id AND orders.book_id=book.id AND orders.quantity > 2 AND orders.quantity <= 5;";
 
-    sql += "insert into temp values ('James', 20, 'M'), ('Bob', 30, 'E'), ('Alice', 20, 'M');\n";
+    sql += "insert into temp values ('James', 20, 'M'), ('Bob', 30, 'F'), ('Alice', 20, 'M');\n";
 
 //    sql += "insert into temp values ('James', 20, 'M');\n";
 //    sql += "insert into temp values ('Bob', 30, 'M');\n";

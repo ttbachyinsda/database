@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = database
 TEMPLATE = app
-
+QMAKE_CXXFLAGS += -Wall -Wextra -Wno-unused
 LIBS += -lgmpxx -lgmp
 
 DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
@@ -81,7 +81,9 @@ SOURCES += main.cpp\
     typehandler/databasetext.cpp \
     DBIndex/comparealgo.cpp \
     queryhandler/checkhelper.cpp \
-    queryhandler/modifyhandler.cpp
+    queryhandler/modifyhandler.cpp \
+    tester/testaes.cpp \
+    aesalgorithm/aes.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -166,7 +168,9 @@ HEADERS  += mainwindow.h \
     typehandler/databasetext.h \
     DBIndex/comparealgo.h \
     queryhandler/checkhelper.h \
-    queryhandler/modifyhandler.h
+    queryhandler/modifyhandler.h \
+    tester/testaes.h \
+    aesalgorithm/aes.h
 
 
 DISTFILES += \
