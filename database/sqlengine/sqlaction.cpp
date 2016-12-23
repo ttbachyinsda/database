@@ -278,7 +278,8 @@ bool SQLInsertAction::execute()
 
     int majorRowNum = myTable->getmajornum();
     db_index* tablePrimaryIndex = myTable->getindexes()[majorRowNum];
-    if (tablePrimaryIndex == 0) {
+    bool hasPriKey = tablePrimaryIndex != 0 && !myTable->getmultivalue(majorRowNum);
+    if (!hasPriKey) {
         driver->addWarningMessage("Current table does not have a primary key.");
     }
 
@@ -306,10 +307,8 @@ bool SQLInsertAction::execute()
             return false;
         }
         // 3. Primary Key constraint.
-        if (tablePrimaryIndex != 0) {
+        if (hasPriKey) {
             vector<pair<int, int> > priKeyRes;
-            cout << "Search: " << priKeyCompiler->compile(valueGroupList->
-                                                          at(i)->at(majorRowNum)->content, majorRowNum) << endl;
             tablePrimaryIndex->findAll(SQLOperand::EQUAL,
                                        priKeyCompiler->compile(valueGroupList->
                                                at(i)->at(majorRowNum)->content, majorRowNum), &priKeyRes);

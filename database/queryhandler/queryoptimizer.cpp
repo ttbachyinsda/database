@@ -103,7 +103,14 @@ float QueryOptimizer::getCost(const ConditionPair &cp, bool reverse,
         op = QueryCondition::getInverseOperand(op);
     }
 
-    strat = 'n';
+    float nCost = NestedLoopJoin::estimateCost(leftSize, rightSize, leftIndexed, rightIndexed, op);
+    float mCost = SortMergeJoin::estimateCost(leftSize, rightSize, leftIndexed, rightIndexed, op);
 
-    return NestedLoopJoin::estimateCost(leftSize, rightSize, leftIndexed, rightIndexed, op);
+    if (nCost < mCost) {
+        strat = 'n';
+        return nCost;
+    } else {
+        strat = 'm';
+        return mCost;
+    }
 }
