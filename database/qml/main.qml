@@ -20,7 +20,7 @@ ApplicationWindow {
             "Custom Icons", "Color Palette", "Typography"
     ]
     property var databaseCommand: [
-            "Button", "CheckBox", "Progress Bar", "Radio Button",
+            "Overview", "Execute", "Progress Bar", "Radio Button",
             "Slider", "Switch", "TextField"
     ]
     property var aboutDatabase: [
@@ -40,8 +40,8 @@ ApplicationWindow {
         "Custom Icons":"basic settings",
         "Color Palette":"search optimize",
         "Typography":"database optimize",
-        "Button":"Database Overview",
-        "CheckBox":"execute SQL",
+        "Overview":"Database Overview",
+        "Execute":"Execute",
         "Progress Bar":"Manage Database",
         "Radio Button":"test1",
         "Slider":"test2",
@@ -251,9 +251,9 @@ ApplicationWindow {
                     // selectedComponent will always be valid, as it defaults to the first component
                     source: {
                         if (navDrawer.enabled) {
-                            return Qt.resolvedUrl("%1Demo.qml").arg(demo.selectedComponent.replace(" ", ""))
+                            return Qt.resolvedUrl("%.qml").arg(demo.selectedComponent.replace(" ", ""))
                         } else {
-                            return Qt.resolvedUrl("%1Demo.qml").arg(selectedComponent.replace(" ", ""))
+                            return Qt.resolvedUrl("%.qml").arg(selectedComponent.replace(" ", ""))
                         }
                     }
                 }

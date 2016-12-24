@@ -56,7 +56,7 @@ Item {
             font.family: "Roboto"
             font.weight: Font.DemiBold
             text: "Roboto Medium"
-            font.pixelSize: dp(34)
+            font.pixelSize: Vdp(34)
 
             anchors {
                 left: parent.left
@@ -98,16 +98,10 @@ Item {
                     text: {
                         var text = fontInfo["font"].substring(0,1).toUpperCase() + fontInfo["font"].substring(1)
 
-                        if (style == "button")
-                            text += " (ALL CAPS)"
-
                         text += " " + fontInfo["size"] + "sp"
 
                         if (fontInfo.size_desktop) {
                             text += " (Device), " + fontInfo["font"].substring(0,1).toUpperCase() + fontInfo["font"].substring(1)
-
-                            if (style == "button")
-                                text += " (ALL CAPS)"
 
                             text += " " + fontInfo["size_desktop"] + "sp (Desktop)"
                         }
@@ -118,4 +112,5 @@ Item {
             }
         }
     }
+
 }

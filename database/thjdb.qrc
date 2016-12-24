@@ -1,25 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/TypographyDemo.qml</file>
-        <file>qml/TimePickerDemo.qml</file>
-        <file>qml/TextFieldDemo.qml</file>
-        <file>qml/SwitchDemo.qml</file>
         <file>qml/SubPage.qml</file>
-        <file>qml/SliderDemo.qml</file>
         <file>qml/SidebarPage.qml</file>
-        <file>qml/RadioButtonDemo.qml</file>
-        <file>qml/ProgressBarDemo.qml</file>
-        <file>qml/PageStackDemo.qml</file>
         <file>qml/main.qml</file>
-        <file>qml/ListItemsDemo.qml</file>
-        <file>qml/FormsDemo.qml</file>
-        <file>qml/DialogDemo.qml</file>
-        <file>qml/DatePickerDemo.qml</file>
-        <file>qml/CustomIconsDemo.qml</file>
-        <file>qml/ColorPaletteDemo.qml</file>
-        <file>qml/CheckBoxDemo.qml</file>
-        <file>qml/ButtonDemo.qml</file>
-        <file>qml/BottomSheetDemo.qml</file>
         <file>icons/social_share.svg</file>
         <file>icons/navigation_arrow_drop_down.svg</file>
         <file>icons/maps_place.svg</file>
@@ -44,5 +27,24 @@
         <file>qml/images/balloon.jpg</file>
         <file>qml/loading.qml</file>
         <file>qml/images/loadingimage.jpeg</file>
+        <file>qml/Overview.qml</file>
+        <file>qml/BottomSheet.qml</file>
+        <file>qml/Button.qml</file>
+        <file>qml/CheckBox.qml</file>
+        <file>qml/ColorPalette.qml</file>
+        <file>qml/CustomIcons.qml</file>
+        <file>qml/DatePicker.qml</file>
+        <file>qml/Dialog.qml</file>
+        <file>qml/Forms.qml</file>
+        <file>qml/ListItems.qml</file>
+        <file>qml/PageStack.qml</file>
+        <file>qml/ProgressBar.qml</file>
+        <file>qml/RadioButton.qml</file>
+        <file>qml/Slider.qml</file>
+        <file>qml/Switch.qml</file>
+        <file>qml/TextField.qml</file>
+        <file>qml/TimePicker.qml</file>
+        <file>qml/Typography.qml</file>
+        <file>qml/Execute.qml</file>
     </qresource>
 </RCC>

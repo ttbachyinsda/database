@@ -72,6 +72,7 @@ bool SQLShowDatabasesAction::execute()
         result->setData(2, now->getfilename());
         ++ idx;
     }
+    driver->setResult(result);
     return true;
 }
 
