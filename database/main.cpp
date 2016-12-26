@@ -29,15 +29,13 @@ int main(int argc, char* argv[])
     TestSQL t;
     t.workingDir = "/home/jameshuang/Study/database/database_wd";
     string sql = "use orderDB;\n";
-/*    sql += "drop table temp;\n";
-    sql += "drop table temp2;\n";
-    sql += "CREATE TABLE temp (name varchar(20), id int(10) NOT NULL, gender char(1), check(gender in ('F', 'M') AND id > 20));\n";
-    sql += "CREATE TABLE temp2 (id int(5), tag varchar(10), primary key(id));\n";
-    sql += "CREATE INDEX temp(id);\n";
-    sql += "CREATE INDEX temp2(id);\n";*/
-    //    sql += "create index orders(quantity);";
-    sql += "create index orders(customer_id);create index customer(id);";
-    sql += "SELECT customer.name,orders.quantity FROM customer,orders WHERE orders.customer_id=customer.id;";
+
+//    sql += "delete from customer where gender='F';\n";
+//    sql += "select * from customer where gender='F';\n";
+    sql += "select * from customer where gender='M';\n";
+
+//    sql += "create index orders(customer_id);create index customer(id);";
+//    sql += "SELECT customer.name,orders.quantity FROM customer,orders WHERE orders.customer_id=customer.id;";
 
 //    sql += "insert into temp values ('James', 21, 'M'), ('Bob', 30, 'F'), ('Bob2', 30, 'M'), ('Alice', 40, 'M'), ('Tom', 25, 'F');\n";
 //    sql += "insert into temp2 values (21, 'JM'), (40, 'AM'), (30, 'BF'), (30, 'BN'), (78, 'New');\n";

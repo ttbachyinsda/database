@@ -3,6 +3,33 @@
 //
 
 #include "modifyhandler.h"
+#include <iostream>
+
+// Check whether current myTableRecord match conditions
+bool ModifyHandler::checkConditions()
+{
+    for (unsigned int i = 0; i < conditions.size(); ++ i) {
+        if (i == indexedConditionID) continue;
+
+        const ConditionPair& c = conditions[i];
+        char cmpType = myTableRecord->getcolumns()[c.left.columnIndex]->getType()[6];
+
+        std::string cmpValue = myTableRecord->getAt(c.left.columnIndex);
+        bool cmpValueIsNull = myTableRecord->getIsNull(c.left.columnIndex);
+
+        bool matchResult = QueryCondition::match(c.operand, cmpType, cmpValue, cmpValueIsNull,
+                                                 c.rightValue.content,
+                                                 (c.rightValue.type == SQLValue::LiteralType::NUL));
+        if (!matchResult) return false;
+    }
+    return true;
+}
+
+// Modify myTableRecord according to set clauses.
+void ModifyHandler::modifyRecordContent()
+{
+
+}
 
 bool ModifyHandler::prepareTable(Table *table, SQLConditionGroup *cgrp) {
     myTable = table;
@@ -41,6 +68,21 @@ bool ModifyHandler::prepareTable(Table *table, SQLConditionGroup *cgrp) {
         conditions.push_back(thisPair);
     }
 
+    myTableIterator = IteratorFactory::getiterator(myTable);
+    myTableRecord = RecordFactory::getrecord(myTable);
+
+    // Determine best filter plan. - select numerical columns which has a value.
+    // Use the first one index operatable
+    for (unsigned int i = 0; i < conditions.size(); ++ i) {
+        if (QueryCondition::indexOperatable(conditions[i].operand) &&
+                myTable->getindexes()[conditions[i].left.columnIndex] != NULL) {
+            indexedCol = conditions[i].left.columnIndex;
+            indexedConditionID = i;
+            std::cout << "modifyhandler.cpp: Using index." << std::endl;
+            break;
+        }
+    }
+
     return true;
 }
 
@@ -68,20 +110,26 @@ bool ModifyHandler::prepareSetClause(SQLSetGroup *sgrp) {
 }
 
 void ModifyHandler::executeDeleteQuery() {
-/*    Iterator* currentIterator = IteratorFactory::getiterator(myTable);
-    Record* currentRecord = RecordFactory::getrecord(myTable);
-    while (currentIterator->available()) {
-        currentIterator->getdata(currentRecord);
-        if (QueryCondition::match(sqlCondition->operand,
-                                  'c',
-                                  currentRecord->getAt(whereColumnID),
-                                  currentRecord->getIsNull(whereColumnID),
-                                  sqlCondition->rValue.content,
-                                  sqlCondition->rValue.type == SQLValue::LiteralType::NUL)) {
-            currentIterator->deletedata();
+    if (indexedCol != -1) {
+        // should use index.
+        db_index* bTreeIndex = myTable->getindexes()[indexedCol];
+        vector< pair<int,int> > searchIndexRes;
+        string targetContent = myTableIterator->compile(conditions[indexedConditionID].rightValue.content,
+                                                        indexedCol);
+        bTreeIndex->findAll(conditions[indexedConditionID].operand, targetContent, &searchIndexRes);
+
+        for (const pair<int, int>& p : searchIndexRes) {
+            myTableIterator->access(p.first, p.second);
+            myTableIterator->getdata(myTableRecord);
+            if (checkConditions()) myTableIterator->deletedata();
         }
-        ++ (*currentIterator);
-    }*/
+    } else {
+        while (myTableIterator->available()) {
+            myTableIterator->getdata(myTableRecord);
+            if (checkConditions()) myTableIterator->deletedata();
+            ++ (*myTableIterator);
+        }
+    }
 }
 
 void ModifyHandler::executeUpdateQuery() {
