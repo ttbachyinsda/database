@@ -56,9 +56,10 @@ QStringList QMLif::getDBList() {
     return dataList;
 }
 
-QStringList QMLif::getTable() {
+QStringList QMLif::getTable(QString name) {
 //    QString result;
     QStringList dataList;
+    oldDriver.execute("use " + name.toStdString() + ";");
     oldDriver.execute("show tables;");
 //    QTextStream outFile(&result);
     if (oldDriver.hasResult()) {

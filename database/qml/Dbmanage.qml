@@ -9,11 +9,12 @@ import "clickEvent.js" as Logic
 Item {
     id: manage
     objectName: "DbManage"
+    implicitHeight: column.height
 
     QMLif {
         id: result
         onResultReady: {
-//            addEle(result.getDBList())
+            resultLable.text = result.gettext()
         }
     }
 
@@ -50,9 +51,13 @@ Item {
                     onClicked: list.currentIndex = index
                     onDoubleClicked: {
                         if (Logic.depth == 0) {
-                            result.doSomething("use " + modelData + ";")
-                            Logic.addEle(result.getTable())
+                            Logic.addEle(result.getTable(modelData))
                             Logic.depth += 1
+                        } else if (Logic.depth == 1) {
+                            result.doSomething("select * from " + modelData + ";")
+                            Logic.depth += 1
+                            resultLable.visible = true
+                            list.visible = false
                         }
                     }
                 }
@@ -62,12 +67,25 @@ Item {
             }
         }
 
+        Text {
+            id: resultLable
+            visible: false
+            textFormat: Text.RichText
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            font.family: "Roboto"
+            font.weight: Font.Light
+            font.pixelSize: dp(20)
+        }
+
         Button {
             id:button2
             text: "Refresh"
             elevation: 1
             anchors.horizontalCenter: parent.horizontalCenter
             onClicked: {
+                list.visible = true
+                resultLable.visible = false
                 Logic.addEle(result.getDBList())
                 Logic.depth = 0
             }

@@ -43,7 +43,7 @@ public slots:
         emit resultReady(s);
     }
     QStringList getDBList();
-    QStringList getTable();
+    QStringList getTable(QString);
 
     QString gettext() {
         return this->text;
