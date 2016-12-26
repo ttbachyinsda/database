@@ -39,6 +39,7 @@ bool Database::writeToFile()
         fprintf(this->f, "%s\n", tablelist[i]->gettabletype().c_str());
     }
     fclose(this->f);
+    this->f = NULL;
     return true;
 }
 
@@ -52,6 +53,10 @@ bool Database::Initialize()
     if (this->f != NULL)
         fclose(f);
     this->f = NULL;
+    int hasfile = access(this->filename.c_str(), 0);
+    if (hasfile == -1) {
+        writeToFile();
+    }
     this->f = fopen(this->filename.c_str(), "r");
     if (this->f == NULL)
         return false;
@@ -75,8 +80,10 @@ bool Database::Initialize()
         Table* t = NULL;
         if (tp[1] == 'i') { // F[i]xed Size
             t = new FixedSizeTable();
-        } else { // F[l]exible
+        } else if (tp[1] == 'l'){ // F[l]exible
             t = new FlexibleTable();
+        } else if (tp[1] == 'a'){ // H[a]shFlexible
+            t = new HashFlexibleTable();
         }
         string temp = s;
         t->setfilename(temp);
@@ -116,6 +123,14 @@ void Database::removeTable(int num)
     if (temp != NULL)
         delete temp;
     remove(tempfilename.c_str());
+    string temptableinfoname = tempfilename + ".tableinfo";
+    remove(temptableinfoname.c_str());
+    for (int i = 0; i < MAX_COL_NUM; i++) {
+        string t = UIC::inttostring(i);
+        string temp = tempfilename + t;
+        remove(temp.c_str());
+    }
+
     vector<Table*>::iterator k = tablelist.begin() + num;
     tablelist.erase(k);
     tablenum--;

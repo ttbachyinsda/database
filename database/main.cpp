@@ -59,17 +59,36 @@ int main(int argc, char* argv[])
 */
 //    t.startTestInteractive();
 /*
-
+=======
     BulbFile::setfilename("bulbfile.txt", true);
     //don't let this always be true, That's true only because we are testing.
 
 
-    //    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
-    //    QGuiApplication app(argc, argv);
-    //    QQmlApplicationEngine engine;
-    //    QPM_INIT(engine);
-    //    engine.load(QUrl(QStringLiteral("qrc:/qml/loading.qml")));
-    //    return app.exec();
+    //    TestSQL t;
+    //    t.startTestFile("a.sql");
+    //    t.startTestInteractive();
+
+//    testtype t;
+//    t.begintest(false);
+    testdatabase v;
+    v.begintest();
+
+
+    //    testiterator w;
+    //    w.begintest();
+
+    //    testvirtual x;
+    //    x.begintest();
+>>>>>>> origin/master
+
+
+
+//        qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
+//        QGuiApplication app(argc, argv);
+//        QQmlApplicationEngine engine;
+//        QPM_INIT(engine);
+//        engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+//        return app.exec();
 
     //    testdate xx;
     //    xx.begintest();
@@ -85,6 +104,7 @@ int main(int argc, char* argv[])
 
     //    testbulbfile ceo;
     //    ceo.begintest();
+<<<<<<< HEAD
 */
     return 0;
 }

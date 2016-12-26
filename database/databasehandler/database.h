@@ -2,6 +2,7 @@
 #define DATABASE_H
 #include "fixedsizetable.h"
 #include "flexibletable.h"
+#include "hashflexibletable.h"
 #include "table.h"
 
 class Database {

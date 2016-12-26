@@ -6,6 +6,8 @@ DatabaseManager::DatabaseManager()
     this->databasenum = 0;
     this->f = NULL;
     this->databaselist.clear();
+    this->keystr = __iv__str;
+    this->haveinitialize = false;
 }
 DatabaseManager::DatabaseManager(string filename)
 {
@@ -13,10 +15,12 @@ DatabaseManager::DatabaseManager(string filename)
     this->databasenum = 0;
     this->databaselist.clear();
     this->f = NULL;
+    this->keystr = __iv__str;
+    this->haveinitialize = false;
 }
 DatabaseManager::~DatabaseManager()
 {
-    if (this->filename != "")
+    if (this->filename != "" && this->keystr == __iv__str && haveinitialize)
         writeToFile();
     for (int i = 0; i < this->databasenum; i++)
         delete this->databaselist[i];
@@ -35,9 +39,10 @@ void DatabaseManager::setname(string name)
 }
 bool DatabaseManager::writeToFile()
 {
-    this->f = fopen(this->filename.c_str(), "w");
+    this->f = fopen(this->filename.c_str(), "wb");
     if (this->f == NULL)
         return false;
+    fwrite(keystr.data(),1,keystr.length(),this->f);
     fprintf(this->f, "%s\n", name.c_str());
     fprintf(this->f, "%d\n", databasenum);
     for (int i = 0; i < databasenum; i++) {
@@ -45,10 +50,11 @@ bool DatabaseManager::writeToFile()
         fprintf(this->f, "%s\n", databaselist[i]->getdatabasetype().c_str());
     }
     fclose(this->f);
+    this->f = NULL;
     return true;
 }
 
-bool DatabaseManager::Initialize()
+int DatabaseManager::Initialize()
 {
     for (int i = 0; i < this->databasenum; i++)
         if (databaselist[i] != NULL)
@@ -58,11 +64,32 @@ bool DatabaseManager::Initialize()
     if (this->f != NULL)
         fclose(f);
     this->f = NULL;
-    this->f = fopen(this->filename.c_str(), "r");
+    int hasfile = access(this->filename.c_str(), 0);
+    if (hasfile == -1) {
+        writeToFile();
+    }
+    this->f = fopen(this->filename.c_str(), "rb");
     if (this->f == NULL)
-        return false;
-    char* s = new char[256]; //Max name size is 256
-    char* tp = new char[256];
+    {
+        cout<<"ERROR:: unknown error"<<endl;
+        return 0;
+    }
+    char s[256],tp[256]; //Max name size is 256
+
+    this->keystr = __iv__str;
+    char keystrtemp[100];
+    fread(keystrtemp,1,this->keystr.length(),this->f);
+    string tempkeystr(keystrtemp,this->keystr.length());
+    this->keystr = tempkeystr;
+
+    if (this->keystr != __iv__str)
+    {
+        //databasemanager is encrypted
+        fclose(this->f);
+        this->f = NULL;
+        return -1;
+    }
+
     fscanf(this->f, "%s", s);
     name = s;
     fscanf(this->f, "%d", &databasenum);
@@ -80,7 +107,10 @@ bool DatabaseManager::Initialize()
     }
     fclose(this->f);
     this->f = NULL;
-    return true;
+
+    haveinitialize = true;
+    //succeed without password
+    return 1;
 }
 Database* DatabaseManager::getDatabase(int num)
 {
@@ -140,4 +170,133 @@ string DatabaseManager::getname()
 string DatabaseManager::getfilename()
 {
     return this->filename;
+}
+
+bool DatabaseManager::encrypt(string password)
+{
+    if (this->keystr != __iv__str)
+    {
+        //is encrypted now
+        return false;
+    }
+    this->keystr = Encrypt::trytoencryptastr(this->keystr,password);
+
+    writeToFile();
+    for (int i = 0; i < this->databasenum; i++)
+        if (databaselist[i] != NULL)
+            delete databaselist[i];
+    databasenum = 0;
+    this->databaselist.clear();
+
+    this->f = fopen(this->filename.c_str(), "rb");
+    char s[256],tp[256]; //Max name size is 256
+    char s1[256],tp1[256];
+    char keystrtemp[100];
+    fread(keystrtemp,1,this->keystr.length(),this->f);
+    int tempdatabasenum;
+    fscanf(this->f, "%s", s);
+    fscanf(this->f, "%d", &tempdatabasenum);
+    for (int i = 0; i < tempdatabasenum; i++) {
+        memset(s, 0, 256);
+        fscanf(this->f, "%s", s);
+        fscanf(this->f, "%s", tp);
+        if (tp[0] == 'D') {
+            FILE *g;
+            g = fopen(s,"r");
+            int can = fscanf(g, "%s", s1);
+
+            int tablenum;
+            can = fscanf(g, "%d", &tablenum);
+
+            for (int i = 0; i < tablenum; i++) {
+                memset(s1, 0, 256);
+                can = fscanf(g, "%s", s1);
+                can = fscanf(g, "%s", tp1);
+
+                string tablepath = s1;
+                Encrypt::encryptafile(tablepath,password);
+            }
+            fclose(g);
+        }
+    }
+    fclose(this->f);
+    this->f = NULL;
+    haveinitialize = false;
+    return true;
+}
+
+bool DatabaseManager::decrypt(string password)
+{
+    if (this->keystr == __iv__str)
+    {
+        //is not encrypted now
+        return false;
+    }
+    auto temp = Encrypt::trytodecryptastr(this->keystr,password);
+    if (temp != __iv__str)
+    {
+        //password wrong
+        return false;
+    }
+
+    this->keystr = temp;
+
+    this->f = fopen(this->filename.c_str(), "rb");
+    char s[256],tp[256]; //Max name size is 256
+    char s1[256],tp1[256];
+    char keystrtemp[100];
+    fread(keystrtemp,1,this->keystr.length(),this->f);
+    int tempdatabasenum;
+    fscanf(this->f, "%s", s);
+    fscanf(this->f, "%d", &tempdatabasenum);
+    for (int i = 0; i < tempdatabasenum; i++) {
+        memset(s, 0, 256);
+        fscanf(this->f, "%s", s);
+        fscanf(this->f, "%s", tp);
+        if (tp[0] == 'D') {
+            FILE *g;
+            g = fopen(s,"r");
+            int can = fscanf(g, "%s", s1);
+
+            int tablenum;
+            can = fscanf(g, "%d", &tablenum);
+
+            for (int i = 0; i < tablenum; i++) {
+                memset(s1, 0, 256);
+                can = fscanf(g, "%s", s1);
+                can = fscanf(g, "%s", tp1);
+
+                string tablepath = s1;
+                Encrypt::decryptafile(tablepath,password);
+            }
+            fclose(g);
+        }
+    }
+    fclose(this->f);
+    this->f = NULL;
+
+    unsigned int size = Encrypt::get_file_size(this->filename.c_str());
+    char* tempmanager = (char*)malloc(size);
+    this->f = fopen(this->filename.c_str(), "rb");
+    fread(tempmanager,1,size,this->f);
+    memcpy(tempmanager,this->keystr.data(),this->keystr.length());
+    fclose(this->f);
+
+    this->f = fopen(this->filename.c_str(), "wb");
+    fwrite(tempmanager,1,size,this->f);
+    fclose(this->f);
+    this->f = NULL;
+
+    free(tempmanager);
+    haveinitialize = false;
+    return true;
+}
+bool DatabaseManager::isencrypt()
+{
+    if (this->keystr == __iv__str) return false;
+    else return true;
+}
+bool DatabaseManager::haveinitialized()
+{
+    return haveinitialize;
 }

@@ -83,7 +83,8 @@ SOURCES += main.cpp\
     queryhandler/checkhelper.cpp \
     queryhandler/modifyhandler.cpp \
     tester/testaes.cpp \
-    aesalgorithm/aes.cpp
+    aesalgorithm/aes.cpp \
+    aesalgorithm/encrypt.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -170,7 +171,8 @@ HEADERS  += mainwindow.h \
     queryhandler/checkhelper.h \
     queryhandler/modifyhandler.h \
     tester/testaes.h \
-    aesalgorithm/aes.h
+    aesalgorithm/aes.h \
+    aesalgorithm/encrypt.h
 
 
 DISTFILES += \

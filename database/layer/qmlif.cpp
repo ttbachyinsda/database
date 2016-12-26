@@ -1,6 +1,6 @@
 #include "qmlif.h"
 
-QMLif::QMLif()
-{
+QMLif::QMLif() {
+    oldDriver = new SQLDriver();
     i = 0;
 }
