@@ -1,7 +1,7 @@
 #ifndef TESTDATABASE_H
 #define TESTDATABASE_H
 
-#include "../databasehandler/database.h"
+#include "../layer/databasemanager.h"
 
 class testdatabase {
 public:

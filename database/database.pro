@@ -74,7 +74,8 @@ SOURCES += main.cpp\
     typehandler/databasetext.cpp \
     DBIndex/comparealgo.cpp \
     tester/testaes.cpp \
-    aesalgorithm/aes.cpp
+    aesalgorithm/aes.cpp \
+    aesalgorithm/encrypt.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -152,7 +153,8 @@ HEADERS  += mainwindow.h \
     typehandler/databasetext.h \
     DBIndex/comparealgo.h \
     tester/testaes.h \
-    aesalgorithm/aes.h
+    aesalgorithm/aes.h \
+    aesalgorithm/encrypt.h
 
 
 DISTFILES += \

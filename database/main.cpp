@@ -24,16 +24,19 @@ int BulbFile::totalsize = 0;
 
 int main(int argc, char* argv[])
 {
+    BulbFile::setfilename("bulbfile.txt", true);
+    //don't let this always be true, That's true only because we are testing.
+
 
     //    TestSQL t;
     //    t.startTestFile("a.sql");
     //    t.startTestInteractive();
-    /*
-    testtype t;
-    t.begintest(false);
-    testdatabase v;
-    v.begintest();
-*/
+
+//    testtype t;
+//    t.begintest(false);
+//    testdatabase v;
+//    v.begintest();
+
 
     //    testiterator w;
     //    w.begintest();
@@ -41,8 +44,6 @@ int main(int argc, char* argv[])
     //    testvirtual x;
     //    x.begintest();
 
-    BulbFile::setfilename("bulbfile.txt", true);
-    //don't let this always be true, That's true only because we are testing.
 
     //    testgroup xyz;
     //    xyz.begintest();
@@ -85,5 +86,5 @@ int main(int argc, char* argv[])
 //    aess.encryptafile("/home/ttbachyinsda/test.cpp","ttbachyinsda");
 //    aess.decryptafile("/home/ttbachyinsda/test.cpp","ttbachyinsda");
 
-//    return 0;
+    //return 0;
 }
