@@ -34,8 +34,8 @@ int main(int argc, char* argv[])
 
 //    testtype t;
 //    t.begintest(false);
-    testdatabase v;
-    v.begintest();
+//    testdatabase v;
+//    v.begintest();
 
 
     //    testiterator w;
@@ -45,8 +45,8 @@ int main(int argc, char* argv[])
     //    x.begintest();
 
 
-    //    testgroup xyz;
-    //    xyz.begintest();
+        testgroup xyz;
+        xyz.begintest();
 
 //        qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
 //        QGuiApplication app(argc, argv);

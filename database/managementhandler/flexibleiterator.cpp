@@ -66,20 +66,21 @@ bool FlexibleIterator::nextrow()
     bool can = available();
     if (!can)
         while (this->nowpagenum <= maxpagenum) {
-            this->nowpagenum++;
             int index = 0;
             BufType b = BPM->getPage(fileid, this->nowpagenum, index);
             int pagerownum = UIC::chartoint(b + 4);
-            for (int i = 0; i < pagerownum; i++) {
-                this->nowrownum = i;
-                int pageposition = UIC::chartoint(b + __position(i));
+            do{
+                int pageposition = UIC::chartoint(b + __position(this->nowrownum));
                 if (pageposition != 0) {
                     can = true;
                     break;
                 }
-            }
+                this->nowrownum++;
+            }while (this->nowrownum < pagerownum);
             if (can)
                 break;
+            this->nowpagenum ++;
+            this->nowrownum = 0;
         }
     if (this->nowpagenum > maxpagenum)
         return false;
