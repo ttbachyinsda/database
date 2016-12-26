@@ -31,10 +31,8 @@ int main(int argc, char* argv[])
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/create.sql");
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/customer.sql");
     string sql = "use orderDB;\n";
-//printf("current working directory: %s\n", getcwd(NULL, NULL));
-    sql += "delete from customer where gender='F';\n";
-//    sql += "select * from customer where gender='F';\n";
-    sql += "select * from customer where id>0;\n";
+    sql += "update customer set gender='F', name='Great' where gender='M';\n";
+    //sql += "select * from customer where id>0;\n";
 
 //    sql += "create index orders(customer_id);create index customer(id);";
 //    sql += "SELECT customer.name,orders.quantity FROM customer,orders WHERE orders.customer_id=customer.id;";

@@ -91,9 +91,11 @@ void FlexibleRecord::update()
         totallen += 4 + columns[i]->getSize();
     }
     this->size = totallen;
+    cout << (void*)this->data << endl;
     if (this->data != NULL)
         delete[] this->data;
     this->data = new char[this->size];
+    cout << (void*)this->data << endl;
     UIC::inttochar(totallen, this->data);
     for (int i = 0; i < this->columncount; i++) {
         int nowsize = columns[i]->getSize();

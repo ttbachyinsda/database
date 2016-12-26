@@ -28,10 +28,16 @@ bool ModifyHandler::checkConditions()
 // Modify myTableRecord according to set clauses.
 void ModifyHandler::modifyRecordContent()
 {
-
+    for (const SetPair& sp : sets) {
+        myTableRecord->setAt(sp.colID, sp.value.content,
+                             sp.value.type == SQLValue::LiteralType::NUL);
+    }
+    myTableRecord->update();
 }
 
 bool ModifyHandler::prepareTable(Table *table, SQLConditionGroup *cgrp) {
+    // TODO: Check If there is/are a foreign key(s) linked to this table.
+    // If not both delete and update query cannot be executed.
     myTable = table;
     /**
      * Support only following conditions:
@@ -87,6 +93,7 @@ bool ModifyHandler::prepareTable(Table *table, SQLConditionGroup *cgrp) {
 }
 
 bool ModifyHandler::prepareSetClause(SQLSetGroup *sgrp) {
+    // TODO: Check whether this key is a foreign key (ie. key is cid, check main table.)
     for (SQLSet* s : *sgrp) {
         // Only use this structure to store set commands.
         SetPair thisPair;
@@ -133,5 +140,34 @@ void ModifyHandler::executeDeleteQuery() {
 }
 
 void ModifyHandler::executeUpdateQuery() {
+    if (indexedCol != -1) {
+        // should use index.
+        db_index* bTreeIndex = myTable->getindexes()[indexedCol];
+        vector< pair<int,int> > searchIndexRes;
+        string targetContent = myTableIterator->compile(conditions[indexedConditionID].rightValue.content,
+                                                        indexedCol);
+        bTreeIndex->findAll(conditions[indexedConditionID].operand, targetContent, &searchIndexRes);
 
+        for (const pair<int, int>& p : searchIndexRes) {
+            myTableIterator->access(p.first, p.second);
+            myTableIterator->getdata(myTableRecord);
+            if (checkConditions()) {
+                myTableIterator->deletedata();
+                modifyRecordContent();
+                int dum;
+                myTable->FastAllInsert(dum, dum, myTableRecord);
+            }
+        }
+    } else {
+        while (myTableIterator->available()) {
+            myTableIterator->getdata(myTableRecord);
+            if (checkConditions()) {
+                myTableIterator->deletedata();
+                modifyRecordContent();
+                int dum;
+                myTable->FastAllInsert(dum, dum, myTableRecord);
+            }
+            ++ (*myTableIterator);
+        }
+    }
 }
