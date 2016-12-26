@@ -17,6 +17,9 @@
 //#include "layer/pythonif.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickItem>
+#include <QQmlContext>
+#include <QQmlProperty>
 
 #include <sqlengine/sqldriver.h>
 using namespace std;
@@ -86,13 +89,13 @@ int main(int argc, char* argv[])
 //        testgroup xyz;
 //        xyz.begintest();
 
-//    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
-//    QGuiApplication app(argc, argv);
-//    QQmlApplicationEngine engine;
-//    QPM_INIT(engine);
-//    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
+    QPM_INIT(engine);
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
-//    return app.exec();
+    return app.exec();
 
     //    string a = "create database student;\
 //            use student;\
@@ -114,8 +117,8 @@ int main(int argc, char* argv[])
 //        testmd5 zab;
 //        zab.begintest();
 
-    testhashflexible ace;
-    ace.begintest();
+//    testhashflexible ace;
+//    ace.begintest();
 
     //    testbulbfile ceo;
     //    ceo.begintest();

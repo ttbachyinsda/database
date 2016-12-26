@@ -1,7 +1,8 @@
 #include "qmlif.h"
 #include <fstream>
 string QMLif::testcss;
-SQLDriver *QMLif::oldDriver = new SQLDriver();
+SQLDriver QMLif::oldDriver;
+QQuickItem *QMLif::dbList = 0;
 using namespace std;
 
 void WorkerThread::run() {
@@ -38,6 +39,37 @@ void WorkerThread::run() {
     outFile << "</center>\t</body>\n</html>" << endl;
 
     emit resultReady(result);
+}
+
+QStringList QMLif::getDBList() {
+//    QString result;
+    QStringList dataList;
+    oldDriver.execute("show databases;");
+//    QTextStream outFile(&result);
+    if (oldDriver.hasResult()) {
+        SQLResult* temp = oldDriver.getResult();
+        for (std::vector<std::string>& r : temp->data) {
+            dataList.append(QString(r[1].c_str()));
+//            result.clear();
+        }
+    }
+    return dataList;
+}
+
+QStringList QMLif::getTable(QString name) {
+//    QString result;
+    QStringList dataList;
+    oldDriver.execute("use " + name.toStdString() + ";");
+    oldDriver.execute("show tables;");
+//    QTextStream outFile(&result);
+    if (oldDriver.hasResult()) {
+        SQLResult* temp = oldDriver.getResult();
+        for (std::vector<std::string>& r : temp->data) {
+            dataList.append(QString(r[1].c_str()));
+//            result.clear();
+        }
+    }
+    return dataList;
 }
 
 QMLif::QMLif() {

@@ -46,5 +46,7 @@
         <file>qml/TimePicker.qml</file>
         <file>qml/Typography.qml</file>
         <file>qml/Execute.qml</file>
+        <file>qml/Dbmanage.qml</file>
+        <file>qml/clickEvent.js</file>
     </qresource>
 </RCC>
