@@ -64,13 +64,13 @@ bool HashFlexibleIterator::nextrow()
                     this->nowrownum = 0;
                     while (true) {
                         this->nowhashnum++;
-                        if (this->nowhashnum == 1024)
+                        if (this->nowhashnum >= 1024)
                             break;
                         this->nowpagenum = this->nowtable->getinfo(this->nowhashnum, 0, 0, 0);
                         if (this->nowpagenum >= 2)
                             break;
                     }
-                    if (this->nowhashnum == 1024)
+                    if (this->nowhashnum >= 1024)
                         return false;
 
                     continue;
@@ -90,13 +90,13 @@ bool HashFlexibleIterator::nextrow()
                             this->nowrownum = 0;
                             while (true) {
                                 this->nowhashnum++;
-                                if (this->nowhashnum == 1024)
+                                if (this->nowhashnum >= 1024)
                                     break;
                                 this->nowpagenum = this->nowtable->getinfo(this->nowhashnum, 0, 0, 0);
                                 if (this->nowpagenum >= 2)
                                     break;
                             }
-                            if (this->nowhashnum == 1024)
+                            if (this->nowhashnum >= 1024)
                                 return false;
                         }
                     }
