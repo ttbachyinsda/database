@@ -169,55 +169,54 @@ void testhashflexible::begintest()
     auto iterator = IteratorFactory::getiterator(onetable);
     auto record = RecordFactory::getrecord(onetable);
 
-    //    int js=0;
-    //    while (iterator->available())
-    //    {
-    //        js++;
-    //        int k = iterator->gethashnum();
-    //        if (k<1024)
-    //        cout<<iterator->gethashnum()<<endl;
-    //        iterator->getdata(record);
-
-    //        for (int i = 0; i < cltype.size(); i++) {
-    //            cout << i << ' ' << record->getAt(i) << ' ';
-    //        }
-    //        cout<<endl;
-    //        ++(*iterator);
-    //    }
-
-    //    iterator->getbegin();
-
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+        int js=0;
+        while (iterator->available())
+        {
+            js++;
+            if (js % 2 == 0) iterator->deletedata();
+            ++(*iterator);
         }
-    }
+        iterator->getbegin();
+        js = 0;
+        while (iterator->available())
+        {
+            js++;
+            ++(*iterator);
+        }
+        cout<<"now total num = "<<js<<endl;
+//        iterator->getbegin();
 
-    ++(*iterator);
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
-    iterator->access(300, 1);
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
+//    if (iterator->available()) {
+//        iterator->getdata(record);
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+//        }
+//    }
 
-    iterator->access(2, 0);
-    cout << "try to delete" << endl;
-    iterator->deletedata();
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
+//    ++(*iterator);
+//    if (iterator->available()) {
+//        iterator->getdata(record);
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+//        }
+//    }
+//    iterator->access(300, 1);
+//    if (iterator->available()) {
+//        iterator->getdata(record);
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+//        }
+//    }
+
+//    iterator->access(2, 0);
+//    cout << "try to delete" << endl;
+//    iterator->deletedata();
+//    if (iterator->available()) {
+//        iterator->getdata(record);
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+//        }
+//    }
     testindex(onetable, "0");
     testindex(onetable, "1");
     testindex(onetable, "19");

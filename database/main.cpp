@@ -28,11 +28,13 @@ int main(int argc, char* argv[])
 {
     TestSQL t;
     t.workingDir = "/home/jameshuang/Study/database/database_wd";
+//    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/create.sql");
+//    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/customer.sql");
     string sql = "use orderDB;\n";
-
-//    sql += "delete from customer where gender='F';\n";
+//printf("current working directory: %s\n", getcwd(NULL, NULL));
+    sql += "delete from customer where gender='F';\n";
 //    sql += "select * from customer where gender='F';\n";
-    sql += "select * from customer where gender='M';\n";
+    sql += "select * from customer where id>0;\n";
 
 //    sql += "create index orders(customer_id);create index customer(id);";
 //    sql += "SELECT customer.name,orders.quantity FROM customer,orders WHERE orders.customer_id=customer.id;";
@@ -50,16 +52,15 @@ int main(int argc, char* argv[])
 //    sql += "SELECT book.title,book.id,orders.book_id,orders.quantity FROM book,orders WHERE book.id=orders.book_id AND orders.quantity>8;";
 //    sql += "SELECT orders.quantity, orders.customer_id, customer.name, customer.id FROM orders, customer WHERE orders.customer_id = customer.id AND orders.quantity > 8;";
     t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
-/*
-    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/create.sql");
-    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/orders.sql");
-    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/book.sql");
-    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/publisher.sql");
-    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/customer.sql");
-*/
+
+//    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/create.sql");
+//    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/orders.sql");
+//    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/book.sql");
+//    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/publisher.sql");
+//    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/customer.sql");
+
 //    t.startTestInteractive();
 /*
-=======
     BulbFile::setfilename("bulbfile.txt", true);
     //don't let this always be true, That's true only because we are testing.
 
@@ -79,9 +80,6 @@ int main(int argc, char* argv[])
 
     //    testvirtual x;
     //    x.begintest();
->>>>>>> origin/master
-
-
 
 //        qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
 //        QGuiApplication app(argc, argv);
@@ -89,9 +87,9 @@ int main(int argc, char* argv[])
 //        QPM_INIT(engine);
 //        engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 //        return app.exec();
-
-    //    testdate xx;
-    //    xx.begintest();
+*/
+//        testdate xx;
+//        xx.begintest();
 
     //    testregex yza;
     //    yza.begintest();
@@ -104,7 +102,6 @@ int main(int argc, char* argv[])
 
     //    testbulbfile ceo;
     //    ceo.begintest();
-<<<<<<< HEAD
-*/
+
     return 0;
 }

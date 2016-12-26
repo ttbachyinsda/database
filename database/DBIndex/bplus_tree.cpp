@@ -253,7 +253,7 @@ void bplus_tree::search_greater_equal(const index_key &key, vector<pair<int, int
         else
             b = begin(leaf);
 
-        if (keycmp(b->key, key) != 0)
+        if (keycmp(b->key, key) < 0)
             b++;
 
         // copy
@@ -342,9 +342,7 @@ int bplus_tree::search_range(const index_key& left, const index_key& right,
 
 int bplus_tree::search_all(vector<pair<int, int> > *result) {
     int off_left = head.leaf_offset;
-    int off_right = head.last_leaf_offset;
     int off = off_left;
-    record_t *b, *e;
 
     leaf_node_t leaf;
     while (off != 0) {
@@ -352,7 +350,6 @@ int bplus_tree::search_all(vector<pair<int, int> > *result) {
 
         for(int i = 0; i < leaf.n; i++) {
             result->push_back(pair<int, int>(leaf.children[i].value.pagenum, leaf.children[i].value.pageposition));
-//            cout << result->size() << endl;
         }
 
         off = leaf.next;

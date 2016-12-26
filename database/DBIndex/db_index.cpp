@@ -105,7 +105,7 @@ void db_index::findAll(SQLOperand operand, string key, int dataLen, vector<pair<
 
 int db_index::search_all(vector<pair<int, int> > *result) {
 //    if (multi_value)
-        return b_tree.search_all(result);
+    return b_tree.search_all(result);
 //    else return -1;
 }
 

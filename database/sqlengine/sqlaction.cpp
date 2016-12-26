@@ -282,7 +282,6 @@ bool SQLInsertAction::execute()
     if (!hasPriKey) {
         driver->addWarningMessage("Current table does not have a primary key.");
     }
-
     for (unsigned int i = 0; i < valueGroupList->size(); ++ i) {
         int thisSize = (int) valueGroupList->at(i)->size();
         if (thisSize != record->getcolumncount()) {
