@@ -5,8 +5,9 @@
 #include <QDebug>
 #include <QObject>
 #include <QThread>
-#include <QtQuick/QQuickView>
-#include <QtQml/QQmlContext>
+#include <QQuickView>
+#include <QQuickItem>
+#include <QQmlContext>
 #include <QTextStream>
 
 class WorkerThread : public QThread {
@@ -23,6 +24,7 @@ public:
     SQLDriver *driver;
     QString command;
 };
+
 class QMLif : public QObject {
     Q_OBJECT
 signals:
@@ -30,8 +32,7 @@ signals:
     void resultReady(const QString& s);
 public slots:
     void doSomething(const QString command) {
-//        cout << command.toStdString() << endl;
-        WorkerThread* workerThread = new WorkerThread(oldDriver, command);
+        WorkerThread* workerThread = new WorkerThread(&oldDriver, command);
         connect(workerThread, SIGNAL(resultReady(const QString&)), this, SLOT(done(const QString&)));
         //connect(workerThread, &WorkerThread::finished, workerThread, &QObject::deleteLater);
         workerThread->start();
@@ -41,21 +42,23 @@ public slots:
         text = s;
         emit resultReady(s);
     }
-    QString gettext()
-    {
+    QStringList getDBList();
+    QStringList getTable();
+
+    QString gettext() {
         return this->text;
     }
-    void receivedastring(const QString& s)
-    {
+    void receivedastring(const QString& s) {
         string t = s.toStdString();
         cout << t << endl;
     }
 
 public:
     QString text;
-    static SQLDriver *oldDriver;
+    static SQLDriver oldDriver;
     int i;
     QMLif();
+    static QQuickItem *dbList;
 
     static string testcss;
 };

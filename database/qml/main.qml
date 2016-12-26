@@ -11,23 +11,22 @@ ApplicationWindow {
     visible: true
 
     theme {
-        primaryColor: "red"
+        primaryColor: "purple"
         accentColor: "purple"
         tabHighlightColor: "white"
     }
 
     property var databaseSettings: [
-            "Custom Icons", "Color Palette", "Typography"
+
     ]
     property var databaseCommand: [
-            "Overview", "Execute", "Progress Bar", "Radio Button",
-            "Slider", "Switch", "TextField"
+            "Overview", "Execute", "Dbmanage"
     ]
     property var aboutDatabase: [
-            "Bottom Sheet", "Dialog", "Forms", "List Items", "Page Stack", "Time Picker", "Date Picker"
+
     ]
     property var aboutDatabaseString: [
-        "About Author","Thanks","Libs Included","License","test1","test2","test3"
+
     ]
     property var sections: [ databaseCommand, databaseSettings, aboutDatabase ]
 
@@ -42,7 +41,7 @@ ApplicationWindow {
         "Typography":"database optimize",
         "Overview":"Database Overview",
         "Execute":"Execute",
-        "Progress Bar":"Manage Database",
+        "Dbmanage":"Manage Database",
         "Radio Button":"test1",
         "Slider":"test2",
         "Switch":"test3",

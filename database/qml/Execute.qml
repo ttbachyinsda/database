@@ -7,6 +7,7 @@ import QtQuick.Controls 1.3 as Controls
 
 Item {
     id: execute
+    objectName: "haha"
     implicitHeight: column.height
 
     QMLif {
@@ -27,6 +28,8 @@ Item {
 
         TextField {
             id: command
+            objectName: "field"
+
             placeholderText: "Command..."
             anchors.horizontalCenter: parent.horizontalCenter
 
