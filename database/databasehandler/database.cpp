@@ -80,8 +80,10 @@ bool Database::Initialize()
         Table* t = NULL;
         if (tp[1] == 'i') { // F[i]xed Size
             t = new FixedSizeTable();
-        } else { // F[l]exible
+        } else if (tp[1] == 'l'){ // F[l]exible
             t = new FlexibleTable();
+        } else if (tp[1] == 'a'){ // H[a]shFlexible
+            t = new HashFlexibleTable();
         }
         string temp = s;
         t->setfilename(temp);

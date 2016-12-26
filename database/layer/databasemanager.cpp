@@ -7,6 +7,7 @@ DatabaseManager::DatabaseManager()
     this->f = NULL;
     this->databaselist.clear();
     this->keystr = __iv__str;
+    this->haveinitialize = false;
 }
 DatabaseManager::DatabaseManager(string filename)
 {
@@ -15,10 +16,11 @@ DatabaseManager::DatabaseManager(string filename)
     this->databaselist.clear();
     this->f = NULL;
     this->keystr = __iv__str;
+    this->haveinitialize = false;
 }
 DatabaseManager::~DatabaseManager()
 {
-    if (this->filename != "" && this->keystr == __iv__str)
+    if (this->filename != "" && this->keystr == __iv__str && haveinitialize)
         writeToFile();
     for (int i = 0; i < this->databasenum; i++)
         delete this->databaselist[i];
@@ -106,6 +108,7 @@ int DatabaseManager::Initialize()
     fclose(this->f);
     this->f = NULL;
 
+    haveinitialize = true;
     //succeed without password
     return 1;
 }
@@ -218,6 +221,7 @@ bool DatabaseManager::encrypt(string password)
     }
     fclose(this->f);
     this->f = NULL;
+    haveinitialize = false;
     return true;
 }
 
@@ -284,11 +288,15 @@ bool DatabaseManager::decrypt(string password)
     this->f = NULL;
 
     free(tempmanager);
-
+    haveinitialize = false;
     return true;
 }
 bool DatabaseManager::isencrypt()
 {
     if (this->keystr == __iv__str) return false;
     else return true;
+}
+bool DatabaseManager::haveinitialized()
+{
+    return haveinitialize;
 }

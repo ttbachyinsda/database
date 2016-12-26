@@ -21,7 +21,7 @@ public:
     bool decrypt(string password);
     bool isencrypt();
     ~DatabaseManager();
-
+    bool haveinitialized();
 private:
     string keystr;
     string name;
@@ -29,6 +29,7 @@ private:
     vector<Database*> databaselist;
     int databasenum;
     FILE* f;
+    bool haveinitialize;
 };
 
 #endif // DATABASEMANAGER_H
