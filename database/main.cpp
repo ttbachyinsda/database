@@ -83,8 +83,8 @@ int main(int argc, char* argv[])
     BulbFile::setfilename("bulbfile.txt", true);
     //don't let this always be true, That's true only because we are testing.
 
-        testgroup xyz;
-        xyz.begintest();
+//        testgroup xyz;
+//        xyz.begintest();
 
 //    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
 //    QGuiApplication app(argc, argv);
@@ -111,8 +111,8 @@ int main(int argc, char* argv[])
     //    testregex yza;
     //    yza.begintest();
 
-    //    testmd5 zab;
-    //    zab.begintest();
+//        testmd5 zab;
+//        zab.begintest();
 
     testhashflexible ace;
     ace.begintest();
