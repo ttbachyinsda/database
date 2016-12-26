@@ -17,12 +17,14 @@ using std::endl;
 #include "predefined.h"
 #include <fcntl.h>
 #include <unistd.h>
+#ifndef PARA
 #ifdef __linux
 #define PARA O_RDWR
 #elif __APPLE__
 #define PARA O_RDWR
 #else
 #define PARA O_RDWR|O_BINARY
+#endif
 #endif
 
 /* offsets */
