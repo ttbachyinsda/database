@@ -70,7 +70,8 @@ public:
         return false;
     }
     vector<pair<int, pair<int, string> > >* gettablecondition();
-    vector<pair<int, pair<string, int> > >* getlinkedcolumn();
+    vector<vector<pair<string, int> > >* getlinkedcolumn();
+    vector<pair<string,int>>* getforeignkeys();
 
     virtual unsigned long getTraverseCost() = 0;
 
@@ -92,7 +93,8 @@ protected:
     db_index** DBindex;
     bool* multivalue;
     vector<pair<int, pair<int, string> > > tablecondition;
-    vector<pair<int, pair<string, int> > > linkedcolumn;
+    vector<vector<pair<string, int> > > linkedcolumn;
+    vector<pair<string,int>> foreignkeys;
 };
 
 #endif // TABLE_H
