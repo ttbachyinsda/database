@@ -152,21 +152,24 @@ void testgroup::begintest()
     auto iterator = IteratorFactory::getiterator(onetable);
     auto record = RecordFactory::getrecord(onetable);
 
-    int js=0;
+    int js1=0;
     while (iterator->available())
     {
-        js++;
-        if (js % 2 == 0) iterator->deletedata();
+        if (rand()%50)
+        {
+            js1++;
+            iterator->deletedata();
+        }
         ++(*iterator);
     }
     iterator->getbegin();
-    js = 0;
+    int js2 = 0;
     while (iterator->available())
     {
-        js++;
+        js2++;
         ++(*iterator);
     }
-    cout<<"now total num = "<<js<<endl;
+    cout<<"now total num = "<<js2+js1<<' '<<js1<<' '<<js2<<endl;
 
 //    if (iterator->available()) {
 //        iterator->getdata(record);
@@ -226,13 +229,13 @@ void testgroup::begintest()
     record = RecordFactory::getrecord(onetable);
 
     iterator->getbegin();
-    js = 0;
+    int jss = 0;
     while (iterator->available())
     {
-        js++;
+        jss++;
         ++(*iterator);
     }
-    cout<<"after save now total num = "<<js<<endl;
+    cout<<"after save now total num = "<<jss<<endl;
     iterator->getbegin();
 
 

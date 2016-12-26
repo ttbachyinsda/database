@@ -75,8 +75,8 @@ int main(int argc, char* argv[])
     //    testmd5 zab;
     //    zab.begintest();
 
-//    testhashflexible ace;
-//    ace.begintest();
+    testhashflexible ace;
+    ace.begintest();
 
     //    testbulbfile ceo;
     //    ceo.begintest();

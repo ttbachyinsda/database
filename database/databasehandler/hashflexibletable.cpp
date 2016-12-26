@@ -686,6 +686,7 @@ int HashFlexibleTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<i
     } else {
         assert(reqhashnum >= 0);
         assert(reqhashnum <= 1023);
+
         return HBeginPageNum[reqhashnum];
     }
 }
