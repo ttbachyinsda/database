@@ -68,11 +68,20 @@ SOURCES += main.cpp\
     databasehandler/hashflexibletable.cpp \
     tester/testhashflexible.cpp \
     managementhandler/hashflexibleiterator.cpp \
+    queryhandler/joinstrategies/hashjoin.cpp \
+    queryhandler/joinstrategies/joinstrategy.cpp \
+    queryhandler/joinstrategies/nestedloopjoin.cpp \
+    queryhandler/joinstrategies/sortmergejoin.cpp \
+    queryhandler/intelligentfilter.cpp \
+    queryhandler/queryoptimizer.cpp \
+    groupalgorithm/grouphandler.cpp \
     databasehandler/bulbfile.cpp \
     tester/testbulbfile.cpp \
     typehandler/databasebulb.cpp \
     typehandler/databasetext.cpp \
     DBIndex/comparealgo.cpp \
+    queryhandler/checkhelper.cpp \
+    queryhandler/modifyhandler.cpp \
     tester/testaes.cpp \
     aesalgorithm/aes.cpp \
     aesalgorithm/encrypt.cpp
@@ -147,11 +156,20 @@ HEADERS  += mainwindow.h \
     databasehandler/hashflexibletable.h \
     tester/testhashflexible.h \
     managementhandler/hashflexibleiterator.h \
+    queryhandler/joinstrategies/hashjoin.h \
+    queryhandler/joinstrategies/joinstrategy.h \
+    queryhandler/joinstrategies/nestedloopjoin.h \
+    queryhandler/joinstrategies/sortmergejoin.h \
+    queryhandler/intelligentfilter.h \
+    queryhandler/queryoptimizer.h \
+    groupalgorithm/grouphandler.h \
     databasehandler/bulbfile.h \
     tester/testbulbfile.h \
     typehandler/databasebulb.h \
     typehandler/databasetext.h \
     DBIndex/comparealgo.h \
+    queryhandler/checkhelper.h \
+    queryhandler/modifyhandler.h \
     tester/testaes.h \
     aesalgorithm/aes.h \
     aesalgorithm/encrypt.h

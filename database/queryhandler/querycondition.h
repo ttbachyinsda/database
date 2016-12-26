@@ -9,10 +9,9 @@ struct SelectorPair
     int columnIndex;
 };
 
-struct QueryCondition
+struct ConditionPair
 {
     SQLOperand operand;
-    char lValueType;
 
     // left Value
     SelectorPair left;
@@ -21,14 +20,22 @@ struct QueryCondition
     bool rightIsValue;
     SelectorPair right;
     SQLValue rightValue;
+};
 
-    bool compare(const std::string& left, bool leftIsNull,
-                 const std::string& right, bool rightIsNull);
-    int stringCompare(const std::string& left, const std::string& right) const;
-    int integerCompare(const std::string& left, const std::string& right) const;
+struct QueryCondition {
+    static bool match(SQLOperand op, char type,
+                      const std::string& left, bool leftIsNull,
+                      const std::string& right, bool rightIsNull);
+    static bool typeComparable(char t1, char t2);
+    static bool typeComparable(SQLValue::LiteralType literal, char type);
+    static bool indexOperatable(SQLOperand operand);
+    static SQLOperand getInverseOperand(SQLOperand operand);
+    static std::string convertRegex(const std::string&);
 private:
-    int integerConditionCompare(const char* s, int ls,
-                                const char* l, int ll) const;
+    static int matchString(const std::string& left, const std::string& right);
+    static int matchInteger(const std::string& left, const std::string& right);
+    static int matchIntegerCond(const char* s, int ls,
+                                const char* l, int ll);
 };
 
 

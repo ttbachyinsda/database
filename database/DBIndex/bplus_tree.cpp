@@ -52,7 +52,7 @@ int counter = 0;
 /* helper searching function */
 inline index_t* find(internal_node_t& node, const index_key& key) {
     index_t* temp = lower_bound(begin(node), end(node), key);
-    if (temp - begin(node) >= node.n)
+    if (temp - begin(node) >= node.n && node.n > 0)
         temp = end(node) - 1;
     if ( key < *temp && temp > begin(node))
         temp = temp - 1;
@@ -60,7 +60,7 @@ inline index_t* find(internal_node_t& node, const index_key& key) {
 }
 inline record_t* find(leaf_node_t& node, const index_key& key) {
     record_t* temp = lower_bound(begin(node), end(node), key);
-    if (temp - begin(node) >= node.n)
+    if (temp - begin(node) >= node.n && node.n > 0)
         temp = end(node) - 1;
     if ( key < *temp && temp > begin(node))
         temp = temp - 1;
@@ -253,7 +253,7 @@ void bplus_tree::search_greater_equal(const index_key &key, vector<pair<int, int
         else
             b = begin(leaf);
 
-        if (keycmp(b->key, key) != 0)
+        if (keycmp(b->key, key) < 0)
             b++;
 
         // copy
@@ -330,9 +330,11 @@ int bplus_tree::search_range(const index_key& left, const index_key& right,
     b = find(leaf, left);
     if (keycmp(b->key, left) != 0)
         b++;
+    if (b < leaf.children)
+        b = leaf.children;
     e = upper_bound(begin(leaf), end(leaf), right);
 
-    for (; b != e; ++b)
+    for (; b < e; ++b)
         result->push_back(pair<int, int>(b->value.pagenum, b->value.pageposition));
 
     return result->size()==0?-1:0;
@@ -340,9 +342,7 @@ int bplus_tree::search_range(const index_key& left, const index_key& right,
 
 int bplus_tree::search_all(vector<pair<int, int> > *result) {
     int off_left = head.leaf_offset;
-    int off_right = head.last_leaf_offset;
     int off = off_left;
-    record_t *b, *e;
 
     leaf_node_t leaf;
     while (off != 0) {
@@ -350,7 +350,6 @@ int bplus_tree::search_all(vector<pair<int, int> > *result) {
 
         for(int i = 0; i < leaf.n; i++) {
             result->push_back(pair<int, int>(leaf.children[i].value.pagenum, leaf.children[i].value.pageposition));
-//            cout << result->size() << endl;
         }
 
         off = leaf.next;

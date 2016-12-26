@@ -69,14 +69,15 @@ bool FlexibleIterator::nextrow()
             int index = 0;
             BufType b = BPM->getPage(fileid, this->nowpagenum, index);
             int pagerownum = UIC::chartoint(b + 4);
-            do{
+            while (this->nowrownum < pagerownum)
+            {
                 int pageposition = UIC::chartoint(b + __position(this->nowrownum));
                 if (pageposition != 0) {
                     can = true;
                     break;
                 }
                 this->nowrownum++;
-            }while (this->nowrownum < pagerownum);
+            }
             if (can)
                 break;
             this->nowpagenum ++;

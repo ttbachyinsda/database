@@ -19,6 +19,9 @@ public:
     bool Initialize();
     void createTable(vector<string> clname, vector<DataBaseType*> cltype);
     bool DeleteAt(int pagenum, int rownum);
+
+    virtual unsigned long getTraverseCost() override;
+
     bool FastInsert(int& pagenum, int& rownum, Record* rec);
     bool FastAllInsert(int& pagenum, int& rownum, Record* rec);
     bool FastOutput(int pagenum, int rownum, Record* rec);

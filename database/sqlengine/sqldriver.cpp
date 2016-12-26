@@ -4,27 +4,13 @@
 
 #include <sstream>
 #include <iostream>
+#include <unistd.h>
 #include "sqldriver.h"
 
 const std::string SQLDriver::systemName = "top";
 
 SQLDriver::SQLDriver() {
-    sqlLexer  = 0;
-    sqlParser = 0;
-    lastSucceeded = false;
-    lastHasResult = false;
-    lastAffectedRows = 0;
-    currentDatabase = 0;
-    result = 0;
-
-    // May consider lazy init.
-    databaseManager = new DatabaseManager();
-    databaseManager->setname(SQLDriver::systemName);
-    databaseManager->setfilename(SQLDriver::systemName + ".tdb");
-    // If file not exist, new file will be created.
-    databaseManager->Initialize();
-
-    queryExecuter = new QueryExecuter(this);
+    initialize();
 }
 
 SQLDriver::~SQLDriver() {
@@ -66,6 +52,9 @@ void SQLDriver::clearPreviousSession() {
     if (sqlLexer)  delete sqlLexer;
     if (sqlParser) delete sqlParser;
     if (result) delete result;
+    result = 0;
+    sqlLexer = 0;
+    sqlParser = 0;
     warningMessages.clear();
     errorMessages.clear();
     for (std::vector<SQLAction*>::iterator it = allActions.begin();
@@ -77,3 +66,44 @@ void SQLDriver::clearPreviousSession() {
     lastHasResult = false;
 }
 
+void SQLDriver::initialize()
+{
+    sqlLexer  = 0;
+    sqlParser = 0;
+    lastSucceeded = false;
+    lastHasResult = false;
+    lastAffectedRows = 0;
+    currentDatabase = 0;
+    result = 0;
+
+    // May consider lazy init.
+    databaseManager = new DatabaseManager();
+    databaseManager->setname(SQLDriver::systemName);
+    databaseManager->setfilename(SQLDriver::systemName + ".tdb");
+    // If file not exist, new file will be created.
+    databaseManager->Initialize();
+
+    queryExecuter = new QueryExecutor(this);
+}
+
+SQLDriver::SQLDriver(const string &workingDir) {
+    int chdirRes = chdir(workingDir.c_str());
+    if (chdirRes == -1) {
+        cout << "Fatal: " << workingDir << " : Permission denined." << endl;
+        exit(0);
+    }
+    initialize();
+}
+
+void SQLDriver::setWorkingDir(const std::string &workingDir) {
+    clearPreviousSession();
+    // current database will be deleted by the manager
+    if (databaseManager) delete databaseManager;
+    delete queryExecuter;
+    int chdirRes = chdir(workingDir.c_str());
+    if (chdirRes == -1) {
+        cout << "Fatal: " << workingDir << " : Permission denined." << endl;
+        exit(0);
+    }
+    initialize();
+}

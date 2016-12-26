@@ -14,6 +14,9 @@ public:
     FlexibleTable();
     ~FlexibleTable();
     bool Initialize();
+
+    virtual unsigned long getTraverseCost() override;
+
     void createTable(vector<string> clname, vector<DataBaseType*> cltype);
     bool DeleteAt(int pagenum, int rownum);
     bool FastAllInsert(int& pagenum, int& rownum, Record* rec);

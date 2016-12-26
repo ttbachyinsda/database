@@ -733,3 +733,7 @@ bool HashFlexibleTable::FastFind(Record* rec)
     }
     return can;
 }
+
+unsigned long HashFlexibleTable::getTraverseCost() {
+    return getPageNum();
+}

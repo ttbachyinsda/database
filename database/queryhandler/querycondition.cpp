@@ -1,21 +1,25 @@
 #include "querycondition.h"
 #include <cstring>
+#include <regex>
 
-
-bool QueryCondition::compare(const std::string &left,
-                             bool leftIsNull,
-                             const std::string &right,
-                             bool rightIsNull)
-{
+bool QueryCondition::match(SQLOperand op, char type, const std::string &left,
+                           bool leftIsNull, const std::string &right,
+                           bool rightIsNull) {
     // type == 'I', 'C', 'V';
-    if (leftIsNull != rightIsNull) return false;
-    if (leftIsNull) return true;
+    if (leftIsNull != rightIsNull) return (op == SQLOperand::NOT_EQUAL);
+    if (leftIsNull) return (op == SQLOperand::EQUAL);
     // both is not null.
     int cmpResult = 0;
-    if (lValueType == 'I') cmpResult = integerCompare(left, right);
-    else cmpResult = stringCompare(left, right);
+    if (op != SQLOperand::LIKE) {
+        if (type == 'I') cmpResult = matchInteger(left, right);
+        else cmpResult = matchString(left, right);
+    } else {
+        std::regex r(right);
+        if (std::regex_match(left, r))
+            cmpResult = 1;
+    }
 
-    switch (operand) {
+    switch (op) {
         case SQLOperand::EQUAL:
             return cmpResult == 0;
         case SQLOperand::NOT_EQUAL:
@@ -28,28 +32,22 @@ bool QueryCondition::compare(const std::string &left,
             return cmpResult > 0;
         case SQLOperand::GREATER_EQUAL:
             return cmpResult >= 0;
+        case SQLOperand::LIKE:
+            return cmpResult != 0;
     }
     return false;
 }
 
-int QueryCondition::stringCompare(const std::string &left,
-                                   const std::string &right) const
-{
-    return strcmp(left.c_str(), right.c_str());
-}
-
-int QueryCondition::integerCompare(const std::string &left,
-                                    const std::string &right) const
-{
+int QueryCondition::matchInteger(const std::string &left, const std::string &right) {
     if (left.size() < right.size())
-        return integerConditionCompare(left.c_str(), left.size(), right.c_str(), right.size());
+        return matchIntegerCond(left.c_str(), (int) left.size(),
+                                right.c_str(), (int) right.size());
     else
-        return - integerConditionCompare(right.c_str(), right.size(), left.c_str(), left.size());
+        return - matchIntegerCond(right.c_str(), (int) right.size(),
+                                  left.c_str(), (int) left.size());
 }
 
-int QueryCondition::integerConditionCompare(const char *s, int ls,
-                                            const char *l, int ll) const
-{
+int QueryCondition::matchIntegerCond(const char *s, int ls, const char *l, int ll) {
     int margin = ll - ls;
     for (int i = 0; i < margin; ++ i)
         if (l[i] != '0') return -1;
@@ -58,4 +56,51 @@ int QueryCondition::integerConditionCompare(const char *s, int ls,
         if (s[i] < l[i + margin]) return -1;
     }
     return 0;
+}
+
+int QueryCondition::matchString(const std::string &left, const std::string &right) {
+    return strcmp(left.c_str(), right.c_str());
+}
+
+bool QueryCondition::typeComparable(char t1, char t2) {
+    // Defines what can be compared.
+    // 1. Varchar and Char can be compared anyway.
+    // 2. Int and Int can compare.
+    // 3. Real and Real can compare.
+    return (t1 == 'V' && t2 == 'C') || (t1 == 'C' && t2 == 'V') ||
+           (t1 == 'I' && t2 == 'I');
+}
+
+bool QueryCondition::typeComparable(SQLValue::LiteralType literal, char type) {
+    if (type == 'I' && literal == SQLValue::LiteralType::ENUMERATE)
+        return true;
+    if ((type == 'V' || type == 'C') && literal == SQLValue::LiteralType::STRING)
+        return true;
+    // Insert or where clause (NULL is always acceptable)
+    // But NULL is not comparable (< > <= >= ...)
+    return (literal == SQLValue::LiteralType::NUL);
+}
+
+bool QueryCondition::indexOperatable(SQLOperand operand) {
+    return (operand != SQLOperand::LIKE && operand != SQLOperand::NOT_EQUAL);
+}
+
+SQLOperand QueryCondition::getInverseOperand(SQLOperand operand) {
+    if (operand == LESS_EQUAL) return GREATER_EQUAL;
+    if (operand == LESS) return GREATER;
+    if (operand == GREATER) return LESS;
+    if (operand == GREATER_EQUAL) return LESS_EQUAL;
+    return operand;
+}
+
+std::string QueryCondition::convertRegex(const std::string &pattern) {
+    std::string retVal = pattern;
+    unsigned long pos;
+    while ((pos = retVal.find("%")) < retVal.size()) {
+        retVal = retVal.replace(pos, 1, ".*");
+    }
+    while ((pos = retVal.find("_")) < retVal.size()) {
+        retVal = retVal.replace(pos, 1, ".");
+    }
+    return retVal;
 }

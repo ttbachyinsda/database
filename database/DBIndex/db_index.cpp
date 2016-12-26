@@ -41,6 +41,7 @@ int db_index::remove(const index_key &key) {
 }
 
 int db_index::insert(const index_key &key, index_value value) {
+    insertTime++;
     return b_tree.insert(key, value);
 }
 
@@ -103,8 +104,8 @@ void db_index::findAll(SQLOperand operand, string key, int dataLen, vector<pair<
 }
 
 int db_index::search_all(vector<pair<int, int> > *result) {
-    if (multi_value)
-        return b_tree.search_all(result);
-    else return -1;
+//    if (multi_value)
+    return b_tree.search_all(result);
+//    else return -1;
 }
 

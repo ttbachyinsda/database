@@ -45,3 +45,7 @@ int RawGroup::getnum()
 {
     return num;
 }
+
+void RawGroup::clear() {
+
+}

@@ -626,3 +626,7 @@ string FlexibleTable::gettabletype()
 {
     return "Flexible";
 }
+
+unsigned long FlexibleTable::getTraverseCost() {
+    return (unsigned long) getPageNum();
+}

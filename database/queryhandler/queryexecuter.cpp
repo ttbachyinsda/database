@@ -2,23 +2,20 @@
 #include "../sqlengine/sqlstruct.h"
 #include "../sqlengine/sqldriver.h"
 #include "../typehandler/databaseint.h"
+#include "intelligentfilter.h"
+#include "queryoptimizer.h"
 
 #include <iostream>
 using namespace std;
 
-void QueryExecuter::clearUp()
+void QueryExecutor::clearUp()
 {
     tables.clear();
-    for (Record* r : records) { delete r; }
-    records.clear();
-    for (Iterator* i : iterators) { delete i; }
-    iterators.clear();
-
     selectors.clear();
     conditions.clear();
 }
 
-bool QueryExecuter::getTableColumnIndex(int &tid, int &cid, SQLSelector *s,
+bool QueryExecutor::getTableColumnIndex(int &tid, int &cid, SQLSelector *s,
                                         std::map<string, int> &dict,
                                         std::map<string, int>::iterator &dictIter)
 {
@@ -38,14 +35,6 @@ bool QueryExecuter::getTableColumnIndex(int &tid, int &cid, SQLSelector *s,
             return false;
         }
     }
-    // Decide Column ID
-//    cid = -1;
-//    for (int j = 0; j < records[tid]->getcolumncount(); ++ j) {
-//        if (s->tableName == tables[tid]->getcolumnname(j)) {
-//            cid = j;
-//            break;
-//        }
-//    }
     cid = tables[tid]->getColumnIndexByName(s->tableName);
     if (cid == -1) {
         driver->addErrorMessage("No such column (" + s->tableName + ") in table " + s->databaseName);
@@ -54,60 +43,7 @@ bool QueryExecuter::getTableColumnIndex(int &tid, int &cid, SQLSelector *s,
     return true;
 }
 
-bool QueryExecuter::typeComparable(char a, char b)
-{
-    if ((a == 'V' && b == 'C') || (a == 'C' && b == 'V') ||
-            (a == 'I' && b == 'I'))
-        return true;
-    return false;
-}
-
-void QueryExecuter::traverseTable(int tid, SQLResult *result)
-{
-    if (tid == tables.size()) {
-        addToResultIfMatch(result);
-        return;
-    }
-    Iterator* currentIterator = iterators.at(tid);
-    while (currentIterator->available()) {
-        traverseTable(tid + 1, result);
-        ++ (*currentIterator);
-    }
-}
-
-void QueryExecuter::addToResultIfMatch(SQLResult *result)
-{
-    // retrieve all data in this combination
-    for (int i = 0; i < tables.size(); ++ i) {
-        // TODO: Simplify following code using new interface.
-        int dummy;
-        iterators[i]->getdata(tempLinkedRowData[i], dummy);
-        records[i]->Input(tempLinkedRowData[i]);
-    }
-    for (QueryCondition& con : conditions) {
-
-        bool bresult;
-        if (con.rightIsValue)
-            bresult = con.compare(records[con.left.tableIndex]->getAt(con.left.columnIndex),
-                    records[con.left.tableIndex]->getcolumns()[con.left.columnIndex]->getisNull(),
-                     con.rightValue.content, con.rightValue.type == SQLValue::NUL);
-        else
-            bresult = con.compare(records[con.left.tableIndex]->getAt(con.left.columnIndex),
-                    records[con.left.tableIndex]->getcolumns()[con.left.columnIndex]->getisNull(),
-                                 records[con.right.tableIndex]->getAt(con.right.columnIndex),
-                    records[con.right.tableIndex]->getcolumns()[con.right.columnIndex]->getisNull());
-        if (!bresult) return;
-    }
-    // Condition Match: Add to result.
-    result->addNew();
-    int did = 0;
-    for (SelectorPair& s : selectors) {
-        result->setData(did, records[s.tableIndex]->getAt(s.columnIndex));
-        ++ did;
-    }
-}
-
-bool QueryExecuter::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLConditionGroup *cgrp)
+bool QueryExecutor::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLConditionGroup *cgrp)
 {
     clearUp();
 
@@ -119,15 +55,13 @@ bool QueryExecuter::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
         tableDict[tbName] = tidx;
         Table* thisTable = driver->getCurrentDatabase()->getTableByName(tbName);
         tables.push_back(thisTable);
-        records.push_back(RecordFactory::getrecord(thisTable));
-        iterators.push_back(IteratorFactory::getiterator(thisTable));
         ++ tidx;
     }
 
     if (sgrp->allMatched) {
         // Add all selectors
         for (int i = 0; i < tidx; ++ i) {
-            int columnsInTable = records[i]->getcolumncount();
+            int columnsInTable = tables[i]->getcolumncount();
             for (int j = 0; j < columnsInTable; ++ j) {
                 SelectorPair pair;
                 pair.tableIndex = i;
@@ -146,29 +80,37 @@ bool QueryExecuter::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
     }
 
     for (SQLCondition* c : *cgrp) {
-        QueryCondition thisCondition;
+        ConditionPair thisCondition;
         if (!getTableColumnIndex(thisCondition.left.tableIndex, thisCondition.left.columnIndex,
                                  &(c->lValue), tableDict, tableDictIterator))
             return false;
 
-        thisCondition.lValueType = records[thisCondition.left.tableIndex]-> \
+        char lValueType = tables[thisCondition.left.tableIndex]->
                 getcolumns()[thisCondition.left.columnIndex]->getType()[6];
 
         if (c->type == SQLCondition::VALUE) {
             thisCondition.rightIsValue = true;
             thisCondition.rightValue = c->rValue;
-            if (!c->rValue.typeFitChar(thisCondition.lValueType)) {
+            if (c->operand == SQLOperand::LIKE) {
+                thisCondition.rightValue.content = QueryCondition::convertRegex(
+                        thisCondition.rightValue.content);
+            }
+            if (!QueryCondition::typeComparable(c->rValue.type, lValueType)) {
                 driver->addErrorMessage("Invalid Comparison between " +
                                         c->lValue.tableName + " and " + c->rValue.content);
                 return false;
             }
         } else {
             thisCondition.rightIsValue = false;
+            if (c->operand == SQLOperand::LIKE) {
+                driver->addErrorMessage("Like conditions cannot match a column in table.");
+                return false;
+            }
             if (!getTableColumnIndex(thisCondition.right.tableIndex, thisCondition.right.columnIndex,
                                      &(c->rValueColumn), tableDict, tableDictIterator))
                 return false;
-            if (!typeComparable(thisCondition.lValueType,
-                                records[thisCondition.right.tableIndex]-> \
+            if (!QueryCondition::typeComparable(lValueType,
+                                tables[thisCondition.right.tableIndex]->
                                 getcolumns()[thisCondition.right.columnIndex]->getType()[6])) {
                 driver->addErrorMessage("Invalid Comparison between " +
                                         c->lValue.tableName + " and " + c->rValueColumn.tableName);
@@ -181,13 +123,108 @@ bool QueryExecuter::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
     return true;
 }
 
-bool QueryExecuter::executeQuery()
+bool QueryExecutor::executeQuery()
 {
     // ASSERT: All types are fit.
-    // TODO: rearrange query sequence.
+    /*
+     * Algorithm Description:
+     *
+     * 1. Apply all inner / numeric filters.
+     * 2. Arrange all tables into a vector.
+     * 3. Repeat until vector's size == 1:
+     *      - Calculate any 2 tables' condition count.
+     *          and give the joint of them a unique score.
+     *      - Select 2 tables maximizing the score and join them
+     *      - Update condition parameters
+     * 4. Output them to SQLResult.
+     */
 
-    // ASSERT: Below - NO EXCEPTION SHOULD HAPPEN (PTR_DELETE)
-    SQLResult* currentResult = new SQLResult(selectors.size());
+    std::vector<ConditionPair> currentConditions;
+    std::vector<Table*> operatingTables;
+    std::vector<SelectorPair> operatingSelectors;
+
+    for (SelectorPair& pair : selectors) {
+        operatingSelectors.push_back(pair);
+    }
+
+    for (ConditionPair& c : conditions) {
+        currentConditions.push_back(c);
+    }
+
+    for (unsigned tid = 0; tid < tables.size(); ++ tid) {
+        operatingTables.push_back(tables[tid]);
+        std::vector<ConditionPair> thisTableInnerConditions;
+        std::vector<ConditionPair>::iterator cIter = currentConditions.begin();
+        while (cIter != currentConditions.end()) {
+            if (cIter->left.tableIndex == tid &&
+                (cIter->rightIsValue || (!cIter->rightIsValue && cIter->right.tableIndex == tid))) {
+                thisTableInnerConditions.push_back(*cIter);
+                cIter = currentConditions.erase(cIter);
+            } else ++ cIter;
+        }
+        if (thisTableInnerConditions.size() != 0) {
+            // Directly discard old one because this is maintained in database manager.
+            operatingTables[tid] = IntelligentFilter::apply(tables[tid], thisTableInnerConditions);
+        }
+    }
+
+    QueryOptimizer* optimizer = new QueryOptimizer();
+
+    for (unsigned reduceID = 1; reduceID < tables.size(); ++ reduceID) {
+        // notice: following codes are based on transformed index.
+        optimizer->generatePlan(currentConditions, operatingTables);
+        unsigned int mergedID1 = (unsigned int) optimizer->getJoinIDPlan().first,
+                mergedID2 = (unsigned int) optimizer->getJoinIDPlan().second;
+
+        Table* jointTable = optimizer->executePlan();
+        // Heuristic merged operatingTables[mergedID1] and operatingTables[mergedID2] into mergedID1
+        // The mergedID1 is at front.
+        // Return new table and selected 2 IDs. But the old table is not deleted.
+
+        int mergedID1ColumnCount = operatingTables[mergedID1]->getcolumncount();
+
+        if (operatingTables[mergedID1]->gettabletype() == "Virtual")
+            delete operatingTables[mergedID1];
+        if (operatingTables[mergedID2]->gettabletype() == "Virtual")
+            delete operatingTables[mergedID2];
+
+        operatingTables[mergedID1] = jointTable;
+
+        std::vector<ConditionPair>::iterator iter = currentConditions.begin();
+        while (iter != currentConditions.end()) {
+            if (iter->left.tableIndex == mergedID2) {
+                iter->left.tableIndex = mergedID1;
+                iter->left.columnIndex += mergedID1ColumnCount;
+            }
+            if (iter->right.tableIndex == mergedID2) {
+                iter->right.tableIndex = mergedID1;
+                iter->right.columnIndex += mergedID1ColumnCount;
+            }
+            if (iter->right.tableIndex == iter->left.tableIndex) {
+                iter = currentConditions.erase(iter);
+            } else {
+                iter->left.tableIndex = indexMap(iter->left.tableIndex, mergedID2);
+                iter->right.tableIndex = indexMap(iter->right.tableIndex, mergedID2);
+                iter++;
+            }
+        }
+
+        for (SelectorPair& pair : operatingSelectors) {
+            if (pair.tableIndex == mergedID2) {
+                pair.tableIndex = mergedID1;
+                pair.columnIndex += mergedID1ColumnCount;
+            }
+            pair.tableIndex = indexMap(pair.tableIndex, mergedID2);
+        }
+
+        std::vector<Table*>::const_iterator tableIter = operatingTables.begin();
+        while (mergedID2 --) ++ tableIter;
+        operatingTables.erase(tableIter);
+    }
+
+    delete optimizer;
+
+    SQLResult* currentResult = new SQLResult((int) selectors.size());
     bool titled = (tables.size() > 1);
     for (SelectorPair& pair : selectors) {
         std::string dispName = tables[pair.tableIndex]->getcolumnname(pair.columnIndex);
@@ -196,29 +233,36 @@ bool QueryExecuter::executeQuery()
         }
         currentResult->addTitleField(dispName);
     }
-    tempLinkedRowData = new char*[tables.size()];
-    for (int i = 0; i < tables.size(); ++ i)
-        tempLinkedRowData[i] = new char[iterators[i]->getcurrentsize()];
 
-    traverseTable(0, currentResult);
+    Table* resultTable = operatingTables[0];
+    Iterator* resultTableIterator = IteratorFactory::getiterator(resultTable);
+    Record* resultTableRecord = RecordFactory::getrecord(resultTable);
+
+    while (resultTableIterator->available()) {
+        resultTableIterator->getdata(resultTableRecord);
+        currentResult->addNew();
+        for (unsigned t = 0; t < operatingSelectors.size(); ++ t) {
+            currentResult->setData(t, resultTableRecord->getAt(operatingSelectors[t].columnIndex));
+        }
+        ++ (*resultTableIterator);
+    }
+
+    delete resultTableIterator;
+    delete resultTableRecord;
+    delete resultTable;
 
     driver->setResult(currentResult);
-
-    for (int i = 0; i < tables.size(); ++ i)
-        delete[] tempLinkedRowData[i];
-    delete[] tempLinkedRowData;
 
     // No need to clear results.
     return true;
 }
 
-QueryExecuter::QueryExecuter(SQLDriver *d)
+QueryExecutor::QueryExecutor(SQLDriver *d)
 {
     driver = d;
-    tempLinkedRowData = 0;
 }
 
-QueryExecuter::~QueryExecuter()
+QueryExecutor::~QueryExecutor()
 {
     clearUp(); // needed.
 }

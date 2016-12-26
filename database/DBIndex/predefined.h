@@ -41,7 +41,7 @@ inline int keycmp(const index_key &a, const index_key &b) {
                 return -1;
         }
     }
-    else return 0;
+    else return x>0?1:-1;
     return 0;
 }
 

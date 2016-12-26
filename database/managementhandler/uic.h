@@ -40,6 +40,9 @@ public:
     static DataBaseType** copytype(DataBaseType** input, int inputlen);
     static int stringtoint(string text);
     static string inttostring(int text);
+    static DataBaseType *copyType(DataBaseType *oriType);
+    static std::vector<std::string> stringSplit(const std::string &s,
+                                              const std::string &delim);
 };
 
 #endif // UIC_H

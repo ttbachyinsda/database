@@ -34,9 +34,11 @@ class SQLDriver {
 
     DatabaseManager* databaseManager;
     Database* currentDatabase;
-    QueryExecuter* queryExecuter;
+    QueryExecutor* queryExecuter;
 
     void clearPreviousSession();
+
+    void initialize();
 
 public:
 
@@ -65,13 +67,16 @@ public:
     Database* getCurrentDatabase() const { return currentDatabase; }
     DatabaseManager* getDatabaseManager() const { return databaseManager; }
 
-    QueryExecuter* getQueryExecuter() const { return queryExecuter; }
+    QueryExecutor* getQueryExecuter() const { return queryExecuter; }
 
     void setResult(SQLResult* r) { if (result) delete result; result = r; lastHasResult = true; }
 
     SQLResult* getResult() const { return result; }
 
+    void setWorkingDir(const std::string&);
+
     SQLDriver();
+    SQLDriver(const std::string& workingDir);
     ~SQLDriver();
 
 };

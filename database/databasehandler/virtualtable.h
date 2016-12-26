@@ -9,6 +9,9 @@ public:
     VirtualTable();
     ~VirtualTable();
     int getNowRowSize(int rownum);
+
+    virtual unsigned long getTraverseCost() override;
+
     bool Initialize();
     void createTable(vector<string> clname, vector<DataBaseType*> cltype);
     bool DeleteAt(int pagenum, int rownum);

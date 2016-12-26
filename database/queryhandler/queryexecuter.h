@@ -15,36 +15,29 @@ class SQLResult;
 #include "../recordhandler/recordfactory.h"
 #include "../managementhandler/iteratorfactory.h"
 
-class QueryExecuter
+class QueryExecutor
 {
     SQLDriver* driver;
     std::vector<Table*> tables;
-    std::vector<Record*> records;
-
-    // Save the current state
-    std::vector<Iterator*> iterators;
 
     std::vector<SelectorPair> selectors;
-    std::vector<QueryCondition> conditions;
 
-    char** tempLinkedRowData;
+    std::vector<ConditionPair> conditions;
 
     void clearUp();
     bool getTableColumnIndex(int& tid, int& cid, SQLSelector* s, std::map<std::string, int>& dict,
                              std::map<std::string, int>::iterator& dictIter);
-    bool typeComparable(char a, char b);
-
-    // Recursion Entrance:
-    void traverseTable(int tid, SQLResult* result);
-    // Recursion Finish:
-    void addToResultIfMatch(SQLResult* result);
+    inline int indexMap(int i, int splitPoint) {
+        if (i == splitPoint) return -1;
+        return (i < splitPoint) ? i : i - 1;
+    }
 
 public:
     bool setQuery(SQLTableGroup* tgrp, SQLSelectorGroup* sgrp, SQLConditionGroup* cgrp);
     bool executeQuery();
 
-    QueryExecuter(SQLDriver* d);
-    ~QueryExecuter();
+    QueryExecutor(SQLDriver* d);
+    ~QueryExecutor();
 };
 
 #endif // QUERYEXECUTER_H

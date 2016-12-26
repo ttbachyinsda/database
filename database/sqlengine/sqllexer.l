@@ -60,6 +60,10 @@ using token = yy::SQLParser::token;
 (?i:"key")              { return token::KEY;        }
 (?i:"check")            { return token::CHECK;      }
 (?i:"in")               { return token::IN;         }
+(?i:"like")             { return token::LIKE;       }
+
+(?i:"foreign")          { return token::FOREIGN;    }
+(?i:"references")       { return token::REFERENCES; }
 
 (?i:"insert")           { return token::INSERT;     }
 (?i:"into")             { return token::INTO;       }
@@ -72,6 +76,13 @@ using token = yy::SQLParser::token;
 (?i:"from")             { return token::FROM;       }
 (?i:"and")              { return token::AND;        }
 (?i:"index")            { return token::INDEX;      }
+(?i:"group")            { return token::GROUP;      }
+(?i:"by")               { return token::BY;         }
+
+(?i:"sum")              { return token::SUM;        }
+(?i:"avg")              { return token::AVG;        }
+(?i:"min")              { return token::MIN;        }
+(?i:"max")              { return token::MAX;        }
 
 [0-9]+                  {
                             yylval->build<std::string>(yytext);
@@ -79,7 +90,9 @@ using token = yy::SQLParser::token;
                         }
 
 '[^']*'                 {
-                            yylval->build<std::string>(yytext);
+                            std::string strtxt = yytext;
+                            strtxt = strtxt.substr(1, strtxt.size() - 2);
+                            yylval->build<std::string>(strtxt);
                             return token::VALUE_STRING;
                         }
 

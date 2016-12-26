@@ -8,6 +8,9 @@
 #include "../databasehandler/fixedsizetable.h"
 #include "../recordhandler/record.h"
 #include "../recordhandler/recordfactory.h"
+#include "../groupalgorithm/grouphandler.h"
+#include "../queryhandler/modifyhandler.h"
+#include "../queryhandler/checkhelper.h"
 #include <iostream>
 using namespace std;
 
@@ -92,14 +95,14 @@ bool SQLCreateTableAction::execute()
     }
 
     // Check Variable Types.
-    bool isVariableTable = false;
-    for (SQLType* type : *fieldList) {
-        if (type->type[0] == 'V') {
-            isVariableTable = true;
-            break;
-        }
-    }
-
+    bool isVariableTable = true;
+//    for (SQLType* type : *fieldList) {
+//        if (type->type[0] == 'V') {
+//            isVariableTable = true;
+//            break;
+//        }
+//    }
+    // TODO: Hash table support: This time must exist primary type.
     Table* newTable = NULL;
     if (isVariableTable)
         newTable = new FlexibleTable();
@@ -111,16 +114,33 @@ bool SQLCreateTableAction::execute()
 
     vector<string> clname;
     vector<DataBaseType*> cltype;
+    int primaryIndex = -1;
+    int currentIndex = 0;
+    SQLCheckGroup* checkGroup = 0;
 
     for (SQLType* type : *fieldList) {
-        // TODO: CREATE INDEX FOR PRIMARY TYPE
-        // TODO: PRIMARY KEY NOT UNIQUE.
-        if (type->primaryType) continue;
-        if (type->isCheck) continue;
+        if (type->primaryType) {
+            if (primaryIndex != -1) {
+                driver->addErrorMessage("Multiple primary types when creating table.");
+                return false;
+            } else {
+                for (unsigned int i = 0; i < clname.size(); ++ i) {
+                    if (type->identifier == clname[i]) {
+                        primaryIndex = i;
+                        break;
+                    }
+                }
+            }
+            continue;
+        }
+        if (type->isCheck) {
+            checkGroup = type->checkGroup;
+            continue;
+        }
         clname.push_back(type->identifier);
-        // TODO: WHAT IS CONDITION?
         DataBaseType* dbType = UIC::reconvert(type->type, type->length, type->canNull);
         cltype.push_back(dbType);
+        ++ currentIndex;
     }
 
     newTable->createTable(clname, cltype);
@@ -129,6 +149,25 @@ bool SQLCreateTableAction::execute()
     if (!initResult) {
         driver->addErrorMessage("Failed to initialize table " + this->tableName);
         return false;
+    }
+
+    if (checkGroup != 0) {
+        if (!CheckHelper::addCheckCondition(clname, cltype, newTable, checkGroup)) {
+            driver->addErrorMessage("Invalid Check conditions.");
+            return false;
+        }
+    }
+
+    if (primaryIndex != -1) {
+        // Create empty index for primary type and disable multivalue.
+        newTable->setmultivalue(primaryIndex, false);
+        newTable->setmajornum(primaryIndex);
+
+        vector<int> idxVec;
+        idxVec.push_back(primaryIndex);
+        newTable->createindex(idxVec);
+    } else {
+        driver->addWarningMessage("Current table does not have a primary key.");
     }
 
     handler->addTable(newTable);
@@ -153,26 +192,62 @@ bool SQLDropTableAction::execute()
 
 bool SQLDescAction::execute()
 {
-    cout << "DESC" << endl;
+    Database* handler = driver->getCurrentDatabase();
+    if (handler == 0) {
+        driver->addErrorMessage("No database is selected when showing schema of table "
+                                + this->tableName);
+        return false;
+    }
+    Table* myTable = handler->getTableByName(tableName);
+    if (myTable == 0) {
+        driver->addErrorMessage("Table " + tableName + " does not exist.");
+        return false;
+    }
+    // Field, Type, Null, Key, Default, Extra
+    SQLResult* result = new SQLResult(6);
+    result->addTitleField("Field");
+    result->addTitleField("Type");
+    result->addTitleField("Null");
+    result->addTitleField("Key");
+    result->addTitleField("Default");
+    result->addTitleField("Extra");
+
+    for (int i = 0; i < myTable->getcolumncount(); ++ i) {
+        result->addNew();
+        DataBaseType* thisColType = myTable->getcolumn(i);
+        result->setData(0, myTable->getcolumnname(i));
+        result->setData(1, thisColType->getType());
+        result->setData(2, (thisColType->getisNull()) ? "YES" : "NO");
+        result->setData(3, myTable->getmultivalue(i) ? "" : "PRI");
+        result->setData(4, "NULL");
+        result->setData(5, "");
+    }
+    driver->setResult(result);
     return true;
 }
 
 bool SQLShowTablesAction::execute()
 {
-    // TODO: implemented only for fun.
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when showing tables.");
         return false;
     }
-    cout << "==========ALL tbs in " << handler->getname() << "===========" << endl;
+    SQLResult* result = new SQLResult(3);
+    result->addTitleField("Table ID");
+    result->addTitleField("Name");
+    result->addTitleField("File Location");
     int idx = 0;
     while (true) {
         Table* now = handler->getTable(idx);
         if (!now) break;
-        cout << idx << ". " << now->getname() << " (stored in) " << now->getfilename() << endl;
+        result->addNew();
+        result->setData(0, UIC::inttostring(idx + 1));
+        result->setData(1, now->getname());
+        result->setData(2, now->getfilename());
         ++ idx;
     }
+    driver->setResult(result);
     return true;
 }
 
@@ -191,23 +266,58 @@ bool SQLInsertAction::execute()
         return false;
     }
 
-    // TODO: efficiency condiderations of getrecord.
     Record* record = RecordFactory::getrecord(myTable);
-    for (int i = 0; i < valueGroupList->size(); ++ i) {
-        int thisSize = valueGroupList->at(i)->size();
+    Iterator* priKeyCompiler = IteratorFactory::getiterator(myTable);
+    // Build Choice Cache for check clause.
+    vector<vector<string> > choiceCache((unsigned long) myTable->getcolumncount());
+    for (auto s = myTable->gettablecondition()->begin(); s != myTable->gettablecondition()->end(); ++ s) {
+        if (s->second.first == CheckHelper::choiceCode) {
+            choiceCache[s->first] = UIC::stringSplit(s->second.second, "\"");
+        }
+    }
+
+    int majorRowNum = myTable->getmajornum();
+    db_index* tablePrimaryIndex = myTable->getindexes()[majorRowNum];
+    bool hasPriKey = tablePrimaryIndex != 0 && !myTable->getmultivalue(majorRowNum);
+    if (!hasPriKey) {
+        driver->addWarningMessage("Current table does not have a primary key.");
+    }
+    for (unsigned int i = 0; i < valueGroupList->size(); ++ i) {
+        int thisSize = (int) valueGroupList->at(i)->size();
         if (thisSize != record->getcolumncount()) {
             driver->addErrorMessage("Size mismatch in value field of table " + identifier);
             return false;
         }
-        for (int j = 0; j < thisSize; ++ j) {
+        // 1. Type constraint (structural)
+        for (unsigned int j = 0; j < thisSize; ++ j) {
             SQLValue* sigValue = valueGroupList->at(i)->at(j);
-            if (!sigValue->typeFitChar(record->getcolumns()[j]->getType()[6]) ||
-                    !record->setAt(j, sigValue->content, sigValue->type == SQLValue::NUL)) {
+            if (!QueryCondition::typeComparable(sigValue->type, record->getcolumns()[j]->getType()[6])
+                || !record->setAt(j, sigValue->content, sigValue->type == SQLValue::LiteralType::NUL)) {
                 driver->addErrorMessage("Type mismatch when inserting value " +
-                                        sigValue->content + " into table " + identifier);
+                    ((sigValue->type == SQLValue::LiteralType::NUL) ? "<NULL>" : sigValue->content) + " into table " + identifier);
                 return false;
             }  
         }
+        // 2. Check clause constraint
+        if (myTable->gettablecondition()->size() != 0 &&
+                !CheckHelper::satisfy(myTable, valueGroupList->at(i), choiceCache)) {
+            driver->addErrorMessage("Value inserted at position " + to_string(i + 1) +
+                                    " does not satisfy check constraint.");
+            return false;
+        }
+        // 3. Primary Key constraint.
+        if (hasPriKey) {
+            vector<pair<int, int> > priKeyRes;
+            tablePrimaryIndex->findAll(SQLOperand::EQUAL,
+                                       priKeyCompiler->compile(valueGroupList->
+                                               at(i)->at(majorRowNum)->content, majorRowNum), &priKeyRes);
+            if (priKeyRes.size() != 0) {
+                driver->addErrorMessage("Duplicated primary key: " +
+                                                valueGroupList->at(i)->at(majorRowNum)->content);
+                return false;
+            }
+        }
+        // 4. TODO: Outer link constraint
         record->update();
         int dummy;
         myTable->FastAllInsert(dummy, dummy, record);
@@ -218,10 +328,9 @@ bool SQLInsertAction::execute()
 
 bool SQLDeleteAction::execute()
 {
-    // TODO: For where clause: needing type judge.
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
-        driver->addErrorMessage("No database is selected when inserting into table "
+        driver->addErrorMessage("No database is selected when deleting from table "
                                 + this->identifier);
         return false;
     }
@@ -230,31 +339,40 @@ bool SQLDeleteAction::execute()
         driver->addErrorMessage("Table " + identifier + " does not exist.");
         return false;
     }
-    cout << "============================" << endl;
-    cout << "Delete from table: " << identifier << " where ";
-    for (SQLCondition* condition : *conditionGroup) {
-        condition->dump();
-    }
-    return true;
+    ModifyHandler* modifyHandler = new ModifyHandler(driver);
+    bool prepareSucceeded = modifyHandler->prepareTable(myTable, conditionGroup);
+    if (prepareSucceeded) modifyHandler->executeDeleteQuery();
+    delete modifyHandler;
+    return prepareSucceeded;
 }
 
 bool SQLUpdateAction::execute()
 {
-    cout << "============================" << endl;
-    cout << "Update " << identifier << " where ";
-    for (SQLCondition* condition : *conditionGroup) {
-        condition->dump();
+    Database* handler = driver->getCurrentDatabase();
+    if (handler == 0) {
+        driver->addErrorMessage("No database is selected when updating table "
+                                + this->identifier);
+        return false;
     }
-    cout << " Set " << endl;
-    for (SQLSet* set : *setGroup) {
-        set->dump();
+    Table* myTable = handler->getTableByName(identifier);
+    if (myTable == 0) {
+        driver->addErrorMessage("Table " + identifier + " does not exist.");
+        return false;
     }
-    return true;
+    ModifyHandler* modifyHandler = new ModifyHandler(driver);
+    bool tablePrepareSucceed = modifyHandler->prepareTable(myTable, conditionGroup);
+    if (!tablePrepareSucceed) {
+        delete modifyHandler;
+        return false;
+    }
+    bool setPrepareSucceed = modifyHandler->prepareSetClause(setGroup);
+    if (setPrepareSucceed) modifyHandler->executeUpdateQuery();
+    delete modifyHandler;
+    return setPrepareSucceed;
 }
 
 bool SQLSelectAction::execute()
 {
-    // TODO: For where clause: needing type judge.
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when querying data.");
@@ -263,6 +381,24 @@ bool SQLSelectAction::execute()
     bool prepareSucceeded = driver->getQueryExecuter()->setQuery(fromGroup, selectorGroup, conditionGroup);
     if (!prepareSucceeded) return false;
     return driver->getQueryExecuter()->executeQuery();
+}
+
+bool SQLGroupSelectAction::execute() {
+    Database* handler = driver->getCurrentDatabase();
+    if (handler == 0) {
+        driver->addErrorMessage("No database is selected when doing group selections.");
+        return false;
+    }
+    Table* myTable = handler->getTableByName(tableName);
+    if (myTable == 0) {
+        driver->addErrorMessage("Table " + tableName + " does not exist.");
+        return false;
+    }
+    GroupHandler* groupHandler = new GroupHandler(driver);
+    bool prepareSucceeded = groupHandler->prepareQuery(myTable, selectorGroup, groupByGroup);
+    if (prepareSucceeded) driver->setResult(groupHandler->executeQuery());
+    delete groupHandler;
+    return prepareSucceeded;
 }
 
 bool SQLIndexAction::execute()
@@ -291,12 +427,12 @@ bool SQLCreateIndexAction::execute()
     if (!SQLIndexAction::execute())
         return false;
     if (currentTable->getindexes()[columnID] != 0) {
-        driver->addErrorMessage("Index for " + columnName + " already exists.");
-        return false;
+        driver->addWarningMessage("Index for " + columnName + " already exists.");
+        return true;
     }
-    currentTable->createemptyindex(columnID);
-    // TODO: Insert everything into this new index.
-    //currentTable->getindexes()[columnID]->insert();
+    std::vector<int> targetCol;
+    targetCol.push_back(columnID);
+    currentTable->createindex(targetCol);
     return true;
 }
 
@@ -363,4 +499,9 @@ SQLDeleteAction::~SQLDeleteAction()
         delete condition;
     }
     delete conditionGroup;
+}
+
+SQLGroupSelectAction::~SQLGroupSelectAction() {
+    delete selectorGroup;
+    if (groupByGroup) delete groupByGroup;
 }
