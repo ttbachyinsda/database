@@ -2,6 +2,7 @@
 #include "../layer/json.hpp"
 #include <cstring>
 #include <iostream>
+#include <fstream>
 
 using json = nlohmann::json;
 const char *const SQLType::INT = "INT";
@@ -92,4 +93,17 @@ void SQLResult::dumpToConsole()
         }
         std::cout << std::endl;
     }
+}
+
+void SQLResult::dumpToFile(const std::string &filename)
+{
+    std::ofstream fout(filename);
+    if (!fout) return;
+    for (std::vector<std::string>& r : data) {
+        for (std::string& t : r) {
+            fout << t << "\t";
+        }
+        fout << "\n";
+    }
+    fout.close();
 }

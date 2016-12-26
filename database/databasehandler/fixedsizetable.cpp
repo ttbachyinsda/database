@@ -418,3 +418,7 @@ string FixedSizeTable::gettabletype()
 {
     return "Fixed";
 }
+
+unsigned long FixedSizeTable::getTraverseCost() {
+    return (unsigned long) getPageNum();
+}

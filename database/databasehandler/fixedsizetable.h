@@ -26,6 +26,11 @@ public:
 
 private:
     void PackageFromHeadFile(BufType temp);
+
+public:
+    virtual unsigned long getTraverseCost() override;
+
+private:
     void PackageHeadFile(BufType temp);
     bool InsertAt(int pagenum, char* insertdata, int& rownum);
     bool FastInsert(int& pagenum, int& rownum, Record* rec);

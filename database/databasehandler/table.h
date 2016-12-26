@@ -72,6 +72,8 @@ public:
     vector<pair<int, pair<int, string> > >* gettablecondition();
     vector<pair<int, pair<string, int> > >* getlinkedcolumn();
 
+    virtual unsigned long getTraverseCost() = 0;
+
 protected:
     void clearcolumn();
     void clearindex();

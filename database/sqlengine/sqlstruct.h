@@ -7,7 +7,7 @@
 
 struct SQLValue
 {
-    enum {
+    enum LiteralType {
         ENUMERATE, STRING, NUL
     } type;
 
@@ -15,16 +15,6 @@ struct SQLValue
 
     SQLValue() {
         type = SQLValue::STRING;
-    }
-
-    bool typeFitChar(char c) {
-        if (c == 'I' && type == ENUMERATE)
-            return true;
-        if ((c == 'V' || c == 'C') && type == STRING)
-            return true;
-        // Insert or where clause (NULL is always acceptable)
-        // But NULL is not comparable (< > <= >= ...)
-        return (type == NUL);
     }
 
     void dump() const;
@@ -39,15 +29,43 @@ enum SQLOperand
     GREATER,
     LESS,
     GREATER_EQUAL,
-    LESS_EQUAL
+    LESS_EQUAL,
+    LIKE
+};
+enum SQLGroupMethod {
+    MAX, MIN, SUM, AVG, BLANK
+};
+
+struct SQLSelector
+{
+    std::string databaseName;
+    std::string tableName;
+
+    SQLGroupMethod groupMethod;
+
+    bool hasPrefix() const { return databaseName.size() != 0; }
+
+    void dump() const;
+
+    SQLSelector() { groupMethod = BLANK; }
 };
 
 struct SQLCheck
 {
+    SQLSelector* selector;
     bool isChoice;
     SQLValueGroup* choiceList;
     SQLOperand operand;
     SQLValue value;
+    ~SQLCheck() {
+        if (isChoice) {
+            for (SQLValue* sv : *choiceList) {
+                delete sv;
+            }
+            delete choiceList;
+        }
+        delete selector;
+    }
 };
 typedef std::vector<SQLCheck*> SQLCheckGroup;
 
@@ -67,10 +85,15 @@ struct SQLType
     bool isCheck;
     SQLCheckGroup* checkGroup;
 
+    bool hasForeignKey;
+    SQLSelector* foreignKey;
+
     SQLType() {
         isCheck = false;
         checkGroup = NULL;
         primaryType = false;
+        hasForeignKey = false;
+        foreignKey = NULL;
         type = SQLType::CHAR;
         canNull = true;
     }
@@ -81,17 +104,10 @@ struct SQLType
                 delete c;
             delete checkGroup;
         }
+        if (hasForeignKey && foreignKey) {
+            delete foreignKey;
+        }
     }
-
-    void dump() const;
-};
-
-struct SQLSelector
-{
-    std::string databaseName;
-    std::string tableName;
-
-    bool hasPrefix() const { return databaseName.size() != 0; }
 
     void dump() const;
 };
@@ -151,13 +167,13 @@ public:
     ~SQLResult() {}
 
     void addNew() {
-        data.push_back(std::vector<std::string>(columns));
+        data.push_back(std::vector<std::string>((unsigned long) columns));
     }
 
     void setData(int idx, const std::string& str) {
         if (idx >= columns) return;
         if (data.size() == 0) return;
-        data.back().at(idx) = str;
+        data.back().at((unsigned long) idx) = str;
     }
     void addTitleField(const std::string& str) {
         title.push_back(str);
@@ -166,6 +182,8 @@ public:
     std::string toJSON();
 
     void dumpToConsole();
+
+    void dumpToFile(const std::string& filename);
 };
 
 #endif // SQLSTRUCT_H

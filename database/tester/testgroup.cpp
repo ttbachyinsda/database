@@ -152,51 +152,53 @@ void testgroup::begintest()
     auto iterator = IteratorFactory::getiterator(onetable);
     auto record = RecordFactory::getrecord(onetable);
 
-    //    int js=0;
-    //    while (iterator->available())
-    //    {
-    //        js++;
-    //        cout<<js<<endl;
-    //        iterator->getdata(record);
-    //        for (int i = 0; i < cltype.size(); i++) {
-    //            cout << "yes: " << i << ' ' << record->getAt(i) << ' ';
-    //        }
-    //        cout<<endl;
-    //        ++(*iterator);
-    //    }
-    //    iterator->getbegin();
+    int js=0;
+    while (iterator->available())
+    {
+        js++;
+        if (js % 2 == 0) iterator->deletedata();
+        ++(*iterator);
+    }
+    iterator->getbegin();
+    js = 0;
+    while (iterator->available())
+    {
+        js++;
+        ++(*iterator);
+    }
+    cout<<"now total num = "<<js<<endl;
 
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
+//    if (iterator->available()) {
+//        iterator->getdata(record);
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+//        }
+//    }
 
-    ++(*iterator);
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
-    iterator->access(300, 1);
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
+//    ++(*iterator);
+//    if (iterator->available()) {
+//        iterator->getdata(record);
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+//        }
+//    }
+//    iterator->access(300, 1);
+//    if (iterator->available()) {
+//        iterator->getdata(record);
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+//        }
+//    }
 
-    iterator->access(1, 0);
-    cout << "try to delete" << endl;
-    iterator->deletedata();
-    if (iterator->available()) {
-        iterator->getdata(record);
-        for (int i = 0; i < cltype.size(); i++) {
-            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
-        }
-    }
+//    iterator->access(1, 0);
+//    cout << "try to delete" << endl;
+//    iterator->deletedata();
+//    if (iterator->available()) {
+//        iterator->getdata(record);
+//        for (int i = 0; i < cltype.size(); i++) {
+//            cout << "yes: " << i << ' ' << record->getAt(i) << endl;
+//        }
+//    }
     testindex(onetable, "0");
     testindex(onetable, "1");
     testindex(onetable, "19");
@@ -222,6 +224,18 @@ void testgroup::begintest()
     }
     iterator = IteratorFactory::getiterator(onetable);
     record = RecordFactory::getrecord(onetable);
+
+    iterator->getbegin();
+    js = 0;
+    while (iterator->available())
+    {
+        js++;
+        ++(*iterator);
+    }
+    cout<<"after save now total num = "<<js<<endl;
+    iterator->getbegin();
+
+
     if (iterator->available()) {
         iterator->getdata(record);
         for (int i = 0; i < cltype.size(); i++) {

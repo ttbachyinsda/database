@@ -1,5 +1,27 @@
 ﻿使用说明：
 
+2.1.0.7改动：
+
+添加了一个加密模块，使用AES方式加密，具体请见testdatabase。
+
+注意一旦encrypt，就处在未初始化状态，
+
+有一个函数 isencrypt可以判断是不是在加密状态
+
+其他改动：
+
+removeTable 这个函数现在能正确删除其他文件了（.tableinfo .tb?）
+
+修复了一个插入索引时的bug
+
+为所有表添加了一个存储外链信息的linkedcolumn
+
+修复了一个虚表Iterator的bug，该bug会使在表为空的时候访问出问题
+
+添加了一个删除索引的模块
+
+添加了一个build api的工具，使用qmake配合该工具即可进行编译
+
 2.1.0.5改动：
 
 添加了新的类型：Bulb和Text，具体示例请见testhashflexible。特点是在表中只占8个字节，用checkrightandchange输入实际内容，用output获得实际内容，用read和write只能获取链接（8个字节）。

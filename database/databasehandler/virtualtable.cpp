@@ -18,7 +18,12 @@ int VirtualTable::getRowSize(int rownum)
 bool VirtualTable::Initialize()
 {
     haveinitialize = true;
-    //no Initialize needed
+    // deleted in base class.
+    this->DBindex = new db_index*[this->columncount];
+    for (int i = 0; i < columncount; i++)
+    {
+        this->DBindex[i] = 0;
+    }
     return true;
 }
 
@@ -159,4 +164,9 @@ int VirtualTable::getinfo(int reqhashnum, int pagenum, int rownum, vector<int>* 
 {
     //Don't need to write that
     return 0;
+}
+
+unsigned long VirtualTable::getTraverseCost() {
+    // The data is totally in RAM, so the cost is divided by 10.
+    return realdata.size() / 10;
 }

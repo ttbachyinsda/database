@@ -1,3 +1,4 @@
+#pragma once
 #include "bplus_tree.h"
 #include "../sqlengine/sqlstruct.h"
 #include <vector>
@@ -9,6 +10,11 @@ using std::string;
 
 using std::pair;
 using std::vector;
+
+#include <string>
+#include <vector>
+#include "../sqlengine/sqlstruct.h"
+using namespace std;
 
 class db_index {
    public:
@@ -33,6 +39,10 @@ class db_index {
 
     bool isMulti_value() const;
     void setMulti_value(bool multi_value);
+
+    void findAll(SQLOperand operand, string targetValue, vector<pair<int,int>> *res) {
+        findAll(operand, targetValue, (int) targetValue.size(), res);
+    }
 
    private:
     bplus_tree b_tree;

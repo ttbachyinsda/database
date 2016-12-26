@@ -77,22 +77,28 @@ bool HashFlexibleIterator::nextrow()
                 } else if (infovec.size() == 3) {
                     this->nowpagerownum = infovec[0];
                     this->jumppagenum = infovec[1];
-                    if (this->jumppagenum != 0) {
-                        this->nowpagenum = this->jumppagenum;
-                        this->nowrownum = 0;
-                    } else {
-                        this->nowpagenum = 0;
-                        this->nowrownum = 0;
-                        while (true) {
-                            this->nowhashnum++;
+                    if (this->nowrownum < this->nowpagerownum)
+                    {
+                        this->nowrownum ++;
+                    }else
+                    {
+                        if (this->jumppagenum != 0) {
+                            this->nowpagenum = this->jumppagenum;
+                            this->nowrownum = 0;
+                        } else {
+                            this->nowpagenum = 0;
+                            this->nowrownum = 0;
+                            while (true) {
+                                this->nowhashnum++;
+                                if (this->nowhashnum == 1024)
+                                    break;
+                                this->nowpagenum = this->nowtable->getinfo(this->nowhashnum, 0, 0, 0);
+                                if (this->nowpagenum >= 2)
+                                    break;
+                            }
                             if (this->nowhashnum == 1024)
-                                break;
-                            this->nowpagenum = this->nowtable->getinfo(this->nowhashnum, 0, 0, 0);
-                            if (this->nowpagenum >= 2)
-                                break;
+                                return false;
                         }
-                        if (this->nowhashnum == 1024)
-                            return false;
                     }
                     continue;
                 } else {

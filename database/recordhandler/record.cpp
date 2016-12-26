@@ -43,3 +43,7 @@ int* Record::getcolumnsize()
 {
     return this->columnsize;
 }
+
+bool Record::getIsNull(int num) {
+    return this->columns[num]->getisNull();
+}
