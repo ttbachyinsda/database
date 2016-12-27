@@ -11,6 +11,7 @@
 #include "../typehandler/databasetype.h"
 #include "../typehandler/databasevarchar.h"
 #include <sstream>
+#include <vector>
 
 typedef int FileIterator;
 typedef char* BufType;
