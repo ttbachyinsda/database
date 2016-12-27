@@ -12,6 +12,9 @@ bool QueryCondition::match(SQLOperand op, char type, const std::string &left,
     int cmpResult = 0;
     if (op != SQLOperand::LIKE) {
         if (type == 'I') cmpResult = matchInteger(left, right);
+        else if (type == 'L') cmpResult = matchLint(left,right);
+        else if (type == 'R') cmpResult = matchReal(left,right);
+        else if (type == 'D') cmpResult = matchDate(left,right);
         else cmpResult = matchString(left, right);
     } else {
         std::regex r(right);
@@ -45,6 +48,39 @@ int QueryCondition::matchInteger(const std::string &left, const std::string &rig
     else
         return - matchIntegerCond(right.c_str(), (int) right.size(),
                                   left.c_str(), (int) left.size());
+}
+int QueryCondition::matchDate(const std::string &left, const std::string &right)
+{
+    assert(left.length()==8);
+    assert(right.length()==8);
+    time_point<system_clock, chrono::nanoseconds> temp1,temp2;
+    memcpy(&temp1,left.data(),8);
+    memcpy(&temp2,right.data(),8);
+    if (temp1<temp2) return -1;
+    if (temp1>temp2) return 1;
+    return 0;
+}
+int QueryCondition::matchLint(const std::string &left, const std::string &right)
+{
+    assert(left.length()==8);
+    assert(right.length()==8);
+    long long temp1,temp2;
+    memcpy(&temp1,left.data(),8);
+    memcpy(&temp2,right.data(),8);
+    if (temp1<temp2) return -1;
+    if (temp1>temp2) return 1;
+    return 0;
+}
+int QueryCondition::matchReal(const std::string &left, const std::string &right)
+{
+    assert(left.length()==8);
+    assert(right.length()==8);
+    double temp1,temp2;
+    memcpy(&temp1,left.data(),8);
+    memcpy(&temp2,right.data(),8);
+    if (temp1<temp2) return -1;
+    if (temp1>temp2) return 1;
+    return 0;
 }
 
 int QueryCondition::matchIntegerCond(const char *s, int ls, const char *l, int ll) {

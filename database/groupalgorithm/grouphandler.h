@@ -9,6 +9,8 @@
 #include "../databasehandler/table.h"
 #include "../sqlengine/sqldriver.h"
 #include "rawgroup.h"
+#include <assert.h>
+#include <sstream>
 
 class GroupHandler {
     typedef std::map<std::string, int> strIntMap;

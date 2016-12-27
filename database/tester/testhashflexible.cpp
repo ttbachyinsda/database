@@ -111,7 +111,6 @@ void testhashflexible::begintest()
     auto t = RecordFactory::getrecord(onetable);
     QTime time;
     time.start();
-    Group group;
     for (int i = 0; i < 200000; i++) {
         aaa[0] = InttoString(i);
         aaa[1] = "a" + InttoString(i);
@@ -126,8 +125,6 @@ void testhashflexible::begintest()
         }
         if (can)
             onetable->FastAllInsert(pagenum, rownum, t);
-        if (i % 3 == 0)
-            group.add(pagenum, rownum);
         //cout<<pagenum<<' '<<rownum<<endl;
         //assert(pagenum <= onetable->getPageNum());
         //cout<<e<<endl;
@@ -143,21 +140,6 @@ void testhashflexible::begintest()
     int time_Diff = time.elapsed();
     float f = time_Diff / 1000.0;
     cout << "Time table: " << f << endl;
-
-    cout << "group begin" << endl;
-    group.getmax(onetable, 0);
-    group.getmin(onetable, 0);
-    group.getsum(onetable, 0);
-    group.getaverage(onetable, 0);
-    group.getmax(onetable, 3);
-    group.getmin(onetable, 3);
-    group.getsum(onetable, 3);
-    group.getaverage(onetable, 3);
-    group.getmax(onetable, 4);
-    group.getmin(onetable, 4);
-    group.getsum(onetable, 4);
-    group.getaverage(onetable, 4);
-    cout << "group end" << endl;
 
     cout << "test table end" << endl;
     cout << "test iterator begin" << endl;
@@ -260,20 +242,6 @@ void testhashflexible::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-    cout << "group begin" << endl;
-    group.getmax(onetable, 0);
-    group.getmin(onetable, 0);
-    group.getsum(onetable, 0);
-    group.getaverage(onetable, 0);
-    group.getmax(onetable, 3);
-    group.getmin(onetable, 3);
-    group.getsum(onetable, 3);
-    group.getaverage(onetable, 3);
-    group.getmax(onetable, 4);
-    group.getmin(onetable, 4);
-    group.getsum(onetable, 4);
-    group.getaverage(onetable, 4);
-    cout << "group end" << endl;
     delete onetable;
     delete iterator;
     delete record;
