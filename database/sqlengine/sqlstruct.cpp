@@ -1,13 +1,20 @@
 #include "sqlstruct.h"
 #include "../layer/json.hpp"
+#include "../managementhandler/uic.h"
 #include <cstring>
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include "../typehandler/chrono_io.h"
+#include "../typehandler/date.h"
 
 using json = nlohmann::json;
 const char *const SQLType::INT = "INT";
 const char *const SQLType::CHAR = "CHAR";
 const char *const SQLType::VARCHAR = "VARCHAR";
+const char *const SQLType::REAL = "REAL";
+const char *const SQLType::DATE = "DATE";
+const char *const SQLType::LINT = "LINT";
 
 void SQLType::dump() const
 {
@@ -28,6 +35,28 @@ void SQLValue::dump() const
 {
     std::cout << "SQLValue (Type = " << type << ", Content = "
               << content << ")" << std::endl;
+}
+
+void SQLValue::parseDate() {
+    std::vector<std::string> splitRes = UIC::stringSplit(content, "-");
+    int year = atoi(splitRes[0].c_str());
+    int month = atoi(splitRes[1].c_str());
+    int date = atoi(splitRes[2].c_str());
+    time_point<system_clock, std::chrono::nanoseconds> timestamp;
+    timestamp = static_cast<date::sys_days>(date::year_month_day{ date::year{year} / month / date });
+    if (splitRes.size() == 6) {
+        int hour = atoi(splitRes[3].c_str());
+        int minute = atoi(splitRes[4].c_str());
+        int second = atoi(splitRes[5].c_str());
+        auto smallTime = date::make_time(std::chrono::hours{hour},
+                                         std::chrono::minutes{minute},
+                                         std::chrono::seconds{second},
+                                         std::chrono::nanoseconds{ 0 }, 0).to_duration();
+        timestamp += smallTime;
+    }
+//    std::cout << timestamp << std::endl;
+    content.reserve(8);
+//    memcpy(content.c_str(), &timestamp, 8);
 }
 
 void SQLCondition::dump() const

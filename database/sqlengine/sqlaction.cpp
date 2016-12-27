@@ -204,14 +204,17 @@ bool SQLCreateTableAction::execute()
 
     // Add foreign keys to this table and target tables.
     // Update is done here because error could occur when parsing.
+    vector<int> idxForVec;
     for (unsigned int i = 0; i < foreignKeyLinks.size(); ++ i) {
         newTable->getforeignkeys()->at(i) = foreignKeyLinks[i];
         Table* targetTable = foreignKeyTargetTables[i];
         if (targetTable) {
             targetTable->getlinkedcolumn()->at(foreignKeyLinks[i].second).
                     push_back(make_pair(newTable->getname(), i));
+            if (i != primaryIndex) idxForVec.push_back(i);
         }
     }
+    newTable->createindex(idxForVec);
 
     handler->addTable(newTable);
     return true;
@@ -323,6 +326,7 @@ bool SQLShowTablesAction::execute()
 
 bool SQLInsertAction::execute()
 {
+    // TODO: possible memory leak...
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when inserting into table "
