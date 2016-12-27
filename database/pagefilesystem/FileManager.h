@@ -10,12 +10,14 @@
 #include <sys/types.h>
 #include <unistd.h>
 using namespace std;
+#ifndef PARA
 #ifdef __linux
 #define PARA O_RDWR
 #elif __APPLE__
 #define PARA O_RDWR
 #else
-#define PARA O_RDWR | O_BINARY
+#define PARA O_RDWR|O_BINARY
+#endif
 #endif
 class FileManager {
 private:

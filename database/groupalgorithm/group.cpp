@@ -1,6 +1,7 @@
 #include "group.h"
 Group::Group()
 {
+    mpreal::set_default_prec(mpfr::digits2bits(MAX_DIGITS));
 }
 bool Group::add(int x, int y)
 {
@@ -16,7 +17,7 @@ string Group::getmax(Table* onetable, int columnnum)
 {
     auto t = RecordFactory::getrecord(onetable);
     int i = 0;
-    mpq_class temp, maxn;
+    mpreal temp, maxn;
     bool haveget = false;
     for (auto it = data.begin(); it != data.end(); it++) {
         i++;
@@ -33,14 +34,14 @@ string Group::getmax(Table* onetable, int columnnum)
         }
     }
     delete t;
-    cout << "getmax end" << ' ' << maxn << endl;
-    return maxn.get_str();
+    cout << "getmax end" << ' ' << getstr(maxn) << endl;
+    return getstr(maxn);
 }
 string Group::getmin(Table* onetable, int columnnum)
 {
     auto t = RecordFactory::getrecord(onetable);
     int i = 0;
-    mpq_class temp, minn;
+    mpreal temp, minn;
     bool haveget = false;
     for (auto it = data.begin(); it != data.end(); it++) {
         i++;
@@ -57,14 +58,14 @@ string Group::getmin(Table* onetable, int columnnum)
         }
     }
     delete t;
-    cout << "getmin end" << ' ' << minn << endl;
-    return minn.get_str();
+    cout << "getmin end" << ' ' << getstr(minn) << endl;
+    return getstr(minn);
 }
 string Group::getsum(Table* onetable, int columnnum)
 {
     auto t = RecordFactory::getrecord(onetable);
     int i = 0;
-    mpq_class temp, sum;
+    mpreal temp, sum;
     sum = 0;
     for (auto it = data.begin(); it != data.end(); it++) {
         i++;
@@ -78,14 +79,14 @@ string Group::getsum(Table* onetable, int columnnum)
         sum += temp;
     }
     delete t;
-    cout << "getsum end" << ' ' << sum << endl;
-    return sum.get_str();
+    cout << "getsum end" << ' ' << getstr(sum) << endl;
+    return getstr(sum);
 }
 string Group::getaverage(Table* onetable, int columnnum)
 {
     auto t = RecordFactory::getrecord(onetable);
     int i = 0;
-    mpq_class temp, sum;
+    mpreal temp, sum;
     sum = 0;
     for (auto it = data.begin(); it != data.end(); it++) {
         i++;
@@ -99,13 +100,20 @@ string Group::getaverage(Table* onetable, int columnnum)
         sum += temp;
     }
     delete t;
-    mpq_class num = i;
-    mpq_class average;
+    mpreal num = i;
+    mpreal average;
     if (i)
        average = sum / num;
     else
        average = 0;
 
-    cout << "getaverage end" << ' ' << average << endl;
-    return average.get_str();
+    cout << "getaverage end" << ' ' << getstr(average) << endl;
+    return getstr(average);
+}
+string Group::getstr(mpreal num)
+{
+    stringstream sstream;
+    sstream.precision(MAX_DIGITS);
+    sstream<<num;
+    return sstream.str();
 }

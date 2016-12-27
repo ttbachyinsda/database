@@ -14,12 +14,14 @@
 #include <unistd.h>
 typedef char* BufType;
 using namespace std;
+#ifndef PARA
 #ifdef __linux
 #define PARA O_RDWR
 #elif __APPLE__
 #define PARA O_RDWR
 #else
-#define PARA O_RDWR | O_BINARY
+#define PARA O_RDWR|O_BINARY
+#endif
 #endif
 class BulbFile {
 public:
