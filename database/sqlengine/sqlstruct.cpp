@@ -54,9 +54,9 @@ void SQLValue::parseDate() {
                                          std::chrono::nanoseconds{ 0 }, 0).to_duration();
         timestamp += smallTime;
     }
-//    std::cout << timestamp << std::endl;
+    std::cout << timestamp << std::endl;
     content.reserve(8);
-//    memcpy(content.c_str(), &timestamp, 8);
+    memcpy(content.c_str(), &timestamp, 8);
 }
 
 void SQLCondition::dump() const
