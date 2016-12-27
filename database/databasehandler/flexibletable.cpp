@@ -130,6 +130,8 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
         headfile.read((char*)&reservedSizeInPage[i], 4);
 
     tablecondition.clear();
+    linkedcolumn.clear();
+    foreignkeys.clear();
     int vecsize, strsize, first, second;
     headfile.read((char*)&vecsize, 4);
     for (int i = 0; i < vecsize; i++) {
@@ -143,14 +145,33 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
         free(tmp);
     }
     headfile.read((char*)&vecsize, 4);
-    for (int i = 0; i < vecsize; i++) {
-        headfile.read((char*)&first, 4);
+    for (int i = 0; i < vecsize; i++)
+    {
+        vector<pair<string,int>> temp;
+        temp.clear();
+        linkedcolumn.push_back(temp);
+        int vecisize;
+        headfile.read((char*)&vecisize, 4);
+        for (int j=0;j<vecisize;j++)
+        {
+            headfile.read((char*)&second, 4);
+            headfile.read((char*)&strsize, 4);
+            char* tmp = (char*)malloc(strsize);
+            headfile.read(tmp, strsize);
+            string third(tmp, strsize);
+            linkedcolumn[i].push_back(make_pair(third, second));
+            free(tmp);
+        }
+    }
+    headfile.read((char*)&vecsize, 4);
+    for (int i = 0; i < vecsize; i++)
+    {
         headfile.read((char*)&second, 4);
         headfile.read((char*)&strsize, 4);
         char* tmp = (char*)malloc(strsize);
         headfile.read(tmp, strsize);
         string third(tmp, strsize);
-        linkedcolumn.push_back(make_triple(first, third, second));
+        foreignkeys.push_back(make_pair(third, second));
         free(tmp);
     }
     headfile.close();
@@ -220,11 +241,24 @@ void FlexibleTable::PackageHeadFile(BufType b)
     vecsize = this->linkedcolumn.size();
     headfile.write((char*)&vecsize, 4);
     for (int i = 0; i < vecsize; i++) {
-        int first = linkedcolumn[i].first;
-        int second = linkedcolumn[i].second.second;
-        string third = linkedcolumn[i].second.first;
+        int vecisize = linkedcolumn[i].size();
+        headfile.write((char*)&vecisize, 4);
+        for (int j=0;j<vecisize;j++)
+        {
+            int second = linkedcolumn[i][j].second;
+            string third = linkedcolumn[i][j].first;
+            strsize = third.length();
+            headfile.write((char*)&second, 4);
+            headfile.write((char*)&strsize, 4);
+            headfile.write(third.data(), strsize);
+        }
+    }
+    vecsize = this->foreignkeys.size();
+    headfile.write((char*)&vecsize, 4);
+    for (int i = 0; i < vecsize; i++) {
+        int second = foreignkeys[i].second;
+        string third = foreignkeys[i].first;
         strsize = third.length();
-        headfile.write((char*)&first, 4);
         headfile.write((char*)&second, 4);
         headfile.write((char*)&strsize, 4);
         headfile.write(third.data(), strsize);
@@ -240,6 +274,15 @@ void FlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> clt
     this->tablecondition.clear();
     this->clearcolumn();
     this->columncount = clname.size();
+    linkedcolumn.clear();
+    foreignkeys.clear();
+    for (int i=0;i<columncount;i++)
+    {
+        vector<pair<string,int>> temp;
+        temp.clear();
+        linkedcolumn.push_back(temp);
+        foreignkeys.push_back(make_pair("",0));
+    }
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
     multivalue = new bool[this->columncount];

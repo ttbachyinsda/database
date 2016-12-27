@@ -6,7 +6,7 @@ testaes::testaes()
 }
 void testaes::begintest()
 {
-    WORD key_schedule[60];
+    AESWORD key_schedule[60];
         BYTE enc_buf[128];
         string plainstring = "I am a student.wefewfwefwfew?";
         string password = "3123456";
@@ -46,7 +46,7 @@ void testaes::encryptafile(string filepath,string password)
     BYTE* tempoutput = (BYTE*)malloc(totalsize);
 
     //initial password
-    WORD key_schedule[60];
+    AESWORD key_schedule[60];
     string ivpassword = "Iamattbachyinsda";
     string md5pass = MD5(password).toStr();
     aes_key_setup((BYTE*)md5pass.data(), key_schedule, 256);
@@ -88,7 +88,7 @@ void testaes::decryptafile(string filepath,string password)
     BYTE* tempoutput = (BYTE*)malloc(totalsize);
 
     //initial password
-    WORD key_schedule[60];
+    AESWORD key_schedule[60];
     string ivpassword = "Iamattbachyinsda";
     string md5pass = MD5(password).toStr();
     aes_key_setup((BYTE*)md5pass.data(), key_schedule, 256);

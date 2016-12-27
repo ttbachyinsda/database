@@ -169,21 +169,24 @@ void testhashflexible::begintest()
     auto iterator = IteratorFactory::getiterator(onetable);
     auto record = RecordFactory::getrecord(onetable);
 
-        int js=0;
-        while (iterator->available())
+    int js1=0;
+    while (iterator->available())
+    {
+        if (rand()%50)
         {
-            js++;
-            if (js % 2 == 0) iterator->deletedata();
-            ++(*iterator);
+            js1++;
+            iterator->deletedata();
         }
-        iterator->getbegin();
-        js = 0;
-        while (iterator->available())
-        {
-            js++;
-            ++(*iterator);
-        }
-        cout<<"now total num = "<<js<<endl;
+        ++(*iterator);
+    }
+    iterator->getbegin();
+    int js2 = 0;
+    while (iterator->available())
+    {
+        js2++;
+        ++(*iterator);
+    }
+    cout<<"now total num = "<<js2+js1<<' '<<js1<<' '<<js2<<endl;
 //        iterator->getbegin();
 
 //    if (iterator->available()) {

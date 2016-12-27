@@ -223,7 +223,7 @@ QueryStmt       : INSERT INTO IDENTIFIER VALUES ValueLists
                 {
                     $$ = new SQLSelectAction($4, $2, $6);
                 }
-                | SELECT Selector FROM IDENTIFIER GroupByClause
+                | SELECT Selector FROM TableList GroupByClause
                 {
                     $$ = new SQLGroupSelectAction($2, $5, $4);
                 }

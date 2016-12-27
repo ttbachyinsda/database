@@ -19,7 +19,7 @@ void Encrypt::encryptafile(string filepath,string password)
     BYTE* tempoutput = (BYTE*)malloc(totalsize);
 
     //initial password
-    WORD key_schedule[60];
+    AESWORD key_schedule[60];
     string ivpassword = __iv__str;
     string md5pass = MD5(password).toStr();
     aes_key_setup((BYTE*)md5pass.data(), key_schedule, 256);
@@ -64,7 +64,7 @@ void Encrypt::decryptafile(string filepath,string password)
     BYTE* tempoutput = (BYTE*)malloc(totalsize);
 
     //initial password
-    WORD key_schedule[60];
+    AESWORD key_schedule[60];
     string ivpassword = __iv__str;
     string md5pass = MD5(password).toStr();
     aes_key_setup((BYTE*)md5pass.data(), key_schedule, 256);
@@ -120,7 +120,7 @@ BYTE* Encrypt::trytodecrypt(string filepath,string password)
     BYTE* tempoutput = (BYTE*)malloc(totalsize);
 
     //initial password
-    WORD key_schedule[60];
+    AESWORD key_schedule[60];
     string ivpassword = __iv__str;
     string md5pass = MD5(password).toStr();
     aes_key_setup((BYTE*)md5pass.data(), key_schedule, 256);
@@ -153,7 +153,7 @@ string Encrypt::trytodecryptastr(string str,string password)
     BYTE* tempoutput = (BYTE*)malloc(str.length());
 
     //initial password
-    WORD key_schedule[60];
+    AESWORD key_schedule[60];
     string ivpassword = __iv__str;
     string md5pass = MD5(password).toStr();
     aes_key_setup((BYTE*)md5pass.data(), key_schedule, 256);
@@ -170,7 +170,7 @@ string Encrypt::trytoencryptastr(string str,string password)
     BYTE* tempoutput = (BYTE*)malloc(str.length());
 
     //initial password
-    WORD key_schedule[60];
+    AESWORD key_schedule[60];
     string ivpassword = __iv__str;
     string md5pass = MD5(password).toStr();
     aes_key_setup((BYTE*)md5pass.data(), key_schedule, 256);

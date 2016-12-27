@@ -38,6 +38,8 @@ void ModifyHandler::modifyRecordContent()
 bool ModifyHandler::prepareTable(Table *table, SQLConditionGroup *cgrp) {
     // TODO: Check If there is/are a foreign key(s) linked to this table.
     // If not both delete and update query cannot be executed.
+    //
+
     myTable = table;
     /**
      * Support only following conditions:
@@ -93,7 +95,6 @@ bool ModifyHandler::prepareTable(Table *table, SQLConditionGroup *cgrp) {
 }
 
 bool ModifyHandler::prepareSetClause(SQLSetGroup *sgrp) {
-    // TODO: Check whether this key is a foreign key (ie. key is cid, check main table.)
     for (SQLSet* s : *sgrp) {
         // Only use this structure to store set commands.
         SetPair thisPair;
@@ -112,6 +113,7 @@ bool ModifyHandler::prepareSetClause(SQLSetGroup *sgrp) {
             return false;
         }
         sets.push_back(thisPair);
+        // Check whether this key is a foreign key (ie. key is cid, check main table.)
     }
     return true;
 }
@@ -128,7 +130,10 @@ void ModifyHandler::executeDeleteQuery() {
         for (const pair<int, int>& p : searchIndexRes) {
             myTableIterator->access(p.first, p.second);
             myTableIterator->getdata(myTableRecord);
-            if (checkConditions()) myTableIterator->deletedata();
+            if (checkConditions()) {
+                // Check the deleted data is linked to.
+                myTableIterator->deletedata();
+            }
         }
     } else {
         while (myTableIterator->available()) {
@@ -152,6 +157,7 @@ void ModifyHandler::executeUpdateQuery() {
             myTableIterator->access(p.first, p.second);
             myTableIterator->getdata(myTableRecord);
             if (checkConditions()) {
+                // Check the deleted data is linked to.
                 myTableIterator->deletedata();
                 modifyRecordContent();
                 int dum;

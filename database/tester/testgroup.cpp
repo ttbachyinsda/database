@@ -152,21 +152,24 @@ void testgroup::begintest()
     auto iterator = IteratorFactory::getiterator(onetable);
     auto record = RecordFactory::getrecord(onetable);
 
-    int js=0;
+    int js1=0;
     while (iterator->available())
     {
-        js++;
-        if (js % 2 == 0) iterator->deletedata();
+        if (rand()%50)
+        {
+            js1++;
+            iterator->deletedata();
+        }
         ++(*iterator);
     }
     iterator->getbegin();
-    js = 0;
+    int js2 = 0;
     while (iterator->available())
     {
-        js++;
+        js2++;
         ++(*iterator);
     }
-    cout<<"now total num = "<<js<<endl;
+    cout<<"now total num = "<<js2+js1<<' '<<js1<<' '<<js2<<endl;
 
 //    if (iterator->available()) {
 //        iterator->getdata(record);
@@ -205,7 +208,12 @@ void testgroup::begintest()
 
     onetable->gettablecondition()->push_back(make_triple(2, 3, "5"));
     onetable->gettablecondition()->push_back(make_triple(3, 5, "7"));
-
+    onetable->getlinkedcolumn()->at(0).push_back(make_pair("2",3));
+    onetable->getlinkedcolumn()->at(0).push_back(make_pair("22",3));
+    onetable->getlinkedcolumn()->at(1).push_back(make_pair("3",5));
+    onetable->getlinkedcolumn()->at(4).push_back(make_pair("33",5));
+    onetable->getforeignkeys()->at(0) = make_pair("12",3);
+    onetable->getforeignkeys()->at(1) = make_pair("13",5);
     delete iterator;
     delete record;
     delete onetable;
@@ -214,6 +222,23 @@ void testgroup::begintest()
     onetable = new FlexibleTable();
     onetable->setfilename(filename);
     onetable->Initialize();
+
+    for (auto s = onetable->getlinkedcolumn()->at(0).begin(); s != onetable->getlinkedcolumn()->at(0).end(); s++ )
+    {
+        cout<<(*s).first<<' '<<(*s).second<<endl;
+    }
+    for (auto s = onetable->getlinkedcolumn()->at(1).begin(); s != onetable->getlinkedcolumn()->at(1).end(); s++ )
+    {
+        cout<<(*s).first<<' '<<(*s).second<<endl;
+    }
+    for (auto s = onetable->getlinkedcolumn()->at(4).begin(); s != onetable->getlinkedcolumn()->at(4).end(); s++ )
+    {
+        cout<<(*s).first<<' '<<(*s).second<<endl;
+    }
+    for (auto s = onetable->getforeignkeys()->begin(); s !=  onetable->getforeignkeys()->end(); s++)
+    {
+        cout<<(*s).first<<' '<<(*s).second<<endl;
+    }
 
     for (auto s = onetable->gettablecondition()->begin(); s != onetable->gettablecondition()->end(); s++) {
         cout << (*s).first << ' ' << (*s).second.first << ' ' << (*s).second.second << endl;
@@ -226,13 +251,13 @@ void testgroup::begintest()
     record = RecordFactory::getrecord(onetable);
 
     iterator->getbegin();
-    js = 0;
+    int jss = 0;
     while (iterator->available())
     {
-        js++;
+        jss++;
         ++(*iterator);
     }
-    cout<<"after save now total num = "<<js<<endl;
+    cout<<"after save now total num = "<<jss<<endl;
     iterator->getbegin();
 
 

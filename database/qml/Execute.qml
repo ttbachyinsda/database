@@ -7,13 +7,16 @@ import QtQuick.Controls 1.3 as Controls
 
 Item {
     id: execute
+    implicitHeight: column.height
 
     QMLif {
         id: testSearch
         onResultReady: {
-            command.text = testSearch.gettext()
+//            command.text = testSearch.gettext()
+            resultLable.text = testSearch.gettext()
             cyclicColorProgress.visible = false
             column.enabled = true
+            resultLable.visible = true
         }
     }
 
@@ -27,6 +30,10 @@ Item {
             placeholderText: "Command..."
             anchors.horizontalCenter: parent.horizontalCenter
 
+            font.family: "Roboto"
+            font.weight: Font.Light
+            font.pixelSize: dp(25)
+
             onAccepted: {
                 testSearch.doSomething(command.text)
                 cyclicColorProgress.visible = true
@@ -38,6 +45,8 @@ Item {
             id: cyclicColorProgress
             visible: false
             Layout.alignment: Qt.AlignCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
             SequentialAnimation {
                 running: true
                 loops: Animation.Infinite
@@ -78,6 +87,16 @@ Item {
                     duration:  1200
                 }
             }
+        }
+
+        Text {
+            id: resultLable
+            textFormat: Text.RichText
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            font.family: "Roboto"
+            font.weight: Font.Light
+            font.pixelSize: dp(20)
         }
     }
 }

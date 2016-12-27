@@ -100,7 +100,11 @@ string Group::getaverage(Table* onetable, int columnnum)
     }
     delete t;
     mpq_class num = i;
-    mpq_class average = sum / num;
+    mpq_class average;
+    if (i)
+       average = sum / num;
+    else
+       average = 0;
 
     cout << "getaverage end" << ' ' << average << endl;
     return average.get_str();

@@ -5,19 +5,13 @@
 #include <QDebug>
 #include <QObject>
 #include <QThread>
+#include <QtQuick/QQuickView>
+#include <QtQml/QQmlContext>
+#include <QTextStream>
+
 class WorkerThread : public QThread {
     Q_OBJECT
-    void run() Q_DECL_OVERRIDE {
-        QString result = "success link";
-        driver->execute(command.toStdString());
-        cout << command.toStdString() << endl;
-        cout << driver->hasResult() << endl;
-        if (driver->hasResult())
-            driver->getResult()->dumpToConsole();
-        driver->getErrorMessages();
-        driver->getWarningMessages();
-        emit resultReady(result);
-    }
+    void run() Q_DECL_OVERRIDE;
 signals:
     void resultReady(const QString& s);
 
@@ -49,7 +43,7 @@ public slots:
     }
     QString gettext()
     {
-        return this->text + QString::number(i, 10);
+        return this->text;
     }
     void receivedastring(const QString& s)
     {
@@ -59,9 +53,11 @@ public slots:
 
 public:
     QString text;
-    SQLDriver *oldDriver;
+    static SQLDriver *oldDriver;
     int i;
     QMLif();
+
+    static string testcss;
 };
 
 #endif

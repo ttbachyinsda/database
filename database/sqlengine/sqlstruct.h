@@ -158,10 +158,11 @@ typedef std::vector<std::string> SQLTableGroup;
 
 class SQLResult
 {
+public:
     const int columns;
     std::list<std::string> title;
     std::list<std::vector<std::string> > data;
-public:
+
     SQLResult(int col) : columns(col) {}
     ~SQLResult() {}
 
