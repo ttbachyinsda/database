@@ -59,5 +59,8 @@ string RawGroup::getstr(mpreal num)
 }
 
 void RawGroup::clear() {
-
+    num = 0;
+    this->maxn = 0;
+    this->minn = 0;
+    this->sumn = 0;
 }

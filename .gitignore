@@ -16,3 +16,9 @@ stack.hh
 database/layer/pythonif_wrap.cxx
 pythonif_wrap.cxx
 thjdb.py
+qrc_*
+database/database.build/Debug/database.build/Objects-normal/x86_64
+database/database.build
+database/Debug
+build-database-g-Debug
+moc_*

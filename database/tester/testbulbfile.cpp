@@ -1,4 +1,7 @@
 #include "testbulbfile.h"
+#include <vector>
+
+using namespace std;
 
 testbulbfile::testbulbfile()
 {

@@ -75,10 +75,15 @@ bool QueryExecutor::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
             if (!getTableColumnIndex(pair.tableIndex, pair.columnIndex,
                                      s, tableDict, tableDictIterator))
                 return false;
+            if (s->groupMethod != SQLGroupMethod::BLANK) {
+                driver->addErrorMessage("Group clause cannot be applied to where clause.");
+                return false;
+            }
             selectors.push_back(pair);
         }
     }
 
+    if (cgrp == 0) return true;
     for (SQLCondition* c : *cgrp) {
         ConditionPair thisCondition;
         if (!getTableColumnIndex(thisCondition.left.tableIndex, thisCondition.left.columnIndex,
@@ -249,7 +254,8 @@ bool QueryExecutor::executeQuery()
 
     delete resultTableIterator;
     delete resultTableRecord;
-    delete resultTable;
+    if (resultTable->gettabletype() == "Virtual")
+        delete resultTable;
 
     driver->setResult(currentResult);
 

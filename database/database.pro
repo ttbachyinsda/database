@@ -14,6 +14,7 @@ TEMPLATE = app
 QMAKE_CXXFLAGS += -Wall -Wextra -Wno-unused
 LIBS += -lgmpxx -lgmp -lmpfr
 
+
 DEFINES += QPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"
 
 include(../material/material.pri)

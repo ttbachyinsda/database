@@ -202,12 +202,12 @@ class SQLGroupSelectAction : public SQLAction
 {
     SQLSelectorGroup* selectorGroup;
     SQLTableGroup* groupByGroup;
-    std::string tableName;
+    SQLTableGroup* fromGroup;
 public:
     SQLGroupSelectAction(SQLSelectorGroup *selectorGroup, SQLTableGroup *groupByGroup,
-                         const std::string &tableName) : selectorGroup(selectorGroup),
-                                                         groupByGroup(groupByGroup),
-                                                         tableName(tableName) {}
+                         SQLTableGroup* tList) : selectorGroup(selectorGroup),
+                                                 groupByGroup(groupByGroup),
+                                                 fromGroup(tList) {}
 
     ~SQLGroupSelectAction();
     bool execute();

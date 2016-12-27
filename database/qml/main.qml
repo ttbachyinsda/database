@@ -22,15 +22,15 @@ ApplicationWindow {
     property var databaseCommand: [
             "Overview", "Execute", "Dbmanage"
     ]
-    property var aboutDatabase: [
+//    property var aboutDatabase: [
 
-    ]
-    property var aboutDatabaseString: [
+//    ]
+//    property var aboutDatabaseString: [
 
-    ]
-    property var sections: [ databaseCommand, databaseSettings, aboutDatabase ]
+//    ]
+    property var sections: [ databaseCommand ]
 
-    property var sectionTitles: [ "Database Command", "Database Settings", "About Database" ]
+    property var sectionTitles: [ "Database Command" ]
 
     property string selectedComponent: sections[0][0]
 
