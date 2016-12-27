@@ -64,7 +64,12 @@ SOURCES += \
     ../database/queryhandler/joinstrategies/nestedloopjoin.cpp \
     ../database/queryhandler/joinstrategies/sortmergejoin.cpp \
     ../database/queryhandler/intelligentfilter.cpp \
-    ../database/queryhandler/queryoptimizer.cpp
+    ../database/queryhandler/queryoptimizer.cpp \
+    ../database/queryhandler/modifyhandler.cpp \
+    ../database/queryhandler/checkhelper.cpp \
+    ../database/groupalgorithm/grouphandler.cpp \
+    ../database/aesalgorithm/encrypt.cpp \
+    ../database/aesalgorithm/aes.cpp
 
 HEADERS += \
     ../database/tester/testflexible.h \
@@ -132,7 +137,12 @@ HEADERS += \
     ../database/queryhandler/joinstrategies/nestedloopjoin.h \
     ../database/queryhandler/joinstrategies/sortmergejoin.h \
     ../database/queryhandler/intelligentfilter.h \
-    ../database/queryhandler/queryoptimizer.h
+    ../database/queryhandler/queryoptimizer.h \
+    ../database/queryhandler/modifyhandler.h \
+    ../database/queryhandler/checkhelper.h \
+    ../database/groupalgorithm/grouphandler.h \
+    ../database/aesalgorithm/encrypt.h \
+    ../database/aesalgorithm/aes.h
 
 unix{
     maemo5 {
