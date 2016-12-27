@@ -29,32 +29,26 @@ int BulbFile::totalsize = 0;
 
 int main(int argc, char* argv[])
 {
-//    TestSQL t;
-//    t.workingDir = "/home/jameshuang/Study/database/database_wd";
+    TestSQL t;
+    t.workingDir = "/home/jameshuang/Study/database/database_wd";
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/create.sql");
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/customer.sql");
+    string sql = "use orderDB;\n";
+//    sql += "update customer set gender='F', name='Great' where gender='M';\n";
+    //sql += "select * from customer where id>0;\n";
 //    string sql = "use orderDB;\n";
 //printf("current working directory: %s\n", getcwd(NULL, NULL));
 //    sql += "delete from customer where gender='F';\n";
 //    sql += "select * from customer where gender='F';\n";
-//    sql += "select * from customer where id>0;\n";
+//    sql += "select SUM(id) from customer where id = 307000;\n";
+    sql += "drop table b; drop table a;\n";
+    sql += "create table a (id int(3), primary key(id), name varchar(4));\n";
+    sql += "create table b (bid int(4), primary key(bid), aid int(3) foreign key references a(id));";
+    sql += "insert into a values (1, 'Jame');\n";
+    sql += "insert into a values (2, 'Bob');\n";
+    sql += "insert into b values (0001, 2);\n";
 
-//    sql += "create index orders(customer_id);create index customer(id);";
-//    sql += "SELECT customer.name,orders.quantity FROM customer,orders WHERE orders.customer_id=customer.id;";
-
-//    sql += "insert into temp values ('James', 21, 'M'), ('Bob', 30, 'F'), ('Bob2', 30, 'M'), ('Alice', 40, 'M'), ('Tom', 25, 'F');\n";
-//    sql += "insert into temp2 values (21, 'JM'), (40, 'AM'), (30, 'BF'), (30, 'BN'), (78, 'New');\n";
-
-//    sql += "select temp.name, temp.id, temp2.id, temp2.tag from temp, temp2 where temp.id=temp2.id;\n";
-
-//    sql += "insert into temp values ('James', 20, 'M');\n";
-//    sql += "insert into temp values ('Bob', 30, 'M');\n";
-
-    //    sql += " select customer_id, quantity from orders where customer_id=304403;";
-//    sql += "SELECT customer_id,SUM(quantity) FROM orders GROUP BY customer_id;";
-//    sql += "SELECT book.title,book.id,orders.book_id,orders.quantity FROM book,orders WHERE book.id=orders.book_id AND orders.quantity>8;";
-//    sql += "SELECT orders.quantity, orders.customer_id, customer.name, customer.id FROM orders, customer WHERE orders.customer_id = customer.id AND orders.quantity > 8;";
-//    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
+    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/create.sql");
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/orders.sql");
@@ -83,7 +77,7 @@ int main(int argc, char* argv[])
     //    testvirtual x;
     //    x.begintest();
 
-    BulbFile::setfilename("bulbfile.txt", true);
+//    BulbFile::setfilename("bulbfile.txt", true);
     //don't let this always be true, That's true only because we are testing.
 
 //        testgroup xyz;

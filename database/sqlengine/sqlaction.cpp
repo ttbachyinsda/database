@@ -12,6 +12,7 @@
 #include "../queryhandler/modifyhandler.h"
 #include "../queryhandler/checkhelper.h"
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 bool SQLCreateDatabaseAction::execute()
@@ -118,6 +119,9 @@ bool SQLCreateTableAction::execute()
     int currentIndex = 0;
     SQLCheckGroup* checkGroup = 0;
 
+    vector<pair<string, int>> foreignKeyLinks;
+    vector<Table*> foreignKeyTargetTables;
+
     for (SQLType* type : *fieldList) {
         if (type->primaryType) {
             if (primaryIndex != -1) {
@@ -136,6 +140,34 @@ bool SQLCreateTableAction::execute()
         if (type->isCheck) {
             checkGroup = type->checkGroup;
             continue;
+        }
+        if (type->hasForeignKey) {
+            Table* linkedTable = handler->getTableByName(type->foreignKey->databaseName);
+            if (linkedTable == 0) {
+                driver->addErrorMessage("No such table " + type->foreignKey->databaseName + " in this database.");
+                return false;
+            }
+            int colInTable = linkedTable->getColumnIndexByName(type->foreignKey->tableName);
+            if (colInTable == -1) {
+                driver->addErrorMessage("No such column " + type->foreignKey->tableName + " in table " + linkedTable->getname());
+                return false;
+            }
+            // Judge whether foreign is primary in that table
+            if (linkedTable->getindexes()[colInTable] == 0) {
+                driver->addErrorMessage("Foreign key references does not have a primary key.");
+                return false;
+            }
+            // Judge whether type is the same
+            if (type->length != linkedTable->getcolumns()[colInTable]->getRealSize() ||
+                    type->type[0] != linkedTable->getcolumns()[colInTable]->getType()[6]) {
+                driver->addErrorMessage("Type mismatch on foreign key.");
+                return false;
+            }
+            foreignKeyLinks.push_back(make_pair(type->foreignKey->databaseName, colInTable));
+            foreignKeyTargetTables.push_back(linkedTable);
+        } else {
+            foreignKeyLinks.push_back(make_pair("", 0));
+            foreignKeyTargetTables.push_back(0);
         }
         clname.push_back(type->identifier);
         DataBaseType* dbType = UIC::reconvert(type->type, type->length, type->canNull);
@@ -170,6 +202,17 @@ bool SQLCreateTableAction::execute()
         driver->addWarningMessage("Current table does not have a primary key.");
     }
 
+    // Add foreign keys to this table and target tables.
+    // Update is done here because error could occur when parsing.
+    for (unsigned int i = 0; i < foreignKeyLinks.size(); ++ i) {
+        newTable->getforeignkeys()->at(i) = foreignKeyLinks[i];
+        Table* targetTable = foreignKeyTargetTables[i];
+        if (targetTable) {
+            targetTable->getlinkedcolumn()->at(foreignKeyLinks[i].second).
+                    push_back(make_pair(newTable->getname(), i));
+        }
+    }
+
     handler->addTable(newTable);
     return true;
 }
@@ -183,10 +226,36 @@ bool SQLDropTableAction::execute()
                                 + this->tableName);
         return false;
     }
-    bool tableExist = handler->removeTableByName(tableName);
-    if (!tableExist) {
+    Table* currentTable = handler->getTableByName(tableName);
+    if (currentTable == 0) {
         driver->addWarningMessage("Table " + tableName + " does not exist.");
+        return true;
     }
+    // PASS 1: Check outer reference
+    for (unsigned int cid = 0; cid < currentTable->getcolumncount(); ++ cid) {
+        if (currentTable->getlinkedcolumn()->at(cid).size() != 0) {
+            driver->addErrorMessage("Column " + currentTable->getcolumnname(cid) +
+                                    " in the current table is a foreign key of table: " +
+                                    currentTable->getlinkedcolumn()->at(cid)[0].first);
+            return false;
+        }
+    }
+    // PASS 2: remove output reference
+    for (unsigned int cid = 0; cid < currentTable->getcolumncount(); ++ cid) {
+        const pair<string, int>& curColForeignKeyPair = currentTable->getforeignkeys()->at(cid);
+        if (curColForeignKeyPair.first != "") {
+            Table* outerRefTable = handler->getTableByName(curColForeignKeyPair.first);
+            assert(outerRefTable != 0);
+            vector<pair<string, int> >& foreignRefs = outerRefTable->
+                    getlinkedcolumn()->at(curColForeignKeyPair.second);
+            auto refStrain = std::find(foreignRefs.begin(), foreignRefs.end(), make_pair(currentTable->getname(), (int) cid));
+            if (refStrain == foreignRefs.end()) {
+                driver->addWarningMessage("Cannot find foreign key referring backs, your table maybe corrupted.");
+            }
+            foreignRefs.erase(refStrain);
+        }
+    }
+    handler->removeTableByName(tableName);
     return true;
 }
 
@@ -282,6 +351,27 @@ bool SQLInsertAction::execute()
     if (!hasPriKey) {
         driver->addWarningMessage("Current table does not have a primary key.");
     }
+
+    // Cache foreign key indexes.
+    vector<db_index*> cachedDatabaseIndex;
+    vector<Iterator*> foreignKeyCompilers;
+    vector<int> foreignKeyColumns;
+    bool needForeignKeyConstraint = false;
+    for (unsigned int col = 0; col < myTable->getcolumncount(); ++ col) {
+        pair<string, int> foreignKeyPair = myTable->getforeignkeys()->at(col);
+        if (foreignKeyPair.first == "") {
+            cachedDatabaseIndex.push_back(0);
+            foreignKeyCompilers.push_back(0);
+            foreignKeyColumns.push_back(0);
+        } else {
+            Table* refTable = handler->getTableByName(foreignKeyPair.first);
+            cachedDatabaseIndex.push_back(refTable->getindexes()[foreignKeyPair.second]);
+            foreignKeyCompilers.push_back(IteratorFactory::getiterator(refTable));
+            foreignKeyColumns.push_back(foreignKeyPair.second);
+            needForeignKeyConstraint = true;
+        }
+    }
+
     for (unsigned int i = 0; i < valueGroupList->size(); ++ i) {
         int thisSize = (int) valueGroupList->at(i)->size();
         if (thisSize != record->getcolumncount()) {
@@ -317,11 +407,35 @@ bool SQLInsertAction::execute()
                 return false;
             }
         }
-        // 4. TODO: Outer link constraint
+        // 4. Outer link constraint
+        if (needForeignKeyConstraint) {
+            for (unsigned int j = 0; j < thisSize; ++j) {
+                SQLValue *sigValue = valueGroupList->at(i)->at(j);
+                // NULL is always allowed;
+                if (sigValue->type == SQLValue::LiteralType::NUL) continue;
+                if (cachedDatabaseIndex[j] != 0) {
+                    vector<pair<int, int> > forKeyRes;
+                    cachedDatabaseIndex[j]->findAll(SQLOperand::EQUAL,
+                                                    foreignKeyCompilers[j]->compile(
+                                                            sigValue->content, foreignKeyColumns[j]),
+                                                    &forKeyRes);
+                    if (forKeyRes.size() == 0) {
+                        driver->addErrorMessage("No such key " + sigValue->content +
+                                                        " in foreign key references.");
+                        return false;
+                    }
+                }
+            }
+        }
         record->update();
         int dummy;
         myTable->FastAllInsert(dummy, dummy, record);
     }
+
+    for (Iterator* it : foreignKeyCompilers) {
+        delete it;
+    }
+    delete priKeyCompiler;
     delete record;
     return true;
 }
@@ -389,16 +503,35 @@ bool SQLGroupSelectAction::execute() {
         driver->addErrorMessage("No database is selected when doing group selections.");
         return false;
     }
-    Table* myTable = handler->getTableByName(tableName);
-    if (myTable == 0) {
-        driver->addErrorMessage("Table " + tableName + " does not exist.");
-        return false;
+    bool isGeneralSelection = true;
+    if (!selectorGroup->allMatched) {
+        for (SQLSelector* s : selectorGroup->selectors) {
+            if (s->groupMethod != SQLGroupMethod::BLANK) {
+                isGeneralSelection = false;
+                break;
+            }
+        }
     }
-    GroupHandler* groupHandler = new GroupHandler(driver);
-    bool prepareSucceeded = groupHandler->prepareQuery(myTable, selectorGroup, groupByGroup);
-    if (prepareSucceeded) driver->setResult(groupHandler->executeQuery());
-    delete groupHandler;
-    return prepareSucceeded;
+    if (isGeneralSelection) {
+        bool prepareSucceeded = driver->getQueryExecuter()->setQuery(fromGroup, selectorGroup, 0);
+        if (!prepareSucceeded) return false;
+        return driver->getQueryExecuter()->executeQuery();
+    } else {
+        if (fromGroup->size() != 1) {
+            driver->addErrorMessage("Group Selection could only be conducted in one single table.");
+            return false;
+        }
+        Table* myTable = handler->getTableByName(fromGroup->at(0));
+        if (myTable == 0) {
+            driver->addErrorMessage("Table " + fromGroup->at(0) + " does not exist.");
+            return false;
+        }
+        GroupHandler* groupHandler = new GroupHandler(driver);
+        bool prepareSucceeded = groupHandler->prepareQuery(myTable, selectorGroup, groupByGroup);
+        if (prepareSucceeded) driver->setResult(groupHandler->executeQuery());
+        delete groupHandler;
+        return prepareSucceeded;
+    }
 }
 
 bool SQLIndexAction::execute()
@@ -444,6 +577,7 @@ bool SQLDropIndexAction::execute()
         driver->addWarningMessage("Index for " + columnName + " does not exist!");
         return true;
     }
+    currentTable->deleteindex(columnID);
     return true;
 }
 
@@ -504,4 +638,5 @@ SQLDeleteAction::~SQLDeleteAction()
 SQLGroupSelectAction::~SQLGroupSelectAction() {
     delete selectorGroup;
     if (groupByGroup) delete groupByGroup;
+    delete fromGroup;
 }
