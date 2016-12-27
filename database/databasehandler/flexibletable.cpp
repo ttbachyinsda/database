@@ -150,9 +150,9 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
         vector<pair<string,int>> temp;
         temp.clear();
         linkedcolumn.push_back(temp);
-        int vecisize;
-        headfile.read((char*)&vecisize, 4);
-        for (int j=0;j<vecisize;j++)
+        int vecisize2;
+        headfile.read((char*)&vecisize2, 4);
+        for (int j=0;j<vecisize2;j++)
         {
             headfile.read((char*)&second, 4);
             headfile.read((char*)&strsize, 4);
@@ -241,9 +241,9 @@ void FlexibleTable::PackageHeadFile(BufType b)
     vecsize = this->linkedcolumn.size();
     headfile.write((char*)&vecsize, 4);
     for (int i = 0; i < vecsize; i++) {
-        int vecisize = linkedcolumn[i].size();
-        headfile.write((char*)&vecisize, 4);
-        for (int j=0;j<vecisize;j++)
+        int vecisize2 = linkedcolumn[i].size();
+        headfile.write((char*)&vecisize2, 4);
+        for (int j=0;j<vecisize2;j++)
         {
             int second = linkedcolumn[i][j].second;
             string third = linkedcolumn[i][j].first;

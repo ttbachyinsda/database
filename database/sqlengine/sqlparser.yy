@@ -44,7 +44,7 @@
 
 %token CREATE DROP SHOW USE DESC
 %token DATABASE DATABASES TABLE TABLES
-%token INT VARCHAR CHAR
+%token INT VARCHAR CHAR DOUBLE BIGINT DATETIME
 %token IS NOT NUL PRIMARY KEY
 %token CHECK IN LIKE
 %token FOREIGN REFERENCES
@@ -57,7 +57,7 @@
 
 %token NOT_EQUAL GREATER_EQUAL LESS_EQUAL
 
-%token <std::string> IDENTIFIER VALUE_STRING VALUE_INT
+%token <std::string> IDENTIFIER VALUE_STRING VALUE_INT VALUE_DATE VALUE_DECIMAL
 %token ';' '(' ')' ',' '=' '>' '<'
 
 %type <SQLAction*> Stmt SysStmt QueryStmt
@@ -205,6 +205,24 @@ Type            : INT '(' VALUE_INT ')'
                     $$->type = SQLType::VARCHAR;
                     $$->length = atoi($3.c_str());
                 }
+                | BIGINT '(' ')'
+                {
+                    $$ = new SQLType();
+                    $$->type = SQLType::LINT;
+                    $$->length = 8;
+                }
+                | DOUBLE '(' ')'
+                {
+                    $$ = new SQLType();
+                    $$->type = SQLType::REAL;
+                    $$->length = 8;
+                }
+                | DATETIME '(' ')'
+                {
+                    $$ = new SQLType();
+                    $$->type = SQLType::DATE;
+                    $$->length = 8;
+                }
                 ;
 
 QueryStmt       : INSERT INTO IDENTIFIER VALUES ValueLists
@@ -273,6 +291,13 @@ Value           : VALUE_INT
                     $$ = new SQLValue();
                     $$->type = SQLValue::STRING;
                     $$->content = $1;
+                }
+                | VALUE_DATE
+                {
+                    $$ = new SQLValue();
+                    $$->type = SQLValue::DATE;
+                    $$->content = $1;
+                    $$->parseDate();
                 }
                 | NUL
                 {

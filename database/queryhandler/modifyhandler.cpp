@@ -22,17 +22,31 @@ bool ModifyHandler::checkConditions()
                                                  (c.rightValue.type == SQLValue::LiteralType::NUL));
         if (!matchResult) return false;
     }
+    // Check whether the origin value can be changed.
     return true;
 }
 
 // Modify myTableRecord according to set clauses.
-void ModifyHandler::modifyRecordContent()
+bool ModifyHandler::modifyRecordContent()
 {
     for (const SetPair& sp : sets) {
+        string originValue = myTableRecord->getAt(sp.colID);
+        for (const SetForeignPair& fp : sp.foreignPairs) {
+            vector<pair<int, int> > outerRefResult;
+            fp.valueSearcher->findAll(SQLOperand::EQUAL,
+                                      fp.valueCompiler->compile(originValue, fp.foreignColID),
+                                      &outerRefResult);
+            if (outerRefResult.size() != 0) {
+                driver->addWarningMessage("Value " + originValue +
+                    " in this table cannot be updated because there are foreign keys linked to it.");
+                return false;
+            }
+        }
         myTableRecord->setAt(sp.colID, sp.value.content,
                              sp.value.type == SQLValue::LiteralType::NUL);
     }
     myTableRecord->update();
+    return true;
 }
 
 bool ModifyHandler::prepareTable(Table *table, SQLConditionGroup *cgrp) {
@@ -114,6 +128,37 @@ bool ModifyHandler::prepareSetClause(SQLSetGroup *sgrp) {
         }
         sets.push_back(thisPair);
         // Check whether this key is a foreign key (ie. key is cid, check main table.)
+        pair<string, int> foreignTableGrp = myTable->getforeignkeys()->at(setColumnID);
+        if (foreignTableGrp.first != "") {
+            if (s->value.type == SQLValue::LiteralType::NUL)
+                continue;
+
+            Table* foreignTable = driver->getCurrentDatabase()->getTableByName(foreignTableGrp.first);
+            db_index* foreignIndex = foreignTable->getindexes()[foreignTableGrp.second];
+            if (foreignIndex == 0) {
+                driver->addErrorMessage("Corrupted Table. Refuse to update.");
+                return false;
+            }
+            Iterator* compiler = IteratorFactory::getiterator(foreignTable);
+            vector<pair<int, int>> forSeaRes;
+            foreignIndex->findAll(SQLOperand::EQUAL, compiler->compile(s->value.content, setColumnID),
+                                  &forSeaRes);
+            delete compiler;
+            if (forSeaRes.size() != 0) {
+                driver->addErrorMessage("Set value target is not in table " + foreignTable->getname());
+                return false;
+            }
+        }
+        vector<pair<string, int> > linkedColGrp = myTable->getlinkedcolumn()->at(setColumnID);
+        for (const pair<string, int>& p : linkedColGrp) {
+            SetForeignPair fPair;
+            Table* outerLinkTable = driver->getCurrentDatabase()->getTableByName(p.first);
+            // May not exist
+            fPair.valueSearcher = outerLinkTable->getindexes()[p.second];
+            fPair.valueCompiler = IteratorFactory::getiterator(outerLinkTable);
+            fPair.foreignColID = p.second;
+            thisPair.foreignPairs.push_back(fPair);
+        }
     }
     return true;
 }
@@ -157,11 +202,11 @@ void ModifyHandler::executeUpdateQuery() {
             myTableIterator->access(p.first, p.second);
             myTableIterator->getdata(myTableRecord);
             if (checkConditions()) {
-                // Check the deleted data is linked to.
                 myTableIterator->deletedata();
-                modifyRecordContent();
-                int dum;
-                myTable->FastAllInsert(dum, dum, myTableRecord);
+                if (modifyRecordContent()) {
+                    int dum;
+                    myTable->FastAllInsert(dum, dum, myTableRecord);
+                }
             }
         }
     } else {
@@ -169,9 +214,10 @@ void ModifyHandler::executeUpdateQuery() {
             myTableIterator->getdata(myTableRecord);
             if (checkConditions()) {
                 myTableIterator->deletedata();
-                modifyRecordContent();
-                int dum;
-                myTable->FastAllInsert(dum, dum, myTableRecord);
+                if (modifyRecordContent()) {
+                    int dum;
+                    myTable->FastAllInsert(dum, dum, myTableRecord);
+                }
             }
             ++ (*myTableIterator);
         }

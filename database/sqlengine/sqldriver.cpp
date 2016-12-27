@@ -10,7 +10,7 @@
 const std::string SQLDriver::systemName = "top";
 
 SQLDriver::SQLDriver() {
-    initialize();
+//    initialize();
 }
 
 SQLDriver::~SQLDriver() {

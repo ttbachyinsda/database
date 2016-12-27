@@ -29,13 +29,17 @@ int BulbFile::totalsize = 0;
 
 int main(int argc, char* argv[])
 {
+    TestSQL t;
+    t.workingDir = "/home/jameshuang/Study/database/database_wd";
+
+    string sql = "use orderDB;\n";
 //    TestSQL t;
 //    t.workingDir = "/home/jameshuang/Study/database/database_wd";
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/create.sql");
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/customer.sql");
 //    string sql = "use orderDB;\n";
 //    sql += "update customer set gender='F', name='Great' where gender='M';\n";
-    //sql += "select * from customer where id>0;\n";
+    sql += "select * from customer;\n";
 //    string sql = "use orderDB;\n";
 //printf("current working directory: %s\n", getcwd(NULL, NULL));
 //    sql += "delete from customer where gender='F';\n";
@@ -47,6 +51,10 @@ int main(int argc, char* argv[])
 //    sql += "insert into a values (1, 'Jame');\n";
 //    sql += "insert into a values (2, 'Bob');\n";
 //    sql += "insert into b values (0001, 2);\n";
+
+//sql += "insert into a values (1997-03-08, 'James', 3);\n";
+//    sql += "select * from book;\n";
+    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 //
 //    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 

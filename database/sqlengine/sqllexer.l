@@ -51,8 +51,11 @@ using token = yy::SQLParser::token;
 (?i:"tables")           { return token::TABLES;     }
 (?i:"desc")             { return token::DESC;       }
 (?i:"int")              { return token::INT;        }
+(?i:"bigint")           { return token::BIGINT;     }
 (?i:"varchar")          { return token::VARCHAR;    }
 (?i:"char")             { return token::CHAR;       }
+(?i:"datetime")         { return token::DATETIME;   }
+(?i:"double")           { return token::DOUBLE;     }
 (?i:"is")               { return token::IS;         }
 (?i:"not")              { return token::NOT;        }
 (?i:"null")             { return token::NUL;        }
@@ -83,6 +86,16 @@ using token = yy::SQLParser::token;
 (?i:"avg")              { return token::AVG;        }
 (?i:"min")              { return token::MIN;        }
 (?i:"max")              { return token::MAX;        }
+
+[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}   {
+    yylval->build<std::string>(yytext);
+    return token::VALUE_DATE;
+}
+
+[0-9]{4}-[0-9]{2}-[0-9]{2}  {
+    yylval->build<std::string>(yytext);
+    return token::VALUE_DATE;
+}
 
 [0-9]+                  {
                             yylval->build<std::string>(yytext);

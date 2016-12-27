@@ -8,7 +8,7 @@
 struct SQLValue
 {
     enum LiteralType {
-        ENUMERATE, STRING, NUL
+        ENUMERATE, STRING, DATE, NUL
     } type;
 
     std::string content;
@@ -16,6 +16,8 @@ struct SQLValue
     SQLValue() {
         type = SQLValue::STRING;
     }
+
+    void parseDate();
 
     void dump() const;
 };
@@ -75,6 +77,9 @@ struct SQLType
     static const char *const INT;
     static const char *const CHAR;
     static const char *const VARCHAR;
+    static const char *const LINT;
+    static const char *const REAL;
+    static const char *const DATE;
 
     bool primaryType;
     bool canNull;

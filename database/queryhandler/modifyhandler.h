@@ -9,9 +9,17 @@
 #include "../sqlengine/sqldriver.h"
 
 class ModifyHandler {
+
+    struct SetForeignPair {
+        int foreignColID;
+        Iterator* valueCompiler;
+        db_index* valueSearcher;
+    };
+
     struct SetPair {
         int colID;
         SQLValue value;
+        std::vector<SetForeignPair> foreignPairs;
     };
 
     SQLDriver* driver;
@@ -26,7 +34,7 @@ class ModifyHandler {
     int indexedConditionID;
 
     bool checkConditions();
-    void modifyRecordContent();
+    bool modifyRecordContent();
 
 public:
     ModifyHandler(SQLDriver* d) {
@@ -43,6 +51,11 @@ public:
     ~ModifyHandler() {
         if (myTableIterator) delete myTableIterator;
         if (myTableRecord) delete myTableRecord;
+        for (const SetPair& sp : sets) {
+            for (const SetForeignPair& fp : sp.foreignPairs) {
+                delete fp.valueCompiler;
+            }
+        }
     }
 };
 
