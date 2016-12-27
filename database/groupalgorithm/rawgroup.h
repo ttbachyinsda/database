@@ -6,9 +6,13 @@
 #include "../recordhandler/recordfactory.h"
 #include <gmp.h>
 #include <gmpxx.h>
+#include "mpreal.h"
 #include <iostream>
+#include <sstream>
 #include <map>
 using namespace std;
+using mpfr::mpreal;
+#define MAX_DIGITS 50
 
 class RawGroup {
 public:
@@ -19,12 +23,13 @@ public:
     string getmin();
     string getsum();
     string getaverage();
+    string getstr(mpreal num);
     int getnum();
 
 private:
-    mpq_class maxn;
-    mpq_class minn;
-    mpq_class sumn;
+    mpreal maxn;
+    mpreal minn;
+    mpreal sumn;
     int num;
 };
 

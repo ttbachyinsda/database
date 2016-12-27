@@ -2,6 +2,7 @@
 
 RawGroup::RawGroup()
 {
+    mpreal::set_default_prec(mpfr::digits2bits(MAX_DIGITS));
     this->num = 0;
 }
 void RawGroup::add(string input)
@@ -15,7 +16,7 @@ void RawGroup::add(string input)
         this->sumn = input;
     } else {
         this->num++;
-        mpq_class temp(input);
+        mpreal temp(input);
         if (temp > this->maxn)
             this->maxn = temp;
         if (temp < this->minn)
@@ -25,27 +26,41 @@ void RawGroup::add(string input)
 }
 string RawGroup::getaverage()
 {
-    mpq_class numn = num;
-    mpq_class output = sumn / numn;
-    return output.get_str();
+    if (num == 0)
+    {
+        return "0";
+    }
+    mpreal numn = num;
+    mpreal output = sumn / numn;
+    return getstr(output);
 }
 string RawGroup::getsum()
 {
-    return sumn.get_str();
+    return getstr(sumn);
 }
 string RawGroup::getmax()
 {
-    return maxn.get_str();
+    return getstr(maxn);
 }
 string RawGroup::getmin()
 {
-    return minn.get_str();
+    return getstr(minn);
 }
 int RawGroup::getnum()
 {
     return num;
 }
+string RawGroup::getstr(mpreal num)
+{
+    stringstream sstream;
+    sstream.precision(MAX_DIGITS);
+    sstream<<num;
+    return sstream.str();
+}
 
 void RawGroup::clear() {
-
+    num = 0;
+    this->maxn = 0;
+    this->minn = 0;
+    this->sumn = 0;
 }

@@ -1,5 +1,11 @@
 ﻿使用说明：
 
+2.1.0.8改动：
+
+将聚集函数处的mpq_class换成了mpreal库，使其能够正常的工作。小数位数的输出可以由define的那个MAX_DIGITS控制。
+
+使用flask编写了一个数据库的server和client，具体请尝试用client.py连接到指定的ip地址。
+
 2.1.0.7改动：
 
 添加了一个加密模块，使用AES方式加密，具体请见testdatabase。

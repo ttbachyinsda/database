@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "E7D2774CBA7589B8ACE82B1F422747C9877E2749",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "E7D2774CBA7589B8ACE82B1F422747C9877E2749" : 9223372036854775807,
+    "98CAA5309AB57EF0087C288DF6B1AE875307D3C0" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "925D5AD6-55F0-481A-8303-3DDAC4CC64C1",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "E7D2774CBA7589B8ACE82B1F422747C9877E2749" : "project\/",
+    "98CAA5309AB57EF0087C288DF6B1AE875307D3C0" : "project\/material\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "database",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "database\/database.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:papyros\/qml-material.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "98CAA5309AB57EF0087C288DF6B1AE875307D3C0"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/ttbachyinsda\/database.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E7D2774CBA7589B8ACE82B1F422747C9877E2749"
+    }
+  ]
+}

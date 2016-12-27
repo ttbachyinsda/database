@@ -1,0 +1,1263 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		BDFEE1B72F1D7D17473F627A /* Qt Preprocess */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59 /* Build configuration list for PBXNativeTarget "database" */;
+			buildPhases = (
+				5E618435888B9D49F8540165 /* Qt Qmake */,
+				7EF0942E79C014DCEC8976BC /* Qt Preprocessors */,
+			);
+			dependencies = (
+			);
+			name = "Qt Preprocess";
+			productName = "Qt Preprocess";
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		003ACB6D6EF05D5AACB54F28 /* databaselint.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1A05666B8EC3D0CEACE4412C /* databaselint.cpp */; settings = {ATTRIBUTES = (); }; };
+		053913DB6D2901E3CC4C50A2 /* sqldriver.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 84D78A3509ED01C052AA4282 /* sqldriver.cpp */; settings = {ATTRIBUTES = (); }; };
+		0658731DA7A61C15DFC8051A /* databasechar.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = B31052204FAB7AD0E003D8EF /* databasechar.cpp */; settings = {ATTRIBUTES = (); }; };
+		0C3B5F2D1777B4F3F5BD85F2 /* iteratorfactory.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = A07676E2CD718B1D945418C4 /* iteratorfactory.cpp */; settings = {ATTRIBUTES = (); }; };
+		0E12AEF6233AA1CE09F6BA72 /* hashflexibleiterator.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = DBC9628C19D4DEAC1823784B /* hashflexibleiterator.cpp */; settings = {ATTRIBUTES = (); }; };
+		11090A1EA61D6E8D2B9A07BA /* comparealgo.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 6AA7641CF5D0513ED95F9975 /* comparealgo.cpp */; settings = {ATTRIBUTES = (); }; };
+		1257CC14F1D4A838EE8F9655 /* mainwindow.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 896C6A8BCA25A5A4A4B50094 /* mainwindow.cpp */; settings = {ATTRIBUTES = (); }; };
+		165A2E974D9F5F47F8930939 /* joinstrategy.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = F895AAAE49C3A1623785D09F /* joinstrategy.cpp */; settings = {ATTRIBUTES = (); }; };
+		18CDA352B9E33697BF345D2F /* testflexible.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 8CCAF4181FC053EAB01518A3 /* testflexible.cpp */; settings = {ATTRIBUTES = (); }; };
+		19E4B92721A859008B073E93 /* testvirtual.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = C9321197250A2032142C334F /* testvirtual.cpp */; settings = {ATTRIBUTES = (); }; };
+		1BC05966A46D9476C4493ADD /* qrc_styles.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9366FFCA003D22EA6FD5190C /* qrc_styles.cpp */; settings = {ATTRIBUTES = (); }; };
+		1F383BAB392248B1F12CB61D /* qrc_components.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = DC34D289916938ED268BFAA8 /* qrc_components.cpp */; settings = {ATTRIBUTES = (); }; };
+		20727C394906C401B4D1234C /* hashjoin.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = F54BC9C8632B9F4F03F09F5C /* hashjoin.cpp */; settings = {ATTRIBUTES = (); }; };
+		22E35DD64F40DF3D0488216A /* fixedsizetable.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5FFAA17AC9A9AEAC669478C7 /* fixedsizetable.cpp */; settings = {ATTRIBUTES = (); }; };
+		23C94CA1FC45CB2B028CB3C4 /* bulbfile.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = FC02534581277773DD220ED9 /* bulbfile.cpp */; settings = {ATTRIBUTES = (); }; };
+		25F25F7E354C67D8C0D9955A /* QtWidgets.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = AABD8654CC5B69A34C54DC0D /* QtWidgets.framework */; };
+		276E6337ADF614116C78C84E /* querycondition.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = F8B95131D9A0FA8AB94F3948 /* querycondition.cpp */; settings = {ATTRIBUTES = (); }; };
+		29C40D7449F318E08585489F /* testaes.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = D3063511F99CB5257F738C42 /* testaes.cpp */; settings = {ATTRIBUTES = (); }; };
+		2C8FFAE252BCD1EE3E4CBF67 /* queryexecuter.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 893BD844D163F1A66477A053 /* queryexecuter.cpp */; settings = {ATTRIBUTES = (); }; };
+		2D896092AAC8C7371904A976 /* testtype.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = EE5A7F48785B267546AC5F4B /* testtype.cpp */; settings = {ATTRIBUTES = (); }; };
+		2D9078B788AB283AE9EB9275 /* databasetext.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 036FC61DEA6B16EDBDFEDE70 /* databasetext.cpp */; settings = {ATTRIBUTES = (); }; };
+		2F2B520C30F29F723CE9A9AA /* fixedsizerecord.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 2FFF5AB74C313BDECB59B9C0 /* fixedsizerecord.cpp */; settings = {ATTRIBUTES = (); }; };
+		321A092E8B623F5791079CE6 /* databasereal.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 77921DAA8F6B0BBD0EC1C8B8 /* databasereal.cpp */; settings = {ATTRIBUTES = (); }; };
+		341424A72D24FF3BAE3ABAB6 /* testiterator.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = E942E92C1FAF3176FF50A87C /* testiterator.cpp */; settings = {ATTRIBUTES = (); }; };
+		37039B60F2853A1B04149991 /* testgroup.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5B352A3D5A17E7E26FE59354 /* testgroup.cpp */; settings = {ATTRIBUTES = (); }; };
+		370B1004462EB95258122F61 /* testsql.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 19FE2EF8ED59D5991E181C03 /* testsql.cpp */; settings = {ATTRIBUTES = (); }; };
+		3A04B12A6F47D54B6CBED0BD /* sqllexer.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = D0F933ABBEFD4509F1DB1EE6 /* sqllexer.cpp */; settings = {ATTRIBUTES = (); }; };
+		3C4E15A26F7D5F44A9AD60ED /* qrc_thjdb.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = CC3FD0D89E1219CD4506576F /* qrc_thjdb.cpp */; settings = {ATTRIBUTES = (); }; };
+		3E586488D574AEB72D868A52 /* qmlif.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 39B0DA2848FBB6F06B9C3EE5 /* qmlif.cpp */; settings = {ATTRIBUTES = (); }; };
+		3FB31E6DC98C8499616C35BB /* database.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = FD4CABFB0CC8276C72464752 /* database.cpp */; settings = {ATTRIBUTES = (); }; };
+		409122C69D665CC87557C172 /* checkhelper.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = AB88DE24D73144407D3F9944 /* checkhelper.cpp */; settings = {ATTRIBUTES = (); }; };
+		41E3F6C31E124113000E57E4 /* libgmp.10.dylib in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6BD1E124113000E57E4 /* libgmp.10.dylib */; };
+		41E3F6C41E124113000E57E4 /* libgmp.a in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6BE1E124113000E57E4 /* libgmp.a */; };
+		41E3F6C51E124113000E57E4 /* libgmp.10.dylib in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6BF1E124113000E57E4 /* libgmp.10.dylib */; };
+		41E3F6C61E124113000E57E4 /* libgmpxx.4.dylib in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6C01E124113000E57E4 /* libgmpxx.4.dylib */; };
+		41E3F6C71E124113000E57E4 /* libgmpxx.a in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6C11E124113000E57E4 /* libgmpxx.a */; };
+		41E3F6C81E124113000E57E4 /* libgmpxx.4.dylib in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6C21E124113000E57E4 /* libgmpxx.4.dylib */; };
+		41E3F6CC1E124130000E57E4 /* libmpfr.4.dylib in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6C91E124130000E57E4 /* libmpfr.4.dylib */; };
+		41E3F6CD1E124130000E57E4 /* libmpfr.a in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6CA1E124130000E57E4 /* libmpfr.a */; };
+		41E3F6CE1E124130000E57E4 /* libmpfr.4.dylib in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6CB1E124130000E57E4 /* libmpfr.4.dylib */; };
+		44D91CC7350873D0D1275666 /* QtQml.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 3988613369CAFF2C05DA56BB /* QtQml.framework */; };
+		470B489DE171392C9E78FBA1 /* testmd5.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 2F513FE0B153B9566594E544 /* testmd5.cpp */; settings = {ATTRIBUTES = (); }; };
+		4D75362F9C7B5CCB9ACEAEDA /* uic.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = C0E7A1293163A13E9FB4F2F4 /* uic.cpp */; settings = {ATTRIBUTES = (); }; };
+		50DD7E2B7620DAA93B4D07E4 /* databasetype.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = CCD215CA9F1F2FB902637125 /* databasetype.cpp */; settings = {ATTRIBUTES = (); }; };
+		514D62D6486E0F366F8D6E7B /* recordfactory.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = AF97B977CA6C3A3317E89B5F /* recordfactory.cpp */; settings = {ATTRIBUTES = (); }; };
+		58D5588D0D340CD4668A1D48 /* device.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0F78362CD79458B3A41D308C /* device.cpp */; settings = {ATTRIBUTES = (); }; };
+		6139DE2BB3754BA5B230C890 /* sqlparser.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = B34DFC3B353FDE0A849CD23B /* sqlparser.cpp */; settings = {ATTRIBUTES = (); }; };
+		6319CB9A232F84063A06E73F /* plugin.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 558D0428ACA67A97B2B9A289 /* plugin.cpp */; settings = {ATTRIBUTES = (); }; };
+		63344356D036A59374DB1EF7 /* sqlaction.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9C3A61D770DA06A0B036CF59 /* sqlaction.cpp */; settings = {ATTRIBUTES = (); }; };
+		657FB7080C2B7A1E975145B2 /* databasemanager.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 796F948B195A3F199F9100EF /* databasemanager.cpp */; settings = {ATTRIBUTES = (); }; };
+		67F5305F36E965C9D0DA72DE /* flexibleiterator.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1EA597B1510412783B636AD6 /* flexibleiterator.cpp */; settings = {ATTRIBUTES = (); }; };
+		6F8880A3EC9BCD352BCF7A75 /* virtualtable.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = D69BFD23A8FFAE5E6EDA36E2 /* virtualtable.cpp */; settings = {ATTRIBUTES = (); }; };
+		70D892920EF72555E2A95DB7 /* testdate.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 72DA9B08D418CECD66DAFCB4 /* testdate.cpp */; settings = {ATTRIBUTES = (); }; };
+		7128BD93208921234DD83CAC /* qrc_popups.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 64F39810CE1D861AC86F2533 /* qrc_popups.cpp */; settings = {ATTRIBUTES = (); }; };
+		72B64C408ADDFF06C1B6B1C8 /* databaseint.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9F7D339B0AC8828D9F0A2465 /* databaseint.cpp */; settings = {ATTRIBUTES = (); }; };
+		7467A3D5D67277698A8DD37E /* testdatabase.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 4C146861AF3C1F26203C0815 /* testdatabase.cpp */; settings = {ATTRIBUTES = (); }; };
+		79B7B37FBBDEA259BF674FE4 /* flexibletable.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 43AD26625CB36A549FA8D9BF /* flexibletable.cpp */; settings = {ATTRIBUTES = (); }; };
+		83A9E826708D18DF2A1EF4CD /* sortmergejoin.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = E9DB81861128194514425B6B /* sortmergejoin.cpp */; settings = {ATTRIBUTES = (); }; };
+		8771A8C96E9C391044035D99 /* OpenGL.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = D4B32C2222F82AC56BADEB21 /* OpenGL.framework */; };
+		87A7AA2268C2FF9ACAD1E499 /* hashflexibletable.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 6B52B8EB894730D2A587827F /* hashflexibletable.cpp */; settings = {ATTRIBUTES = (); }; };
+		8A516CF91853498D6FC371DC /* databasedate.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = EE2F2309D18BF643C1B3AEA8 /* databasedate.cpp */; settings = {ATTRIBUTES = (); }; };
+		8B64E7187F50449F35DDF988 /* iterator.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 883D2CBA28E4349C16199C3A /* iterator.cpp */; settings = {ATTRIBUTES = (); }; };
+		8D1D1FF0A380CA8DF9924FCA /* record.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = D8929AE756333ED6CBC11FB8 /* record.cpp */; settings = {ATTRIBUTES = (); }; };
+		8D267F2E4776F0ECA2F49DC8 /* IOKit.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = A1A67BEAA744704B29168D39 /* IOKit.framework */; };
+		8E953383A14967EA1AFCED3F /* nestedloopjoin.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 282D08A3904B6409EAFEED18 /* nestedloopjoin.cpp */; settings = {ATTRIBUTES = (); }; };
+		8F5185499C17A535BE1226F2 /* sqlstruct.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = D1B5AC8650241BE7492DBE58 /* sqlstruct.cpp */; settings = {ATTRIBUTES = (); }; };
+		9BC47F34C7CC14113D1D7180 /* db_index.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0E53E30C9239236151DE41B6 /* db_index.cpp */; settings = {ATTRIBUTES = (); }; };
+		9DCB37AAFB0AA266BB39F4FF /* qrc_listitems.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 210B430B69A73999D8D3C028 /* qrc_listitems.cpp */; settings = {ATTRIBUTES = (); }; };
+		9E32A806F53F89A31AA6D484 /* fixedsizediterator.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 57199ED7B8B663A267BA5565 /* fixedsizediterator.cpp */; settings = {ATTRIBUTES = (); }; };
+		A2D379BE5CC98DE3DC817A27 /* moc_units.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 517C0BF19C04D26BCB0175AF /* moc_units.cpp */; settings = {ATTRIBUTES = (); }; };
+		A3379D45A97A27C194E58081 /* rawgroup.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 8FEA7BEE6560BCA4C1954D20 /* rawgroup.cpp */; settings = {ATTRIBUTES = (); }; };
+		A76C667AC027162BAE66F289 /* moc_device.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 3CBC3A2DAAD5AC9E1957C10C /* moc_device.cpp */; settings = {ATTRIBUTES = (); }; };
+		A77FCE802B364EF8C1130234 /* aes.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 806E3BDB4B0B27FC3B1B1AE8 /* aes.cpp */; settings = {ATTRIBUTES = (); }; };
+		A89CB53352EC97FACB207E8F /* qrc_extras.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 03FF6F7B2CAE8947292A6D1E /* qrc_extras.cpp */; settings = {ATTRIBUTES = (); }; };
+		A8C813EECB144B4AD2AFA2FD /* queryoptimizer.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 01D23A611F65D392AF4D0A22 /* queryoptimizer.cpp */; settings = {ATTRIBUTES = (); }; };
+		A99B2AA0F9CBBDD12BA126A4 /* DiskArbitration.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 2B774D8E4178765CE52EAAF5 /* DiskArbitration.framework */; };
+		AAD450257087BB8A6A0D11FE /* databasebulb.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 4CA5F9F7A5FDBDA92E533BD8 /* databasebulb.cpp */; settings = {ATTRIBUTES = (); }; };
+		AB4A83C27FE9A3F114B41D9B /* grouphandler.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9EB72D26F2D77593BF718B51 /* grouphandler.cpp */; settings = {ATTRIBUTES = (); }; };
+		AC8D2376A88DD0305BB6DD17 /* flexiblerecord.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = D412A01BE16916F34F288FD5 /* flexiblerecord.cpp */; settings = {ATTRIBUTES = (); }; };
+		AFCC4AFDCEA27F51645DDD7B /* encrypt.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 229AD19083F3F14D0A443D7C /* encrypt.cpp */; settings = {ATTRIBUTES = (); }; };
+		B9312531BCF0AB46EBC47ECC /* md5.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 3FD92288223141498276B879 /* md5.cpp */; settings = {ATTRIBUTES = (); }; };
+		C02CB99888C9E3260E2628A3 /* QtCore.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 8805AE36827CD0A904775A1E /* QtCore.framework */; };
+		C398A87DF31A7BA1B84E6037 /* qrc_material.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = E4CAD6BE04ECF030467774F1 /* qrc_material.cpp */; settings = {ATTRIBUTES = (); }; };
+		C99CECCB58D7EBE53B0EF533 /* qrc_window.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = B6F30939FE71D1C9C40FD566 /* qrc_window.cpp */; settings = {ATTRIBUTES = (); }; };
+		CA44B1CA57987FD87D343E73 /* qrc_core.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 81EB60A0B3E36AC3B538F7D5 /* qrc_core.cpp */; settings = {ATTRIBUTES = (); }; };
+		CC1D8580D2897B93DE8E65ED /* modifyhandler.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = D660717CD103C500B60429FB /* modifyhandler.cpp */; settings = {ATTRIBUTES = (); }; };
+		CD2764FF5C1D4FAE5E94A134 /* QtNetwork.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 1A8347CC40760A7ACC64D79E /* QtNetwork.framework */; };
+		CE6AA7876541104C844ECCF7 /* databasevarchar.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = EF85E1D484706F4FC20C9E42 /* databasevarchar.cpp */; settings = {ATTRIBUTES = (); }; };
+		CE8A7904FBD8968DC8AA1454 /* main.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = A31093919AB8325E803F61FA /* main.cpp */; settings = {ATTRIBUTES = (); }; };
+		CE95DE191876BC0E768E0D2E /* qrc_core_icons.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = BA9A4ECB25880E132B5CCAA9 /* qrc_core_icons.cpp */; settings = {ATTRIBUTES = (); }; };
+		D4A704FCA6A1D784D52EFD00 /* QtGui.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = B19B511E9F2F93737EE2F7EE /* QtGui.framework */; };
+		D639D0B423D9258F2012C85C /* qrc_icons.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = A4B985F6BC3E11142521D1FA /* qrc_icons.cpp */; settings = {ATTRIBUTES = (); }; };
+		D712C029C8D5FBF26D4A81D3 /* testhashflexible.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = F9DCDEBAFC83C6C2A9B03002 /* testhashflexible.cpp */; settings = {ATTRIBUTES = (); }; };
+		D7F4B6ADE277FC59EA6C6819 /* moc_plugin.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = F411AB50FDEDDC68FE8CE0D3 /* moc_plugin.cpp */; settings = {ATTRIBUTES = (); }; };
+		E1F7E3F0ED87FFA35A78504F /* testbulbfile.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 58D5A2420E796E3E30788052 /* testbulbfile.cpp */; settings = {ATTRIBUTES = (); }; };
+		E3036AEE5F57725CDBB0F6BF /* bplus_tree.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5274560C2D8FAB064E18DDD2 /* bplus_tree.cpp */; settings = {ATTRIBUTES = (); }; };
+		E3D1E74557AE10991DF43781 /* testregex.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0FEE83189D87BB388120BF10 /* testregex.cpp */; settings = {ATTRIBUTES = (); }; };
+		E45E51A644D5FC9F942ECE55 /* AGL.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 8D9815BDB5BD9F90D2BC05C5 /* AGL.framework */; };
+		E8193C70F651175E87062803 /* qrc_controls.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 12983AEDAC816259B99C4980 /* qrc_controls.cpp */; settings = {ATTRIBUTES = (); }; };
+		E93B0676F1BA346A60431F1D /* units.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1FC7B09935EC93308B85D675 /* units.cpp */; settings = {ATTRIBUTES = (); }; };
+		F252359C3FA91EE426D9744F /* QtQuick.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 3F0C3DB142D2D48CE9A65C13 /* QtQuick.framework */; };
+		F65ACDDA51D883719EEB9BEA /* table.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 8914E5242B56512476AE2E7B /* table.cpp */; settings = {ATTRIBUTES = (); }; };
+		F7418492A705550C5D3929CD /* intelligentfilter.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 3AA72CFDBF43A035A2F441CC /* intelligentfilter.cpp */; settings = {ATTRIBUTES = (); }; };
+		FACEBB3C5D45FF2DB5A5A26B /* virtualiterator.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = F926DB3DE79C5686278DD783 /* virtualiterator.cpp */; settings = {ATTRIBUTES = (); }; };
+		FD0A8E3D4C6605D29EEA5B10 /* moc_qmlif.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 3823A64655CAD6A8A93E3F6F /* moc_qmlif.cpp */; settings = {ATTRIBUTES = (); }; };
+		FD0F86414AE1BFB086D5A4BC /* group.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1D1E2F1A02301BA376B5C4A8 /* group.cpp */; settings = {ATTRIBUTES = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		41E3F6BC1E124041000E57E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6DB9C3763D02B1415CD9D565 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BDFEE1B72F1D7D17473F627A;
+			remoteInfo = "Qt Preprocess";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		016957C9823A927E38199276 /* core_icons.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = core_icons.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/icons/core_icons.qrc; sourceTree = "<absolute>"; };
+		01D23A611F65D392AF4D0A22 /* queryoptimizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = queryoptimizer.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/queryoptimizer.cpp; sourceTree = "<absolute>"; };
+		01DB71A7A014480D96AB3B1E /* intelligentfilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = intelligentfilter.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/intelligentfilter.h; sourceTree = "<absolute>"; };
+		036FC61DEA6B16EDBDFEDE70 /* databasetext.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databasetext.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasetext.cpp; sourceTree = "<absolute>"; };
+		03FF6F7B2CAE8947292A6D1E /* qrc_extras.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_extras.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_extras.cpp; sourceTree = "<absolute>"; };
+		07AFA39FDA12115FF5C2FD4B /* pythonif.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pythonif.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/layer/pythonif.h; sourceTree = "<absolute>"; };
+		0A2A3335A316B78C8A3F08B0 /* joinstrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = joinstrategy.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/joinstrategies/joinstrategy.h; sourceTree = "<absolute>"; };
+		0E53E30C9239236151DE41B6 /* db_index.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = db_index.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/DBIndex/db_index.cpp; sourceTree = "<absolute>"; };
+		0F1EE940F7B138E3E32F6E75 /* virtualtable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = virtualtable.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/virtualtable.h; sourceTree = "<absolute>"; };
+		0F78362CD79458B3A41D308C /* device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = device.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/core/device.cpp; sourceTree = "<absolute>"; };
+		0FEE83189D87BB388120BF10 /* testregex.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testregex.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testregex.cpp; sourceTree = "<absolute>"; };
+		12983AEDAC816259B99C4980 /* qrc_controls.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_controls.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_controls.cpp; sourceTree = "<absolute>"; };
+		153416196ACB3CE4E9DC69F3 /* iterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iterator.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/iterator.h; sourceTree = "<absolute>"; };
+		179DDCC29CCC8F7A3BF0FC1D /* grouphandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = grouphandler.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/groupalgorithm/grouphandler.h; sourceTree = "<absolute>"; };
+		17F12B00DB262FA2A42F1FCB /* testtype.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testtype.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testtype.h; sourceTree = "<absolute>"; };
+		19FE2EF8ED59D5991E181C03 /* testsql.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testsql.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testsql.cpp; sourceTree = "<absolute>"; };
+		1A05666B8EC3D0CEACE4412C /* databaselint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databaselint.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databaselint.cpp; sourceTree = "<absolute>"; };
+		1A8347CC40760A7ACC64D79E /* QtNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtNetwork.framework; path = /Users/NitreExplosion/Qt/5.7/clang_64/lib/QtNetwork.framework; sourceTree = "<absolute>"; };
+		1D1E2F1A02301BA376B5C4A8 /* group.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = group.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/groupalgorithm/group.cpp; sourceTree = "<absolute>"; };
+		1EA597B1510412783B636AD6 /* flexibleiterator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = flexibleiterator.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/flexibleiterator.cpp; sourceTree = "<absolute>"; };
+		1FC7B09935EC93308B85D675 /* units.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = units.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/core/units.cpp; sourceTree = "<absolute>"; };
+		210B430B69A73999D8D3C028 /* qrc_listitems.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_listitems.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_listitems.cpp; sourceTree = "<absolute>"; };
+		224770EF8805657C26653619 /* uic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = uic.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/uic.h; sourceTree = "<absolute>"; };
+		227D2937989CAEBCEEEBE369 /* date.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = date.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/date.h; sourceTree = "<absolute>"; };
+		229AD19083F3F14D0A443D7C /* encrypt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = encrypt.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/aesalgorithm/encrypt.cpp; sourceTree = "<absolute>"; };
+		23728045BF2CADCA8D71AF66 /* queryoptimizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = queryoptimizer.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/queryoptimizer.h; sourceTree = "<absolute>"; };
+		282D08A3904B6409EAFEED18 /* nestedloopjoin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = nestedloopjoin.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/joinstrategies/nestedloopjoin.cpp; sourceTree = "<absolute>"; };
+		288781230042B82A59F7DAE8 /* units.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = units.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/core/units.h; sourceTree = "<absolute>"; };
+		29B6A0A6B6FA8C58A6F5D95A /* MyBitMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MyBitMap.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/pagefilesystem/MyBitMap.h; sourceTree = "<absolute>"; };
+		2B774D8E4178765CE52EAAF5 /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = /System/Library/Frameworks/DiskArbitration.framework; sourceTree = "<absolute>"; };
+		2EDE4B593A0FEA82D8CDF13E /* material.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = material.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/material.qrc; sourceTree = "<absolute>"; };
+		2F513FE0B153B9566594E544 /* testmd5.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testmd5.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testmd5.cpp; sourceTree = "<absolute>"; };
+		2FFF5AB74C313BDECB59B9C0 /* fixedsizerecord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fixedsizerecord.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/recordhandler/fixedsizerecord.cpp; sourceTree = "<absolute>"; };
+		366F729BABE65D6221DD59ED /* databaseint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databaseint.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databaseint.h; sourceTree = "<absolute>"; };
+		37E4C0608BB7AE4F1129B230 /* core.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = core.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/core/core.qrc; sourceTree = "<absolute>"; };
+		3823A64655CAD6A8A93E3F6F /* moc_qmlif.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = moc_qmlif.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/moc_qmlif.cpp; sourceTree = "<absolute>"; };
+		3875CE15BF7D6FCFB3EB1898 /* databasechar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databasechar.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasechar.h; sourceTree = "<absolute>"; };
+		38E7C66CD89879D821CB4E2F /* testhashflexible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testhashflexible.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testhashflexible.h; sourceTree = "<absolute>"; };
+		3988613369CAFF2C05DA56BB /* QtQml.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtQml.framework; path = /Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQml.framework; sourceTree = "<absolute>"; };
+		39B0DA2848FBB6F06B9C3EE5 /* qmlif.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qmlif.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/layer/qmlif.cpp; sourceTree = "<absolute>"; };
+		3AA72CFDBF43A035A2F441CC /* intelligentfilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = intelligentfilter.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/intelligentfilter.cpp; sourceTree = "<absolute>"; };
+		3B026267AE5CEACF92F40CCE /* controls.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = controls.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/controls/controls.qrc; sourceTree = "<absolute>"; };
+		3CBC3A2DAAD5AC9E1957C10C /* moc_device.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = moc_device.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/moc_device.cpp; sourceTree = "<absolute>"; };
+		3E8DAC1F46BD30AA693CA4EB /* location.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = location.hh; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/location.hh; sourceTree = "<absolute>"; };
+		3F0C3DB142D2D48CE9A65C13 /* QtQuick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtQuick.framework; path = /Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQuick.framework; sourceTree = "<absolute>"; };
+		3FD92288223141498276B879 /* md5.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = md5.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/md5.cpp; sourceTree = "<absolute>"; };
+		41666320A59F40F2955A87FE /* json.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = json.hpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/layer/json.hpp; sourceTree = "<absolute>"; };
+		41E3F6BD1E124113000E57E4 /* libgmp.10.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgmp.10.dylib; path = ../../../../../../../usr/local/Cellar/gmp/6.1.1/lib/libgmp.10.dylib; sourceTree = "<group>"; };
+		41E3F6BE1E124113000E57E4 /* libgmp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmp.a; path = ../../../../../../../usr/local/Cellar/gmp/6.1.1/lib/libgmp.a; sourceTree = "<group>"; };
+		41E3F6BF1E124113000E57E4 /* libgmp.10.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgmp.10.dylib; path = ../../../../../../../usr/local/Cellar/gmp/6.1.1/lib/libgmp.10.dylib; sourceTree = "<group>"; };
+		41E3F6C01E124113000E57E4 /* libgmpxx.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgmpxx.4.dylib; path = ../../../../../../../usr/local/Cellar/gmp/6.1.1/lib/libgmpxx.4.dylib; sourceTree = "<group>"; };
+		41E3F6C11E124113000E57E4 /* libgmpxx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgmpxx.a; path = ../../../../../../../usr/local/Cellar/gmp/6.1.1/lib/libgmpxx.a; sourceTree = "<group>"; };
+		41E3F6C21E124113000E57E4 /* libgmpxx.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgmpxx.4.dylib; path = ../../../../../../../usr/local/Cellar/gmp/6.1.1/lib/libgmpxx.4.dylib; sourceTree = "<group>"; };
+		41E3F6C91E124130000E57E4 /* libmpfr.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmpfr.4.dylib; path = ../../../../../../../usr/local/Cellar/mpfr/3.1.3/lib/libmpfr.4.dylib; sourceTree = "<group>"; };
+		41E3F6CA1E124130000E57E4 /* libmpfr.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpfr.a; path = ../../../../../../../usr/local/Cellar/mpfr/3.1.3/lib/libmpfr.a; sourceTree = "<group>"; };
+		41E3F6CB1E124130000E57E4 /* libmpfr.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmpfr.4.dylib; path = ../../../../../../../usr/local/Cellar/mpfr/3.1.3/lib/libmpfr.4.dylib; sourceTree = "<group>"; };
+		41E3F6CF1E12428C000E57E4 /* mpreal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mpreal.h; path = groupalgorithm/mpreal.h; sourceTree = "<group>"; };
+		43AD26625CB36A549FA8D9BF /* flexibletable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = flexibletable.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/flexibletable.cpp; sourceTree = "<absolute>"; };
+		4BEDD6BC1CB5DA70EA0CAB83 /* popups.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = popups.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/popups/popups.qrc; sourceTree = "<absolute>"; };
+		4C146861AF3C1F26203C0815 /* testdatabase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testdatabase.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testdatabase.cpp; sourceTree = "<absolute>"; };
+		4C5A0110315888DDC932CD17 /* qmlif.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = qmlif.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/layer/qmlif.h; sourceTree = "<absolute>"; };
+		4CA5F9F7A5FDBDA92E533BD8 /* databasebulb.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databasebulb.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasebulb.cpp; sourceTree = "<absolute>"; };
+		517C0BF19C04D26BCB0175AF /* moc_units.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = moc_units.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/moc_units.cpp; sourceTree = "<absolute>"; };
+		5274560C2D8FAB064E18DDD2 /* bplus_tree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bplus_tree.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/DBIndex/bplus_tree.cpp; sourceTree = "<absolute>"; };
+		5296FC604388317042F3AC97 /* database.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = database.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		558D0428ACA67A97B2B9A289 /* plugin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = plugin.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/plugin.cpp; sourceTree = "<absolute>"; };
+		57199ED7B8B663A267BA5565 /* fixedsizediterator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fixedsizediterator.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/fixedsizediterator.cpp; sourceTree = "<absolute>"; };
+		58D5A2420E796E3E30788052 /* testbulbfile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testbulbfile.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testbulbfile.cpp; sourceTree = "<absolute>"; };
+		59117378FE91DA4C8911F6AF /* table.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = table.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/table.h; sourceTree = "<absolute>"; };
+		5B352A3D5A17E7E26FE59354 /* testgroup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testgroup.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testgroup.cpp; sourceTree = "<absolute>"; };
+		5BD34F4243E5CFAEA586A96B /* position.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = position.hh; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/position.hh; sourceTree = "<absolute>"; };
+		5C48DC865C8EB314E8F81DD0 /* flexibletable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = flexibletable.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/flexibletable.h; sourceTree = "<absolute>"; };
+		5EE0EC76BAE9F56CE4DEDB79 /* testregex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testregex.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testregex.h; sourceTree = "<absolute>"; };
+		5FFAA17AC9A9AEAC669478C7 /* fixedsizetable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fixedsizetable.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/fixedsizetable.cpp; sourceTree = "<absolute>"; };
+		61D534F328982703661EB3E3 /* bplus_node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bplus_node.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/DBIndex/bplus_node.h; sourceTree = "<absolute>"; };
+		61D68661F2CEAA6D3A5469A7 /* sqllexer.l */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.lex; name = sqllexer.l; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqllexer.l; sourceTree = "<absolute>"; };
+		64F39810CE1D861AC86F2533 /* qrc_popups.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_popups.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_popups.cpp; sourceTree = "<absolute>"; };
+		6500CDE6C8F80698DC14030B /* testdate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testdate.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testdate.h; sourceTree = "<absolute>"; };
+		65EFBF47F02C1E3E76816077 /* databasereal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databasereal.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasereal.h; sourceTree = "<absolute>"; };
+		668F8A571A07A2707F0BD39E /* device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = device.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/core/device.h; sourceTree = "<absolute>"; };
+		679352372E13D64E3DB382AB /* aes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = aes.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/aesalgorithm/aes.h; sourceTree = "<absolute>"; };
+		68AD31DCF9EED9309A746C3B /* nestedloopjoin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nestedloopjoin.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/joinstrategies/nestedloopjoin.h; sourceTree = "<absolute>"; };
+		68DF8D9F13CA76EC1C303271 /* fixedsizediterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fixedsizediterator.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/fixedsizediterator.h; sourceTree = "<absolute>"; };
+		6AA7641CF5D0513ED95F9975 /* comparealgo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = comparealgo.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/DBIndex/comparealgo.cpp; sourceTree = "<absolute>"; };
+		6B52B8EB894730D2A587827F /* hashflexibletable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hashflexibletable.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/hashflexibletable.cpp; sourceTree = "<absolute>"; };
+		6B81CFC47A5CC493378E8669 /* material.pri */ = {isa = PBXFileReference; lastKnownFileType = text; name = material.pri; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/material.pri; sourceTree = "<absolute>"; };
+		6D5B21FF1E5D886945E706C8 /* recordfactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = recordfactory.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/recordhandler/recordfactory.h; sourceTree = "<absolute>"; };
+		709216DA3577677AAF22F623 /* plugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = plugin.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/plugin.h; sourceTree = "<absolute>"; };
+		71793097DF506F92144A687D /* sqlparser.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sqlparser.hpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqlparser.hpp; sourceTree = "<absolute>"; };
+		72DA9B08D418CECD66DAFCB4 /* testdate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testdate.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testdate.cpp; sourceTree = "<absolute>"; };
+		73162EAEA669B7816EB43F5C /* testmd5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testmd5.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testmd5.h; sourceTree = "<absolute>"; };
+		73EF875C026651257296602D /* databasevarchar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databasevarchar.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasevarchar.h; sourceTree = "<absolute>"; };
+		74C2B7DF7110318396BAB5BB /* databaselint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databaselint.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databaselint.h; sourceTree = "<absolute>"; };
+		76DF85B1F1C2B682FBF0C31C /* record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = record.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/recordhandler/record.h; sourceTree = "<absolute>"; };
+		7748094F8E4A96CAC8B91967 /* flexibleiterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = flexibleiterator.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/flexibleiterator.h; sourceTree = "<absolute>"; };
+		77921DAA8F6B0BBD0EC1C8B8 /* databasereal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databasereal.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasereal.cpp; sourceTree = "<absolute>"; };
+		779E81AF2F935704B1782F0C /* fixedsizerecord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fixedsizerecord.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/recordhandler/fixedsizerecord.h; sourceTree = "<absolute>"; };
+		77F0CA4FB2ACA581AC022979 /* group.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = group.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/groupalgorithm/group.h; sourceTree = "<absolute>"; };
+		791CEB71BDF2957060BB7472 /* listitems.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = listitems.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/listitems/listitems.qrc; sourceTree = "<absolute>"; };
+		796F948B195A3F199F9100EF /* databasemanager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databasemanager.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/layer/databasemanager.cpp; sourceTree = "<absolute>"; };
+		7BDAF3D915EC6E0DF73E8C27 /* checkhelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = checkhelper.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/checkhelper.h; sourceTree = "<absolute>"; };
+		7E3212C23133D3C0D28C5E6C /* queryexecuter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = queryexecuter.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/queryexecuter.h; sourceTree = "<absolute>"; };
+		806E3BDB4B0B27FC3B1B1AE8 /* aes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = aes.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/aesalgorithm/aes.cpp; sourceTree = "<absolute>"; };
+		81EB60A0B3E36AC3B538F7D5 /* qrc_core.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_core.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_core.cpp; sourceTree = "<absolute>"; };
+		84C5D9A161C5D952CDA7AEA9 /* components.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = components.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/components/components.qrc; sourceTree = "<absolute>"; };
+		84D5C2FD110F78876B58B8E8 /* sqlparser.yy */ = {isa = PBXFileReference; lastKnownFileType = text; name = sqlparser.yy; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqlparser.yy; sourceTree = "<absolute>"; };
+		84D78A3509ED01C052AA4282 /* sqldriver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sqldriver.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqldriver.cpp; sourceTree = "<absolute>"; };
+		860CB9764FDC81210B5860E1 /* styles.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = styles.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/styles/styles.qrc; sourceTree = "<absolute>"; };
+		8631DC14045476A674DBDFF3 /* fixedsizetable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fixedsizetable.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/fixedsizetable.h; sourceTree = "<absolute>"; };
+		87F1FA8256AFD414F403AC73 /* MyLinkList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MyLinkList.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/pagefilesystem/MyLinkList.h; sourceTree = "<absolute>"; };
+		8805AE36827CD0A904775A1E /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = /Users/NitreExplosion/Qt/5.7/clang_64/lib/QtCore.framework; sourceTree = "<absolute>"; };
+		883D2CBA28E4349C16199C3A /* iterator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = iterator.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/iterator.cpp; sourceTree = "<absolute>"; };
+		8914E5242B56512476AE2E7B /* table.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = table.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/table.cpp; sourceTree = "<absolute>"; };
+		893BD844D163F1A66477A053 /* queryexecuter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = queryexecuter.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/queryexecuter.cpp; sourceTree = "<absolute>"; };
+		896C6A8BCA25A5A4A4B50094 /* mainwindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mainwindow.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/mainwindow.cpp; sourceTree = "<absolute>"; };
+		8CCAF4181FC053EAB01518A3 /* testflexible.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testflexible.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testflexible.cpp; sourceTree = "<absolute>"; };
+		8D409FF51C68ED6AAD4E993F /* testvirtual.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testvirtual.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testvirtual.h; sourceTree = "<absolute>"; };
+		8D9815BDB5BD9F90D2BC05C5 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
+		8DD34FBC84607F9487EA2A0A /* testflexible.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testflexible.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testflexible.h; sourceTree = "<absolute>"; };
+		8F0F615F18D1A1F2382F4F68 /* database.pro */ = {isa = PBXFileReference; lastKnownFileType = text; name = database.pro; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/database.pro; sourceTree = "<absolute>"; };
+		8F5370C4CAB15789470FB4E5 /* rawgroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = rawgroup.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/groupalgorithm/rawgroup.h; sourceTree = "<absolute>"; };
+		8FEA7BEE6560BCA4C1954D20 /* rawgroup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = rawgroup.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/groupalgorithm/rawgroup.cpp; sourceTree = "<absolute>"; };
+		92E03E642DFF940EB3EEA15E /* stack.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stack.hh; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/stack.hh; sourceTree = "<absolute>"; };
+		931C5E939E04EEBE6A2C05FD /* sqlaction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sqlaction.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqlaction.h; sourceTree = "<absolute>"; };
+		9366FFCA003D22EA6FD5190C /* qrc_styles.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_styles.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_styles.cpp; sourceTree = "<absolute>"; };
+		93AC771FE9E630B232677267 /* md5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = md5.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/md5.h; sourceTree = "<absolute>"; };
+		97402F42835F2B7E8B19AC38 /* bulbfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bulbfile.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/bulbfile.h; sourceTree = "<absolute>"; };
+		97E25357F5973F8C5B39C214 /* window.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = window.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/window/window.qrc; sourceTree = "<absolute>"; };
+		9858439EF0377B5262E9AB63 /* sortmergejoin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sortmergejoin.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/joinstrategies/sortmergejoin.h; sourceTree = "<absolute>"; };
+		9C3A61D770DA06A0B036CF59 /* sqlaction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sqlaction.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqlaction.cpp; sourceTree = "<absolute>"; };
+		9C64A4348E593E39D0E7C0BB /* mainwindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mainwindow.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/mainwindow.h; sourceTree = "<absolute>"; };
+		9C9D480019F73A4D4B22EAEA /* database.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = database.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/database.h; sourceTree = "<absolute>"; };
+		9EB72D26F2D77593BF718B51 /* grouphandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = grouphandler.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/groupalgorithm/grouphandler.cpp; sourceTree = "<absolute>"; };
+		9F7D339B0AC8828D9F0A2465 /* databaseint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databaseint.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databaseint.cpp; sourceTree = "<absolute>"; };
+		A07676E2CD718B1D945418C4 /* iteratorfactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = iteratorfactory.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/iteratorfactory.cpp; sourceTree = "<absolute>"; };
+		A1779461AEE4F322B4621879 /* extras.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = extras.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/extras/extras.qrc; sourceTree = "<absolute>"; };
+		A1A67BEAA744704B29168D39 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		A20CBBE258B92D9C91829C78 /* chrono_io.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = chrono_io.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/chrono_io.h; sourceTree = "<absolute>"; };
+		A31093919AB8325E803F61FA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/main.cpp; sourceTree = "<absolute>"; };
+		A4B985F6BC3E11142521D1FA /* qrc_icons.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_icons.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_icons.cpp; sourceTree = "<absolute>"; };
+		A8F158D84C45B7FE6030C2AC /* flexiblerecord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = flexiblerecord.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/recordhandler/flexiblerecord.h; sourceTree = "<absolute>"; };
+		AABD8654CC5B69A34C54DC0D /* QtWidgets.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtWidgets.framework; path = /Users/NitreExplosion/Qt/5.7/clang_64/lib/QtWidgets.framework; sourceTree = "<absolute>"; };
+		AB88DE24D73144407D3F9944 /* checkhelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = checkhelper.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/checkhelper.cpp; sourceTree = "<absolute>"; };
+		AF06B5B75BF7544F5B30C3D1 /* hashjoin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = hashjoin.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/joinstrategies/hashjoin.h; sourceTree = "<absolute>"; };
+		AF97B977CA6C3A3317E89B5F /* recordfactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = recordfactory.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/recordhandler/recordfactory.cpp; sourceTree = "<absolute>"; };
+		B19B511E9F2F93737EE2F7EE /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = /Users/NitreExplosion/Qt/5.7/clang_64/lib/QtGui.framework; sourceTree = "<absolute>"; };
+		B31052204FAB7AD0E003D8EF /* databasechar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databasechar.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasechar.cpp; sourceTree = "<absolute>"; };
+		B34DFC3B353FDE0A849CD23B /* sqlparser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sqlparser.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqlparser.cpp; sourceTree = "<absolute>"; };
+		B38BDCFA5A0D645116063472 /* testdatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testdatabase.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testdatabase.h; sourceTree = "<absolute>"; };
+		B6F30939FE71D1C9C40FD566 /* qrc_window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_window.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_window.cpp; sourceTree = "<absolute>"; };
+		B87D46D552936E58D0ABDD4F /* hashflexibleiterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = hashflexibleiterator.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/hashflexibleiterator.h; sourceTree = "<absolute>"; };
+		BA9A4ECB25880E132B5CCAA9 /* qrc_core_icons.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_core_icons.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_core_icons.cpp; sourceTree = "<absolute>"; };
+		BC99CC73AE5228191D3AF425 /* databasemanager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databasemanager.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/layer/databasemanager.h; sourceTree = "<absolute>"; };
+		BE502B76D58F60EE4B93862C /* testbulbfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testbulbfile.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testbulbfile.h; sourceTree = "<absolute>"; };
+		C0E7A1293163A13E9FB4F2F4 /* uic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = uic.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/uic.cpp; sourceTree = "<absolute>"; };
+		C1FFDEE61760BF3C04524A29 /* iteratorfactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iteratorfactory.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/iteratorfactory.h; sourceTree = "<absolute>"; };
+		C88BE57708F33D9BA69FFB24 /* BufPageManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BufPageManager.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/pagefilesystem/BufPageManager.h; sourceTree = "<absolute>"; };
+		C8FD6DE4C38B1B0747150201 /* encrypt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = encrypt.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/aesalgorithm/encrypt.h; sourceTree = "<absolute>"; };
+		C9321197250A2032142C334F /* testvirtual.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testvirtual.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testvirtual.cpp; sourceTree = "<absolute>"; };
+		CB08A38ED590D34C2871616D /* pagedef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pagedef.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/pagefilesystem/pagedef.h; sourceTree = "<absolute>"; };
+		CC3FD0D89E1219CD4506576F /* qrc_thjdb.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_thjdb.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_thjdb.cpp; sourceTree = "<absolute>"; };
+		CCD215CA9F1F2FB902637125 /* databasetype.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databasetype.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasetype.cpp; sourceTree = "<absolute>"; };
+		CF1B673E9CB53D83924861E8 /* db_index.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = db_index.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/DBIndex/db_index.h; sourceTree = "<absolute>"; };
+		D037ECA5ED4A2C9C969BE97C /* sqldriver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sqldriver.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqldriver.h; sourceTree = "<absolute>"; };
+		D0F933ABBEFD4509F1DB1EE6 /* sqllexer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sqllexer.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqllexer.cpp; sourceTree = "<absolute>"; };
+		D1938C354A2D343CEA9E0224 /* sqllexer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sqllexer.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqllexer.h; sourceTree = "<absolute>"; };
+		D1B5AC8650241BE7492DBE58 /* sqlstruct.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sqlstruct.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqlstruct.cpp; sourceTree = "<absolute>"; };
+		D1D996F14769D9BEC47D5A71 /* icons.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = icons.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/icons/icons.qrc; sourceTree = "<absolute>"; };
+		D3063511F99CB5257F738C42 /* testaes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testaes.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testaes.cpp; sourceTree = "<absolute>"; };
+		D412A01BE16916F34F288FD5 /* flexiblerecord.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = flexiblerecord.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/recordhandler/flexiblerecord.cpp; sourceTree = "<absolute>"; };
+		D4B32C2222F82AC56BADEB21 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		D61181A6E025A84571DF48A1 /* testiterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testiterator.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testiterator.h; sourceTree = "<absolute>"; };
+		D660717CD103C500B60429FB /* modifyhandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = modifyhandler.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/modifyhandler.cpp; sourceTree = "<absolute>"; };
+		D684CF79601C6BDF7FD51043 /* databasedate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databasedate.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasedate.h; sourceTree = "<absolute>"; };
+		D69BFD23A8FFAE5E6EDA36E2 /* virtualtable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = virtualtable.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/virtualtable.cpp; sourceTree = "<absolute>"; };
+		D78A1AA77BAF38A7A3238741 /* virtualiterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = virtualiterator.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/virtualiterator.h; sourceTree = "<absolute>"; };
+		D8929AE756333ED6CBC11FB8 /* record.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = record.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/recordhandler/record.cpp; sourceTree = "<absolute>"; };
+		DA429F15B1C46FBF26083244 /* comparealgo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = comparealgo.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/DBIndex/comparealgo.h; sourceTree = "<absolute>"; };
+		DB1C30FF5861BAF3544DA7B4 /* FindReplace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FindReplace.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/pagefilesystem/FindReplace.h; sourceTree = "<absolute>"; };
+		DBC9628C19D4DEAC1823784B /* hashflexibleiterator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hashflexibleiterator.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/hashflexibleiterator.cpp; sourceTree = "<absolute>"; };
+		DC34D289916938ED268BFAA8 /* qrc_components.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_components.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_components.cpp; sourceTree = "<absolute>"; };
+		DE15EAF945D5E74185BD72B6 /* modifyhandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = modifyhandler.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/modifyhandler.h; sourceTree = "<absolute>"; };
+		E0F6933C278EBE2BAD0D61E9 /* FileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FileManager.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/pagefilesystem/FileManager.h; sourceTree = "<absolute>"; };
+		E1D84C6EDFA1551771FE541E /* databasebulb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databasebulb.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasebulb.h; sourceTree = "<absolute>"; };
+		E33E57CDE49E8213EE3A4BD5 /* querycondition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = querycondition.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/querycondition.h; sourceTree = "<absolute>"; };
+		E38B5539A77E2FF7F2CE263D /* testaes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testaes.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testaes.h; sourceTree = "<absolute>"; };
+		E43434A78214F8474BBE80FB /* databasetext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databasetext.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasetext.h; sourceTree = "<absolute>"; };
+		E4CAD6BE04ECF030467774F1 /* qrc_material.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = qrc_material.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/qrc_material.cpp; sourceTree = "<absolute>"; };
+		E8F9BABE149271F2BBA2B496 /* testgroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testgroup.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testgroup.h; sourceTree = "<absolute>"; };
+		E942E92C1FAF3176FF50A87C /* testiterator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testiterator.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testiterator.cpp; sourceTree = "<absolute>"; };
+		E9D3EB3995E21E08E1684946 /* testsql.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = testsql.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testsql.h; sourceTree = "<absolute>"; };
+		E9DB81861128194514425B6B /* sortmergejoin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sortmergejoin.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/joinstrategies/sortmergejoin.cpp; sourceTree = "<absolute>"; };
+		EA4C982BF3C4C243C8A57910 /* FileTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FileTable.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/pagefilesystem/FileTable.h; sourceTree = "<absolute>"; };
+		EB37EDEBB6CC9993C6E63CFA /* MyHashMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MyHashMap.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/pagefilesystem/MyHashMap.h; sourceTree = "<absolute>"; };
+		EDB4460FEB47A21915757915 /* databasetype.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = databasetype.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasetype.h; sourceTree = "<absolute>"; };
+		EDD4B92507AA405019CDF75C /* thjdb.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = thjdb.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/thjdb.qrc; sourceTree = "<absolute>"; };
+		EE2F2309D18BF643C1B3AEA8 /* databasedate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databasedate.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasedate.cpp; sourceTree = "<absolute>"; };
+		EE5A7F48785B267546AC5F4B /* testtype.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testtype.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testtype.cpp; sourceTree = "<absolute>"; };
+		EF85E1D484706F4FC20C9E42 /* databasevarchar.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = databasevarchar.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/typehandler/databasevarchar.cpp; sourceTree = "<absolute>"; };
+		F246C00A4EF3630744E7CAA5 /* sqlstruct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sqlstruct.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/sqlengine/sqlstruct.h; sourceTree = "<absolute>"; };
+		F411AB50FDEDDC68FE8CE0D3 /* moc_plugin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = moc_plugin.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/moc_plugin.cpp; sourceTree = "<absolute>"; };
+		F47109D3AB749A2610674A95 /* predefined.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = predefined.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/DBIndex/predefined.h; sourceTree = "<absolute>"; };
+		F54BC9C8632B9F4F03F09F5C /* hashjoin.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hashjoin.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/joinstrategies/hashjoin.cpp; sourceTree = "<absolute>"; };
+		F895AAAE49C3A1623785D09F /* joinstrategy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = joinstrategy.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/joinstrategies/joinstrategy.cpp; sourceTree = "<absolute>"; };
+		F8B95131D9A0FA8AB94F3948 /* querycondition.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = querycondition.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/queryhandler/querycondition.cpp; sourceTree = "<absolute>"; };
+		F926DB3DE79C5686278DD783 /* virtualiterator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = virtualiterator.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/managementhandler/virtualiterator.cpp; sourceTree = "<absolute>"; };
+		F9DCDEBAFC83C6C2A9B03002 /* testhashflexible.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testhashflexible.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testhashflexible.cpp; sourceTree = "<absolute>"; };
+		FC02534581277773DD220ED9 /* bulbfile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bulbfile.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/bulbfile.cpp; sourceTree = "<absolute>"; };
+		FD4CABFB0CC8276C72464752 /* database.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = database.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/database.cpp; sourceTree = "<absolute>"; };
+		FE402F0D0A26C216ED97DBD8 /* hashflexibletable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = hashflexibletable.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/hashflexibletable.h; sourceTree = "<absolute>"; };
+		FFB0210218C9C3088C0C8DBF /* bplus_tree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bplus_tree.h; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/DBIndex/bplus_tree.h; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D1C883685E82D5676953459A /* Link Binary With Libraries */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				41E3F6CC1E124130000E57E4 /* libmpfr.4.dylib in Link Binary With Libraries */,
+				41E3F6CD1E124130000E57E4 /* libmpfr.a in Link Binary With Libraries */,
+				41E3F6CE1E124130000E57E4 /* libmpfr.4.dylib in Link Binary With Libraries */,
+				41E3F6C31E124113000E57E4 /* libgmp.10.dylib in Link Binary With Libraries */,
+				41E3F6C41E124113000E57E4 /* libgmp.a in Link Binary With Libraries */,
+				41E3F6C51E124113000E57E4 /* libgmp.10.dylib in Link Binary With Libraries */,
+				41E3F6C61E124113000E57E4 /* libgmpxx.4.dylib in Link Binary With Libraries */,
+				41E3F6C71E124113000E57E4 /* libgmpxx.a in Link Binary With Libraries */,
+				41E3F6C81E124113000E57E4 /* libgmpxx.4.dylib in Link Binary With Libraries */,
+				F252359C3FA91EE426D9744F /* QtQuick.framework in Link Binary With Libraries */,
+				44D91CC7350873D0D1275666 /* QtQml.framework in Link Binary With Libraries */,
+				CD2764FF5C1D4FAE5E94A134 /* QtNetwork.framework in Link Binary With Libraries */,
+				C02CB99888C9E3260E2628A3 /* QtCore.framework in Link Binary With Libraries */,
+				A99B2AA0F9CBBDD12BA126A4 /* DiskArbitration.framework in Link Binary With Libraries */,
+				8D267F2E4776F0ECA2F49DC8 /* IOKit.framework in Link Binary With Libraries */,
+				D4A704FCA6A1D784D52EFD00 /* QtGui.framework in Link Binary With Libraries */,
+				25F25F7E354C67D8C0D9955A /* QtWidgets.framework in Link Binary With Libraries */,
+				8771A8C96E9C391044035D99 /* OpenGL.framework in Link Binary With Libraries */,
+				E45E51A644D5FC9F942ECE55 /* AGL.framework in Link Binary With Libraries */,
+			);
+			name = "Link Binary With Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		005603A0CB20F430E73A3B47 /* aesalgorithm */ = {
+			isa = PBXGroup;
+			children = (
+				806E3BDB4B0B27FC3B1B1AE8 /* aes.cpp */,
+				229AD19083F3F14D0A443D7C /* encrypt.cpp */,
+				679352372E13D64E3DB382AB /* aes.h */,
+				C8FD6DE4C38B1B0747150201 /* encrypt.h */,
+			);
+			name = aesalgorithm;
+			sourceTree = "<group>";
+		};
+		0AD4167236585C2E63D32579 /* recordhandler */ = {
+			isa = PBXGroup;
+			children = (
+				2FFF5AB74C313BDECB59B9C0 /* fixedsizerecord.cpp */,
+				D8929AE756333ED6CBC11FB8 /* record.cpp */,
+				AF97B977CA6C3A3317E89B5F /* recordfactory.cpp */,
+				D412A01BE16916F34F288FD5 /* flexiblerecord.cpp */,
+				779E81AF2F935704B1782F0C /* fixedsizerecord.h */,
+				76DF85B1F1C2B682FBF0C31C /* record.h */,
+				6D5B21FF1E5D886945E706C8 /* recordfactory.h */,
+				A8F158D84C45B7FE6030C2AC /* flexiblerecord.h */,
+			);
+			name = recordhandler;
+			sourceTree = "<group>";
+		};
+		16AA0055C2D2D0B893768F4C /* databasehandler */ = {
+			isa = PBXGroup;
+			children = (
+				FD4CABFB0CC8276C72464752 /* database.cpp */,
+				8914E5242B56512476AE2E7B /* table.cpp */,
+				5FFAA17AC9A9AEAC669478C7 /* fixedsizetable.cpp */,
+				43AD26625CB36A549FA8D9BF /* flexibletable.cpp */,
+				D69BFD23A8FFAE5E6EDA36E2 /* virtualtable.cpp */,
+				6B52B8EB894730D2A587827F /* hashflexibletable.cpp */,
+				FC02534581277773DD220ED9 /* bulbfile.cpp */,
+				9C9D480019F73A4D4B22EAEA /* database.h */,
+				59117378FE91DA4C8911F6AF /* table.h */,
+				8631DC14045476A674DBDFF3 /* fixedsizetable.h */,
+				5C48DC865C8EB314E8F81DD0 /* flexibletable.h */,
+				0F1EE940F7B138E3E32F6E75 /* virtualtable.h */,
+				FE402F0D0A26C216ED97DBD8 /* hashflexibletable.h */,
+				97402F42835F2B7E8B19AC38 /* bulbfile.h */,
+			);
+			name = databasehandler;
+			sourceTree = "<group>";
+		};
+		1A00A8B939287151EC4D726C /* queryhandler */ = {
+			isa = PBXGroup;
+			children = (
+				F8B95131D9A0FA8AB94F3948 /* querycondition.cpp */,
+				893BD844D163F1A66477A053 /* queryexecuter.cpp */,
+				806D1C6B38485689B78BF084 /* joinstrategies */,
+				3AA72CFDBF43A035A2F441CC /* intelligentfilter.cpp */,
+				01D23A611F65D392AF4D0A22 /* queryoptimizer.cpp */,
+				AB88DE24D73144407D3F9944 /* checkhelper.cpp */,
+				D660717CD103C500B60429FB /* modifyhandler.cpp */,
+				E33E57CDE49E8213EE3A4BD5 /* querycondition.h */,
+				7E3212C23133D3C0D28C5E6C /* queryexecuter.h */,
+				01DB71A7A014480D96AB3B1E /* intelligentfilter.h */,
+				23728045BF2CADCA8D71AF66 /* queryoptimizer.h */,
+				7BDAF3D915EC6E0DF73E8C27 /* checkhelper.h */,
+				DE15EAF945D5E74185BD72B6 /* modifyhandler.h */,
+			);
+			name = queryhandler;
+			sourceTree = "<group>";
+		};
+		25B08E2869634E9BCBA333A2 /* Generated Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E4CAD6BE04ECF030467774F1 /* qrc_material.cpp */,
+				DC34D289916938ED268BFAA8 /* qrc_components.cpp */,
+				12983AEDAC816259B99C4980 /* qrc_controls.cpp */,
+				81EB60A0B3E36AC3B538F7D5 /* qrc_core.cpp */,
+				03FF6F7B2CAE8947292A6D1E /* qrc_extras.cpp */,
+				210B430B69A73999D8D3C028 /* qrc_listitems.cpp */,
+				64F39810CE1D861AC86F2533 /* qrc_popups.cpp */,
+				9366FFCA003D22EA6FD5190C /* qrc_styles.cpp */,
+				B6F30939FE71D1C9C40FD566 /* qrc_window.cpp */,
+				BA9A4ECB25880E132B5CCAA9 /* qrc_core_icons.cpp */,
+				CC3FD0D89E1219CD4506576F /* qrc_thjdb.cpp */,
+				A4B985F6BC3E11142521D1FA /* qrc_icons.cpp */,
+				F411AB50FDEDDC68FE8CE0D3 /* moc_plugin.cpp */,
+				3CBC3A2DAAD5AC9E1957C10C /* moc_device.cpp */,
+				517C0BF19C04D26BCB0175AF /* moc_units.cpp */,
+				3823A64655CAD6A8A93E3F6F /* moc_qmlif.cpp */,
+			);
+			name = "Generated Sources";
+			sourceTree = "<group>";
+		};
+		2BA4DC399098B1941E72DF62 /* pagefilesystem */ = {
+			isa = PBXGroup;
+			children = (
+				C88BE57708F33D9BA69FFB24 /* BufPageManager.h */,
+				E0F6933C278EBE2BAD0D61E9 /* FileManager.h */,
+				CB08A38ED590D34C2871616D /* pagedef.h */,
+				87F1FA8256AFD414F403AC73 /* MyLinkList.h */,
+				EB37EDEBB6CC9993C6E63CFA /* MyHashMap.h */,
+				29B6A0A6B6FA8C58A6F5D95A /* MyBitMap.h */,
+				DB1C30FF5861BAF3544DA7B4 /* FindReplace.h */,
+				EA4C982BF3C4C243C8A57910 /* FileTable.h */,
+			);
+			name = pagefilesystem;
+			sourceTree = "<group>";
+		};
+		2EB56BE3C2D93CDAB0C52E67 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				558D0428ACA67A97B2B9A289 /* plugin.cpp */,
+				0F78362CD79458B3A41D308C /* device.cpp */,
+				1FC7B09935EC93308B85D675 /* units.cpp */,
+				A31093919AB8325E803F61FA /* main.cpp */,
+				896C6A8BCA25A5A4A4B50094 /* mainwindow.cpp */,
+				16AA0055C2D2D0B893768F4C /* databasehandler */,
+				A462220663418B2E11578E13 /* typehandler */,
+				4B08673F76566F4114D95AC3 /* tester */,
+				C92BACF9E105A9BEFD622A1C /* managementhandler */,
+				80C5949EFB0AF6F51EC9B7EC /* layer */,
+				0AD4167236585C2E63D32579 /* recordhandler */,
+				D19F523DAEBC26FA49BB73FC /* sqlengine */,
+				1A00A8B939287151EC4D726C /* queryhandler */,
+				35757B85385FCED399272992 /* DBIndex */,
+				F65DA334310D0E65FEC9E340 /* groupalgorithm */,
+				005603A0CB20F430E73A3B47 /* aesalgorithm */,
+				709216DA3577677AAF22F623 /* plugin.h */,
+				668F8A571A07A2707F0BD39E /* device.h */,
+				288781230042B82A59F7DAE8 /* units.h */,
+				9C64A4348E593E39D0E7C0BB /* mainwindow.h */,
+				2BA4DC399098B1941E72DF62 /* pagefilesystem */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		35757B85385FCED399272992 /* DBIndex */ = {
+			isa = PBXGroup;
+			children = (
+				5274560C2D8FAB064E18DDD2 /* bplus_tree.cpp */,
+				0E53E30C9239236151DE41B6 /* db_index.cpp */,
+				6AA7641CF5D0513ED95F9975 /* comparealgo.cpp */,
+				61D534F328982703661EB3E3 /* bplus_node.h */,
+				FFB0210218C9C3088C0C8DBF /* bplus_tree.h */,
+				CF1B673E9CB53D83924861E8 /* db_index.h */,
+				F47109D3AB749A2610674A95 /* predefined.h */,
+				DA429F15B1C46FBF26083244 /* comparealgo.h */,
+			);
+			name = DBIndex;
+			sourceTree = "<group>";
+		};
+		4B08673F76566F4114D95AC3 /* tester */ = {
+			isa = PBXGroup;
+			children = (
+				EE5A7F48785B267546AC5F4B /* testtype.cpp */,
+				4C146861AF3C1F26203C0815 /* testdatabase.cpp */,
+				E942E92C1FAF3176FF50A87C /* testiterator.cpp */,
+				19FE2EF8ED59D5991E181C03 /* testsql.cpp */,
+				8CCAF4181FC053EAB01518A3 /* testflexible.cpp */,
+				72DA9B08D418CECD66DAFCB4 /* testdate.cpp */,
+				C9321197250A2032142C334F /* testvirtual.cpp */,
+				5B352A3D5A17E7E26FE59354 /* testgroup.cpp */,
+				0FEE83189D87BB388120BF10 /* testregex.cpp */,
+				2F513FE0B153B9566594E544 /* testmd5.cpp */,
+				F9DCDEBAFC83C6C2A9B03002 /* testhashflexible.cpp */,
+				58D5A2420E796E3E30788052 /* testbulbfile.cpp */,
+				D3063511F99CB5257F738C42 /* testaes.cpp */,
+				17F12B00DB262FA2A42F1FCB /* testtype.h */,
+				B38BDCFA5A0D645116063472 /* testdatabase.h */,
+				D61181A6E025A84571DF48A1 /* testiterator.h */,
+				E9D3EB3995E21E08E1684946 /* testsql.h */,
+				8DD34FBC84607F9487EA2A0A /* testflexible.h */,
+				6500CDE6C8F80698DC14030B /* testdate.h */,
+				8D409FF51C68ED6AAD4E993F /* testvirtual.h */,
+				E8F9BABE149271F2BBA2B496 /* testgroup.h */,
+				5EE0EC76BAE9F56CE4DEDB79 /* testregex.h */,
+				73162EAEA669B7816EB43F5C /* testmd5.h */,
+				38E7C66CD89879D821CB4E2F /* testhashflexible.h */,
+				BE502B76D58F60EE4B93862C /* testbulbfile.h */,
+				E38B5539A77E2FF7F2CE263D /* testaes.h */,
+			);
+			name = tester;
+			sourceTree = "<group>";
+		};
+		519C9E2D7BD509BEA554FC21 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = icons;
+			sourceTree = "<group>";
+		};
+		74B182DB50CB5611B5C1C297 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				8F0F615F18D1A1F2382F4F68 /* database.pro */,
+				6B81CFC47A5CC493378E8669 /* material.pri */,
+				519C9E2D7BD509BEA554FC21 /* icons */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		806D1C6B38485689B78BF084 /* joinstrategies */ = {
+			isa = PBXGroup;
+			children = (
+				F54BC9C8632B9F4F03F09F5C /* hashjoin.cpp */,
+				F895AAAE49C3A1623785D09F /* joinstrategy.cpp */,
+				282D08A3904B6409EAFEED18 /* nestedloopjoin.cpp */,
+				E9DB81861128194514425B6B /* sortmergejoin.cpp */,
+				AF06B5B75BF7544F5B30C3D1 /* hashjoin.h */,
+				0A2A3335A316B78C8A3F08B0 /* joinstrategy.h */,
+				68AD31DCF9EED9309A746C3B /* nestedloopjoin.h */,
+				9858439EF0377B5262E9AB63 /* sortmergejoin.h */,
+			);
+			name = joinstrategies;
+			sourceTree = "<group>";
+		};
+		80C5949EFB0AF6F51EC9B7EC /* layer */ = {
+			isa = PBXGroup;
+			children = (
+				796F948B195A3F199F9100EF /* databasemanager.cpp */,
+				39B0DA2848FBB6F06B9C3EE5 /* qmlif.cpp */,
+				BC99CC73AE5228191D3AF425 /* databasemanager.h */,
+				41666320A59F40F2955A87FE /* json.hpp */,
+				07AFA39FDA12115FF5C2FD4B /* pythonif.h */,
+				4C5A0110315888DDC932CD17 /* qmlif.h */,
+			);
+			name = layer;
+			sourceTree = "<group>";
+		};
+		87DF60DE337FB58864343E39 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2EDE4B593A0FEA82D8CDF13E /* material.qrc */,
+				84C5D9A161C5D952CDA7AEA9 /* components.qrc */,
+				3B026267AE5CEACF92F40CCE /* controls.qrc */,
+				37E4C0608BB7AE4F1129B230 /* core.qrc */,
+				A1779461AEE4F322B4621879 /* extras.qrc */,
+				791CEB71BDF2957060BB7472 /* listitems.qrc */,
+				4BEDD6BC1CB5DA70EA0CAB83 /* popups.qrc */,
+				860CB9764FDC81210B5860E1 /* styles.qrc */,
+				97E25357F5973F8C5B39C214 /* window.qrc */,
+				016957C9823A927E38199276 /* core_icons.qrc */,
+				EDD4B92507AA405019CDF75C /* thjdb.qrc */,
+				8D3437CC494853D691238E55 /* icons */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		8D3437CC494853D691238E55 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				D1D996F14769D9BEC47D5A71 /* icons.qrc */,
+			);
+			name = icons;
+			sourceTree = "<group>";
+		};
+		A462220663418B2E11578E13 /* typehandler */ = {
+			isa = PBXGroup;
+			children = (
+				9F7D339B0AC8828D9F0A2465 /* databaseint.cpp */,
+				B31052204FAB7AD0E003D8EF /* databasechar.cpp */,
+				CCD215CA9F1F2FB902637125 /* databasetype.cpp */,
+				EF85E1D484706F4FC20C9E42 /* databasevarchar.cpp */,
+				77921DAA8F6B0BBD0EC1C8B8 /* databasereal.cpp */,
+				1A05666B8EC3D0CEACE4412C /* databaselint.cpp */,
+				EE2F2309D18BF643C1B3AEA8 /* databasedate.cpp */,
+				4CA5F9F7A5FDBDA92E533BD8 /* databasebulb.cpp */,
+				036FC61DEA6B16EDBDFEDE70 /* databasetext.cpp */,
+				366F729BABE65D6221DD59ED /* databaseint.h */,
+				3875CE15BF7D6FCFB3EB1898 /* databasechar.h */,
+				EDB4460FEB47A21915757915 /* databasetype.h */,
+				73EF875C026651257296602D /* databasevarchar.h */,
+				65EFBF47F02C1E3E76816077 /* databasereal.h */,
+				74C2B7DF7110318396BAB5BB /* databaselint.h */,
+				227D2937989CAEBCEEEBE369 /* date.h */,
+				D684CF79601C6BDF7FD51043 /* databasedate.h */,
+				A20CBBE258B92D9C91829C78 /* chrono_io.h */,
+				E1D84C6EDFA1551771FE541E /* databasebulb.h */,
+				E43434A78214F8474BBE80FB /* databasetext.h */,
+			);
+			name = typehandler;
+			sourceTree = "<group>";
+		};
+		AF39DD055C3EF8226FBE929D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				41E3F6C91E124130000E57E4 /* libmpfr.4.dylib */,
+				41E3F6CA1E124130000E57E4 /* libmpfr.a */,
+				41E3F6CB1E124130000E57E4 /* libmpfr.4.dylib */,
+				41E3F6BD1E124113000E57E4 /* libgmp.10.dylib */,
+				41E3F6BE1E124113000E57E4 /* libgmp.a */,
+				41E3F6BF1E124113000E57E4 /* libgmp.10.dylib */,
+				41E3F6C01E124113000E57E4 /* libgmpxx.4.dylib */,
+				41E3F6C11E124113000E57E4 /* libgmpxx.a */,
+				41E3F6C21E124113000E57E4 /* libgmpxx.4.dylib */,
+				3F0C3DB142D2D48CE9A65C13 /* QtQuick.framework */,
+				3988613369CAFF2C05DA56BB /* QtQml.framework */,
+				1A8347CC40760A7ACC64D79E /* QtNetwork.framework */,
+				8805AE36827CD0A904775A1E /* QtCore.framework */,
+				2B774D8E4178765CE52EAAF5 /* DiskArbitration.framework */,
+				A1A67BEAA744704B29168D39 /* IOKit.framework */,
+				B19B511E9F2F93737EE2F7EE /* QtGui.framework */,
+				AABD8654CC5B69A34C54DC0D /* QtWidgets.framework */,
+				D4B32C2222F82AC56BADEB21 /* OpenGL.framework */,
+				8D9815BDB5BD9F90D2BC05C5 /* AGL.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C92BACF9E105A9BEFD622A1C /* managementhandler */ = {
+			isa = PBXGroup;
+			children = (
+				C0E7A1293163A13E9FB4F2F4 /* uic.cpp */,
+				883D2CBA28E4349C16199C3A /* iterator.cpp */,
+				57199ED7B8B663A267BA5565 /* fixedsizediterator.cpp */,
+				A07676E2CD718B1D945418C4 /* iteratorfactory.cpp */,
+				1EA597B1510412783B636AD6 /* flexibleiterator.cpp */,
+				F926DB3DE79C5686278DD783 /* virtualiterator.cpp */,
+				3FD92288223141498276B879 /* md5.cpp */,
+				DBC9628C19D4DEAC1823784B /* hashflexibleiterator.cpp */,
+				224770EF8805657C26653619 /* uic.h */,
+				153416196ACB3CE4E9DC69F3 /* iterator.h */,
+				68DF8D9F13CA76EC1C303271 /* fixedsizediterator.h */,
+				C1FFDEE61760BF3C04524A29 /* iteratorfactory.h */,
+				7748094F8E4A96CAC8B91967 /* flexibleiterator.h */,
+				D78A1AA77BAF38A7A3238741 /* virtualiterator.h */,
+				93AC771FE9E630B232677267 /* md5.h */,
+				B87D46D552936E58D0ABDD4F /* hashflexibleiterator.h */,
+			);
+			name = managementhandler;
+			sourceTree = "<group>";
+		};
+		D19F523DAEBC26FA49BB73FC /* sqlengine */ = {
+			isa = PBXGroup;
+			children = (
+				B34DFC3B353FDE0A849CD23B /* sqlparser.cpp */,
+				D0F933ABBEFD4509F1DB1EE6 /* sqllexer.cpp */,
+				84D78A3509ED01C052AA4282 /* sqldriver.cpp */,
+				9C3A61D770DA06A0B036CF59 /* sqlaction.cpp */,
+				D1B5AC8650241BE7492DBE58 /* sqlstruct.cpp */,
+				92E03E642DFF940EB3EEA15E /* stack.hh */,
+				71793097DF506F92144A687D /* sqlparser.hpp */,
+				D1938C354A2D343CEA9E0224 /* sqllexer.h */,
+				D037ECA5ED4A2C9C969BE97C /* sqldriver.h */,
+				5BD34F4243E5CFAEA586A96B /* position.hh */,
+				3E8DAC1F46BD30AA693CA4EB /* location.hh */,
+				931C5E939E04EEBE6A2C05FD /* sqlaction.h */,
+				F246C00A4EF3630744E7CAA5 /* sqlstruct.h */,
+				61D68661F2CEAA6D3A5469A7 /* sqllexer.l */,
+				84D5C2FD110F78876B58B8E8 /* sqlparser.yy */,
+			);
+			name = sqlengine;
+			sourceTree = "<group>";
+		};
+		E8C543AB96796ECAA2E65C57 /* database */ = {
+			isa = PBXGroup;
+			children = (
+				2EB56BE3C2D93CDAB0C52E67 /* Sources */,
+				25B08E2869634E9BCBA333A2 /* Generated Sources */,
+				74B182DB50CB5611B5C1C297 /* Supporting Files */,
+				87DF60DE337FB58864343E39 /* Resources */,
+				AF39DD055C3EF8226FBE929D /* Frameworks */,
+				FE0A091FDBFB3E9C31B7A1BD /* Products */,
+			);
+			name = database;
+			sourceTree = "<group>";
+		};
+		F65DA334310D0E65FEC9E340 /* groupalgorithm */ = {
+			isa = PBXGroup;
+			children = (
+				41E3F6CF1E12428C000E57E4 /* mpreal.h */,
+				1D1E2F1A02301BA376B5C4A8 /* group.cpp */,
+				8FEA7BEE6560BCA4C1954D20 /* rawgroup.cpp */,
+				9EB72D26F2D77593BF718B51 /* grouphandler.cpp */,
+				77F0CA4FB2ACA581AC022979 /* group.h */,
+				8F5370C4CAB15789470FB4E5 /* rawgroup.h */,
+				179DDCC29CCC8F7A3BF0FC1D /* grouphandler.h */,
+			);
+			name = groupalgorithm;
+			sourceTree = "<group>";
+		};
+		FE0A091FDBFB3E9C31B7A1BD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5296FC604388317042F3AC97 /* database.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AAC89AECFD356AFBD3DC6F2B /* database */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59 /* Build configuration list for PBXNativeTarget "database" */;
+			buildPhases = (
+				F7E50F631C51CD5B5DC0BC43 /* Compile Sources */,
+				D1C883685E82D5676953459A /* Link Binary With Libraries */,
+				30414803F31797EB689AE508 /* Copy Bundle Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				71D7414B9064462D5F798D3D /* PBXTargetDependency */,
+			);
+			name = database;
+			productName = database;
+			productReference = 5296FC604388317042F3AC97 /* database.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6DB9C3763D02B1415CD9D565 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+			};
+			buildConfigurationList = DAC4C1AA5EDEA1C85E9CA5E6 /* Build configuration list for PBXProject "database" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E8C543AB96796ECAA2E65C57 /* database */;
+			productRefGroup = FE0A091FDBFB3E9C31B7A1BD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AAC89AECFD356AFBD3DC6F2B /* database */,
+				BDFEE1B72F1D7D17473F627A /* Qt Preprocess */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		30414803F31797EB689AE508 /* Copy Bundle Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Copy Bundle Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5E618435888B9D49F8540165 /* Qt Qmake */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Qt Qmake";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/ -f database.xcodeproj/qt_makeqmake.mak";
+			showEnvVarsInLog = 0;
+		};
+		7EF0942E79C014DCEC8976BC /* Qt Preprocessors */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Qt Preprocessors";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/ -f database.xcodeproj/qt_preprocess.mak";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F7E50F631C51CD5B5DC0BC43 /* Compile Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6319CB9A232F84063A06E73F /* plugin.cpp in Compile Sources */,
+				58D5588D0D340CD4668A1D48 /* device.cpp in Compile Sources */,
+				E93B0676F1BA346A60431F1D /* units.cpp in Compile Sources */,
+				CE8A7904FBD8968DC8AA1454 /* main.cpp in Compile Sources */,
+				1257CC14F1D4A838EE8F9655 /* mainwindow.cpp in Compile Sources */,
+				3FB31E6DC98C8499616C35BB /* database.cpp in Compile Sources */,
+				F65ACDDA51D883719EEB9BEA /* table.cpp in Compile Sources */,
+				72B64C408ADDFF06C1B6B1C8 /* databaseint.cpp in Compile Sources */,
+				0658731DA7A61C15DFC8051A /* databasechar.cpp in Compile Sources */,
+				2D896092AAC8C7371904A976 /* testtype.cpp in Compile Sources */,
+				22E35DD64F40DF3D0488216A /* fixedsizetable.cpp in Compile Sources */,
+				4D75362F9C7B5CCB9ACEAEDA /* uic.cpp in Compile Sources */,
+				7467A3D5D67277698A8DD37E /* testdatabase.cpp in Compile Sources */,
+				50DD7E2B7620DAA93B4D07E4 /* databasetype.cpp in Compile Sources */,
+				657FB7080C2B7A1E975145B2 /* databasemanager.cpp in Compile Sources */,
+				2F2B520C30F29F723CE9A9AA /* fixedsizerecord.cpp in Compile Sources */,
+				8D1D1FF0A380CA8DF9924FCA /* record.cpp in Compile Sources */,
+				8B64E7187F50449F35DDF988 /* iterator.cpp in Compile Sources */,
+				9E32A806F53F89A31AA6D484 /* fixedsizediterator.cpp in Compile Sources */,
+				341424A72D24FF3BAE3ABAB6 /* testiterator.cpp in Compile Sources */,
+				514D62D6486E0F366F8D6E7B /* recordfactory.cpp in Compile Sources */,
+				0C3B5F2D1777B4F3F5BD85F2 /* iteratorfactory.cpp in Compile Sources */,
+				370B1004462EB95258122F61 /* testsql.cpp in Compile Sources */,
+				6139DE2BB3754BA5B230C890 /* sqlparser.cpp in Compile Sources */,
+				3A04B12A6F47D54B6CBED0BD /* sqllexer.cpp in Compile Sources */,
+				053913DB6D2901E3CC4C50A2 /* sqldriver.cpp in Compile Sources */,
+				63344356D036A59374DB1EF7 /* sqlaction.cpp in Compile Sources */,
+				8F5185499C17A535BE1226F2 /* sqlstruct.cpp in Compile Sources */,
+				276E6337ADF614116C78C84E /* querycondition.cpp in Compile Sources */,
+				2C8FFAE252BCD1EE3E4CBF67 /* queryexecuter.cpp in Compile Sources */,
+				79B7B37FBBDEA259BF674FE4 /* flexibletable.cpp in Compile Sources */,
+				AC8D2376A88DD0305BB6DD17 /* flexiblerecord.cpp in Compile Sources */,
+				67F5305F36E965C9D0DA72DE /* flexibleiterator.cpp in Compile Sources */,
+				18CDA352B9E33697BF345D2F /* testflexible.cpp in Compile Sources */,
+				CE6AA7876541104C844ECCF7 /* databasevarchar.cpp in Compile Sources */,
+				E3036AEE5F57725CDBB0F6BF /* bplus_tree.cpp in Compile Sources */,
+				9BC47F34C7CC14113D1D7180 /* db_index.cpp in Compile Sources */,
+				3E586488D574AEB72D868A52 /* qmlif.cpp in Compile Sources */,
+				321A092E8B623F5791079CE6 /* databasereal.cpp in Compile Sources */,
+				003ACB6D6EF05D5AACB54F28 /* databaselint.cpp in Compile Sources */,
+				8A516CF91853498D6FC371DC /* databasedate.cpp in Compile Sources */,
+				70D892920EF72555E2A95DB7 /* testdate.cpp in Compile Sources */,
+				6F8880A3EC9BCD352BCF7A75 /* virtualtable.cpp in Compile Sources */,
+				FACEBB3C5D45FF2DB5A5A26B /* virtualiterator.cpp in Compile Sources */,
+				19E4B92721A859008B073E93 /* testvirtual.cpp in Compile Sources */,
+				FD0F86414AE1BFB086D5A4BC /* group.cpp in Compile Sources */,
+				37039B60F2853A1B04149991 /* testgroup.cpp in Compile Sources */,
+				A3379D45A97A27C194E58081 /* rawgroup.cpp in Compile Sources */,
+				E3D1E74557AE10991DF43781 /* testregex.cpp in Compile Sources */,
+				B9312531BCF0AB46EBC47ECC /* md5.cpp in Compile Sources */,
+				470B489DE171392C9E78FBA1 /* testmd5.cpp in Compile Sources */,
+				87A7AA2268C2FF9ACAD1E499 /* hashflexibletable.cpp in Compile Sources */,
+				D712C029C8D5FBF26D4A81D3 /* testhashflexible.cpp in Compile Sources */,
+				0E12AEF6233AA1CE09F6BA72 /* hashflexibleiterator.cpp in Compile Sources */,
+				20727C394906C401B4D1234C /* hashjoin.cpp in Compile Sources */,
+				165A2E974D9F5F47F8930939 /* joinstrategy.cpp in Compile Sources */,
+				8E953383A14967EA1AFCED3F /* nestedloopjoin.cpp in Compile Sources */,
+				83A9E826708D18DF2A1EF4CD /* sortmergejoin.cpp in Compile Sources */,
+				F7418492A705550C5D3929CD /* intelligentfilter.cpp in Compile Sources */,
+				A8C813EECB144B4AD2AFA2FD /* queryoptimizer.cpp in Compile Sources */,
+				AB4A83C27FE9A3F114B41D9B /* grouphandler.cpp in Compile Sources */,
+				23C94CA1FC45CB2B028CB3C4 /* bulbfile.cpp in Compile Sources */,
+				E1F7E3F0ED87FFA35A78504F /* testbulbfile.cpp in Compile Sources */,
+				AAD450257087BB8A6A0D11FE /* databasebulb.cpp in Compile Sources */,
+				2D9078B788AB283AE9EB9275 /* databasetext.cpp in Compile Sources */,
+				11090A1EA61D6E8D2B9A07BA /* comparealgo.cpp in Compile Sources */,
+				409122C69D665CC87557C172 /* checkhelper.cpp in Compile Sources */,
+				CC1D8580D2897B93DE8E65ED /* modifyhandler.cpp in Compile Sources */,
+				29C40D7449F318E08585489F /* testaes.cpp in Compile Sources */,
+				A77FCE802B364EF8C1130234 /* aes.cpp in Compile Sources */,
+				AFCC4AFDCEA27F51645DDD7B /* encrypt.cpp in Compile Sources */,
+				C398A87DF31A7BA1B84E6037 /* qrc_material.cpp in Compile Sources */,
+				1F383BAB392248B1F12CB61D /* qrc_components.cpp in Compile Sources */,
+				E8193C70F651175E87062803 /* qrc_controls.cpp in Compile Sources */,
+				CA44B1CA57987FD87D343E73 /* qrc_core.cpp in Compile Sources */,
+				A89CB53352EC97FACB207E8F /* qrc_extras.cpp in Compile Sources */,
+				9DCB37AAFB0AA266BB39F4FF /* qrc_listitems.cpp in Compile Sources */,
+				7128BD93208921234DD83CAC /* qrc_popups.cpp in Compile Sources */,
+				1BC05966A46D9476C4493ADD /* qrc_styles.cpp in Compile Sources */,
+				C99CECCB58D7EBE53B0EF533 /* qrc_window.cpp in Compile Sources */,
+				CE95DE191876BC0E768E0D2E /* qrc_core_icons.cpp in Compile Sources */,
+				3C4E15A26F7D5F44A9AD60ED /* qrc_thjdb.cpp in Compile Sources */,
+				D639D0B423D9258F2012C85C /* qrc_icons.cpp in Compile Sources */,
+				D7F4B6ADE277FC59EA6C6819 /* moc_plugin.cpp in Compile Sources */,
+				A76C667AC027162BAE66F289 /* moc_device.cpp in Compile Sources */,
+				A2D379BE5CC98DE3DC817A27 /* moc_units.cpp in Compile Sources */,
+				FD0A8E3D4C6605D29EEA5B10 /* moc_qmlif.cpp in Compile Sources */,
+			);
+			name = "Compile Sources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		71D7414B9064462D5F798D3D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BDFEE1B72F1D7D17473F627A /* Qt Preprocess */;
+			targetProxy = 41E3F6BC1E124041000E57E4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		339EE1B2CC4FC24589A0EA95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = x86_64;
+				CC = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang;
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1.0;
+				DYLIB_CURRENT_VERSION = 1.0.0;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = (
+					.,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQuick.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtWidgets.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtGui.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQml.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtNetwork.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtCore.framework/Headers,
+					.,
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/OpenGL.framework/Headers,
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/AGL.framework/Headers,
+					"/Users/NitreExplosion/Qt/5.7/clang_64/mkspecs/macx-clang",
+				);
+				INFOPLIST_FILE = Info.plist;
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				LIBRARY_SEARCH_PATHS = (
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib,
+					/System/Library/Frameworks/,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICK_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-stdlib=libc++",
+					"-Wall",
+					"-Wextra",
+					"-Wno-unused",
+					"-O2",
+					"-std=gnu++11",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICK_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+				);
+				OTHER_LDFLAGS = (
+					"-headerpad_max_install_names",
+					"-stdlib=libc++",
+					"-Wl,-rpath,/Users/NitreExplosion/Qt/5.7/clang_64/lib",
+					"-F/Users/NitreExplosion/Qt/5.7/clang_64/lib",
+					"-lgmpxx",
+					"-lgmp",
+					"-lmpfr",
+				);
+				PRODUCT_NAME = database;
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = macosx;
+				SYMROOT = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/;
+			};
+			name = Release;
+		};
+		3AA6C32AC930069E80220CF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = x86_64;
+				CC = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1.0;
+				DYLIB_CURRENT_VERSION = 1.0.0;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				HEADER_SEARCH_PATHS = (
+					.,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQuick.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtWidgets.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtGui.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQml.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtNetwork.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtCore.framework/Headers,
+					.,
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/OpenGL.framework/Headers,
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/AGL.framework/Headers,
+					"/Users/NitreExplosion/Qt/5.7/clang_64/mkspecs/macx-clang",
+				);
+				INFOPLIST_FILE = Info.plist;
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				LIBRARY_SEARCH_PATHS = (
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib,
+					/System/Library/Frameworks/,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICK_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-stdlib=libc++",
+					"-Wall",
+					"-Wextra",
+					"-Wno-unused",
+					"-O2",
+					"-std=gnu++11",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICK_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+				);
+				OTHER_LDFLAGS = (
+					"-headerpad_max_install_names",
+					"-stdlib=libc++",
+					"-Wl,-rpath,/Users/NitreExplosion/Qt/5.7/clang_64/lib",
+					"-F/Users/NitreExplosion/Qt/5.7/clang_64/lib",
+					"-lgmpxx",
+					"-lgmp",
+					"-lmpfr",
+				);
+				PRODUCT_NAME = database;
+				QT_LIBRARY_SUFFIX = _debug;
+				SDKROOT = macosx;
+				SYMROOT = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/;
+			};
+			name = Debug;
+		};
+		6666AA5E688052234F6758D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				HEADER_SEARCH_PATHS = (
+					.,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQuick.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtWidgets.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtGui.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQml.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtNetwork.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtCore.framework/Headers,
+					.,
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/OpenGL.framework/Headers,
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/AGL.framework/Headers,
+					"/Users/NitreExplosion/Qt/5.7/clang_64/mkspecs/macx-clang",
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/gmp/6.1.1/lib,
+					/usr/local/Cellar/mpfr/3.1.3/lib,
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-stdlib=libc++",
+					"-Wall",
+					"-Wextra",
+					"-Wno-unused",
+					"-O2",
+					"-std=c++11",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICK_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+				);
+				PRODUCT_NAME = database;
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		77418F46922677BB04ED38DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					.,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQuick.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtWidgets.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtGui.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtQml.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtNetwork.framework/Headers,
+					/Users/NitreExplosion/Qt/5.7/clang_64/lib/QtCore.framework/Headers,
+					.,
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/OpenGL.framework/Headers,
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/AGL.framework/Headers,
+					"/Users/NitreExplosion/Qt/5.7/clang_64/mkspecs/macx-clang",
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/gmp/6.1.1/lib,
+					/usr/local/Cellar/mpfr/3.1.3/lib,
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-stdlib=libc++",
+					"-Wall",
+					"-Wextra",
+					"-Wno-unused",
+					"-O2",
+					"-std=c++11",
+					"-Wall",
+					"-W",
+					"-fPIC",
+					"-DQPM_INIT\\(E\\)=\"E.addImportPath(QStringLiteral(\\\"qrc:/\\\"));\"",
+					"-DQT_NO_DEBUG",
+					"-DQT_QUICK_LIB",
+					"-DQT_WIDGETS_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_QML_LIB",
+					"-DQT_NETWORK_LIB",
+					"-DQT_CORE_LIB",
+				);
+				PRODUCT_NAME = database;
+				QT_LIBRARY_SUFFIX = _debug;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6CC3B5D2136C7CD6A5CF5A59 /* Build configuration list for PBXNativeTarget "database" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77418F46922677BB04ED38DD /* Debug */,
+				6666AA5E688052234F6758D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAC4C1AA5EDEA1C85E9CA5E6 /* Build configuration list for PBXProject "database" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3AA6C32AC930069E80220CF1 /* Debug */,
+				339EE1B2CC4FC24589A0EA95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6DB9C3763D02B1415CD9D565 /* Project object */;
+}
