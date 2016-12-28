@@ -97,6 +97,11 @@ using token = yy::SQLParser::token;
     return token::VALUE_DATE;
 }
 
+[0-9]+\.[0-9]+          {
+                            yylval->build<std::string>(yytext);
+                            return token::VALUE_DECIMAL;
+                        }
+
 [0-9]+                  {
                             yylval->build<std::string>(yytext);
                             return token::VALUE_INT;

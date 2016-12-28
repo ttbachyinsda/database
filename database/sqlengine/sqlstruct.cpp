@@ -8,6 +8,9 @@
 #include "../typehandler/chrono_io.h"
 #include "../typehandler/date.h"
 
+using namespace date;
+using namespace std::chrono;
+
 using json = nlohmann::json;
 const char *const SQLType::INT = "INT";
 const char *const SQLType::CHAR = "CHAR";
@@ -42,7 +45,7 @@ void SQLValue::parseDate() {
     int year = atoi(splitRes[0].c_str());
     int month = atoi(splitRes[1].c_str());
     int date = atoi(splitRes[2].c_str());
-    time_point<system_clock, std::chrono::nanoseconds> timestamp;
+    std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> timestamp;
     timestamp = static_cast<date::sys_days>(date::year_month_day{ date::year{year} / month / date });
     if (splitRes.size() == 6) {
         int hour = atoi(splitRes[3].c_str());
@@ -54,9 +57,31 @@ void SQLValue::parseDate() {
                                          std::chrono::nanoseconds{ 0 }, 0).to_duration();
         timestamp += smallTime;
     }
-    std::cout << timestamp << std::endl;
+    content.clear();
     content.reserve(8);
-    memcpy(content.c_str(), &timestamp, 8);
+    for (int i = 0; i < 8; ++ i)
+        content.push_back(*((char*)(&timestamp) + i));
+}
+
+void SQLValue::parseReal()
+{
+    std::vector<std::string> splitRes = UIC::stringSplit(content, ".");
+    int integerPart = atoi(splitRes[0].c_str());
+    int decimalPart = atoi(splitRes[1].c_str());
+    double targetValue = integerPart + (double) decimalPart / pow(10, splitRes[1].size());
+    content.clear();
+    content.reserve(8);
+    for (int i = 0; i < 8; ++ i)
+        content.push_back(*((char*)(&targetValue) + i));
+}
+
+void SQLValue::parseLong()
+{
+    int targetValue = atoi(content.c_str());
+    content.clear();
+    content.reserve(8);
+    for (int i = 0; i < 8; ++ i)
+        content.push_back(*((char*)(&targetValue) + i));
 }
 
 void SQLCondition::dump() const

@@ -205,17 +205,19 @@ void bplus_tree::remove_from_index_multi(int parent_off, int off, internal_node_
     // remove key
     index_t* to_delete;
     for (int i = 0; i < parent.n; i++)
-        if (parent.children[i].child == off)
+        if (parent.children[i].child == off) {
             to_delete = parent.children + i;
+            break;
+        }
 
-    if (to_delete != end(parent)) {
+    if (to_delete + 1 < parent.children + parent.n) {
         (to_delete + 1)->child = to_delete->child;
         std::copy(to_delete + 1, end(parent), to_delete);
     }
     parent.n--;
 
     // remove to only one key
-    if (parent.n == 1 && head.root_offset == off &&
+    if (parent.n == 0 && head.root_offset == off &&
         head.internal_node_num != 1) {
         unalloc(&parent, head.root_offset);
         head.height--;

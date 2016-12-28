@@ -49,11 +49,28 @@ bool ModifyHandler::modifyRecordContent()
     return true;
 }
 
-bool ModifyHandler::prepareTable(Table *table, SQLConditionGroup *cgrp) {
-    // TODO: Check If there is/are a foreign key(s) linked to this table.
-    // If not both delete and update query cannot be executed.
-    //
+bool ModifyHandler::checkReferenceForCurrentRecord()
+{
+    if (!needDelCheck) return true;
+    for (unsigned int cid = 0; cid < myTable->getcolumncount(); ++ cid) {
+        if (delChecks[cid].size() == 0) continue;
+        string originValue = myTableRecord->getAt(cid);
+        for (const SetForeignPair& sfp : delChecks[cid]) {
+            vector<pair<int, int> > outerRefResult;
+            sfp.valueSearcher->findAll(SQLOperand::EQUAL,
+                                      sfp.valueCompiler->compile(originValue, sfp.foreignColID),
+                                      &outerRefResult);
+            if (outerRefResult.size() != 0) {
+                driver->addWarningMessage("Value " + originValue +
+                    " in this table cannot be deleted because there are foreign keys linked to it.");
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
+bool ModifyHandler::prepareTable(Table *table, SQLConditionGroup *cgrp) {
     myTable = table;
     /**
      * Support only following conditions:
@@ -141,10 +158,11 @@ bool ModifyHandler::prepareSetClause(SQLSetGroup *sgrp) {
             }
             Iterator* compiler = IteratorFactory::getiterator(foreignTable);
             vector<pair<int, int>> forSeaRes;
-            foreignIndex->findAll(SQLOperand::EQUAL, compiler->compile(s->value.content, setColumnID),
+            foreignIndex->findAll(SQLOperand::EQUAL, compiler->compile(s->value.content,
+                                                                       foreignTableGrp.second),
                                   &forSeaRes);
             delete compiler;
-            if (forSeaRes.size() != 0) {
+            if (forSeaRes.size() == 0) {
                 driver->addErrorMessage("Set value target is not in table " + foreignTable->getname());
                 return false;
             }
@@ -164,6 +182,23 @@ bool ModifyHandler::prepareSetClause(SQLSetGroup *sgrp) {
 }
 
 void ModifyHandler::executeDeleteQuery() {
+    // Prepare delete check table.
+    delChecks.clear();
+    needDelCheck = false;
+    for (unsigned int cid = 0; cid < myTable->getcolumncount(); ++ cid) {
+        vector<SetForeignPair> currentPairs;
+        for (const pair<string, int>& cp : myTable->getlinkedcolumn()->at(cid)) {
+            SetForeignPair thisPair;
+            Table* outerTable = driver->getCurrentDatabase()->getTableByName(cp.first);
+            thisPair.valueSearcher = outerTable->getindexes()[cp.second];
+            thisPair.valueCompiler = IteratorFactory::getiterator(outerTable);
+            thisPair.foreignColID = cp.second;
+            needDelCheck = true;
+            currentPairs.push_back(thisPair);
+        }
+        delChecks.push_back(currentPairs);
+    }
+
     if (indexedCol != -1) {
         // should use index.
         db_index* bTreeIndex = myTable->getindexes()[indexedCol];
@@ -175,7 +210,7 @@ void ModifyHandler::executeDeleteQuery() {
         for (const pair<int, int>& p : searchIndexRes) {
             myTableIterator->access(p.first, p.second);
             myTableIterator->getdata(myTableRecord);
-            if (checkConditions()) {
+            if (checkConditions() && checkReferenceForCurrentRecord()) {
                 // Check the deleted data is linked to.
                 myTableIterator->deletedata();
             }
@@ -183,7 +218,8 @@ void ModifyHandler::executeDeleteQuery() {
     } else {
         while (myTableIterator->available()) {
             myTableIterator->getdata(myTableRecord);
-            if (checkConditions()) myTableIterator->deletedata();
+            if (checkConditions() && checkReferenceForCurrentRecord())
+                myTableIterator->deletedata();
             ++ (*myTableIterator);
         }
     }

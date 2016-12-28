@@ -39,20 +39,21 @@ int main(int argc, char* argv[])
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/customer.sql");
 //    string sql = "use orderDB;\n";
 //    sql += "update customer set gender='F', name='Great' where gender='M';\n";
-    sql += "select * from customer;\n";
+//    sql += "select * from customer;\n";
 //    string sql = "use orderDB;\n";
 //printf("current working directory: %s\n", getcwd(NULL, NULL));
 //    sql += "delete from customer where gender='F';\n";
 //    sql += "select * from customer where gender='F';\n";
 //    sql += "select SUM(id) from customer where id = 307000;\n";
-//    sql += "drop table b; drop table a;\n";
-//    sql += "create table a (id int(3), primary key(id), name varchar(4));\n";
-//    sql += "create table b (bid int(4), primary key(bid), aid int(3) foreign key references a(id));";
-//    sql += "insert into a values (1, 'Jame');\n";
-//    sql += "insert into a values (2, 'Bob');\n";
-//    sql += "insert into b values (0001, 2);\n";
-
-//sql += "insert into a values (1997-03-08, 'James', 3);\n";
+    sql += "drop table b; drop table a;\n";
+    sql += "create table a (id int(3), primary key(id), name varchar(4));\n";
+    sql += "create table b (bid int(4), primary key(bid), aid int(3) foreign key references a(id));";
+    sql += "insert into a values (1, 'Jame');\n";
+    sql += "insert into a values (2, 'Bob');\n";
+    sql += "insert into b values (1, 2);\n";
+    sql += "update b set aid=1 where bid=0001;\n";
+//sql="create database orderDB;\n";
+//sql += "insert into a values (1997-03-08-21-39-00, 120.312, 3);\n";
 //    sql += "select * from book;\n";
     t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 //

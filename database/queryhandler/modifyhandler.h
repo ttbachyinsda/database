@@ -30,11 +30,15 @@ class ModifyHandler {
     std::vector<ConditionPair> conditions;
     std::vector<SetPair> sets;
 
+    std::vector<std::vector<SetForeignPair> > delChecks;
+    bool needDelCheck;
+
     int indexedCol;
     int indexedConditionID;
 
     bool checkConditions();
     bool modifyRecordContent();
+    bool checkReferenceForCurrentRecord();
 
 public:
     ModifyHandler(SQLDriver* d) {
@@ -43,6 +47,7 @@ public:
         myTableRecord = 0;
         indexedCol = -1;
         indexedConditionID = -1;
+        needDelCheck = false;
     }
     bool prepareTable(Table* table, SQLConditionGroup* cgrp);
     bool prepareSetClause(SQLSetGroup* sgrp);
@@ -54,6 +59,11 @@ public:
         for (const SetPair& sp : sets) {
             for (const SetForeignPair& fp : sp.foreignPairs) {
                 delete fp.valueCompiler;
+            }
+        }
+        for (const std::vector<SetForeignPair>& sfp : delChecks) {
+            for (const SetForeignPair& sp : sfp) {
+                delete sp.valueCompiler;
             }
         }
     }

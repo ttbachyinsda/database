@@ -299,6 +299,13 @@ Value           : VALUE_INT
                     $$->content = $1;
                     $$->parseDate();
                 }
+                | VALUE_DECIMAL
+                {
+                    $$ = new SQLValue();
+                    $$->type = SQLValue::DECIMAL;
+                    $$->content = $1;
+                    $$->parseReal();
+                }
                 | NUL
                 {
                     $$ = new SQLValue();
