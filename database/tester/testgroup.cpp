@@ -97,7 +97,6 @@ void testgroup::begintest()
     auto t = RecordFactory::getrecord(onetable);
     QTime time;
     time.start();
-    Group group;
     for (int i = 0; i < 200000; i++) {
         aaa[0] = InttoString(i);
         aaa[1] = "a" + InttoString(i);
@@ -112,8 +111,6 @@ void testgroup::begintest()
         //cout<<t->getAt(3)<<endl;
         if (can)
             onetable->FastAllInsert(pagenum, rownum, t);
-        if (i % 3 == 0)
-            group.add(pagenum, rownum);
         //if (i<3) cout<<pagenum<<' '<<rownum<<endl;
     }
     delete t;
@@ -123,20 +120,6 @@ void testgroup::begintest()
     colnum.push_back(0);
     onetable->createindex(colnum);
 
-    cout << "group begin" << endl;
-    group.getmax(onetable, 0);
-    group.getmin(onetable, 0);
-    group.getsum(onetable, 0);
-    group.getaverage(onetable, 0);
-    group.getmax(onetable, 3);
-    group.getmin(onetable, 3);
-    group.getsum(onetable, 3);
-    group.getaverage(onetable, 3);
-    group.getmax(onetable, 4);
-    group.getmin(onetable, 4);
-    group.getsum(onetable, 4);
-    group.getaverage(onetable, 4);
-    cout << "group end" << endl;
 
     int time_Diff = time.elapsed();
     float f = time_Diff / 1000.0;
@@ -281,20 +264,7 @@ void testgroup::begintest()
             cout << "yes: " << i << ' ' << record->getAt(i) << endl;
         }
     }
-    cout << "group begin" << endl;
-    group.getmax(onetable, 0);
-    group.getmin(onetable, 0);
-    group.getsum(onetable, 0);
-    group.getaverage(onetable, 0);
-    group.getmax(onetable, 3);
-    group.getmin(onetable, 3);
-    group.getsum(onetable, 3);
-    group.getaverage(onetable, 3);
-    group.getmax(onetable, 4);
-    group.getmin(onetable, 4);
-    group.getsum(onetable, 4);
-    group.getaverage(onetable, 4);
-    cout << "group end" << endl;
+
     delete onetable;
     delete iterator;
     delete record;

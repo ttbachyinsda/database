@@ -156,10 +156,7 @@ string DatabaseDate::output()
 {
     if (isNull)
         return "NULL__DATA";
-    char* temp = (char*)malloc(this->size);
-    memcpy(temp, data, this->size);
-    string s(temp, this->size);
-    free(temp);
+    string s(data, this->size);
     return s;
 }
 

@@ -17,3 +17,6 @@ print r.text
 onedata = {'name': 'ttbachyinsda', 'pass': '123456789', 'method': 'execsql', 'sql': SQLQUERY}
 r = requests.post("http://128.199.74.228:5000/register", data=onedata)
 print r.text
+onedata = {'name': 'ttbachyinsda', 'pass': '123456789', 'method': 'close'}
+r = requests.post("http://128.199.74.228:5000/register", data=onedata)
+print r.text

@@ -117,8 +117,8 @@ int main(int argc, char* argv[])
     //    testregex yza;
     //    yza.begintest();
 
-//        testmd5 zab;
-//        zab.begintest();
+        testmd5 zab;
+        zab.begintest();
 
 //    testhashflexible ace;
 //    ace.begintest();
