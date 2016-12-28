@@ -32,6 +32,7 @@ class GroupHandler {
     SQLResult* executeQueryWithGroup();
     SQLResult* executeQueryWithoutGroup();
     string convertTitle(const string& orig, SQLGroupMethod method);
+    string getGroupableValue(char type, const string& val);
 
 public:
     bool prepareQuery(Table* table, SQLSelectorGroup *selectorGroup, SQLTableGroup *groupByGroup);

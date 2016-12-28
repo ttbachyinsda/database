@@ -77,7 +77,7 @@ void SQLValue::parseReal()
 
 void SQLValue::parseLong()
 {
-    int targetValue = atoi(content.c_str());
+    long long targetValue = atoll(content.c_str());
     content.clear();
     content.reserve(8);
     for (int i = 0; i < 8; ++ i)

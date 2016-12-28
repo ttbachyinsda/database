@@ -48,6 +48,34 @@ bool SQLDriver::execute(const std::string& sqlStr) {
     return lastSucceeded;
 }
 
+void SQLDriver::encryptDatabaseManager(const string &password)
+{
+    if (!isEncrypted) {
+        databaseManager->encrypt(password);
+        currentDatabase = 0;
+        isEncrypted = true;
+    }
+}
+
+void SQLDriver::decryptDatabaseManager(const string &password)
+{
+    if (!isEncrypted) return;
+//    databaseManager = new DatabaseManager();
+//    databaseManager->setname(SQLDriver::systemName);
+//    databaseManager->setfilename(SQLDriver::systemName + ".tdb");
+//    int dbmInitResult = databaseManager->Initialize();
+//    if (dbmInitResult == -1) {
+//        isEncrypted = true;
+//        delete databaseManager;
+//        databaseManager = 0;
+//    }
+    int decryptResult = databaseManager->decrypt(password);
+    if (decryptResult == 0) return;
+    isEncrypted = false;
+    currentDatabase = 0;
+    databaseManager->Initialize();
+}
+
 void SQLDriver::clearPreviousSession() {
     if (sqlLexer)  delete sqlLexer;
     if (sqlParser) delete sqlParser;
@@ -80,10 +108,12 @@ void SQLDriver::initialize()
     databaseManager = new DatabaseManager();
     databaseManager->setname(SQLDriver::systemName);
     databaseManager->setfilename(SQLDriver::systemName + ".tdb");
-    // If file not exist, new file will be created.
-    databaseManager->Initialize();
-
     queryExecuter = new QueryExecutor(this);
+    // If file not exist, new file will be created.
+
+    int dbmInitResult = databaseManager->Initialize();
+    isEncrypted = (dbmInitResult == -1);
+
 }
 
 SQLDriver::SQLDriver(const string &workingDir) {

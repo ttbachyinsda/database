@@ -8,7 +8,7 @@
 struct SQLValue
 {
     enum LiteralType {
-        ENUMERATE, STRING, DATE, DECIMAL, NUL
+        ENUMERATE, STRING, DATE, DECIMAL, LONGINT, NUL
     } type;
 
     std::string content;

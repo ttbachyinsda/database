@@ -20,6 +20,29 @@ public:
     virtual bool execute() = 0;
     virtual ~SQLAction() {}
     void setDriver(SQLDriver* d) { driver = d; }
+    bool checkEncrypted();
+};
+
+class SQLEncryptAction : public SQLAction
+{
+    std::string password;
+public:
+    SQLEncryptAction(const std::string& password)
+    { this->password = password; }
+
+    ~SQLEncryptAction() {}
+    bool execute();
+};
+
+class SQLDecryptAction : public SQLAction
+{
+    std::string password;
+public:
+    SQLDecryptAction(const std::string& password)
+    { this->password = password; }
+
+    ~SQLDecryptAction() {}
+    bool execute();
 };
 
 /**

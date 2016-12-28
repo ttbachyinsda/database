@@ -224,6 +224,10 @@ void bplus_tree::remove_from_index_multi(int parent_off, int off, internal_node_
         head.root_offset = parent.children[0].child;
         block_write(&head, OFFSET_META);
         return;
+    } else if (parent.n == 0 && head.root_offset == off &&
+               head.height == 1) {
+        parent.n = 1;
+        return;
     }
 
     // merge or borrow

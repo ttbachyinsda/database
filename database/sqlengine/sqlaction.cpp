@@ -17,6 +17,7 @@ using namespace std;
 
 bool SQLCreateDatabaseAction::execute()
 {
+    if (!checkEncrypted()) return false;
     // Judge if exist.
     if (driver->getDatabaseManager()->getDatabaseByName(databaseName) != NULL) {
         driver->addErrorMessage("Database " + databaseName + " already exists.");
@@ -36,6 +37,7 @@ bool SQLCreateDatabaseAction::execute()
 
 bool SQLDropDatabaseAction::execute()
 {
+    if (!checkEncrypted()) return false;
     if (driver->getCurrentDatabase() != 0 &&
             driver->getCurrentDatabase()->getname() == databaseName) {
         driver->addWarningMessage("Currently used database is set to NULL.");
@@ -51,6 +53,7 @@ bool SQLDropDatabaseAction::execute()
 
 bool SQLUseDatabaseAction::execute()
 {
+    if (!checkEncrypted()) return false;
     Database* base = driver->getDatabaseManager()->getDatabaseByName(databaseName);
     if (base == NULL) {
         driver->addErrorMessage("Database " + databaseName + " does not exist.");
@@ -62,6 +65,7 @@ bool SQLUseDatabaseAction::execute()
 
 bool SQLShowDatabasesAction::execute()
 {
+    if (!checkEncrypted()) return false;
     SQLResult* result = new SQLResult(3);
     result->addTitleField("Database ID");
     result->addTitleField("Name");
@@ -82,6 +86,7 @@ bool SQLShowDatabasesAction::execute()
 
 bool SQLCreateTableAction::execute()
 {
+    if (!checkEncrypted()) return false;
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when creating table "
@@ -223,6 +228,7 @@ bool SQLCreateTableAction::execute()
 
 bool SQLDropTableAction::execute()
 {
+    if (!checkEncrypted()) return false;
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when dropping table "
@@ -264,6 +270,7 @@ bool SQLDropTableAction::execute()
 
 bool SQLDescAction::execute()
 {
+    if (!checkEncrypted()) return false;
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when showing schema of table "
@@ -300,6 +307,7 @@ bool SQLDescAction::execute()
 
 bool SQLShowTablesAction::execute()
 {
+    if (!checkEncrypted()) return false;
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when showing tables.");
@@ -326,6 +334,7 @@ bool SQLShowTablesAction::execute()
 
 bool SQLInsertAction::execute()
 {
+    if (!checkEncrypted()) return false;
     // TODO: possible memory leak...
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
@@ -446,6 +455,7 @@ bool SQLInsertAction::execute()
 
 bool SQLDeleteAction::execute()
 {
+    if (!checkEncrypted()) return false;
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when deleting from table "
@@ -466,6 +476,7 @@ bool SQLDeleteAction::execute()
 
 bool SQLUpdateAction::execute()
 {
+    if (!checkEncrypted()) return false;
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when updating table "
@@ -491,6 +502,7 @@ bool SQLUpdateAction::execute()
 
 bool SQLSelectAction::execute()
 {
+    if (!checkEncrypted()) return false;
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when querying data.");
@@ -502,6 +514,7 @@ bool SQLSelectAction::execute()
 }
 
 bool SQLGroupSelectAction::execute() {
+    if (!checkEncrypted()) return false;
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when doing group selections.");
@@ -540,6 +553,7 @@ bool SQLGroupSelectAction::execute() {
 
 bool SQLIndexAction::execute()
 {
+    if (!checkEncrypted()) return false;
     Database* handler = driver->getCurrentDatabase();
     if (handler == 0) {
         driver->addErrorMessage("No database is selected when operating indexes.");
@@ -585,6 +599,27 @@ bool SQLDropIndexAction::execute()
     return true;
 }
 
+
+bool SQLEncryptAction::execute()
+{
+    if (!checkEncrypted()) return false;
+    driver->encryptDatabaseManager(password);
+    return true;
+}
+
+bool SQLDecryptAction::execute()
+{
+    if (!driver->getIsEncrypted()) {
+        driver->addWarningMessage("The current database is not encrypted.");
+        return true;
+    }
+    driver->decryptDatabaseManager(password);
+    if (driver->getIsEncrypted()) {
+        driver->addErrorMessage("Decrypt master key error: wrong password.");
+        return false;
+    }
+    return true;
+}
 
 /* Below are destructors */
 
@@ -643,4 +678,13 @@ SQLGroupSelectAction::~SQLGroupSelectAction() {
     delete selectorGroup;
     if (groupByGroup) delete groupByGroup;
     delete fromGroup;
+}
+
+bool SQLAction::checkEncrypted()
+{
+    if (driver->getIsEncrypted()) {
+        driver->addErrorMessage("Database is encrypted.");
+        return false;
+    }
+    return true;
 }

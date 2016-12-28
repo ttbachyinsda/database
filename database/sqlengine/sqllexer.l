@@ -64,6 +64,11 @@ using token = yy::SQLParser::token;
 (?i:"check")            { return token::CHECK;      }
 (?i:"in")               { return token::IN;         }
 (?i:"like")             { return token::LIKE;       }
+(?i:"master")           { return token::MASTER;     }
+(?i:"encryption")       { return token::ENCRYPTION; }
+(?i:"decryption")       { return token::DECRYPTION; }
+(?i:"password")         { return token::PASSWORD;   }
+(?i:"open")             { return token::OPEN;       }
 
 (?i:"foreign")          { return token::FOREIGN;    }
 (?i:"references")       { return token::REFERENCES; }
@@ -100,6 +105,13 @@ using token = yy::SQLParser::token;
 [0-9]+\.[0-9]+          {
                             yylval->build<std::string>(yytext);
                             return token::VALUE_DECIMAL;
+                        }
+
+[0-9]+L                 {
+                            std::string strtxt = yytext;
+                            strtxt = strtxt.substr(0, strtxt.size() - 1);
+                            yylval->build<std::string>(strtxt);
+                            return token::VALUE_LINT;
                         }
 
 [0-9]+                  {

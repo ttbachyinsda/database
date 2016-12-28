@@ -35,6 +35,7 @@ class SQLDriver {
     DatabaseManager* databaseManager;
     Database* currentDatabase;
     QueryExecutor* queryExecuter;
+    bool isEncrypted;
 
     void clearPreviousSession();
 
@@ -72,6 +73,12 @@ public:
     void setResult(SQLResult* r) { if (result) delete result; result = r; lastHasResult = true; }
 
     SQLResult* getResult() const { return result; }
+
+    bool getIsEncrypted() const { return isEncrypted; }
+
+    void encryptDatabaseManager(const std::string& password);
+
+    void decryptDatabaseManager(const std::string& password);
 
     void setWorkingDir(const std::string&);
 

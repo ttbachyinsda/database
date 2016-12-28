@@ -51,13 +51,14 @@
 
 %token INSERT INTO VALUES DELETE FROM
 %token UPDATE SET WHERE SELECT AND INDEX
+%token MASTER ENCRYPTION DECRYPTION PASSWORD OPEN
 
 %token GROUP BY
 %token MAX MIN AVG SUM
 
 %token NOT_EQUAL GREATER_EQUAL LESS_EQUAL
 
-%token <std::string> IDENTIFIER VALUE_STRING VALUE_INT VALUE_DATE VALUE_DECIMAL
+%token <std::string> IDENTIFIER VALUE_STRING VALUE_INT VALUE_DATE VALUE_DECIMAL VALUE_LINT
 %token ';' '(' ')' ',' '=' '>' '<'
 
 %type <SQLAction*> Stmt SysStmt QueryStmt
@@ -138,6 +139,14 @@ SysStmt         : CREATE DATABASE IDENTIFIER
                 | DROP INDEX IDENTIFIER '(' IDENTIFIER ')'
                 {
                     $$ = new SQLDropIndexAction($3, $5);
+                }
+                | CREATE MASTER KEY ENCRYPTION BY PASSWORD '=' VALUE_STRING
+                {
+                    $$ = new SQLEncryptAction($8);
+                }
+                | OPEN MASTER KEY DECRYPTION BY PASSWORD '=' VALUE_STRING
+                {
+                    $$ = new SQLDecryptAction($8);
                 }
                 ;
 
@@ -305,6 +314,13 @@ Value           : VALUE_INT
                     $$->type = SQLValue::DECIMAL;
                     $$->content = $1;
                     $$->parseReal();
+                }
+                | VALUE_LINT
+                {
+                    $$ = new SQLValue();
+                    $$->type = SQLValue::LONGINT;
+                    $$->content = $1;
+                    $$->parseLong();
                 }
                 | NUL
                 {

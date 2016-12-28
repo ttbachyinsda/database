@@ -51,7 +51,10 @@ int main(int argc, char* argv[])
     sql += "insert into a values (1, 'Jame');\n";
     sql += "insert into a values (2, 'Bob');\n";
     sql += "insert into b values (1, 2);\n";
-    sql += "update b set aid=1 where bid=0001;\n";
+    sql += "insert into b values (2, 2);\n";
+//    sql += "update b set aid=3 where bid=0001;\n";
+    sql += "delete from a where name='Jame';\n";
+    sql += "select * from a;\n";
 //sql="create database orderDB;\n";
 //sql += "insert into a values (1997-03-08-21-39-00, 120.312, 3);\n";
 //    sql += "select * from book;\n";

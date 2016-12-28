@@ -44,6 +44,7 @@ public:
     static DataBaseType *copyType(DataBaseType *oriType);
     static std::vector<std::string> stringSplit(const std::string &s,
                                               const std::string &delim);
+    static string getUserOutput(char type, string input, bool isNull);
 };
 
 #endif // UIC_H

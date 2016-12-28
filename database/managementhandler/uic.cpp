@@ -370,3 +370,10 @@ std::vector<std::string> UIC::stringSplit(const std::string &s,
     }
     return ret;
 }
+
+string UIC::getUserOutput(char type, string input, bool isNull)
+{
+    if (isNull) return "<null>";
+    if (type == 'I' || type == 'C' || type == 'V') return input;
+    return "CANNOT PARSE";
+}
