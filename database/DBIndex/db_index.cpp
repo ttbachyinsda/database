@@ -2,8 +2,9 @@
 #include <iostream>
 using namespace std;
 
-db_index::db_index(char *path, bool forceNewIndex, bool multi_value, int keySize)
-    : b_tree(path, forceNewIndex, multi_value, keySize) {
+db_index::db_index(char *path, bool forceNewIndex, bool multi_value, CompareAlgo *cmp, int keySize)
+    : b_tree(path, forceNewIndex, multi_value, cmp, keySize) {
+    this->cmp = cmp;
     strcpy(this->path, path);
     this->multi_value = multi_value;
     this->keySize = keySize;
@@ -79,8 +80,7 @@ void db_index::findAll(SQLOperand operand, string key, int dataLen, vector<pair<
     index_key temp_key(key.c_str(), dataLen);
     switch (operand) {
         case SQLOperand::GREATER: {
-            temp_key.k[temp_key.len-1] ++;
-            b_tree.search_greater_equal(temp_key, result);
+            b_tree.search_greater(temp_key, result);
             break;
         }
         case SQLOperand::GREATER_EQUAL: {
@@ -88,8 +88,7 @@ void db_index::findAll(SQLOperand operand, string key, int dataLen, vector<pair<
             break;
         }
         case SQLOperand::LESS: {
-            temp_key.k[temp_key.len-1] --;
-            b_tree.search_less_equal(temp_key, result);
+            b_tree.search_less(temp_key, result);
             break;
         }
         case SQLOperand::LESS_EQUAL: {

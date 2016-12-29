@@ -58,6 +58,7 @@ Item {
                             Logic.depth += 1
                             resultLable.visible = true
                             list.visible = false
+                            controlRow.visible = true
                         }
                     }
                 }
@@ -78,6 +79,30 @@ Item {
             font.pixelSize: dp(20)
         }
 
+        RowLayout {
+            id: controlRow
+            visible: false
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Button {
+                id: previous
+                text: "PREV"
+                elevation: 1
+                onClicked: {
+                    resultLable.text = result.getPrevResult()
+                }
+            }
+
+            Button {
+                id: next
+                text: "NEXT"
+                elevation: 1
+                onClicked: {
+                    resultLable.text = result.getNextResult()
+                }
+            }
+        }
+
         Button {
             id:button2
             text: "Refresh"
@@ -86,6 +111,7 @@ Item {
             onClicked: {
                 list.visible = true
                 resultLable.visible = false
+                controlRow.visible = false
                 Logic.addEle(result.getDBList())
                 Logic.depth = 0
             }

@@ -22,7 +22,16 @@ void TestSQL::startTestInteractive()
         getline(cin, input);
         if (input == "quit")
             break;
-        sqlDriver.execute(input);
+        if (input.substr(0, 4) == "exec") {
+            string filename = input.substr(5);
+            ifstream in(filename, ios::in);
+            istreambuf_iterator<char> beg(in), end;
+            string data(beg, end);
+            in.close();
+            sqlDriver.execute(data);
+        } else {
+            sqlDriver.execute(input);
+        }
         if (sqlDriver.getLastSucceeded() == false) {
             cout << "\033[31m ERROR: \033[0m" << sqlDriver.getErrorMessages()[0] << endl;
         } else {

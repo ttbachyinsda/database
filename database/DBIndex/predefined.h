@@ -2,6 +2,7 @@
 #define PREDEFINED_H
 
 #include <string.h>
+#include "comparealgo.h"
 
 /* predefined B+ info */
 #define CHILDREN_NUM 200
@@ -31,18 +32,8 @@ struct index_key {
     }
 };
 
-inline int keycmp(const index_key &a, const index_key &b) {
-    int x = a.len - b.len;
-    if (x == 0) {
-        for (int i = 0; i < a.len; i++) {
-            if (a.k[i] > b.k[i])
-                return 1;
-            else if (b.k[i] > a.k[i])
-                return -1;
-        }
-    }
-    else return x>0?1:-1;
-    return 0;
+inline int keycmp(const index_key &a, const index_key &b, CompareAlgo *cmp) {
+    return cmp->strcmp(a.k, a.len, b.k, b.len);
 }
 
 #endif /* end of PREDEFINED_H */

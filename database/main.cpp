@@ -22,6 +22,9 @@
 #include <QQmlProperty>
 
 #include <sqlengine/sqldriver.h>
+
+#include "layer/json.hpp"
+using json = nlohmann::json;
 using namespace std;
 
 int BulbFile::fm = -1;
@@ -31,7 +34,7 @@ int main(int argc, char* argv[])
 {
     TestSQL t;
     t.workingDir = "/home/jameshuang/Study/database/database_wd";
-
+//
     string sql = "use orderDB;\n";
 //    TestSQL t;
 //    t.workingDir = "/home/jameshuang/Study/database/database_wd";
@@ -66,10 +69,11 @@ int main(int argc, char* argv[])
     sql += "insert into a values (3, 1L, 2.13, 1994-03-08);\n";
     sql += "insert into a values (4, 2L, 1.25, 1993-03-04-01-12-12);\n";
     sql += "delete from a where largeint=3L;\n";
-    sql += "select * from a;\n";
-//    sql += "select sum(largeint), avg(real) from a;\n";
+//    sql += "select * from a;\n";
+    sql += "select sum(largeint), avg(real) from a;\n";
 
     t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
+//    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 //
 //    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 
@@ -88,6 +92,18 @@ int main(int argc, char* argv[])
     //    t.startTestFile("a.sql");
     //    t.startTestInteractive();
 
+//    SQLResult res(1);
+//    res.addTitleField("name");
+//    for (int i = 0; i < 100; ++ i) {
+//        res.addNew();
+//        res.setData(0, "123123");
+//    }
+//    json j, k;
+//    j["result"] = true;
+//    k = json::parse(j.dump());
+//    cout << k.dump() << endl;
+    
+    
 //    testtype t;
 //    t.begintest(false);
 //    testdatabase v;
@@ -100,7 +116,7 @@ int main(int argc, char* argv[])
     //    testvirtual x;
     //    x.begintest();
 
-//    BulbFile::setfilename("bulbfile.txt", true);
+    BulbFile::setfilename("bulbfile.txt", true);
     //don't let this always be true, That's true only because we are testing.
 
 //        testgroup xyz;

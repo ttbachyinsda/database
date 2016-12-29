@@ -27,10 +27,13 @@ using token = yy::SQLParser::token;
 %option noyywrap
 %option c++
 
+%x S
+
 %%
 
 %{          /** Code executed at the beginning of yylex **/
             yylval = lval;
+            std::string stringBuffer;
 %}
 
 ([ \t]+)                { /* Just ignore */         }
@@ -119,11 +122,19 @@ using token = yy::SQLParser::token;
                             return token::VALUE_INT;
                         }
 
-'[^']*'                 {
-                            std::string strtxt = yytext;
-                            strtxt = strtxt.substr(1, strtxt.size() - 2);
+<INITIAL>'              {
+                            yybegin(S);
+                            stringBuffer.clear();
+                        }
+
+<S>'                    {
+                            yybegin(YYINITIAL);
                             yylval->build<std::string>(strtxt);
                             return token::VALUE_STRING;
+                        }
+
+<S>.                    {
+                            stringBuffer += yytext;
                         }
 
 [A-Za-z][_0-9A-Za-z]*   {

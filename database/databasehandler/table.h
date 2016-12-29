@@ -7,6 +7,7 @@
 #include "../typehandler/databasechar.h"
 #include "../typehandler/databaseint.h"
 #include "../typehandler/databasetype.h"
+#include "../DBIndex/comparealgo.h"
 #include "bulbfile.h"
 #include <string>
 #include <vector>

@@ -9,6 +9,8 @@
 #include <QQuickItem>
 #include <QQmlContext>
 #include <QTextStream>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
 
 class WorkerThread : public QThread {
     Q_OBJECT
@@ -31,7 +33,9 @@ signals:
     void clicked();
     void resultReady(const QString& s);
 public slots:
+    void replyFinish(QNetworkReply*);
     void doSomething(const QString command) {
+        counter = 0;
         WorkerThread* workerThread = new WorkerThread(&oldDriver, command);
         connect(workerThread, SIGNAL(resultReady(const QString&)), this, SLOT(done(const QString&)));
         //connect(workerThread, &WorkerThread::finished, workerThread, &QObject::deleteLater);
@@ -44,6 +48,9 @@ public slots:
     }
     QStringList getDBList();
     QStringList getTable(QString);
+    QString getNextResult();
+    QString getPrevResult();
+    void getNetwork(const QString command);
 
     QString gettext() {
         return this->text;
@@ -55,9 +62,12 @@ public slots:
 
 public:
     QString text;
+    static QNetworkAccessManager manager;
     static SQLDriver oldDriver;
+    static SQLResult *lastResult;
     int i;
     QMLif();
+    int counter;
     static QQuickItem *dbList;
 
     static string testcss;

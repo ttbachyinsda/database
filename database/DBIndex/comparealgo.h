@@ -14,37 +14,37 @@ using namespace std::chrono;
 class CompareAlgo
 {
 public:
-    virtual int strcmp(char* s1,int l1,char* s2,int l2) = 0;
+    virtual int strcmp(const char* s1,int l1,const char* s2,int l2) = 0;
 };
 class CompareINTE: public CompareAlgo
 {
 public:
-    int strcmp(char* s1,int l1,char* s2,int l2);
+    int strcmp(const char* s1,int l1,const char* s2,int l2);
 };
 class CompareCHAR: public CompareAlgo
 {
 public:
-    int strcmp(char* s1,int l1,char* s2,int l2);
+    int strcmp(const char* s1,int l1,const char* s2,int l2);
 };
 class CompareLINT: public CompareAlgo
 {
 public:
-    int strcmp(char* s1,int l1,char* s2,int l2);
+    int strcmp(const char* s1,int l1,const char* s2,int l2);
 };
 class CompareREAL: public CompareAlgo
 {
 public:
-    int strcmp(char* s1,int l1,char* s2,int l2);
+    int strcmp(const char* s1,int l1,const char* s2,int l2);
 };
 class CompareVARC: public CompareAlgo
 {
 public:
-    int strcmp(char* s1,int l1,char* s2,int l2);
+    int strcmp(const char* s1,int l1,const char* s2,int l2);
 };
 class CompareDATE: public CompareAlgo
 {
 public:
-    int strcmp(char* s1,int l1,char* s2,int l2);
+    int strcmp(const char* s1,int l1,const char* s2,int l2);
 };
 
 
