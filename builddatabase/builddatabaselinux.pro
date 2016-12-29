@@ -10,7 +10,7 @@ TARGET = _thjdb
 TEMPLATE = lib
 
 QMAKE_CXXFLAGS += -fpic
-LIBS += -lgmpxx -lgmp -L /usr/lib/python2.7
+LIBS += -lgmpxx -lgmp -lmpfr -L /usr/lib/python2.7
 
 INCLUDEPATH += /usr/include/python2.7
 
@@ -69,7 +69,8 @@ SOURCES += \
     ../database/queryhandler/checkhelper.cpp \
     ../database/groupalgorithm/grouphandler.cpp \
     ../database/aesalgorithm/encrypt.cpp \
-    ../database/aesalgorithm/aes.cpp
+    ../database/aesalgorithm/aes.cpp \
+    ../database/DBIndex/bplus_treel.cpp
 
 HEADERS += \
     ../database/tester/testflexible.h \
@@ -142,7 +143,8 @@ HEADERS += \
     ../database/queryhandler/checkhelper.h \
     ../database/groupalgorithm/grouphandler.h \
     ../database/aesalgorithm/encrypt.h \
-    ../database/aesalgorithm/aes.h
+    ../database/aesalgorithm/aes.h \
+    ../database/DBIndex/bplus_treel.h
 
 unix{
     maemo5 {

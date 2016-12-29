@@ -23,7 +23,7 @@ using json = nlohmann::json;
 using namespace std;
 
 
-#define SQL_DEBUG
+//#define SQL_DEBUG
 
 int main(int argc, char* argv[])
 {
@@ -58,17 +58,10 @@ int main(int argc, char* argv[])
     return 0;
 
 #else
-//    string sql = "use orderDB;\n";
-//    sql += "UPDATE book SET title='Nine Times Nine' WHERE authors='Anthony Boucher';\n";
-//    sql += "select * from book;\n";
+
     string sql;
     sql = "create database test;use test; select * from uesr;";
     t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/1_val.txt");
-//    sql = "use test;";
-//    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/1_val.txt");
-//    sql = "select * from user;";
-//    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/1_val.txt");
-//    t.startTestBlob();
     return 0;
 #endif
 }
