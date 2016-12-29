@@ -2,6 +2,14 @@
 #define QUERYCONDITION_H
 
 #include "../sqlengine/sqlstruct.h"
+#include "../managementhandler/uic.h"
+#include <assert.h>
+#include <gmp.h>
+#include <gmpxx.h>
+#include <mpfr.h>
+#include <mpf2mpfr.h>
+#include "../groupalgorithm/mpreal.h"
+using mpfr::mpreal;
 
 struct SelectorPair
 {
@@ -33,6 +41,9 @@ struct QueryCondition {
     static std::string convertRegex(const std::string&);
 private:
     static int matchString(const std::string& left, const std::string& right);
+    static int matchReal(const std::string& left, const std::string& right);
+    static int matchLint(const std::string& left, const std::string& right);
+    static int matchDate(const std::string& left, const std::string& right);
     static int matchInteger(const std::string& left, const std::string& right);
     static int matchIntegerCond(const char* s, int ls,
                                 const char* l, int ll);

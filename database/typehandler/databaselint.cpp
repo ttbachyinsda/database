@@ -156,12 +156,8 @@ string DatabaseLint::output()
 {
     if (isNull)
         return "NULL__DATA";
-    long long temp;
-    memcpy(&temp, data, 8);
-    stringstream ss;
-    ss << temp;
-    string s1 = ss.str();
-    return s1;
+    string s(data, this->size);
+    return s;
 }
 
 /* Don't delete that
