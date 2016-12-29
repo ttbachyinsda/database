@@ -62,6 +62,7 @@
 		41E3F6CC1E124130000E57E4 /* libmpfr.4.dylib in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6C91E124130000E57E4 /* libmpfr.4.dylib */; };
 		41E3F6CD1E124130000E57E4 /* libmpfr.a in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6CA1E124130000E57E4 /* libmpfr.a */; };
 		41E3F6CE1E124130000E57E4 /* libmpfr.4.dylib in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 41E3F6CB1E124130000E57E4 /* libmpfr.4.dylib */; };
+		41E4C8921E14F69A004349F1 /* bplus_treel.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 41E4C8901E14F69A004349F1 /* bplus_treel.cpp */; };
 		44D91CC7350873D0D1275666 /* QtQml.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 3988613369CAFF2C05DA56BB /* QtQml.framework */; };
 		470B489DE171392C9E78FBA1 /* testmd5.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = 2F513FE0B153B9566594E544 /* testmd5.cpp */; settings = {ATTRIBUTES = (); }; };
 		4D75362F9C7B5CCB9ACEAEDA /* uic.cpp in Compile Sources */ = {isa = PBXBuildFile; fileRef = C0E7A1293163A13E9FB4F2F4 /* uic.cpp */; settings = {ATTRIBUTES = (); }; };
@@ -198,6 +199,8 @@
 		41E3F6CA1E124130000E57E4 /* libmpfr.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpfr.a; path = ../../../../../../../usr/local/Cellar/mpfr/3.1.3/lib/libmpfr.a; sourceTree = "<group>"; };
 		41E3F6CB1E124130000E57E4 /* libmpfr.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libmpfr.4.dylib; path = ../../../../../../../usr/local/Cellar/mpfr/3.1.3/lib/libmpfr.4.dylib; sourceTree = "<group>"; };
 		41E3F6CF1E12428C000E57E4 /* mpreal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mpreal.h; path = groupalgorithm/mpreal.h; sourceTree = "<group>"; };
+		41E4C8901E14F69A004349F1 /* bplus_treel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bplus_treel.cpp; path = DBIndex/bplus_treel.cpp; sourceTree = "<group>"; };
+		41E4C8911E14F69A004349F1 /* bplus_treel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bplus_treel.h; path = DBIndex/bplus_treel.h; sourceTree = "<group>"; };
 		43AD26625CB36A549FA8D9BF /* flexibletable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = flexibletable.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/databasehandler/flexibletable.cpp; sourceTree = "<absolute>"; };
 		4BEDD6BC1CB5DA70EA0CAB83 /* popups.qrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = popups.qrc; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/material/src/popups/popups.qrc; sourceTree = "<absolute>"; };
 		4C146861AF3C1F26203C0815 /* testdatabase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = testdatabase.cpp; path = /Users/NitreExplosion/3rd_Year/Autumn/DataBase/project/database/tester/testdatabase.cpp; sourceTree = "<absolute>"; };
@@ -521,6 +524,8 @@
 		35757B85385FCED399272992 /* DBIndex */ = {
 			isa = PBXGroup;
 			children = (
+				41E4C8901E14F69A004349F1 /* bplus_treel.cpp */,
+				41E4C8911E14F69A004349F1 /* bplus_treel.h */,
 				5274560C2D8FAB064E18DDD2 /* bplus_tree.cpp */,
 				0E53E30C9239236151DE41B6 /* db_index.cpp */,
 				6AA7641CF5D0513ED95F9975 /* comparealgo.cpp */,
@@ -931,6 +936,7 @@
 				AFCC4AFDCEA27F51645DDD7B /* encrypt.cpp in Compile Sources */,
 				C398A87DF31A7BA1B84E6037 /* qrc_material.cpp in Compile Sources */,
 				1F383BAB392248B1F12CB61D /* qrc_components.cpp in Compile Sources */,
+				41E4C8921E14F69A004349F1 /* bplus_treel.cpp in Compile Sources */,
 				E8193C70F651175E87062803 /* qrc_controls.cpp in Compile Sources */,
 				CA44B1CA57987FD87D343E73 /* qrc_core.cpp in Compile Sources */,
 				A89CB53352EC97FACB207E8F /* qrc_extras.cpp in Compile Sources */,
