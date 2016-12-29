@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdlib>
 
+#include <iostream>
+
 /* Implementation of yyFlexScanner */
 #include "sqllexer.h"
 #include "sqldriver.h"
@@ -59,6 +61,7 @@ using token = yy::SQLParser::token;
 (?i:"char")             { return token::CHAR;       }
 (?i:"datetime")         { return token::DATETIME;   }
 (?i:"double")           { return token::DOUBLE;     }
+(?i:"varbinary")        { return token::VARBINARY;  }
 (?i:"is")               { return token::IS;         }
 (?i:"not")              { return token::NOT;        }
 (?i:"null")             { return token::NUL;        }
@@ -123,18 +126,26 @@ using token = yy::SQLParser::token;
                         }
 
 <INITIAL>'              {
-                            yybegin(S);
+                            BEGIN(S);
                             stringBuffer.clear();
                         }
 
 <S>'                    {
-                            yybegin(YYINITIAL);
-                            yylval->build<std::string>(strtxt);
+                            BEGIN(INITIAL);
+                            yylval->build<std::string>(stringBuffer);
                             return token::VALUE_STRING;
                         }
 
 <S>.                    {
                             stringBuffer += yytext;
+                        }
+
+<S>\\'                  {
+                            stringBuffer += "\'";
+                        }
+
+<S>\\\"                 {
+                            stringBuffer += "\"";
                         }
 
 [A-Za-z][_0-9A-Za-z]*   {

@@ -44,7 +44,7 @@
 
 %token CREATE DROP SHOW USE DESC
 %token DATABASE DATABASES TABLE TABLES
-%token INT VARCHAR CHAR DOUBLE BIGINT DATETIME
+%token INT VARCHAR CHAR DOUBLE BIGINT DATETIME VARBINARY
 %token IS NOT NUL PRIMARY KEY
 %token CHECK IN LIKE
 %token FOREIGN REFERENCES
@@ -58,7 +58,8 @@
 
 %token NOT_EQUAL GREATER_EQUAL LESS_EQUAL
 
-%token <std::string> IDENTIFIER VALUE_STRING VALUE_INT VALUE_DATE VALUE_DECIMAL VALUE_LINT
+%token <std::string> IDENTIFIER VALUE_STRING VALUE_INT
+%token <std::string> VALUE_DATE VALUE_DECIMAL VALUE_LINT
 %token ';' '(' ')' ',' '=' '>' '<'
 
 %type <SQLAction*> Stmt SysStmt QueryStmt
@@ -230,6 +231,12 @@ Type            : INT '(' VALUE_INT ')'
                 {
                     $$ = new SQLType();
                     $$->type = SQLType::DATE;
+                    $$->length = 8;
+                }
+                | VARBINARY '(' ')'
+                {
+                    $$ = new SQLType();
+                    $$->type = SQLType::BULB;
                     $$->length = 8;
                 }
                 ;

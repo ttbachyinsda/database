@@ -52,7 +52,6 @@ SOURCES += main.cpp\
     typehandler/databasevarchar.cpp \
     DBIndex/bplus_tree.cpp \
     DBIndex/db_index.cpp \
-    layer/qmlif.cpp \
     typehandler/databasereal.cpp \
     typehandler/databaselint.cpp \
     typehandler/databasedate.cpp \
@@ -140,7 +139,6 @@ HEADERS  += mainwindow.h \
     typehandler/databaselint.h \
     layer/json.hpp \
     layer/pythonif.h \
-    layer/qmlif.h \
     typehandler/date.h \
     typehandler/databasedate.h \
     typehandler/chrono_io.h \

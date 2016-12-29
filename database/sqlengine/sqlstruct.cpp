@@ -18,6 +18,7 @@ const char *const SQLType::VARCHAR = "VARCHAR";
 const char *const SQLType::REAL = "REAL";
 const char *const SQLType::DATE = "DATE";
 const char *const SQLType::LINT = "LINT";
+const char *const SQLType::BULB = "BULB";
 
 void SQLType::dump() const
 {

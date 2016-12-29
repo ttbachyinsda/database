@@ -84,6 +84,7 @@ struct SQLType
     static const char *const LINT;
     static const char *const REAL;
     static const char *const DATE;
+    static const char *const BULB;
 
     bool primaryType;
     bool canNull;

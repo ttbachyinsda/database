@@ -12,7 +12,7 @@ using std::binary_search;
 using std::lower_bound;
 using std::upper_bound;
 
-CompareAlgo *bplus_tree::global_cmp;
+CompareAlgo *bplus_tree::global_cmp = 0;
 
 /* custom compare operator for STL algorithms */
 bool operator<(const index_key& l, const index_t& r) {

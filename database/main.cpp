@@ -1,5 +1,4 @@
 #include "databasehandler/bulbfile.h"
-#include "layer/qmlif.h"
 #include "tester/testbulbfile.h"
 #include "tester/testdatabase.h"
 #include "tester/testdate.h"
@@ -14,12 +13,6 @@
 #include "tester/testvirtual.h"
 #include "tester/testaes.h"
 #include <iostream>
-//#include "layer/pythonif.h"
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QQuickItem>
-#include <QQmlContext>
-#include <QQmlProperty>
 
 #include <sqlengine/sqldriver.h>
 
@@ -36,43 +29,19 @@ int main(int argc, char* argv[])
     t.workingDir = "/home/jameshuang/Study/database/database_wd";
 //
     string sql = "use orderDB;\n";
-//    TestSQL t;
-//    t.workingDir = "/home/jameshuang/Study/database/database_wd";
-//    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/create.sql");
-//    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/customer.sql");
-//    string sql = "use orderDB;\n";
-//    sql += "update customer set gender='F', name='Great' where gender='M';\n";
-//    sql += "select * from customer;\n";
-//    string sql = "use orderDB;\n";
-//printf("current working directory: %s\n", getcwd(NULL, NULL));
-//    sql += "delete from customer where gender='F';\n";
-//    sql += "select * from customer where gender='F';\n";
-//    sql += "select SUM(id) from customer where id = 307000;\n";
+
+    sql += "create table a (id int(4), image varbinary());\n";
+
 //    sql += "drop table b; drop table a;\n";
-//    sql += "create table a (id int(3), primary key(id), name varchar(4));\n";
-//    sql += "create table b (bid int(4), primary key(bid), aid int(3) foreign key references a(id));";
-//    sql += "insert into a values (1, 'Jame');\n";
-//    sql += "insert into a values (2, 'Bob');\n";
-//    sql += "insert into b values (1, 2);\n";
-//    sql += "insert into b values (2, 2);\n";
-//    sql += "update b set aid=3 where bid=0001;\n";
-//    sql += "delete from a where name='Jame';\n";
+//    sql += "create table a (id int(3), primary key (id), largeint bigint(), real double(), birthdate datetime());\n";
+//    sql += "insert into a values (1, 123415L, 3.134, 1997-03-08);\n";
+//    sql += "insert into a values (2, 3L, 3.0, 1996-03-08);\n";
+//    sql += "insert into a values (3, 1L, 2.13, 1994-03-08);\n";
+//    sql += "insert into a values (4, 2L, 1.25, 1993-03-04-01-12-12);\n";
+//    sql += "delete from a where largeint=3L;\n";
 //    sql += "select * from a;\n";
-//sql="create database orderDB;\n";
-//sql += "insert into a values (1997-03-08-21-39-00, 120.312, 3);\n";
-//    sql += "select * from book;\n";
-
-    sql += "drop table b; drop table a;\n";
-    sql += "create table a (id int(3), primary key (id), largeint bigint(), real double(), birthdate datetime());\n";
-    sql += "insert into a values (1, 123415L, 3.134, 1997-03-08);\n";
-    sql += "insert into a values (2, 3L, 3.0, 1996-03-08);\n";
-    sql += "insert into a values (3, 1L, 2.13, 1994-03-08);\n";
-    sql += "insert into a values (4, 2L, 1.25, 1993-03-04-01-12-12);\n";
-    sql += "delete from a where largeint=3L;\n";
-//    sql += "select * from a;\n";
-    sql += "select sum(largeint), avg(real) from a;\n";
-
-    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
+//    sql += "select sum(largeint), avg(real) from a;\n";
+//    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 //    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 //
 //    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
@@ -102,8 +71,8 @@ int main(int argc, char* argv[])
 //    j["result"] = true;
 //    k = json::parse(j.dump());
 //    cout << k.dump() << endl;
-    
-    
+
+
 //    testtype t;
 //    t.begintest(false);
 //    testdatabase v;
@@ -116,7 +85,7 @@ int main(int argc, char* argv[])
     //    testvirtual x;
     //    x.begintest();
 
-    BulbFile::setfilename("bulbfile.txt", true);
+//    BulbFile::setfilename("bulbfile.txt", true);
     //don't let this always be true, That's true only because we are testing.
 
 //        testgroup xyz;
@@ -127,7 +96,6 @@ int main(int argc, char* argv[])
 //    QQmlApplicationEngine engine;
 //    QPM_INIT(engine);
 //    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-
 //    return app.exec();
 
     //    string a = "create database student;\

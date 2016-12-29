@@ -82,6 +82,9 @@ public:
 
     void setWorkingDir(const std::string&);
 
+    bool storeBinaryFile(const std::string& filename);
+    bool getBinaryFile(const std::string& tableName, const std::string& filename);
+
     SQLDriver();
     SQLDriver(const std::string& workingDir);
     ~SQLDriver();

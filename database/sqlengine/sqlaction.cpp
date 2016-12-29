@@ -101,19 +101,19 @@ bool SQLCreateTableAction::execute()
     }
 
     // Check Variable Types.
-    bool isVariableTable = true;
-//    for (SQLType* type : *fieldList) {
-//        if (type->type[0] == 'V') {
-//            isVariableTable = true;
-//            break;
-//        }
-//    }
-    // TODO: Hash table support: This time must exist primary type.
+    bool isHashTable = false;
+    for (SQLType* type : *fieldList) {
+        if (type->primaryType) {
+            isHashTable = true;
+            break;
+        }
+    }
+
     Table* newTable = NULL;
-    if (isVariableTable)
-        newTable = new FlexibleTable();
+    if (isHashTable)
+        newTable = new HashFlexibleTable();
     else
-        newTable = new FixedSizeTable();
+        newTable = new FlexibleTable();
 
     newTable->setfilename(handler->getname() + "_" + this->tableName + ".tb");
     newTable->setname(this->tableName);
@@ -174,6 +174,10 @@ bool SQLCreateTableAction::execute()
             foreignKeyLinks.push_back(make_pair("", 0));
             foreignKeyTargetTables.push_back(0);
         }
+        if (type->type[0] == 'B' && currentIndex != 1) {
+            driver->addErrorMessage("Current table layout is not supported.");
+            return false;
+        }
         clname.push_back(type->identifier);
         DataBaseType* dbType = UIC::reconvert(type->type, type->length, type->canNull);
         cltype.push_back(dbType);
@@ -204,7 +208,7 @@ bool SQLCreateTableAction::execute()
         idxVec.push_back(primaryIndex);
         newTable->createindex(idxVec);
     } else {
-        driver->addWarningMessage("Current table does not have a primary key.");
+        driver->addWarningMessage("Current table does not have a primary key. Flexible table created.");
     }
 
     // Add foreign keys to this table and target tables.
@@ -602,6 +606,11 @@ bool SQLDropIndexAction::execute()
     if (currentTable->getindexes()[columnID] == 0) {
         driver->addWarningMessage("Index for " + columnName + " does not exist!");
         return true;
+    }
+    if (currentTable->getforeignkeys()->at(columnID).first != "" ||
+            currentTable->getmajornum() == columnID) {
+        driver->addErrorMessage("The index at this column cannot be deleted.");
+        return false;
     }
     currentTable->deleteindex(columnID);
     return true;

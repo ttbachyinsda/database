@@ -400,6 +400,9 @@ string UIC::getUserOutput(char type, string input, bool isNull)
         retVal = retVal.substr(0, retVal.find_last_of("."));
         return retVal;
     }
+    if (type == 'B') {
+        return "<bulb>";
+    }
     return "CANNOT PARSE";
 }
 
