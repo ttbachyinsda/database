@@ -106,13 +106,13 @@ int main(int argc, char* argv[])
 //        testgroup xyz;
 //        xyz.begintest();
 
-    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
-    QGuiApplication app(argc, argv);
-    QQmlApplicationEngine engine;
-    QPM_INIT(engine);
-    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-
-    return app.exec();
+//    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
+//    QGuiApplication app(argc, argv);
+//    QQmlApplicationEngine engine;
+//    QPM_INIT(engine);
+//    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+//
+//    return app.exec();
 
     //    string a = "create database student;\
 //            use student;\
@@ -134,8 +134,8 @@ int main(int argc, char* argv[])
 //        testmd5 zab;
 //        zab.begintest();
 
-//    testhashflexible ace;
-//    ace.begintest();
+    testhashflexible ace;
+    ace.begintest();
 
     //    testbulbfile ceo;
     //    ceo.begintest();

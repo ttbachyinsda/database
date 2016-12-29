@@ -6,6 +6,7 @@
 
 /* predefined B+ info */
 #define CHILDREN_NUM 200
+#define INDEX_KEYSIZE 20
 
 /* key/value type */
 struct index_value {
@@ -21,12 +22,12 @@ struct index_value {
 };
 struct index_key {
     int len;
-    char k[20];
+    char k[INDEX_KEYSIZE];
 
     static int getSize() {return sizeof(index_key);}
 
     index_key(const char *str = "", int len = 0) {
-        memset(k, 0, 20);
+        memset(k, 0, INDEX_KEYSIZE);
         memcpy(k, str, len);
         this->len = len;
     }
