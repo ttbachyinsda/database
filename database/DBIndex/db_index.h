@@ -1,5 +1,7 @@
 #pragma once
 #include "bplus_tree.h"
+#include "bplus_treel.h"
+#include "comparealgo.h"
 #include "../sqlengine/sqlstruct.h"
 #include <vector>
 #include <cstdlib>
@@ -18,7 +20,8 @@ using namespace std;
 
 class db_index {
    public:
-    db_index(char *path, bool forceNewIndex = false, bool multi_value = false, int keySize = 20);
+    db_index(char *path, bool forceNewIndex = false, bool multi_value = false, CompareAlgo *cmp = NULL, int keySize = 20);
+    ~db_index();
 
     int search(const index_key &key, index_value *value,
                vector<pair<int, int>> *result = NULL) const;
@@ -45,9 +48,12 @@ class db_index {
     }
 
    private:
-    bplus_tree b_tree;
+    bplus_tree *b_tree;
+    bplus_treeL *b_treel;
 
+    CompareAlgo *cmp;
     char path[512];
+    bool largeKey;
     bool multi_value;
     int insertTime;
     int keySize;

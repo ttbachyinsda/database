@@ -47,11 +47,12 @@ int DatabaseBulb::getMaxSize()
 void DatabaseBulb::change(string input)
 {
     isNull = false;
-    this->nowoffset = BulbFile::put(input.data(), input.length());
+    memcpy(data,input.data(),8);
+//    this->nowoffset = BulbFile::put(input.data(), input.length());
 
-    memcpy(data, &this->nowoffset, 4);
-    int strsize = input.length();
-    memcpy(data + 4, &strsize, 4);
+//    memcpy(data, &this->nowoffset, 4);
+//    int strsize = input.length();
+//    memcpy(data + 4, &strsize, 4);
 
     data[this->size] = IS_NOT_NULL;
     this->isNull = false;
@@ -59,12 +60,12 @@ void DatabaseBulb::change(string input)
 void DatabaseBulb::change(char* input, int size)
 {
     isNull = false;
+    memcpy(data,input,8);
+//    this->nowoffset = BulbFile::put(input, size);
 
-    this->nowoffset = BulbFile::put(input, size);
-
-    memcpy(data, &this->nowoffset, 4);
-    int strsize = size;
-    memcpy(data + 4, &strsize, 4);
+//    memcpy(data, &this->nowoffset, 4);
+//    int strsize = size;
+//    memcpy(data + 4, &strsize, 4);
 
     data[this->size] = IS_NOT_NULL;
     this->isNull = false;
@@ -147,11 +148,13 @@ string DatabaseBulb::output()
 {
     if (isNull)
         return "NULL__DATA";
-    if (this->nowoffset == -1)
-        return "";
-    int strsize;
-    memcpy(&strsize, data + 4, 4);
-    return BulbFile::get(this->nowoffset, strsize);
+    string temp(data,8);
+    return temp;
+//    if (this->nowoffset == -1)
+//        return "";
+//    int strsize;
+//    memcpy(&strsize, data + 4, 4);
+//    return BulbFile::get(this->nowoffset, strsize);
 }
 
 /* Don't delete that

@@ -167,7 +167,19 @@ void Table::readindex()
         tst[temp.length()] = '\0';
         int can = access(temp.c_str(), 0);
         if (can != -1) {
-            this->DBindex[i] = new db_index(tst, false, multivalue[i]);
+            string type =  getcolumn(i)->getType();
+            CompareAlgo* cp;
+            switch(type[6])
+            {
+            case 'I': cp = new CompareINTE(); break;
+            case 'C': cp = new CompareCHAR(); break;
+            case 'V': cp = new CompareVARC(); break;
+            case 'L': cp = new CompareLINT(); break;
+            case 'R': cp = new CompareREAL(); break;
+            case 'D': cp = new CompareDATE(); break;
+            default: cout<<"ERROR TYPE"<<' '<<type<<endl; cp = new CompareCHAR(); break;
+            }
+            this->DBindex[i] = new db_index(tst, false, multivalue[i],cp,getcolumn(i)->getRealSize());
         } else
             this->DBindex[i] = NULL;
         free(tst);
@@ -182,7 +194,19 @@ void Table::createemptyindex(int i)
     tst[temp.length()] = '\0';
     if (this->DBindex == NULL)
         readindex();
-    this->DBindex[i] = new db_index(tst, true, multivalue[i]);
+    string type =  getcolumn(i)->getType();
+    CompareAlgo* cp;
+    switch(type[6])
+    {
+    case 'I': cp = new CompareINTE(); break;
+    case 'C': cp = new CompareCHAR(); break;
+    case 'V': cp = new CompareVARC(); break;
+    case 'L': cp = new CompareLINT(); break;
+    case 'R': cp = new CompareREAL(); break;
+    case 'D': cp = new CompareDATE(); break;
+    default: cout<<"ERROR TYPE"<<' '<<type<<endl; cp = new CompareCHAR(); break;
+    }
+    this->DBindex[i] = new db_index(tst, true, multivalue[i],cp,getcolumn(i)->getRealSize());
     free(tst);
 }
 

@@ -25,11 +25,15 @@ void testmd5::begintest()
 //    cout << comk << endl;
     int digits = 50;
     mpreal::set_default_prec(mpfr::digits2bits(digits));
-    mpreal a;
-    a = "123456789123456789.123456789123456789";
-    mpreal b = "12345678";
-    stringstream sstream;
-    sstream.precision(digits);
-    sstream<<a+b;
-    cout<<sstream.str()<<endl;
+//    mpreal a;
+//    a = "123456789123456789.123456789123456789";
+//    mpreal b = "12345678";
+//    stringstream sstream;
+//    sstream.precision(digits);
+//    sstream<<a+b;
+//    cout<<sstream.str()<<endl;
+
+    mpreal a="123456789123456789.123456789123456789",b="1.80000000";
+    cout.precision(digits);
+    cout<<a<<' '<<b<<' '<<(a>b)<<endl;
 }

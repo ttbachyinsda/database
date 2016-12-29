@@ -89,10 +89,40 @@ SQLResult *GroupHandler::executeQueryWithGroup() {
                 rgIt->second[i] = new RawGroup();
             }
         }
+        assert(false);
+        //You can't use get At for group algorithm.
+        //So I write some code to replace it.
+        //please check it.
 
         for (unsigned int i = 0; i < groupTargets.size(); ++ i) {
-            rgIt->second[i]->add(record->getAt(groupTargets[i].columnID));
+            string tempdata = "";
+            stringstream ss;
+            long long l1; double r1;
+            switch (record->getcolumns()[groupTargets[i].columnID]->getType()[6])
+            {
+            case 'I':
+                tempdata = record->getAt(groupTargets[i].columnID);break;
+            case 'L':
+                tempdata = record->getAt(groupTargets[i].columnID);
+                memcpy(&l1,tempdata.data(),8);
+                ss.clear();
+                ss<<l1;
+                tempdata = ss.str();
+                break;
+            case 'R':
+                tempdata = record->getAt(groupTargets[i].columnID);
+                memcpy(&r1,tempdata.data(),8);
+                ss.clear();
+                ss<<r1;
+                tempdata = ss.str();
+                break;
+            }
+            rgIt->second[i]->add(tempdata);
         }
+
+//        for (unsigned int i = 0; i < groupTargets.size(); ++ i) {
+//            rgIt->second[i]->add(record->getAt(groupTargets[i].columnID));
+//        }
 
 
         ++ (*iterator);

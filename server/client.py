@@ -9,11 +9,14 @@ insert into orders values (120, 'Soap','James'), (1, 'Laptop', 'John');
 select book.name, orders.buyer from book,orders where book.id = orders.id;
 insert into orders values (140, 'Coat', 'Alice');
 '''
-SQLQUERY2 = 'drop database student;'
+SQLQUERY2 = 'show databases;'
 print type(SQLQUERY)
 onedata = {'name': 'ttbachyinsda', 'pass': '123456789', 'method': 'open'}
 r = requests.post("http://128.199.74.228:5000/register", data=onedata)
 print r.text
-onedata = {'name': 'ttbachyinsda', 'pass': '123456789', 'method': 'execsql', 'sql': SQLQUERY}
+onedata = {'name': 'ttbachyinsda', 'pass': '123456789', 'method': 'execsql', 'sql': SQLQUERY2}
+r = requests.post("http://128.199.74.228:5000/register", data=onedata)
+print r.text
+onedata = {'name': 'ttbachyinsda', 'pass': '123456789', 'method': 'close'}
 r = requests.post("http://128.199.74.228:5000/register", data=onedata)
 print r.text
