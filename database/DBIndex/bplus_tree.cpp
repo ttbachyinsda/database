@@ -237,6 +237,36 @@ void bplus_tree::remove_from_index_multi(int parent_off, int off, internal_node_
     return;
 }
 
+void bplus_tree::search_greater(const index_key &key, vector<pair<int, int> > *result) {
+    int off_left = search_leaf(key);
+
+    int off = off_left;
+    record_t *b, *e;
+
+    leaf_node_t leaf;
+    while (off != 0) {
+        block_read(&leaf, off);
+
+        // start point
+        if (off_left == off)
+            b = upper_bound(begin(leaf), end(leaf), key);
+        else
+            b = begin(leaf);
+
+        if (keycmp(b->key, key) < 0)
+            b++;
+
+        // copy
+        e = leaf.children + leaf.n;
+        for (; b != e; ++b)
+            result->push_back(pair<int, int>(b->value.pagenum, b->value.pageposition));
+
+        off = leaf.next;
+    }
+
+    return;
+}
+
 void bplus_tree::search_greater_equal(const index_key &key, vector<pair<int, int> > *result) {
     int off_left = search_leaf_l(key);
 
@@ -262,6 +292,33 @@ void bplus_tree::search_greater_equal(const index_key &key, vector<pair<int, int
             result->push_back(pair<int, int>(b->value.pagenum, b->value.pageposition));
 
         off = leaf.next;
+    }
+
+    return;
+}
+
+void bplus_tree::search_less(const index_key &key, vector<pair<int, int> > *result) {
+    int off_right = search_leaf_l(key);
+
+    int off = off_right;
+    record_t *b, *e;
+
+    leaf_node_t leaf;
+    while (off != 0) {
+        block_read(&leaf, off);
+
+        // start point
+        b = begin(leaf);
+        // copy
+        if (off == off_right)
+            e = lower_bound(begin(leaf), end(leaf), key);
+        else
+            e = leaf.children + leaf.n;
+
+        for (; b != e; ++b)
+            result->push_back(pair<int, int>(b->value.pagenum, b->value.pageposition));
+
+        off = leaf.prev;
     }
 
     return;
