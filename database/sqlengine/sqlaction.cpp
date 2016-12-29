@@ -361,6 +361,7 @@ bool SQLInsertAction::execute()
     int majorRowNum = myTable->getmajornum();
     db_index* tablePrimaryIndex = myTable->getindexes()[majorRowNum];
     bool hasPriKey = tablePrimaryIndex != 0 && !myTable->getmultivalue(majorRowNum);
+    bool isHashFlexibleTable = (myTable->gettabletype() == "HashFlexible");
     if (!hasPriKey) {
         driver->addWarningMessage("Current table does not have a primary key.");
     }
@@ -397,7 +398,8 @@ bool SQLInsertAction::execute()
             if (!QueryCondition::typeComparable(sigValue->type, record->getcolumns()[j]->getType()[6])
                 || !record->setAt(j, sigValue->content, sigValue->type == SQLValue::LiteralType::NUL)) {
                 driver->addErrorMessage("Type mismatch when inserting value " +
-                    ((sigValue->type == SQLValue::LiteralType::NUL) ? "<NULL>" : sigValue->content) + " into table " + identifier);
+                                        UIC::getUserOutput(sigValue->type, sigValue->content) +
+                                        " into table " + identifier);
                 return false;
             }  
         }
@@ -410,11 +412,17 @@ bool SQLInsertAction::execute()
         }
         // 3. Primary Key constraint.
         if (hasPriKey) {
-            vector<pair<int, int> > priKeyRes;
-            tablePrimaryIndex->findAll(SQLOperand::EQUAL,
-                                       priKeyCompiler->compile(valueGroupList->
-                                               at(i)->at(majorRowNum)->content, majorRowNum), &priKeyRes);
-            if (priKeyRes.size() != 0) {
+            bool primaryKeyDuplicated = false;
+            if (isHashFlexibleTable) {
+                primaryKeyDuplicated = myTable->FastFind(record);
+            } else {
+                vector<pair<int, int> > priKeyRes;
+                tablePrimaryIndex->findAll(SQLOperand::EQUAL,
+                                           priKeyCompiler->compile(valueGroupList->
+                                                   at(i)->at(majorRowNum)->content, majorRowNum), &priKeyRes);
+                primaryKeyDuplicated = (priKeyRes.size() != 0);
+            }
+            if (primaryKeyDuplicated) {
                 driver->addErrorMessage("Duplicated primary key: " +
                                                 valueGroupList->at(i)->at(majorRowNum)->content);
                 return false;

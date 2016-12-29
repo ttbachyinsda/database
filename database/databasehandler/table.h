@@ -69,6 +69,12 @@ public:
         cout << "Please don't use it in non-hashflexible table" << endl;
         return false;
     }
+
+    virtual pair<int,int> FastFindPosition(string input)
+    {
+        cout << "Please don't use it in non-hashflexible table" << endl;
+        return make_pair(0,0);
+    }
     vector<pair<int, pair<int, string> > >* gettablecondition();
     vector<vector<pair<string, int> > >* getlinkedcolumn();
     vector<pair<string,int>>* getforeignkeys();

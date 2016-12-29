@@ -1,5 +1,6 @@
 #include "uic.h"
 
+
 UIC::UIC()
 {
 }
@@ -373,7 +374,50 @@ std::vector<std::string> UIC::stringSplit(const std::string &s,
 
 string UIC::getUserOutput(char type, string input, bool isNull)
 {
+    static stringstream ss;
+    static long long l1;
+    static double r1;
+    static time_point<system_clock, chrono::nanoseconds> t1;
     if (isNull) return "<null>";
     if (type == 'I' || type == 'C' || type == 'V') return input;
+    if (type == 'L') {
+        l1 = *((long long*) input.data());
+        ss.str(std::string());
+        ss << l1;
+        return ss.str();
+    }
+    if (type == 'R') {
+        r1 = *((double*) input.data());
+        ss.str(std::string());
+        ss << r1;
+        return ss.str();
+    }
+    if (type == 'D') {
+        t1 = *((time_point<system_clock, chrono::nanoseconds>*) input.data());
+        ss.str(std::string());
+        ss << t1;
+        string retVal = ss.str();
+        retVal = retVal.substr(0, retVal.find_last_of("."));
+        return retVal;
+    }
     return "CANNOT PARSE";
+}
+
+string UIC::getUserOutput(SQLValue::LiteralType type, string input)
+{
+    switch (type) {
+        case SQLValue::ENUMERATE:
+            return getUserOutput('I', input, false);
+        case SQLValue::NUL:
+            return getUserOutput('C', input, true);
+        case SQLValue::DATE:
+            return getUserOutput('D', input, false);
+        case SQLValue::DECIMAL:
+            return getUserOutput('R', input, false);
+        case SQLValue::LONGINT:
+            return getUserOutput('L', input, false);
+        case SQLValue::STRING:
+            return getUserOutput('V', input, false);
+    }
+    return "<MISC>";
 }

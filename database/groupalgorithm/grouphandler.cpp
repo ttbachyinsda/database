@@ -260,13 +260,14 @@ string GroupHandler::getGroupableValue(char type, const string &val) {
         case 'L':
 //            memcpy(&l1, val.data(), 8);
             l1 = *((long long*) val.data());
-            ss.clear();
+            ss.str(std::string());
             ss << l1;
+//            cout << ss.str() << endl;
             return ss.str();
         case 'R':
 //            memcpy(&r1, val.data(), 8);
             r1 = *((double*) val.data());
-            ss.clear();
+            ss.str(std::string());
             ss << r1;
             return ss.str();
     }

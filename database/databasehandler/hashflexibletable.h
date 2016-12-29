@@ -33,6 +33,7 @@ public:
     int getMaxRowNum();
     int getinfo(int reqhashnum, int pagenum, int rownum, vector<int>* infovec);
     bool FastFind(Record* rec);
+    pair<int,int> FastFindPosition(string input);
     void createindex(vector<int> columnnum);
 
 private:
