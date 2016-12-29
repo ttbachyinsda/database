@@ -11,12 +11,12 @@ Table *HashJoin::join() {
     while (passengerIterator->available()) {
         passengerIterator->getdata(passengerRecord);
         pair<int, int> findResult = driverTable->FastFindPosition(
-                    driverIterator->compile(passengerRecord->getAt(passengerTableConditionColumnID),
-                                            driverTableConditionColumnID));
-        if (findResult.first == 0 && findResult.second == 0) continue;
-        driverIterator->access(findResult.first, findResult.second);
-        driverIterator->getdata(driverRecord);
-        addToResultIfMatch(false);
+                    passengerRecord->getAt(passengerTableConditionColumnID));
+        if (findResult.first != 0 || findResult.second != 0) {
+            driverIterator->access(findResult.first, findResult.second);
+            driverIterator->getdata(driverRecord);
+            addToResultIfMatch(false);
+        }
         ++ (*passengerIterator);
     }
 

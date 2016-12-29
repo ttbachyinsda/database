@@ -455,6 +455,7 @@ bool SQLInsertAction::execute()
         record->update();
         int dummy;
         myTable->FastAllInsert(dummy, dummy, record);
+        driver->incAffectedRows();
     }
 
     for (Iterator* it : foreignKeyCompilers) {

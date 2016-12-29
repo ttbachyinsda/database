@@ -126,6 +126,11 @@ void SQLSelectorGroup::dump() const
 std::string SQLResult::toJSON()
 {
     json res;
+    json titleJson;
+    for (std::string& str : title) {
+        titleJson.push_back(str);
+    }
+    res.push_back(titleJson);
     for (std::vector<std::string>& r : data) {
         json now;
         for (std::string& t : r) {

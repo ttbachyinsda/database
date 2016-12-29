@@ -213,14 +213,22 @@ void ModifyHandler::executeDeleteQuery() {
             if (checkConditions() && checkReferenceForCurrentRecord()) {
                 // Check the deleted data is linked to.
                 myTableIterator->deletedata();
+                driver->incAffectedRows();
             }
         }
     } else {
+        vector<pair<int, int> > searchRes;
         while (myTableIterator->available()) {
             myTableIterator->getdata(myTableRecord);
-            if (checkConditions() && checkReferenceForCurrentRecord())
-                myTableIterator->deletedata();
+            if (checkConditions() && checkReferenceForCurrentRecord()) {
+                searchRes.push_back(make_pair(myTableIterator->getpagenum(), myTableIterator->getrownum()));
+            }
             ++ (*myTableIterator);
+        }
+        for (const pair<int, int>& p : searchRes) {
+            myTableIterator->access(p.first, p.second);
+            myTableIterator->deletedata();
+            driver->incAffectedRows();
         }
     }
 }
@@ -237,25 +245,31 @@ void ModifyHandler::executeUpdateQuery() {
         for (const pair<int, int>& p : searchIndexRes) {
             myTableIterator->access(p.first, p.second);
             myTableIterator->getdata(myTableRecord);
-            if (checkConditions()) {
+            if (checkConditions() && modifyRecordContent()) {
                 myTableIterator->deletedata();
-                if (modifyRecordContent()) {
-                    int dum;
-                    myTable->FastAllInsert(dum, dum, myTableRecord);
-                }
+                int dum;
+                myTable->FastAllInsert(dum, dum, myTableRecord);
+                driver->incAffectedRows();
             }
         }
     } else {
+        vector<pair<int, int> > searchRes;
         while (myTableIterator->available()) {
             myTableIterator->getdata(myTableRecord);
             if (checkConditions()) {
-                myTableIterator->deletedata();
-                if (modifyRecordContent()) {
-                    int dum;
-                    myTable->FastAllInsert(dum, dum, myTableRecord);
-                }
+                searchRes.push_back(make_pair(myTableIterator->getpagenum(), myTableIterator->getrownum()));
             }
             ++ (*myTableIterator);
+        }
+        for (const pair<int, int>& p : searchRes) {
+            myTableIterator->access(p.first, p.second);
+            myTableIterator->getdata(myTableRecord);
+            if (modifyRecordContent()) {
+                myTableIterator->deletedata();
+                int dum;
+                myTable->FastAllInsert(dum, dum, myTableRecord);
+                driver->incAffectedRows();
+            }
         }
     }
 }

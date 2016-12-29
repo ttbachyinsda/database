@@ -137,6 +137,9 @@ void DatabaseManager::addDatabase(Database* now)
 void DatabaseManager::removeDatabase(int num)
 {
     Database* temp = databaselist.at(num);
+    while (temp->getTable(0)) {
+        temp->removeTable(0);
+    }
     string tempfilename = temp->getfilename();
     if (temp != NULL)
         delete temp;

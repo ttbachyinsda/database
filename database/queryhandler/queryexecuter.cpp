@@ -54,6 +54,10 @@ bool QueryExecutor::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
     for (std::string& tbName : *tgrp) {
         tableDict[tbName] = tidx;
         Table* thisTable = driver->getCurrentDatabase()->getTableByName(tbName);
+        if (thisTable == 0) {
+            driver->addErrorMessage("Table " + tbName + " does not exist in this database.");
+            return false;
+        }
         tables.push_back(thisTable);
         ++ tidx;
     }

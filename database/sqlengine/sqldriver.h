@@ -49,6 +49,8 @@ public:
 
     const std::vector<std::string> &getWarningMessages() const { return warningMessages; }
 
+    void incAffectedRows() { lastAffectedRows += 1; }
+
     int getLastAffectedRows() const { return lastAffectedRows; }
 
     bool getLastSucceeded() const { return lastSucceeded; }
@@ -82,8 +84,10 @@ public:
 
     void setWorkingDir(const std::string&);
 
-    bool storeBinaryFile(const std::string& filename);
-    bool getBinaryFile(const std::string& tableName, const std::string& filename);
+    bool storeBinaryFile(const string& tableName, const string& primaryKey,
+                         const string &inputFilename);
+    bool getBinaryFile(const string& tableName, const string& primaryKey,
+                       const string &outputFilename);
 
     SQLDriver();
     SQLDriver(const std::string& workingDir);

@@ -62,7 +62,7 @@ public slots:
 
 public:
     QString text;
-    static QNetworkAccessManager* manager;
+    QNetworkAccessManager manager;
     static SQLDriver oldDriver;
     static SQLResult *lastResult;
     int i;

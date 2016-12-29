@@ -107,8 +107,8 @@ float QueryOptimizer::getCost(const ConditionPair &cp, bool reverse,
     float mCost = SortMergeJoin::estimateCost(leftSize, rightSize, leftIndexed, rightIndexed, op);
 
     float hCost = 1e40;
-    int leftTableID = reverse ? cp.left.tableIndex : cp.right.tableIndex;
-    int leftColumnID = reverse ? cp.left.columnIndex : cp.right.columnIndex;
+    int leftTableID = reverse ? cp.right.tableIndex : cp.left.tableIndex;
+    int leftColumnID = reverse ? cp.right.columnIndex : cp.left.columnIndex;
     if (tables[leftTableID]->gettabletype() == "HashFlexible" &&
             tables[leftTableID]->getmajornum() == leftColumnID) {
         hCost = HashJoin::estimateCost(leftSize, rightSize, leftIndexed, rightIndexed, op);

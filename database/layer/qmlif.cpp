@@ -6,7 +6,6 @@ string QMLif::testcss;
 SQLDriver QMLif::oldDriver;
 SQLResult *QMLif::lastResult = 0;
 QQuickItem *QMLif::dbList = 0;
-QNetworkAccessManager *QMLif::manager = new QNetworkAccessManager();
 
 using json = nlohmann::json;
 using namespace std;
@@ -138,9 +137,9 @@ void QMLif::getNetwork(const QString command) {
     request.setUrl(QUrl("http://128.199.74.228:5000/register"));
     QByteArray postData;
     postData.append(QString("name=ttbachyinsda&pass=123456789&method=execsql&sql=")+command);
-    QNetworkReply *reply = manager->post(request,postData);
+    QNetworkReply *reply = manager.post(request,postData);
     
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinish(QNetworkReply*)));
+    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinish(QNetworkReply*)));
 }
 
 void QMLif::replyFinish(QNetworkReply* reply) {
@@ -175,7 +174,7 @@ void QMLif::replyFinish(QNetworkReply* reply) {
         outFile << "</center>\t</body>\n</html>" << endl;
     }
     
-    disconnect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinish(QNetworkReply*)));
+    disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinish(QNetworkReply*)));
     
     emit resultReady(text);
 }
@@ -189,7 +188,7 @@ QMLif::QMLif() {
     
     QByteArray postData;
     postData.append(QString("name=ttbachyinsda&pass=123456789&method=open"));
-    QNetworkReply* reply = manager->post(request,postData);
+    QNetworkReply* reply = manager.post(request,postData);
     
     char temp[1024];
     ifstream inFile("test.css");

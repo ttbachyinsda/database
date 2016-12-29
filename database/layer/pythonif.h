@@ -6,9 +6,6 @@
 using json = nlohmann::json;
 SQLDriver* driver = NULL;
 
-int BulbFile::fm = -1;
-int BulbFile::totalsize = 0;
-
 void beginpythontest()
 {
     testflexible t;
@@ -34,6 +31,34 @@ bool close()
 std::string execSQL(const std::string& sql)
 {
     driver->execute(sql);
+
+    json j;
+    if (driver->getResult() != NULL)
+        j["result"] = driver->getResult()->toJSON();
+    for (const std::string& s : driver->getWarningMessages())
+        j["warning"].push_back(s);
+    for (const std::string& s : driver->getErrorMessages())
+        j["error"].push_back(s);
+    return j.dump();
+}
+
+std::string storeBinaryFile(const std::string& tableName, const std::string& primaryKey,
+                            const std::string &inputFilename) {
+    driver->storeBinaryFile(tableName, primaryKey, inputFilename);
+
+    json j;
+    if (driver->getResult() != NULL)
+        j["result"] = driver->getResult()->toJSON();
+    for (const std::string& s : driver->getWarningMessages())
+        j["warning"].push_back(s);
+    for (const std::string& s : driver->getErrorMessages())
+        j["error"].push_back(s);
+    return j.dump();
+}
+
+std::string getBinaryFile(const std::string& tableName, const std::string& primaryKey,
+                          const std::string &outputFilename) {
+    driver->getBinaryFile(tableName, primaryKey, outputFilename);
 
     json j;
     if (driver->getResult() != NULL)

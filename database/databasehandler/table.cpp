@@ -179,7 +179,7 @@ void Table::readindex()
             case 'D': cp = new CompareDATE(); break;
             default: cout<<"ERROR TYPE"<<' '<<type<<endl; cp = new CompareCHAR(); break;
             }
-            this->DBindex[i] = new db_index(tst, false, multivalue[i],cp);
+            this->DBindex[i] = new db_index(tst, false, multivalue[i],cp,getcolumn(i)->getMaxSize() - 1);
         } else
             this->DBindex[i] = NULL;
         free(tst);
@@ -206,7 +206,7 @@ void Table::createemptyindex(int i)
     case 'D': cp = new CompareDATE(); break;
     default: cout<<"ERROR TYPE"<<' '<<type<<endl; cp = new CompareCHAR(); break;
     }
-    this->DBindex[i] = new db_index(tst, true, multivalue[i],cp);
+    this->DBindex[i] = new db_index(tst, true, multivalue[i],cp,getcolumn(i)->getMaxSize() - 1);
     free(tst);
 }
 

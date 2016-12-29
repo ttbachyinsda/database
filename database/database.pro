@@ -84,7 +84,9 @@ SOURCES += main.cpp\
     queryhandler/modifyhandler.cpp \
     tester/testaes.cpp \
     aesalgorithm/aes.cpp \
-    aesalgorithm/encrypt.cpp
+    aesalgorithm/encrypt.cpp \
+    DBIndex/bplus_treel.cpp \
+    layer/qmlif.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -171,7 +173,9 @@ HEADERS  += mainwindow.h \
     queryhandler/modifyhandler.h \
     tester/testaes.h \
     aesalgorithm/aes.h \
-    aesalgorithm/encrypt.h
+    aesalgorithm/encrypt.h \
+    DBIndex/bplus_treel.h \
+    layer/qmlif.h
 
 
 DISTFILES += \

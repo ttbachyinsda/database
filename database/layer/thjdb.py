@@ -106,6 +106,14 @@ close = _thjdb.close
 def execSQL(sql):
     return _thjdb.execSQL(sql)
 execSQL = _thjdb.execSQL
+
+def storeBinaryFile(tableName, primaryKey, inputFilename):
+    return _thjdb.storeBinaryFile(tableName, primaryKey, inputFilename)
+storeBinaryFile = _thjdb.storeBinaryFile
+
+def getBinaryFile(tableName, primaryKey, outputFilename):
+    return _thjdb.getBinaryFile(tableName, primaryKey, outputFilename)
+getBinaryFile = _thjdb.getBinaryFile
 # This file is compatible with both classic and new-style classes.
 
 

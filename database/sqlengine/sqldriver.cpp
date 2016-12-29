@@ -142,44 +142,124 @@ void SQLDriver::setWorkingDir(const std::string &workingDir) {
 bool SQLDriver::storeBinaryFile(const string& tableName, const string& primaryKey,
                                 const string &inputFilename)
 {
-    if (!checkEncrypted()) return false;
+    clearPreviousSession();
+    if (isEncrypted) return false;
     if (currentDatabase == 0) {
         addErrorMessage("No database is selected when inserting into table "
                                 + tableName);
+        lastSucceeded = false;
         return false;
     }
     Table* myTable = currentDatabase->getTableByName(tableName);
     if (myTable == 0) {
         addErrorMessage("Table " + tableName + " does not exist.");
+        lastSucceeded = false;
         return false;
     }
-    int insertColID = myTable->getColumnIndexByName(columnName);
-    if (insertColID != 1 || myTable->getcolumns()[columnName]->getType()[6] != 'B') {
-        addErrorMessage("Target column does not exist or is not varbinary type!");
+    db_index* myTableIndex = myTable->getindexes()[0];
+
+    if (myTable->getcolumns()[1]->getType()[6] != 'B' || myTableIndex == 0) {
+        addErrorMessage("The table does not support binary file storage.");
+        lastSucceeded = false;
         return false;
     }
+
     ifstream in(inputFilename, ios::in | ios::binary);
+    if (!in) {
+        addErrorMessage("The file does not exist.");
+        lastSucceeded = false;
+        return false;
+    }
     istreambuf_iterator<char> beg(in), end;
     string fileBuffer(beg, end);
     in.close();
 
+    Iterator* iter = IteratorFactory::getiterator(myTable);
+    Record* rec = RecordFactory::getrecord(myTable);
+
+    vector<pair<int, int> > fRes;
+    myTableIndex->findAll(SQLOperand::EQUAL, iter->compile(primaryKey, 0), &fRes);
+
+    if (fRes.size() != 0) {
+        addErrorMessage("The primary key is duplicated.");
+        delete iter; delete rec;
+        lastSucceeded = false;
+        return false;
+    }
+
     int storeOffset = BulbFile::put(fileBuffer.data(), fileBuffer.length());
-
-    memcpy(data, &this->nowoffset, 4);
-    int strsize = input.length();
+    char data[8];
+    memcpy(data, &storeOffset, 4);
+    int strsize = fileBuffer.length();
     memcpy(data + 4, &strsize, 4);
+    string dataStr(data, 8);
+    rec->setAt(0, primaryKey, false);
+    rec->setAt(1, dataStr, false);
+    rec->update();
 
-    data[this->size] = IS_NOT_NULL;
-    this->isNull = false;
+    int dum;
+    myTable->FastAllInsert(dum, dum, rec);
+
+    delete iter;
+    delete rec;
+    lastSucceeded = true;
+    return true;
 }
 
-bool SQLDriver::getBinaryFile(const string &tableName, const string &filename)
+bool SQLDriver::getBinaryFile(const string &tableName, const string& primaryKey,
+                              const string &outputFilename)
 {
-    if (isNull)
-        return "NULL__DATA";
-    if (this->nowoffset == -1)
-        return "";
-    int strsize;
-    memcpy(&strsize, data + 4, 4);
-    return BulbFile::get(this->nowoffset, strsize);
+    clearPreviousSession();
+    if (isEncrypted) return false;
+    if (currentDatabase == 0) {
+        addErrorMessage("No database is selected when inserting into table "
+                                + tableName);
+        lastSucceeded = false;
+        return false;
+    }
+    Table* myTable = currentDatabase->getTableByName(tableName);
+    if (myTable == 0) {
+        addErrorMessage("Table " + tableName + " does not exist.");
+        lastSucceeded = false;
+        return false;
+    }
+    db_index* myTableIndex = myTable->getindexes()[0];
+
+    if (myTable->getcolumns()[1]->getType()[6] != 'B' || myTableIndex == 0) {
+        addErrorMessage("The table does not support binary file storage.");
+        lastSucceeded = false;
+        return false;
+    }
+
+    Iterator* iter = IteratorFactory::getiterator(myTable);
+    Record* rec = RecordFactory::getrecord(myTable);
+
+    vector<pair<int, int> > fRes;
+    myTableIndex->findAll(SQLOperand::EQUAL, iter->compile(primaryKey, 0), &fRes);
+
+    if (fRes.size() != 1) {
+        addErrorMessage("The primary key does not exist");
+        delete iter; delete rec;
+        lastSucceeded = false;
+        return false;
+    }
+
+    iter->access(fRes[0].first, fRes[0].second);
+    iter->getdata(rec);
+
+    string dataRef = rec->getAt(1);
+    int offset, strsize;
+    memcpy(&offset, dataRef.data(), 4);
+    memcpy(&strsize, (char*)dataRef.data() + 4, 4);
+    string fileContent = BulbFile::get(offset, strsize);
+
+    ofstream fout(outputFilename, ios::binary);
+    fout.write(fileContent.data(), fileContent.size());
+    fout.close();
+
+    delete iter;
+    delete rec;
+    lastSucceeded = true;
+    return true;
+
 }
