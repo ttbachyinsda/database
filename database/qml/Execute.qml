@@ -26,6 +26,7 @@ Item {
         anchors.centerIn: parent
         spacing: dp(32)
 
+
         TextField {
             id: command
             objectName: "field"
@@ -38,9 +39,31 @@ Item {
             font.pixelSize: dp(25)
 
             onAccepted: {
-                testSearch.doSomething(command.text)
-                cyclicColorProgress.visible = true
-                column.enabled = false
+                if (switchNet.checked == false) {
+                    testSearch.doSomething(command.text)
+                    cyclicColorProgress.visible = true
+                    column.enabled = false
+                }
+                else {
+                    testSearch.getNetwork(command.text)
+                }
+            }
+        }
+
+        RowLayout {
+            anchors.horizontalCenter: parent.horizontalCenter
+            Switch {
+                id: switchNet
+                checked: true
+                enabled: true
+                darkBackground: index == 1
+            }
+
+            Label {
+                font.family: "Roboto"
+                font.weight: Font.Light
+                font.pixelSize: dp(20)
+                text: switchNet.checked ? "Network" : "Local"
             }
         }
 

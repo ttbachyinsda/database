@@ -165,8 +165,8 @@ class SQLResult
 {
 public:
     const int columns;
-    std::list<std::string> title;
-    std::list<std::vector<std::string> > data;
+    std::vector<std::string> title;
+    std::vector<std::vector<std::string> > data;
 
     SQLResult(int col) : columns(col) {}
     ~SQLResult() {}

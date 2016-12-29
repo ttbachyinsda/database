@@ -1,8 +1,14 @@
 #include "qmlif.h"
 #include <fstream>
+#include "json.hpp"
+#include <QNetworkRequest>
 string QMLif::testcss;
 SQLDriver QMLif::oldDriver;
+SQLResult *QMLif::lastResult;
 QQuickItem *QMLif::dbList = 0;
+QNetworkAccessManager QMLif::manager;
+
+using json = nlohmann::json;
 using namespace std;
 
 void WorkerThread::run() {
@@ -11,21 +17,25 @@ void WorkerThread::run() {
     cout << command.toStdString() << endl;
     cout << driver->hasResult() << endl;
     QTextStream outFile(&result);
-    outFile << "<!DOCTYPE html>\n<html>\n" << endl;
+    outFile << "<!DOCTYPE html>\n<html>\n<style type=\"text/css\">\n" << QMLif::testcss.c_str() << "</style>\n" << endl;
     if (driver->hasResult()) {
         outFile << "<body>\n<center>\t<table>\n\t\t<caption>Result</caption>\n";
         outFile << "\t\t<thead>\n\t\t\t<tr>" << endl;
-        SQLResult* temp = driver->getResult();
-        for (std::string& t : temp->title) {
+        QMLif::lastResult = driver->getResult();
+        for (std::string& t : QMLif::lastResult->title) {
             outFile << "\t\t\t\t<th>" << t.c_str() << endl;
         }
         outFile << "\t\t</thead>" << endl;
         outFile << "\t\t<tbody>" << endl;
-        for (std::vector<std::string>& r : temp->data) {
+        int i = 0;
+        for (std::vector<std::string>& r : QMLif::lastResult->data) {
+            i ++;
             outFile << "\t\t\t<tr>" << endl;
             for (std::string& t : r) {
                 outFile << "\t\t\t\t<td>" << t.c_str() << endl;
             }
+            if (i > 50)
+                break;
         }
         outFile << "\t\t</tbody>" << endl;
         outFile << "\t\t</table>" << endl;
@@ -72,10 +82,115 @@ QStringList QMLif::getTable(QString name) {
     return dataList;
 }
 
+QString QMLif::getNextResult() {
+    if (counter * 50 + 50 < lastResult->data.size())
+        counter++;
+    QString result = "";
+    QTextStream outFile(&result);
+    outFile << "<!DOCTYPE html>\n<html>\n<style type=\"text/css\">\n" << QMLif::testcss.c_str() << "</style>\n" << endl;
+    outFile << "<body>\n<center>\t<table>\n\t\t<caption>Result</caption>\n";
+    outFile << "\t\t<thead>\n\t\t\t<tr>" << endl;
+    for (std::string& t : QMLif::lastResult->title) {
+        outFile << "\t\t\t\t<th>" << t.c_str() << endl;
+    }
+    outFile << "\t\t</thead>" << endl;
+    outFile << "\t\t<tbody>" << endl;
+    for (int i = counter * 50; i < counter * 50 + 50 && i < lastResult->data.size(); ++i) {
+        outFile << "\t\t\t<tr>" << endl;
+        for (std::string& t : lastResult->data[i]) {
+            outFile << "\t\t\t\t<td>" << t.c_str() << endl;
+        }
+    }
+    outFile << "\t\t</tbody>" << endl;
+    outFile << "\t\t</table>" << endl;
+    outFile << "</center>\t</body>\n</html>" << endl;
+    return result;
+}
+
+QString QMLif::getPrevResult() {
+    if (counter >= 1)
+        counter--;
+    QString result = "";
+    QTextStream outFile(&result);
+    outFile << "<!DOCTYPE html>\n<html>\n<style type=\"text/css\">\n" << QMLif::testcss.c_str() << "</style>\n" << endl;
+    outFile << "<body>\n<center>\t<table>\n\t\t<caption>Result</caption>\n";
+    outFile << "\t\t<thead>\n\t\t\t<tr>" << endl;
+    for (std::string& t : QMLif::lastResult->title) {
+        outFile << "\t\t\t\t<th>" << t.c_str() << endl;
+    }
+    outFile << "\t\t</thead>" << endl;
+    outFile << "\t\t<tbody>" << endl;
+    for (int i = counter * 50; i < counter * 50 + 50 && i < lastResult->data.size(); ++i) {
+        outFile << "\t\t\t<tr>" << endl;
+        for (std::string& t : lastResult->data[i]) {
+            outFile << "\t\t\t\t<td>" << t.c_str() << endl;
+        }
+    }
+    outFile << "\t\t</tbody>" << endl;
+    outFile << "\t\t</table>" << endl;
+    outFile << "</center>\t</body>\n</html>" << endl;
+    return result;
+}
+
+void QMLif::getNetwork(const QString command) {
+    counter = 0;
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://128.199.74.228:5000/register"));
+    QByteArray postData;
+    postData.append(QString("name=ttbachyinsda&pass=123456789&method=execsql&sql=")+command);
+    QNetworkReply *reply = manager.post(request,postData);
+    
+    connect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinish(QNetworkReply*)));
+}
+
+void QMLif::replyFinish(QNetworkReply* reply) {
+    json temp;
+    QString Qtemp(reply->readAll());
+//    cout << Qtemp.toStdString() << endl;
+    temp = json::parse(Qtemp.toStdString());
+    text.clear();
+    
+    if(temp["result"] != nullptr) {
+        json result;
+        string tempS = temp["result"];
+        result = json::parse(tempS);
+        cout << result.at(0).dump() << endl;
+        QTextStream outFile(&text);
+        outFile << "<!DOCTYPE html>\n<html>\n<style type=\"text/css\">\n" << testcss.c_str() << "</style>\n" << endl;
+        outFile << "<body>\n<center>\t<table>\n\t\t<caption>Result</caption>\n";
+//        outFile << "\t\t<thead>\n\t\t\t<tr>" << endl;
+//        for (std::string& t : QMLif::lastResult->title) {
+//            outFile << "\t\t\t\t<th>" << t.c_str() << endl;
+//        }
+//        outFile << "\t\t</thead>" << endl;
+        outFile << "\t\t<tbody>" << endl;
+        for (json r : result) {
+            outFile << "\t\t\t<tr>" << endl;
+            for (std::string t : r) {
+                outFile << "\t\t\t\t<td>" << t.c_str() << endl;
+            }
+        }
+        outFile << "\t\t</tbody>" << endl;
+        outFile << "\t\t</table>" << endl;
+        outFile << "</center>\t</body>\n</html>" << endl;
+    }
+    
+    disconnect(&manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinish(QNetworkReply*)));
+    
+    emit resultReady(text);
+}
+
 QMLif::QMLif() {
     text = "HaHa";
     i = 0;
 
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://128.199.74.228:5000/register"));
+    
+    QByteArray postData;
+    postData.append(QString("name=ttbachyinsda&pass=123456789&method=open"));
+    QNetworkReply* reply = manager.post(request,postData);
+    
     char temp[1024];
     ifstream inFile("test.css");
     while(!inFile.eof()) {
