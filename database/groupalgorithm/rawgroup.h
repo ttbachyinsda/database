@@ -12,7 +12,7 @@
 #include <map>
 using namespace std;
 using mpfr::mpreal;
-#define MAX_DIGITS 50
+#define MAX_DIGITS 5
 
 class RawGroup {
 public:

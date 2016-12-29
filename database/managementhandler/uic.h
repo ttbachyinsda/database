@@ -10,6 +10,16 @@
 #include "../typehandler/databasetext.h"
 #include "../typehandler/databasetype.h"
 #include "../typehandler/databasevarchar.h"
+#include "../sqlengine/sqlstruct.h"
+#include "../typehandler/chrono_io.h"
+#include "../typehandler/date.h"
+#include <chrono>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+using namespace date;
+using namespace std::chrono;
 #include <sstream>
 #include <vector>
 
@@ -44,6 +54,8 @@ public:
     static DataBaseType *copyType(DataBaseType *oriType);
     static std::vector<std::string> stringSplit(const std::string &s,
                                               const std::string &delim);
+    static string getUserOutput(char type, string input, bool isNull);
+    static string getUserOutput(SQLValue::LiteralType type, string input);
 };
 
 #endif // UIC_H

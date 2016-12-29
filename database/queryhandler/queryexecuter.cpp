@@ -54,6 +54,10 @@ bool QueryExecutor::setQuery(SQLTableGroup *tgrp, SQLSelectorGroup *sgrp, SQLCon
     for (std::string& tbName : *tgrp) {
         tableDict[tbName] = tidx;
         Table* thisTable = driver->getCurrentDatabase()->getTableByName(tbName);
+        if (thisTable == 0) {
+            driver->addErrorMessage("Table " + tbName + " does not exist in this database.");
+            return false;
+        }
         tables.push_back(thisTable);
         ++ tidx;
     }
@@ -243,11 +247,19 @@ bool QueryExecutor::executeQuery()
     Iterator* resultTableIterator = IteratorFactory::getiterator(resultTable);
     Record* resultTableRecord = RecordFactory::getrecord(resultTable);
 
+    vector<char> dispTypes;
+    for (unsigned t = 0; t < operatingSelectors.size(); ++ t)
+        dispTypes.push_back(resultTableRecord->
+                            getcolumns()[operatingSelectors[t].columnIndex]->getType()[6]);
+
     while (resultTableIterator->available()) {
         resultTableIterator->getdata(resultTableRecord);
         currentResult->addNew();
         for (unsigned t = 0; t < operatingSelectors.size(); ++ t) {
-            currentResult->setData(t, resultTableRecord->getAt(operatingSelectors[t].columnIndex));
+            string data = resultTableRecord->getAt(operatingSelectors[t].columnIndex);
+            bool resIsNull = resultTableRecord->getIsNull(operatingSelectors[t].columnIndex);
+            data = UIC::getUserOutput(dispTypes[t], data, resIsNull);
+            currentResult->setData(t, data);
         }
         ++ (*resultTableIterator);
     }

@@ -106,11 +106,22 @@ float QueryOptimizer::getCost(const ConditionPair &cp, bool reverse,
     float nCost = NestedLoopJoin::estimateCost(leftSize, rightSize, leftIndexed, rightIndexed, op);
     float mCost = SortMergeJoin::estimateCost(leftSize, rightSize, leftIndexed, rightIndexed, op);
 
-    if (nCost < mCost) {
+    float hCost = 1e40;
+    int leftTableID = reverse ? cp.right.tableIndex : cp.left.tableIndex;
+    int leftColumnID = reverse ? cp.right.columnIndex : cp.left.columnIndex;
+    if (tables[leftTableID]->gettabletype() == "HashFlexible" &&
+            tables[leftTableID]->getmajornum() == leftColumnID) {
+        hCost = HashJoin::estimateCost(leftSize, rightSize, leftIndexed, rightIndexed, op);
+    }
+
+    if (nCost < mCost && nCost < hCost) {
         strat = 'n';
         return nCost;
-    } else {
+    } else if (mCost < hCost) {
         strat = 'm';
         return mCost;
+    } else {
+        strat = 'h';
+        return hCost;
     }
 }

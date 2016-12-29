@@ -4,9 +4,8 @@
 #include <QNetworkRequest>
 string QMLif::testcss;
 SQLDriver QMLif::oldDriver;
-SQLResult *QMLif::lastResult;
+SQLResult *QMLif::lastResult = 0;
 QQuickItem *QMLif::dbList = 0;
-QNetworkAccessManager QMLif::manager;
 
 using json = nlohmann::json;
 using namespace std;

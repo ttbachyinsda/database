@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdlib>
 
+#include <iostream>
+
 /* Implementation of yyFlexScanner */
 #include "sqllexer.h"
 #include "sqldriver.h"
@@ -27,10 +29,13 @@ using token = yy::SQLParser::token;
 %option noyywrap
 %option c++
 
+%x S
+
 %%
 
 %{          /** Code executed at the beginning of yylex **/
             yylval = lval;
+            std::string stringBuffer;
 %}
 
 ([ \t]+)                { /* Just ignore */         }
@@ -56,6 +61,7 @@ using token = yy::SQLParser::token;
 (?i:"char")             { return token::CHAR;       }
 (?i:"datetime")         { return token::DATETIME;   }
 (?i:"double")           { return token::DOUBLE;     }
+(?i:"varbinary")        { return token::VARBINARY;  }
 (?i:"is")               { return token::IS;         }
 (?i:"not")              { return token::NOT;        }
 (?i:"null")             { return token::NUL;        }
@@ -64,6 +70,11 @@ using token = yy::SQLParser::token;
 (?i:"check")            { return token::CHECK;      }
 (?i:"in")               { return token::IN;         }
 (?i:"like")             { return token::LIKE;       }
+(?i:"master")           { return token::MASTER;     }
+(?i:"encryption")       { return token::ENCRYPTION; }
+(?i:"decryption")       { return token::DECRYPTION; }
+(?i:"password")         { return token::PASSWORD;   }
+(?i:"open")             { return token::OPEN;       }
 
 (?i:"foreign")          { return token::FOREIGN;    }
 (?i:"references")       { return token::REFERENCES; }
@@ -97,16 +108,44 @@ using token = yy::SQLParser::token;
     return token::VALUE_DATE;
 }
 
+[0-9]+\.[0-9]+          {
+                            yylval->build<std::string>(yytext);
+                            return token::VALUE_DECIMAL;
+                        }
+
+[0-9]+L                 {
+                            std::string strtxt = yytext;
+                            strtxt = strtxt.substr(0, strtxt.size() - 1);
+                            yylval->build<std::string>(strtxt);
+                            return token::VALUE_LINT;
+                        }
+
 [0-9]+                  {
                             yylval->build<std::string>(yytext);
                             return token::VALUE_INT;
                         }
 
-'[^']*'                 {
-                            std::string strtxt = yytext;
-                            strtxt = strtxt.substr(1, strtxt.size() - 2);
-                            yylval->build<std::string>(strtxt);
+<INITIAL>'              {
+                            BEGIN(S);
+                            stringBuffer.clear();
+                        }
+
+<S>'                    {
+                            BEGIN(INITIAL);
+                            yylval->build<std::string>(stringBuffer);
                             return token::VALUE_STRING;
+                        }
+
+<S>.                    {
+                            stringBuffer += yytext;
+                        }
+
+<S>\\'                  {
+                            stringBuffer += "\'";
+                        }
+
+<S>\\\"                 {
+                            stringBuffer += "\"";
                         }
 
 [A-Za-z][_0-9A-Za-z]*   {

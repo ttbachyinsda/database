@@ -10,11 +10,15 @@ Table *HashJoin::join() {
 
     while (passengerIterator->available()) {
         passengerIterator->getdata(passengerRecord);
-//        driverTable->FastFind(driverRecord);
-        addToResultIfMatch(false);
+        pair<int, int> findResult = driverTable->FastFindPosition(
+                    passengerRecord->getAt(passengerTableConditionColumnID));
+        if (findResult.first != 0 || findResult.second != 0) {
+            driverIterator->access(findResult.first, findResult.second);
+            driverIterator->getdata(driverRecord);
+            addToResultIfMatch(false);
+        }
         ++ (*passengerIterator);
     }
-
 
     return resultTable;
 }
@@ -24,7 +28,7 @@ HashJoin::HashJoin(const vector<ConditionPair> &cond) : JoinStrategy(cond) {}
 float HashJoin::estimateCost(int dSize, int pSize, int dIndex, int pIndex, SQLOperand opCode) {
     // Assert: driver must be a hash table.
     if (opCode == SQLOperand::EQUAL) {
-        return pSize + dSize / 1024;
+        return pSize * 2;
     }
     return 1e40;
 }

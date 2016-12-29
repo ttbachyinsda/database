@@ -776,6 +776,37 @@ bool HashFlexibleTable::FastFind(Record* rec)
     }
     return can;
 }
+pair<int,int> HashFlexibleTable::FastFindPosition(string input)
+{
+    int opagenum=0,orownum=0;
+    int snum = (majornum == -1 ? 0 : majornum);
+    int hashnum = getHashNum(input);
+    int nowpagenum = HBeginPageNum[hashnum];
+    if (atemprecord == 0) {
+        atemprecord = new FlexibleRecord();
+        DataBaseType** col = UIC::copytype(getcolumns(), getcolumncount());
+        atemprecord->Initialize(col, getcolumncount());
+    }
+    while (nowpagenum >= 2) {
+        int index;
+        BufType b = BPM->getPage(fileid, nowpagenum, index);
+        int pagerownum = UIC::chartoint(b + 4);
+        int jumppagenum = UIC::chartoint(b + 16);
+        for (int i = 0; i < pagerownum; i++) {
+            int position = UIC::chartoint(b + __position(i));
+            if (position) {
+                atemprecord->Input(b + position);
+                if (atemprecord->getAt(snum) == input) {
+                    opagenum = nowpagenum;
+                    orownum = i;
+                    return make_pair(opagenum,orownum);
+                }
+            }
+        }
+        nowpagenum = jumppagenum;
+    }
+    return make_pair(opagenum,orownum);
+}
 
 unsigned long HashFlexibleTable::getTraverseCost() {
     return getPageNum();

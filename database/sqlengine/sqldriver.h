@@ -35,6 +35,7 @@ class SQLDriver {
     DatabaseManager* databaseManager;
     Database* currentDatabase;
     QueryExecutor* queryExecuter;
+    bool isEncrypted;
 
     void clearPreviousSession();
 
@@ -47,6 +48,8 @@ public:
     const std::vector<std::string> &getErrorMessages() const { return errorMessages; }
 
     const std::vector<std::string> &getWarningMessages() const { return warningMessages; }
+
+    void incAffectedRows() { lastAffectedRows += 1; }
 
     int getLastAffectedRows() const { return lastAffectedRows; }
 
@@ -73,7 +76,18 @@ public:
 
     SQLResult* getResult() const { return result; }
 
+    bool getIsEncrypted() const { return isEncrypted; }
+
+    void encryptDatabaseManager(const std::string& password);
+
+    void decryptDatabaseManager(const std::string& password);
+
     void setWorkingDir(const std::string&);
+
+    bool storeBinaryFile(const string& tableName, const string& primaryKey,
+                         const string &inputFilename);
+    bool getBinaryFile(const string& tableName, const string& primaryKey,
+                       const string &outputFilename);
 
     SQLDriver();
     SQLDriver(const std::string& workingDir);

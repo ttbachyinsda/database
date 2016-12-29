@@ -52,7 +52,6 @@ SOURCES += main.cpp\
     typehandler/databasevarchar.cpp \
     DBIndex/bplus_tree.cpp \
     DBIndex/db_index.cpp \
-    layer/qmlif.cpp \
     typehandler/databasereal.cpp \
     typehandler/databaselint.cpp \
     typehandler/databasedate.cpp \
@@ -86,7 +85,8 @@ SOURCES += main.cpp\
     tester/testaes.cpp \
     aesalgorithm/aes.cpp \
     aesalgorithm/encrypt.cpp \
-    DBIndex/bplus_treel.cpp
+    DBIndex/bplus_treel.cpp \
+    layer/qmlif.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -141,7 +141,6 @@ HEADERS  += mainwindow.h \
     typehandler/databaselint.h \
     layer/json.hpp \
     layer/pythonif.h \
-    layer/qmlif.h \
     typehandler/date.h \
     typehandler/databasedate.h \
     typehandler/chrono_io.h \
@@ -175,7 +174,8 @@ HEADERS  += mainwindow.h \
     tester/testaes.h \
     aesalgorithm/aes.h \
     aesalgorithm/encrypt.h \
-    DBIndex/bplus_treel.h
+    DBIndex/bplus_treel.h \
+    layer/qmlif.h
 
 
 DISTFILES += \

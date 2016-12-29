@@ -89,35 +89,14 @@ SQLResult *GroupHandler::executeQueryWithGroup() {
                 rgIt->second[i] = new RawGroup();
             }
         }
-        assert(false);
+//        assert(false);
         //You can't use get At for group algorithm.
         //So I write some code to replace it.
         //please check it.
 
         for (unsigned int i = 0; i < groupTargets.size(); ++ i) {
-            string tempdata = "";
-            stringstream ss;
-            long long l1; double r1;
-            switch (record->getcolumns()[groupTargets[i].columnID]->getType()[6])
-            {
-            case 'I':
-                tempdata = record->getAt(groupTargets[i].columnID);break;
-            case 'L':
-                tempdata = record->getAt(groupTargets[i].columnID);
-                memcpy(&l1,tempdata.data(),8);
-                ss.clear();
-                ss<<l1;
-                tempdata = ss.str();
-                break;
-            case 'R':
-                tempdata = record->getAt(groupTargets[i].columnID);
-                memcpy(&r1,tempdata.data(),8);
-                ss.clear();
-                ss<<r1;
-                tempdata = ss.str();
-                break;
-            }
-            rgIt->second[i]->add(tempdata);
+            char type = record->getcolumns()[groupTargets[i].columnID]->getType()[6];
+            rgIt->second[i]->add(getGroupableValue(type, record->getAt(groupTargets[i].columnID)));
         }
 
 //        for (unsigned int i = 0; i < groupTargets.size(); ++ i) {
@@ -138,6 +117,12 @@ SQLResult *GroupHandler::executeQueryWithGroup() {
         } else {
             retVal->addTitleField(myTable->getcolumnname(referers[displays[i]]));
         }
+    }
+
+    vector<char> dispTypes;
+    for (unsigned int j = 0; j < displays.size(); ++ j) {
+        if (displays[j] >= 1000) dispTypes.push_back('P');
+        else dispTypes.push_back(myTable->getcolumns()[referers[displays[j]]]->getType()[6]);
     }
 
     for (rawGroupMap::iterator iterator1 = rawGroups.begin(); iterator1 != rawGroups.end(); ++ iterator1) {
@@ -165,6 +150,7 @@ SQLResult *GroupHandler::executeQueryWithGroup() {
             } else {
                 int colValUniqueID = iterator1->first[displays[j]];
                 colDisp = referColUniqueVal[displays[j]][colValUniqueID];
+                colDisp = UIC::getUserOutput(dispTypes[j], colDisp, false);
             }
             retVal->setData(j, colDisp);
         }
@@ -197,8 +183,13 @@ SQLResult *GroupHandler::executeQueryWithoutGroup() {
         iterator->getdata(record);
 
         for (unsigned int i = 0; i < groupTargets.size(); ++ i) {
-            resultGroup[i]->add(record->getAt(groupTargets[i].columnID));
+            char type = record->getcolumns()[groupTargets[i].columnID]->getType()[6];
+            resultGroup[i]->add(getGroupableValue(type, record->getAt(groupTargets[i].columnID)));
         }
+
+//        for (unsigned int i = 0; i < groupTargets.size(); ++ i) {
+//            resultGroup[i]->add(record->getAt(groupTargets[i].columnID));
+//        }
 
         ++ (*iterator);
     }
@@ -256,4 +247,29 @@ string GroupHandler::convertTitle(const string &orig, SQLGroupMethod method) {
     if (method == MAX) return orig + ".max";
     if (method == MIN) return orig + ".min";
     return orig;
+}
+
+string GroupHandler::getGroupableValue(char type, const string &val) {
+    static stringstream ss;
+    static long long l1;
+    static double r1;
+    switch (type)
+    {
+        case 'I':
+            return val;
+        case 'L':
+//            memcpy(&l1, val.data(), 8);
+            l1 = *((long long*) val.data());
+            ss.str(std::string());
+            ss << l1;
+//            cout << ss.str() << endl;
+            return ss.str();
+        case 'R':
+//            memcpy(&r1, val.data(), 8);
+            r1 = *((double*) val.data());
+            ss.str(std::string());
+            ss << r1;
+            return ss.str();
+    }
+    return "";
 }

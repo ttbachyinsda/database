@@ -1,5 +1,8 @@
 #include "bulbfile.h"
 
+int BulbFile::fm = -1;
+int BulbFile::totalsize = 0;
+
 void BulbFile::setfilename(string filename, bool reconstruct)
 {
     if (fm != -1)

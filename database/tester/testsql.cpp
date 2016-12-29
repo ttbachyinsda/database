@@ -3,6 +3,7 @@
 #include "../sqlengine/sqlstruct.h"
 #include <fstream>
 #include <iostream>
+#include <QTime>
 using namespace std;
 
 TestSQL::TestSQL()
@@ -22,21 +23,66 @@ void TestSQL::startTestInteractive()
         getline(cin, input);
         if (input == "quit")
             break;
-        sqlDriver.execute(input);
+        QTime timer;
+        timer.start();
+        if (input.substr(0, 4) == "exec") {
+            string filename = input.substr(5);
+            ifstream in(filename, ios::in);
+            istreambuf_iterator<char> beg(in), end;
+            string data(beg, end);
+            in.close();
+            sqlDriver.execute(data);
+        } else {
+            sqlDriver.execute(input);
+        }
         if (sqlDriver.getLastSucceeded() == false) {
             cout << "\033[31m ERROR: \033[0m" << sqlDriver.getErrorMessages()[0] << endl;
         } else {
+            if (sqlDriver.hasResult())
+                sqlDriver.getResult()->dumpToConsole();
             if (sqlDriver.getWarningMessages().size() != 0)
                 cout << "\033[33m WARNING: \033[0m" << sqlDriver.getWarningMessages()[0] << endl;
             else
-                cout << "Succeeded!" << endl;
-            if (sqlDriver.hasResult())
-                sqlDriver.getResult()->dumpToConsole();
+                cout << "OK." << endl;
+            cout << "Affected Rows = " << sqlDriver.getLastAffectedRows() <<
+                    ", time elapsed = " << timer.elapsed() / 1000.0 << endl;
         }
     }
 }
 
-void TestSQL::startTestFile(const char* filename)
+void TestSQL::startTestBlob()
+{
+    SQLDriver sqlDriver(workingDir);
+    sqlDriver.execute("drop database a;create database a;use a;drop table img;create table img (id int(4), image varbinary(), primary key(id));");
+    checkPoint(&sqlDriver);
+    sqlDriver.storeBinaryFile("img", "1", "104.jpg");
+    checkPoint(&sqlDriver);
+    sqlDriver.getBinaryFile("img", "1", "out.jpg");
+    checkPoint(&sqlDriver);
+    sqlDriver.execute("select * from img;\n");
+    checkPoint(&sqlDriver);
+    sqlDriver.execute("delete from img where id = 1;");
+    checkPoint(&sqlDriver);
+    sqlDriver.execute("select * from img;\n");
+    checkPoint(&sqlDriver);
+
+}
+
+void TestSQL::checkPoint(SQLDriver *d)
+{
+    if (d->getLastSucceeded() == false) {
+        cout << "\033[31m ERROR: \033[0m" << d->getErrorMessages()[0] << endl;
+    } else {
+        if (d->getWarningMessages().size() != 0)
+            cout << "\033[33m WARNING: \033[0m" << d->getWarningMessages()[0] << endl;
+        else
+            cout << "Succeeded!" << endl;
+        if (d->hasResult())
+            d->getResult()->dumpToConsole();
+    }
+}
+
+void TestSQL::startTestFile(const char* filename, const std::string& dump)
 {
     cout << "Now Start SQL Test..." << endl;
     ifstream in(filename, ios::in);
@@ -44,7 +90,7 @@ void TestSQL::startTestFile(const char* filename)
     string data(beg, end);
     in.close();
     SQLDriver sqlDriver(workingDir);
-    sqlDriver.execute(data);
+    sqlDriver.execute("use orderDB;" + data);
     if (sqlDriver.getLastSucceeded() == false) {
         cout << "\033[31m ERROR: \033[0m" << sqlDriver.getErrorMessages()[0] << endl;
     } else {
@@ -52,8 +98,9 @@ void TestSQL::startTestFile(const char* filename)
             cout << "\033[33m WARNING: \033[0m" << sqlDriver.getWarningMessages()[0] << endl;
         else
             cout << "Succeeded!" << endl;
-        if (sqlDriver.hasResult())
-            sqlDriver.getResult()->dumpToConsole();
+        if (sqlDriver.hasResult()) {
+            sqlDriver.getResult()->dumpToFile(dump);
+        }
     }
 }
 
