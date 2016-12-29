@@ -15,6 +15,7 @@ using std::cout;
 using std::endl;
 #include "bplus_node.h"
 #include "predefined.h"
+#include "comparealgo.h"
 #include <fcntl.h>
 #include <unistd.h>
 #ifndef PARA
@@ -56,7 +57,7 @@ struct head_t{
 class bplus_tree {
    public:
     bplus_tree(const char *path, bool force_empty = false,
-               bool multi_value = false, int keySize = 20);
+               bool multi_value = false, CompareAlgo *cmp = NULL, int keySize = 20);
 
     ~bplus_tree() {
         close_file();
@@ -77,11 +78,13 @@ class bplus_tree {
 
     void set_MultiValue(bool multi_value) { this->multi_value = multi_value; }
     head_t get_head() const { return head; }
-
+    static CompareAlgo *global_cmp;
+    
    private:
     char path[512];
     head_t head;
     bool multi_value;
+    CompareAlgo *cmp;
 
     /* init empty tree */
     void init_from_empty(int keySize);
@@ -99,7 +102,7 @@ class bplus_tree {
     int search_leaf(const index_key &key) const {
         return search_leaf(search_index(key), key);
     }
-
+    
     /* remove internal node */
     void remove_from_index(int offset, internal_node_t &node,
                            const index_key &key);

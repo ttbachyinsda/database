@@ -2,8 +2,9 @@
 #include <iostream>
 using namespace std;
 
-db_index::db_index(char *path, bool forceNewIndex, bool multi_value, int keySize)
-    : b_tree(path, forceNewIndex, multi_value, keySize) {
+db_index::db_index(char *path, bool forceNewIndex, bool multi_value, CompareAlgo *cmp, int keySize)
+    : b_tree(path, forceNewIndex, multi_value, cmp, keySize) {
+    this->cmp = cmp;
     strcpy(this->path, path);
     this->multi_value = multi_value;
     this->keySize = keySize;

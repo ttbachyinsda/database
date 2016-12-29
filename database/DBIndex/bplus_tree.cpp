@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <algorithm>
+#include <functional>
 #include <list>
 using std::cout;
 using std::endl;
@@ -11,30 +12,32 @@ using std::binary_search;
 using std::lower_bound;
 using std::upper_bound;
 
+CompareAlgo *bplus_tree::global_cmp;
+
 /* custom compare operator for STL algorithms */
 bool operator<(const index_key& l, const index_t& r) {
-    return keycmp(l, r.key) < 0;
+    return keycmp(l, r.key, bplus_tree::global_cmp) < 0;
 }
 bool operator<(const index_t& l, const index_key& r) {
-    return keycmp(l.key, r) < 0;
+    return keycmp(l.key, r, bplus_tree::global_cmp) < 0;
 }
 bool operator==(const index_key& l, const index_t& r) {
-    return keycmp(l, r.key) == 0;
+    return keycmp(l, r.key, bplus_tree::global_cmp) == 0;
 }
 bool operator==(const index_t& l, const index_key& r) {
-    return keycmp(l.key, r) == 0;
+    return keycmp(l.key, r, bplus_tree::global_cmp) == 0;
 }
 bool operator<(const index_key& l, const record_t& r) {
-    return keycmp(l, r.key) < 0;
+    return keycmp(l, r.key, bplus_tree::global_cmp) < 0;
 }
 bool operator<(const record_t& l, const index_key& r) {
-    return keycmp(l.key, r) < 0;
+    return keycmp(l.key, r, bplus_tree::global_cmp) < 0;
 }
 bool operator==(const index_key& l, const record_t& r) {
-    return keycmp(l, r.key) == 0;
+    return keycmp(l, r.key, bplus_tree::global_cmp) == 0;
 }
 bool operator==(const record_t& l, const index_key& r) {
-    return keycmp(l.key, r) == 0;
+    return keycmp(l.key, r, bplus_tree::global_cmp) == 0;
 }
 
 /* helper iterating function */
@@ -58,7 +61,9 @@ inline index_t* find(internal_node_t& node, const index_key& key) {
         temp = temp - 1;
     return temp;
 }
+
 inline record_t* find(leaf_node_t& node, const index_key& key) {
+    using namespace std::placeholders;
     record_t* temp = lower_bound(begin(node), end(node), key);
     if (temp - begin(node) >= node.n && node.n > 0)
         temp = end(node) - 1;
@@ -68,12 +73,13 @@ inline record_t* find(leaf_node_t& node, const index_key& key) {
 }
 
 bplus_tree::bplus_tree(const char* p, bool force_empty /*false*/,
-                       bool multi_value /*false*/, int keySize /*20*/)
+                       bool multi_value /*false*/, CompareAlgo *cmp, int keySize /*20*/)
     : fp(NULL), fp_level(0) {
     memset(path,0, sizeof(path));
     strcpy(path, p);
     this->multi_value = multi_value;
-
+    this->cmp = cmp;
+        
     if (!force_empty) {
         // read tree from file
         open_file();
@@ -90,6 +96,7 @@ bplus_tree::bplus_tree(const char* p, bool force_empty /*false*/,
 }
 
 int bplus_tree::search(const index_key& key, index_value* value) const {
+    global_cmp = cmp;
     leaf_node_t leaf;
     block_read(&leaf, search_leaf(key));
 
@@ -98,7 +105,7 @@ int bplus_tree::search(const index_key& key, index_value* value) const {
     if (record != leaf.children + leaf.n) {
         // always return the lower bound
         *value = record->value;
-        int result = keycmp(record->key, key);
+        int result = keycmp(record->key, key, cmp);
         if (result != 0)
             return -1;
         else return 0;
@@ -123,7 +130,7 @@ int bplus_tree::search_and_remove_multi(const index_key &key, int pagenum, int p
         else
             b = begin(leaf);
 
-        if (keycmp(b->key, key) != 0)
+        if (keycmp(b->key, key, cmp) != 0)
             b++;
 
         // copy
@@ -165,7 +172,7 @@ int bplus_tree::search_and_remove_multi(const index_key &key, int pagenum, int p
     block_read(&leaf, off_right);
 
     b = find(leaf, key);
-    if (keycmp(b->key, key) != 0)
+    if (keycmp(b->key, key, cmp) != 0)
         b++;
     e = upper_bound(begin(leaf), end(leaf), key);
 
@@ -238,6 +245,7 @@ void bplus_tree::remove_from_index_multi(int parent_off, int off, internal_node_
 }
 
 void bplus_tree::search_greater(const index_key &key, vector<pair<int, int> > *result) {
+    global_cmp = cmp;
     int off_left = search_leaf(key);
 
     int off = off_left;
@@ -253,7 +261,7 @@ void bplus_tree::search_greater(const index_key &key, vector<pair<int, int> > *r
         else
             b = begin(leaf);
 
-        if (keycmp(b->key, key) < 0)
+        if (keycmp(b->key, key, cmp) < 0)
             b++;
 
         // copy
@@ -268,6 +276,7 @@ void bplus_tree::search_greater(const index_key &key, vector<pair<int, int> > *r
 }
 
 void bplus_tree::search_greater_equal(const index_key &key, vector<pair<int, int> > *result) {
+    global_cmp = cmp;
     int off_left = search_leaf_l(key);
 
     int off = off_left;
@@ -283,7 +292,7 @@ void bplus_tree::search_greater_equal(const index_key &key, vector<pair<int, int
         else
             b = begin(leaf);
 
-        if (keycmp(b->key, key) < 0)
+        if (keycmp(b->key, key, cmp) < 0)
             b++;
 
         // copy
@@ -298,6 +307,7 @@ void bplus_tree::search_greater_equal(const index_key &key, vector<pair<int, int
 }
 
 void bplus_tree::search_less(const index_key &key, vector<pair<int, int> > *result) {
+    global_cmp = cmp;
     int off_right = search_leaf_l(key);
 
     int off = off_right;
@@ -325,6 +335,7 @@ void bplus_tree::search_less(const index_key &key, vector<pair<int, int> > *resu
 }
 
 void bplus_tree::search_less_equal(const index_key &key, vector<pair<int, int> > *result) {
+    global_cmp = cmp;
     int off_right = search_leaf(key);
 
     int off = off_right;
@@ -353,7 +364,8 @@ void bplus_tree::search_less_equal(const index_key &key, vector<pair<int, int> >
 
 int bplus_tree::search_range(const index_key& left, const index_key& right,
                              vector<pair<int, int>> *result) const {
-    if (keycmp(left, right) > 0) return -1;
+    global_cmp = cmp;
+    if (keycmp(left, right, cmp) > 0) return -1;
 
     int off_left = search_leaf_l(left);
     int off_right = search_leaf(right);
@@ -370,7 +382,7 @@ int bplus_tree::search_range(const index_key& left, const index_key& right,
         else
             b = begin(leaf);
 
-        if (keycmp(b->key, left) != 0)
+        if (keycmp(b->key, left, cmp) != 0)
             b++;
 
         // copy
@@ -385,7 +397,7 @@ int bplus_tree::search_range(const index_key& left, const index_key& right,
     block_read(&leaf, off_right);
 
     b = find(leaf, left);
-    if (keycmp(b->key, left) != 0)
+    if (keycmp(b->key, left, cmp) != 0)
         b++;
     if (b < leaf.children)
         b = leaf.children;
@@ -398,6 +410,7 @@ int bplus_tree::search_range(const index_key& left, const index_key& right,
 }
 
 int bplus_tree::search_all(vector<pair<int, int> > *result) {
+    global_cmp = cmp;
     int off_left = head.leaf_offset;
     int off = off_left;
 
@@ -416,6 +429,7 @@ int bplus_tree::search_all(vector<pair<int, int> > *result) {
 }
 
 int bplus_tree::remove(const index_key& key) {
+    global_cmp = cmp;
     internal_node_t parent;
     leaf_node_t leaf;
 
@@ -462,6 +476,7 @@ int bplus_tree::remove(const index_key& key) {
 }
 
 int bplus_tree::insert(const index_key& key, index_value value) {
+    global_cmp = cmp;
 //    if (key.k[0] == 244 && key.k[1] == 1) {
 //        cout << counter++ << endl;
 //        if (counter == 18)
@@ -486,7 +501,7 @@ int bplus_tree::insert(const index_key& key, index_value value) {
 
         // find even split point
         int point = leaf.n / 2;
-        bool place_right = keycmp(key, leaf.children[point].key) > 0;
+        bool place_right = keycmp(key, leaf.children[point].key, cmp) > 0;
         if (place_right) ++point;
 
         // split
@@ -531,13 +546,14 @@ void bplus_tree::update_parent_node(int parent, int offset, const index_key &key
 }
 
 int bplus_tree::update(const index_key& key, index_value value) {
+    global_cmp = cmp;
     int offset = search_leaf(key);
     leaf_node_t leaf;
     block_read(&leaf, offset);
 
     record_t* record = find(leaf, key);
     if (record != leaf.children + leaf.n)
-        if (keycmp(key, record->key) == 0) {
+        if (keycmp(key, record->key, cmp) == 0) {
             record->value = value;
             block_write(&leaf, offset);
 
@@ -605,12 +621,12 @@ void bplus_tree::insert_index_keyo_index(int offset, const index_key& key, int o
 
         // find even split point
         int point = (node.n - 1) / 2;
-        bool place_right = keycmp(key, node.children[point].key) > 0;
+        bool place_right = keycmp(key, node.children[point].key, cmp) > 0;
         if (place_right) ++point;
 
         // prevent the `key` being the right `middle_key`
         // example: insert 48 into |42|45| 6|    |
-        if (place_right && keycmp(key, node.children[point].key) < 0) point--;
+        if (place_right && keycmp(key, node.children[point].key, cmp) < 0) point--;
 
         // split
         std::copy(begin(node) + point + 1, end(node), begin(new_node));
