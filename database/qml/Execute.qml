@@ -18,6 +18,7 @@ Item {
             cyclicColorProgress.visible = false
             column.enabled = true
             resultLable.visible = true
+            controlRow.visible = switchNet.checked?false:true
         }
     }
 
@@ -25,6 +26,7 @@ Item {
         id: column
         anchors.centerIn: parent
         spacing: dp(32)
+
 
         TextField {
             id: command
@@ -38,9 +40,32 @@ Item {
             font.pixelSize: dp(25)
 
             onAccepted: {
-                testSearch.doSomething(command.text)
-                cyclicColorProgress.visible = true
-                column.enabled = false
+                controlRow.visible = false
+                if (switchNet.checked == false) {
+                    testSearch.doSomething(command.text)
+                    cyclicColorProgress.visible = true
+                    column.enabled = false
+                }
+                else {
+                    testSearch.getNetwork(command.text)
+                }
+            }
+        }
+
+        RowLayout {
+            anchors.horizontalCenter: parent.horizontalCenter
+            Switch {
+                id: switchNet
+                checked: true
+                enabled: true
+                darkBackground: index == 1
+            }
+
+            Label {
+                font.family: "Roboto"
+                font.weight: Font.Light
+                font.pixelSize: dp(20)
+                text: switchNet.checked ? "Network" : "Local"
             }
         }
 
@@ -100,6 +125,30 @@ Item {
             font.family: "Roboto"
             font.weight: Font.Light
             font.pixelSize: dp(20)
+        }
+
+        RowLayout {
+            id: controlRow
+            visible: false
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Button {
+                id: previous
+                text: "PREV"
+                elevation: 1
+                onClicked: {
+                    resultLable.text = testSearch.getPrevResult()
+                }
+            }
+
+            Button {
+                id: next
+                text: "NEXT"
+                elevation: 1
+                onClicked: {
+                    resultLable.text = testSearch.getNextResult()
+                }
+            }
         }
     }
 }

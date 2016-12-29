@@ -22,6 +22,9 @@
 #include <QQmlProperty>
 
 #include <sqlengine/sqldriver.h>
+
+#include "layer/json.hpp"
+using json = nlohmann::json;
 using namespace std;
 
 int BulbFile::fm = -1;
@@ -29,17 +32,17 @@ int BulbFile::totalsize = 0;
 
 int main(int argc, char* argv[])
 {
-    TestSQL t;
-    t.workingDir = "/home/jameshuang/Study/database/database_wd";
-
-    string sql = "use orderDB;\n";
+//    TestSQL t;
+//    t.workingDir = "/home/jameshuang/Study/database/database_wd";
+//
+//    string sql = "use orderDB;\n";
 //    TestSQL t;
 //    t.workingDir = "/home/jameshuang/Study/database/database_wd";
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/create.sql");
 //    t.startTestFile("/home/jameshuang/Study/database/database_wd/sqls/customer.sql");
 //    string sql = "use orderDB;\n";
 //    sql += "update customer set gender='F', name='Great' where gender='M';\n";
-    sql += "select * from customer;\n";
+//    sql += "select * from customer;\n";
 //    string sql = "use orderDB;\n";
 //printf("current working directory: %s\n", getcwd(NULL, NULL));
 //    sql += "delete from customer where gender='F';\n";
@@ -54,7 +57,7 @@ int main(int argc, char* argv[])
 
 //sql += "insert into a values (1997-03-08, 'James', 3);\n";
 //    sql += "select * from book;\n";
-    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
+//    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 //
 //    t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/3_val.txt");
 
@@ -73,6 +76,18 @@ int main(int argc, char* argv[])
     //    t.startTestFile("a.sql");
     //    t.startTestInteractive();
 
+//    SQLResult res(1);
+//    res.addTitleField("name");
+//    for (int i = 0; i < 100; ++ i) {
+//        res.addNew();
+//        res.setData(0, "123123");
+//    }
+//    json j, k;
+//    j["result"] = true;
+//    k = json::parse(j.dump());
+//    cout << k.dump() << endl;
+    
+    
 //    testtype t;
 //    t.begintest(false);
 //    testdatabase v;
@@ -85,19 +100,19 @@ int main(int argc, char* argv[])
     //    testvirtual x;
     //    x.begintest();
 
-//    BulbFile::setfilename("bulbfile.txt", true);
+    BulbFile::setfilename("bulbfile.txt", true);
     //don't let this always be true, That's true only because we are testing.
 
 //        testgroup xyz;
 //        xyz.begintest();
 
-//    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
-//    QGuiApplication app(argc, argv);
-//    QQmlApplicationEngine engine;
-//    QPM_INIT(engine);
-//    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    qmlRegisterType<QMLif>("thjdb.QMLif",1,0,"QMLif");
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
+    QPM_INIT(engine);
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
-//    return app.exec();
+    return app.exec();
 
     //    string a = "create database student;\
 //            use student;\
