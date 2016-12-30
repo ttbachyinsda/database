@@ -108,13 +108,11 @@ bool SQLCreateTableAction::execute()
             break;
         }
     }
-
     Table* newTable = NULL;
     if (isHashTable)
         newTable = new HashFlexibleTable();
     else
         newTable = new FlexibleTable();
-
     newTable->setfilename(handler->getname() + "_" + this->tableName + ".tb");
     newTable->setname(this->tableName);
 
@@ -183,9 +181,7 @@ bool SQLCreateTableAction::execute()
         cltype.push_back(dbType);
         ++ currentIndex;
     }
-
     newTable->createTable(clname, cltype);
-
     bool initResult = newTable->Initialize();
     if (!initResult) {
         driver->addErrorMessage("Failed to initialize table " + this->tableName);

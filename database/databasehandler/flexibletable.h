@@ -7,6 +7,7 @@
 #include "../recordhandler/record.h"
 #include <fstream>
 #include <sstream>
+using namespace std;
 
 #define __position(x) (PAGE_SIZE - ((x) + 1) * 4)
 class FlexibleTable : public Table {

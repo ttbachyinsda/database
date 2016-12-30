@@ -37,7 +37,6 @@ bool SQLDriver::execute(const std::string& sqlStr) {
     if (!lastSucceeded) return false;
 
     delete sstream;
-
     for (SQLAction* it : allActions) {
         it->setDriver(this);
         // Execute everthing before error prompt.
@@ -164,15 +163,22 @@ bool SQLDriver::storeBinaryFile(const string& tableName, const string& primaryKe
         return false;
     }
 
-    ifstream in(inputFilename, ios::in | ios::binary);
-    if (!in) {
+    // Change to std interface
+    if (access(inputFilename.c_str(), 0) == -1) {
         addErrorMessage("The file does not exist.");
         lastSucceeded = false;
         return false;
     }
-    istreambuf_iterator<char> beg(in), end;
-    string fileBuffer(beg, end);
-    in.close();
+
+    int fm = open(inputFilename.c_str(), PARA);
+    int totalsize = Encrypt::get_file_size(inputFilename.c_str());
+
+    char* buf = new char[totalsize];
+    read(fm, (void*) buf, totalsize);
+
+    close(fm);
+    string fileBuffer(buf, totalsize);
+    delete[] buf;
 
     Iterator* iter = IteratorFactory::getiterator(myTable);
     Record* rec = RecordFactory::getrecord(myTable);
@@ -253,9 +259,13 @@ bool SQLDriver::getBinaryFile(const string &tableName, const string& primaryKey,
     memcpy(&strsize, (char*)dataRef.data() + 4, 4);
     string fileContent = BulbFile::get(offset, strsize);
 
-    ofstream fout(outputFilename, ios::binary);
-    fout.write(fileContent.data(), fileContent.size());
-    fout.close();
+    remove(outputFilename.c_str());
+    FILE* f = fopen(outputFilename.c_str(), "ab+");
+    fclose(f);
+
+    int fm = open(outputFilename.c_str(), PARA);
+    write(fm, fileContent.data(), fileContent.size());
+    close(fm);
 
     delete iter;
     delete rec;

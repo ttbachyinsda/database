@@ -192,10 +192,54 @@ QMLif::QMLif() {
     
     char temp[1024];
     ifstream inFile("test.css");
-    while(!inFile.eof()) {
-        inFile.getline(temp, 1024);
-        testcss.append(string(temp));
-        testcss += "\n";
-    }
+    cout<<"cdef"<<endl;
+    testcss = "table {\
+            border-collapse: collapse;\
+            font-family: Futura, Arial, sans-serif;\
+       }\
+       \
+       caption {\
+            font-size: larger;\
+            margin: 1em auto;\
+       }\
+       \
+       th,td {\
+            padding: .65em;\
+       }\
+       \
+       th {\
+           background: #555;\
+           /* border: 1px solid #777; */\
+           color: #fff;\
+       }\
+       \
+       td {\
+            /* border: 1px solid #777; */\
+       }\
+       \
+       tbody tr:nth-child(odd) {\
+            background: #ccc;\
+       }\
+       \
+       th:first-child {\
+            border-radius: 9px 0 0 0;\
+       }\
+       \
+       th:last-child {\
+            border-radius: 0 9px 0 0;\
+       }\
+       \
+       tr:last-child td:first-child {\
+            border-radius: 0 0 0 9px;\
+       }\
+       \
+       tr:last-child td:last-child {\
+            border-radius: 0 0 9px 0;\
+       }";
+//    while(!inFile.eof()) {
+//        inFile.getline(temp, 1024);
+//        testcss.append(string(temp));
+//        testcss += "\n";
+//    }
 //    cout << testcss;
 }

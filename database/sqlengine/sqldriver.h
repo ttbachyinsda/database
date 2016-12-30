@@ -13,6 +13,7 @@
 #include "../databasehandler/database.h"
 #include "../layer/databasemanager.h"
 #include "../queryhandler/queryexecuter.h"
+#include "../aesalgorithm/encrypt.h"
 
 class SQLDriver {
 

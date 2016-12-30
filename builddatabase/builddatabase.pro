@@ -11,7 +11,7 @@ TEMPLATE = lib
 CONFIG += dll
 
 QMAKE_CXXFLAGS += -fpic
-LIBS += -lgmpxx -lgmp -L C:\Python27\libs -lpython27
+LIBS += -lgmpxx -lgmp -L C:\Python27\libs -lpython27 -lmpfr
 DEFINES += THJDB_LIBRARY
 INCLUDEPATH += C:\Python27\include\
 
@@ -59,7 +59,19 @@ SOURCES += \
     ../database/databasehandler/bulbfile.cpp \
     ../database/databasehandler/hashflexibletable.cpp \
     ../database/DBIndex/comparealgo.cpp \
-    ../database/tester/testflexible.cpp
+    ../database/tester/testflexible.cpp \
+    ../database/DBIndex/bplus_treel.cpp \
+    ../database/groupalgorithm/grouphandler.cpp \
+    ../database/queryhandler/checkhelper.cpp \
+    ../database/queryhandler/intelligentfilter.cpp \
+    ../database/queryhandler/modifyhandler.cpp \
+    ../database/queryhandler/queryoptimizer.cpp \
+    ../database/queryhandler/joinstrategies/hashjoin.cpp \
+    ../database/queryhandler/joinstrategies/joinstrategy.cpp \
+    ../database/queryhandler/joinstrategies/nestedloopjoin.cpp \
+    ../database/queryhandler/joinstrategies/sortmergejoin.cpp \
+    ../database/aesalgorithm/aes.cpp \
+    ../database/aesalgorithm/encrypt.cpp
 
 HEADERS += \
     ../database/tester/testflexible.h \
@@ -121,7 +133,20 @@ HEADERS += \
     ../database/managementhandler/md5.h \
     ../database/databasehandler/bulbfile.h \
     ../database/databasehandler/hashflexibletable.h \
-    ../database/DBIndex/comparealgo.h
+    ../database/DBIndex/comparealgo.h \
+    ../database/DBIndex/bplus_treel.h \
+    ../database/groupalgorithm/grouphandler.h \
+    ../database/groupalgorithm/mpreal.h \
+    ../database/queryhandler/checkhelper.h \
+    ../database/queryhandler/intelligentfilter.h \
+    ../database/queryhandler/modifyhandler.h \
+    ../database/queryhandler/queryoptimizer.h \
+    ../database/queryhandler/joinstrategies/hashjoin.h \
+    ../database/queryhandler/joinstrategies/joinstrategy.h \
+    ../database/queryhandler/joinstrategies/nestedloopjoin.h \
+    ../database/queryhandler/joinstrategies/sortmergejoin.h \
+    ../database/aesalgorithm/aes.h \
+    ../database/aesalgorithm/encrypt.h
 
 unix{
     maemo5 {

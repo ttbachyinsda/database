@@ -36,7 +36,6 @@ for (int i=0;i<PAGE_INT_NUM;i++)
 }
 cout<<"Now end "<<"testment"<<endl;
 */
-
     char* temp = (char*)malloc(4);
     memcpy(temp, b, 4);
     string ob1 = "HEAD";
@@ -44,6 +43,7 @@ cout<<"Now end "<<"testment"<<endl;
         PackageHeadFile(b);
         BPM->markDirty(index);
         Nullindex();
+
     } else {
         PackageFromHeadFile(b);
         BPM->access(index);
@@ -56,20 +56,22 @@ cout<<"Now end "<<"testment"<<endl;
 
 void FlexibleTable::PackageFromHeadFile(BufType b)
 {
-    ifstream headfile(filename + ".tableinfo", ios::binary);
+    string filepath = filename + ".tableinfo";
+    int f = open(filepath.c_str(), PARA);
+
     int namelen;
-    headfile.read((char*)&namelen, 4);
+    read(f,(void*)&namelen,4);
     char* namechar = (char*)malloc(namelen);
-    headfile.read(namechar, namelen);
+    read(f,(void*)namechar,namelen);
     string namestr(namechar, namelen);
     free(namechar);
     name = namestr;
 
-    headfile.read((char*)&PageNum, 4);
-    headfile.read((char*)&majornum, 4);
+    read(f,(void*)&PageNum,4);
+    read(f,(void*)&majornum,4);
 
     clearcolumn();
-    headfile.read((char*)&columncount, 4);
+    read(f,(void*)&columncount,4);
 
     columnname = new string[this->columncount];
     column = new DataBaseType*[this->columncount];
@@ -77,21 +79,21 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
     for (int i = 0; i < this->columncount; i++) {
 
         int namelen;
-        headfile.read((char*)&namelen, 4);
+        read(f,(void*)&namelen,4);
         char* namechar = (char*)malloc(namelen);
-        headfile.read(namechar, namelen);
+        read(f,(void*)namechar,namelen);
         string namestr(namechar, namelen);
         free(namechar);
         columnname[i] = namestr;
 
         char* temptype = (char*)malloc(4);
-        headfile.read(temptype, 4);
+        read(f,(void*)temptype,4);
 
         int tempsize;
-        headfile.read((char*)&tempsize, 4);
+        read(f,(void*)&tempsize,4);
 
         char* nullable = (char*)malloc(4);
-        headfile.read(nullable, 4);
+        read(f,(void*)nullable,4);
 
         bool cannull;
         if (nullable[0] == 'A')
@@ -99,7 +101,7 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
         else
             cannull = false;
         char* canmulti = (char*)malloc(4);
-        headfile.read(canmulti, 4);
+        read(f,(void*)canmulti,4);
         if (canmulti[0] == 'A')
             multivalue[i] = true;
         else
@@ -107,10 +109,10 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
         DataBaseType* t = UIC::realreconvert(temptype, tempsize, cannull);
 
         int conditionsize;
-        headfile.read((char*)&conditionsize, 4);
+        read(f,(void*)&conditionsize,4);
 
         char* tempcondition = (char*)malloc(conditionsize);
-        headfile.read(tempcondition, conditionsize);
+        read(f,(void*)tempcondition,conditionsize);
 
         int position = 0;
         t->readcondition(tempcondition, conditionsize, position);
@@ -122,79 +124,87 @@ void FlexibleTable::PackageFromHeadFile(BufType b)
         free(tempcondition);
     }
 
-    headfile.read((char*)&MaxRecordSize, 4);
+    read(f,(void*)&MaxRecordSize,4);
     if (reservedSizeInPage != NULL)
         delete[] reservedSizeInPage;
     reservedSizeInPage = new int[MaxRecordSize];
     for (int i = 0; i < MaxRecordSize; i++)
-        headfile.read((char*)&reservedSizeInPage[i], 4);
+        read(f,(void*)&reservedSizeInPage[i],4);
 
     tablecondition.clear();
     linkedcolumn.clear();
     foreignkeys.clear();
     int vecsize, strsize, first, second;
-    headfile.read((char*)&vecsize, 4);
+    read(f,(void*)&vecsize,4);
     for (int i = 0; i < vecsize; i++) {
-        headfile.read((char*)&first, 4);
-        headfile.read((char*)&second, 4);
-        headfile.read((char*)&strsize, 4);
+        read(f,(void*)&first,4);
+        read(f,(void*)&second,4);
+        read(f,(void*)&strsize,4);
         char* tmp = (char*)malloc(strsize);
-        headfile.read(tmp, strsize);
+        read(f,(void*)tmp,strsize);
         string third(tmp, strsize);
         tablecondition.push_back(make_triple(first, second, third));
         free(tmp);
     }
-    headfile.read((char*)&vecsize, 4);
+    read(f,(void*)&vecsize,4);
     for (int i = 0; i < vecsize; i++)
     {
         vector<pair<string,int>> temp;
         temp.clear();
         linkedcolumn.push_back(temp);
         int vecisize2;
-        headfile.read((char*)&vecisize2, 4);
+        read(f,(void*)&vecisize2,4);
         for (int j=0;j<vecisize2;j++)
         {
-            headfile.read((char*)&second, 4);
-            headfile.read((char*)&strsize, 4);
+            read(f,(void*)&second,4);
+            read(f,(void*)&strsize,4);
             char* tmp = (char*)malloc(strsize);
-            headfile.read(tmp, strsize);
+            read(f,(void*)tmp,strsize);
             string third(tmp, strsize);
             linkedcolumn[i].push_back(make_pair(third, second));
             free(tmp);
         }
     }
-    headfile.read((char*)&vecsize, 4);
+    read(f,(void*)&vecsize,4);
     for (int i = 0; i < vecsize; i++)
     {
-        headfile.read((char*)&second, 4);
-        headfile.read((char*)&strsize, 4);
+        read(f,(void*)&second,4);
+        read(f,(void*)&strsize,4);
         char* tmp = (char*)malloc(strsize);
-        headfile.read(tmp, strsize);
+        read(f,(void*)tmp,strsize);
         string third(tmp, strsize);
         foreignkeys.push_back(make_pair(third, second));
         free(tmp);
     }
-    headfile.close();
+    close(f);
 }
 void FlexibleTable::PackageHeadFile(BufType b)
 {
-    ofstream headfile(filename + ".tableinfo", ios::binary);
-
+    string filepath = filename + ".tableinfo";
+    int can = access(filepath.c_str(), 0);
+    if (can == -1) {
+        FILE* f = fopen(filepath.c_str(), "ab+");
+        if (f == NULL) {
+            cout << "ERROR: CAN'T CREATE FILE" << endl;
+        }
+        fclose(f);
+    }
+    int f = open(filepath.c_str(), PARA);
     string headstr = "HEAD";
     memcpy(b, headstr.data(), 4);
 
     int namelen = name.length();
-    headfile.write((char*)&namelen, 4);
-    headfile.write(name.data(), namelen);
-    headfile.write((char*)&PageNum, 4);
-    headfile.write((char*)&majornum, 4);
-    headfile.write((char*)&columncount, 4);
+    write(f,(void*)&namelen,4);
+    write(f,(void*)name.data(),namelen);
+    write(f,(void*)&PageNum,4);
+    write(f,(void*)&majornum,4);
+    write(f,(void*)&columncount,4);
 
     for (int i = 0; i < columncount; i++) {
         int namelen = columnname[i].length();
 
-        headfile.write((char*)&namelen, 4);
-        headfile.write(columnname[i].data(), namelen);
+        write(f,(void*)&namelen,4);
+        write(f,(void*)columnname[i].data(),namelen);
 
         char* temptype = (char*)malloc(4);
         char* nullable = (char*)malloc(4);
@@ -202,68 +212,68 @@ void FlexibleTable::PackageHeadFile(BufType b)
         UIC::convert(column[i], temptype, nullable);
         UIC::convertmulti(multivalue[i], canmulti);
 
-        headfile.write(temptype, 4);
+        write(f,(void*)temptype,4);
         int tempsize = column[i]->getMaxSize();
-        headfile.write((char*)&tempsize, 4);
-        headfile.write(nullable, 4);
-        headfile.write(canmulti, 4);
+        write(f,(void*)&tempsize,4);
+        write(f,(void*)nullable,4);
+        write(f,(void*)canmulti,4);
 
         free(temptype);
         free(nullable);
         free(canmulti);
 
         int conditionsize = column[i]->getconditionsize();
-        headfile.write((char*)&conditionsize, 4);
+        write(f,(void*)&conditionsize,4);
 
         char* tempcondition = (char*)malloc(conditionsize);
         int position = 0;
         column[i]->writecondition(tempcondition, position);
-        headfile.write(tempcondition, conditionsize);
+        write(f,(void*)tempcondition,conditionsize);
 
         free(tempcondition);
     }
-    headfile.write((char*)&MaxRecordSize, 4);
+    write(f,(void*)&MaxRecordSize,4);
     for (int i = 0; i < MaxRecordSize; i++)
-        headfile.write((char*)&reservedSizeInPage[i], 4);
+        write(f,(void*)&reservedSizeInPage[i],4);
 
     int vecsize = this->tablecondition.size(), strsize;
-    headfile.write((char*)&vecsize, 4);
+    write(f,(void*)&vecsize,4);
     for (int i = 0; i < vecsize; i++) {
         int first = tablecondition[i].first;
         int second = tablecondition[i].second.first;
         string third = tablecondition[i].second.second;
         strsize = third.length();
-        headfile.write((char*)&first, 4);
-        headfile.write((char*)&second, 4);
-        headfile.write((char*)&strsize, 4);
-        headfile.write(third.data(), strsize);
+        write(f,(void*)&first,4);
+        write(f,(void*)&second,4);
+        write(f,(void*)&strsize,4);
+        write(f,(void*)third.data(),strsize);
     }
     vecsize = this->linkedcolumn.size();
-    headfile.write((char*)&vecsize, 4);
+    write(f,(void*)&vecsize,4);
     for (int i = 0; i < vecsize; i++) {
         int vecisize2 = linkedcolumn[i].size();
-        headfile.write((char*)&vecisize2, 4);
+        write(f,(void*)&vecisize2,4);
         for (int j=0;j<vecisize2;j++)
         {
             int second = linkedcolumn[i][j].second;
             string third = linkedcolumn[i][j].first;
             strsize = third.length();
-            headfile.write((char*)&second, 4);
-            headfile.write((char*)&strsize, 4);
-            headfile.write(third.data(), strsize);
+            write(f,(void*)&second,4);
+            write(f,(void*)&strsize,4);
+            write(f,(void*)third.data(),strsize);
         }
     }
     vecsize = this->foreignkeys.size();
-    headfile.write((char*)&vecsize, 4);
+    write(f,(void*)&vecsize,4);
     for (int i = 0; i < vecsize; i++) {
         int second = foreignkeys[i].second;
         string third = foreignkeys[i].first;
         strsize = third.length();
-        headfile.write((char*)&second, 4);
-        headfile.write((char*)&strsize, 4);
-        headfile.write(third.data(), strsize);
+        write(f,(void*)&second,4);
+        write(f,(void*)&strsize,4);
+        write(f,(void*)third.data(),strsize);
     }
-    headfile.close();
+    close(f);
 }
 
 void FlexibleTable::createTable(vector<string> clname, vector<DataBaseType*> cltype)

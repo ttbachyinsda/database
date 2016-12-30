@@ -175,7 +175,8 @@ HEADERS  += mainwindow.h \
     aesalgorithm/aes.h \
     aesalgorithm/encrypt.h \
     DBIndex/bplus_treel.h \
-    layer/qmlif.h
+    layer/qmlif.h \
+    groupalgorithm/mpreal.h
 
 
 DISTFILES += \

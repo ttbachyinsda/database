@@ -10,6 +10,7 @@
 #include <gmp.h>
 #include <gmpxx.h>
 #include <sstream>
+using namespace std;
 
 #define __position(x) (PAGE_SIZE - ((x) + 1) * 4)
 class HashFlexibleTable : public Table {
