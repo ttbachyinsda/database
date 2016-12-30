@@ -56,7 +56,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             Switch {
                 id: switchNet
-                checked: true
+                checked: false
                 enabled: true
                 darkBackground: index == 1
             }

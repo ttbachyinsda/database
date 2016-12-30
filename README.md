@@ -6,6 +6,18 @@
 
 欢迎各位进行尝试！Linux x64 QT UI和Python接口编译通过
 
+在linux下编译GUI请先进行如下操作：
+
+    git clone https://github.com/openssl/openssl.git
+    cd openssl
+    git checkout OpenSSL_1_0_0-stable
+    ./config enable-shared
+    make depend
+    make -j4
+    sudo cp libcrypto.so libssl.so libcrypto.so.1.0.0 libssl.so.1.0.0 /opt/Qt/5.7/gcc_64/lib/
+
+这里注意/opt/Qt/5.7/gcc_64是$QTDIR/lib，在不同操作系统可能略有差异。
+
 2.1.0.8改动：
 
 将聚集函数处的mpq_class换成了mpreal库，使其能够正常的工作。小数位数的输出可以由define的那个MAX_DIGITS控制。

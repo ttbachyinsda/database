@@ -10,7 +10,7 @@ Item {
         id: column
         spacing: dp(16)
 
-         nLabel {
+         Label {
             font.family: "Roboto"
             font.weight: Font.DemiBold
             text: "Database Overview"
