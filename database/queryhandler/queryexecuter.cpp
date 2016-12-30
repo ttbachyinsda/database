@@ -180,6 +180,13 @@ bool QueryExecutor::executeQuery()
     QueryOptimizer* optimizer = new QueryOptimizer();
 
     for (unsigned reduceID = 1; reduceID < tables.size(); ++ reduceID) {
+        if (currentConditions.size() == 0) {
+            driver->addErrorMessage("Join Error: conditions not fully connected.");
+            for (Table* tbl : operatingTables) {
+                if (tbl->gettabletype() == "Virtual") delete tbl;
+            }
+            return false;
+        }
         // notice: following codes are based on transformed index.
         optimizer->generatePlan(currentConditions, operatingTables);
         unsigned int mergedID1 = (unsigned int) optimizer->getJoinIDPlan().first,

@@ -190,9 +190,9 @@ QMLif::QMLif() {
     postData.append(QString("name=ttbachyinsda&pass=123456789&method=open"));
     QNetworkReply* reply = manager.post(request,postData);
     
-    char temp[1024];
-    ifstream inFile("test.css");
-    cout<<"cdef"<<endl;
+//    char temp[1024];
+//    ifstream inFile("test.css");
+//    cout<<"cdef"<<endl;
     testcss = "table {\
             border-collapse: collapse;\
             font-family: Futura, Arial, sans-serif;\

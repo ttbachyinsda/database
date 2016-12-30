@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 #else
 
     string sql;
-    sql = "create database test;use test; select * from uesr;";
+    sql = "use orderDB;";
     t.startTestString(sql, "/home/jameshuang/Desktop/Cross Validation/1_val.txt");
     return 0;
 #endif
